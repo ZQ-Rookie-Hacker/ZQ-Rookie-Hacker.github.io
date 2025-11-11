@@ -450,53 +450,7 @@
 <li>添加未跟踪文件：<code>git add .</code></li>
 <li>或忽略文件：在.gitignore中添加文件模式</li>
 </ul>
-<h2 id="十二、Git与GitHub的未来趋势"><a href="#十二、Git与GitHub的未来趋势" class="headerlink" title="十二、Git与GitHub的未来趋势"></a>十二、Git与GitHub的未来趋势</h2><h3 id="1-AI辅助开发"><a href="#1-AI辅助开发" class="headerlink" title="1. AI辅助开发"></a>1. AI辅助开发</h3><ul>
-<li>GitHub Copilot</li>
-<li>自动代码生成</li>
-<li>智能代码补全</li>
-</ul>
-<h3 id="2-云原生开发"><a href="#2-云原生开发" class="headerlink" title="2. 云原生开发"></a>2. 云原生开发</h3><ul>
-<li>GitHub Codespaces</li>
-<li>云端开发环境</li>
-<li>无缝协作</li>
-</ul>
-<h3 id="3-安全增强"><a href="#3-安全增强" class="headerlink" title="3. 安全增强"></a>3. 安全增强</h3><ul>
-<li>自动漏洞扫描</li>
-<li>依赖项安全检查</li>
-<li>密钥泄露检测</li>
-</ul>
-<h3 id="4-开源生态"><a href="#4-开源生态" class="headerlink" title="4. 开源生态"></a>4. 开源生态</h3><ul>
-<li>更多开源项目</li>
-<li>更广泛的社区协作</li>
-<li>更多贡献机会</li>
-</ul>
-<h3 id="5-企业级功能"><a href="#5-企业级功能" class="headerlink" title="5. 企业级功能"></a>5. 企业级功能</h3><ul>
-<li>更强大的权限管理</li>
-<li>更安全的代码存储</li>
-<li>更完善的审计功能</li>
-</ul>
-<h2 id="十三、学习资源"><a href="#十三、学习资源" class="headerlink" title="十三、学习资源"></a>十三、学习资源</h2><h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://docs.github.com/">GitHub官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://git-scm.com/docs">Git官方文档</a></li>
-</ul>
-<h3 id="学习资源"><a href="#学习资源" class="headerlink" title="学习资源"></a>学习资源</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2">Pro Git 书籍</a></li>
-<li><a target="_blank" rel="noopener" href="https://lab.github.com/">GitHub Learning Lab</a></li>
-<li><a target="_blank" rel="noopener" href="http://gitimmersion.com/">Git Immersion</a></li>
-</ul>
-<h3 id="社区"><a href="#社区" class="headerlink" title="社区"></a>社区</h3><ul>
-<li>Stack Overflow</li>
-<li>GitHub社区论坛</li>
-<li>Reddit的r&#x2F;git和r&#x2F;github</li>
-</ul>
-<h3 id="实践项目"><a href="#实践项目" class="headerlink" title="实践项目"></a>实践项目</h3><ul>
-<li>贡献开源项目</li>
-<li>创建自己的项目</li>
-<li>参与GitHub Hacktoberfest</li>
-</ul>
-<blockquote>
-<p><strong>提示</strong>：在多人协作项目中，避免使用 <code>--force</code> 推送，以免影响其他开发者的工作。使用 <code>git pull --rebase</code> 代替 <code>git pull</code> 可以保持提交历史的线性。</p>
-</blockquote>
+<hr>
 
       
     </div>
@@ -1032,6 +986,26 @@
 <h1 id="十二、实用命令速查"><a href="#十二、实用命令速查" class="headerlink" title="十二、实用命令速查"></a>十二、实用命令速查</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;文章标题&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地写作（预览草稿）</span></span><br><span class="line">hexo server --draft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制清理缓存</span></span><br><span class="line">hexo clean --debug</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Hexo版本</span></span><br><span class="line">hexo version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一键部署（最常用）</span></span><br><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
 
 <hr>
+<h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
+<ul>
+<li>git clone <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git init (初始化刚拉取的myBlog)</li>
+<li>git remote add origin <a href="mailto:&#103;&#105;&#x74;&#64;&#103;&#105;&#x74;&#104;&#117;&#x62;&#46;&#99;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+</ul>
+<p>13.2 下载nodejs + hexo</p>
+<ul>
+<li>官网下载nodejs</li>
+<li>下载 hexo npm install -g hexo-cli</li>
+</ul>
+<p>13.3 nmp 相关插件下载</p>
+<ul>
+<li>npm install</li>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>因为 myBlog 已经hexo 初始化完毕，不需要再进行初始化<br>myBlog 私仓用于博客协作更新（用git）, 用hexo deploy 更新博客仓</p>
+</blockquote>
+<p>注意：每次修改文章或其他文件时，hexo clean -&gt; hexo g -&gt; hexo deploy -&gt; git add . -&gt; git commit …. -&gt; git push origin main</p>
 
       
     </div>

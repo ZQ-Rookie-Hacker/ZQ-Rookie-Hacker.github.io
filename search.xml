@@ -1,437 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Blog-Building</title>
-    <url>/2024/09/10/Blog-Building/</url>
-    <content><![CDATA[<h1 id="从CSDN迁移博客到Hexo-Next-GitHub-Pages"><a href="#从CSDN迁移博客到Hexo-Next-GitHub-Pages" class="headerlink" title="从CSDN迁移博客到Hexo+Next+GitHub Pages"></a>从CSDN迁移博客到Hexo+Next+GitHub Pages</h1><p>本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：</p>
-<ul>
-<li>CSDN导出图片不显示问题</li>
-<li>Hexo配置错误导致部署失败</li>
-<li>路径解析和缓存冲突</li>
-<li>GitHub Pages部署疑难杂症</li>
-<li>博客结构混乱、功能缺失、体验不佳</li>
-</ul>
-<h1 id="一、环境准备与项目初始化"><a href="#一、环境准备与项目初始化" class="headerlink" title="一、环境准备与项目初始化"></a>一、环境准备与项目初始化</h1><p><strong>1.1 必备环境安装</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装Node.js（必需v14+，推荐v18+）</span></span><br><span class="line"><span class="comment"># 官网下载：https://nodejs.org/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Git</span></span><br><span class="line"><span class="comment"># 官网下载：https://git-scm.com/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证安装</span></span><br><span class="line">node --version</span><br><span class="line">npm --version</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<p><strong>1.2 GitHub仓库准备</strong></p>
-<ul>
-<li>创建一个名为 <code>你的用户名.github.io</code> 的仓库（必须是此格式）。</li>
-<li><strong>推荐</strong>：配置SSH密钥以实现免密推送。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;your_email@example.com&quot;</span></span><br><span class="line"><span class="comment"># 将 ~/.ssh/id_rsa.pub 内容添加到 GitHub 的 SSH Keys 设置中</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>1.3 Hexo项目初始化</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装Hexo命令行工具</span></span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建博客项目</span></span><br><span class="line">hexo init myBlog</span><br><span class="line"><span class="built_in">cd</span> myBlog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Next主题</span></span><br><span class="line">npm install hexo-theme-next --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装部署插件</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装搜索插件（用于本地搜索）</span></span><br><span class="line">npm install hexo-generator-searchdb --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装站点地图插件（用于SEO）</span></span><br><span class="line">npm install hexo-generator-sitemap --save</span><br><span class="line">npm install hexo-generator-baidu-sitemap --save  <span class="comment"># 可选，百度专用</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="二、核心配置文件详解"><a href="#二、核心配置文件详解" class="headerlink" title="二、核心配置文件详解"></a>二、核心配置文件详解</h1><p><strong>2.1 Hexo主配置文件 (<code>_config.yml</code>)</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">ZQ-Rookie-Hacker的技术博客</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;分享编程、网络安全、工具使用技巧&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;专注于Hexo博客搭建、前端开发、网络安全的技术分享平台&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> [<span class="string">&#x27;Hexo&#x27;</span>, <span class="string">&#x27;博客搭建&#x27;</span>, <span class="string">&#x27;网络安全&#x27;</span>, <span class="string">&#x27;SSH&#x27;</span>, <span class="string">&#x27;编程技巧&#x27;</span>]</span><br><span class="line"><span class="attr">author:</span> <span class="string">ZQ-Rookie-Hacker</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://你的用户名.github.io</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="attr">source_dir:</span> <span class="string">source</span></span><br><span class="line"><span class="attr">public_dir:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">tag_dir:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">archive_dir:</span> <span class="string">archives</span></span><br><span class="line"><span class="attr">category_dir:</span> <span class="string">categories</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Writing</span></span><br><span class="line"><span class="attr">new_post_name:</span> <span class="string">:title.md</span></span><br><span class="line"><span class="attr">default_layout:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">titlecase:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">external_link:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">site</span></span><br><span class="line">  <span class="attr">exclude:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">filename_case:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">render_drafts:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span>  <span class="comment"># 🔑 关键：启用文章资源文件夹（每篇文章一个文件夹存放图片）</span></span><br><span class="line"><span class="attr">relative_link:</span> <span class="literal">false</span>     <span class="comment"># 🔑 关键：禁用相对链接，确保路径正确</span></span><br><span class="line"><span class="attr">future:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Markdown配置（解决图片核心问题）</span></span><br><span class="line"><span class="attr">syntax_highlighter:</span> <span class="string">highlight.js</span></span><br><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">auto_detect:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">wrap:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">hljs:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line">  <span class="attr">prepend_root:</span> <span class="literal">true</span>    <span class="comment"># 🔑 关键：自动为相对路径添加根路径</span></span><br><span class="line">  <span class="attr">post_asset:</span> <span class="literal">true</span>      <span class="comment"># 🔑 关键：识别文章资源文件夹中的图片</span></span><br><span class="line"></span><br><span class="line"><span class="attr">prismjs:</span></span><br><span class="line">  <span class="attr">preprocess:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭缓存避免路径问题</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>2.2 Next主题配置 (<code>themes/next/_config.yml</code>)</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Scheme Settings (推荐简洁大气的Gemini或Mist)</span></span><br><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span></span><br><span class="line"><span class="comment"># scheme: Mist</span></span><br><span class="line"><span class="comment"># scheme: Pisces</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line"><span class="attr">darkmode:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Menu Settings</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-folder</span>  <span class="comment"># 新增：分类页</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-tags</span>              <span class="comment"># 新增：标签页</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-user</span>            <span class="comment"># 可选：需先创建about页</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sidebar Settings</span></span><br><span class="line"><span class="attr">sidebar:</span></span><br><span class="line">  <span class="attr">position:</span> <span class="string">left</span></span><br><span class="line">  <span class="attr">display:</span> <span class="string">post</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Post Settings</span></span><br><span class="line"><span class="attr">excerpt_description:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">read_more_btn:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 图片懒加载（提升加载速度）</span></span><br><span class="line"><span class="attr">lazyload:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代码高亮优化</span></span><br><span class="line"><span class="attr">codeblock:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地搜索</span></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">搜索文章...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 阅读量统计（不蒜子）</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_visitors:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">post_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">archive_views:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 评论系统（推荐Gitalk）</span></span><br><span class="line"><span class="attr">gitalk:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">client_id:</span> <span class="string">你的Client</span> <span class="string">ID</span></span><br><span class="line">  <span class="attr">client_secret:</span> <span class="string">你的Client</span> <span class="string">Secret</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">blog-comments</span>  <span class="comment"># 用于存储评论的GitHub仓库名</span></span><br><span class="line">  <span class="attr">owner:</span> <span class="string">你的GitHub用户名</span></span><br><span class="line">  <span class="attr">admin:</span> [<span class="string">你的GitHub用户名</span>]</span><br><span class="line">  <span class="attr">distraction_free_mode:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SEO</span></span><br><span class="line"><span class="attr">seo:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="三、CSDN图片处理终极方案"><a href="#三、CSDN图片处理终极方案" class="headerlink" title="三、CSDN图片处理终极方案"></a>三、CSDN图片处理终极方案</h1><p><strong>3.1 自动化图片下载与修复脚本 (<code>fix_csdn_images.py</code>)</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># ====== 你只需要改这一行：你的文章放哪儿？ ======</span></span><br><span class="line">POSTS_DIR = <span class="string">r&quot;F:\myBlog\source\_posts&quot;</span>  <span class="comment"># 修改为你的实际路径</span></span><br><span class="line"><span class="comment"># ================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 支持的图片格式</span></span><br><span class="line">IMG_EXTENSIONS = (<span class="string">&#x27;.png&#x27;</span>, <span class="string">&#x27;.jpg&#x27;</span>, <span class="string">&#x27;.jpeg&#x27;</span>, <span class="string">&#x27;.gif&#x27;</span>, <span class="string">&#x27;.bmp&#x27;</span>, <span class="string">&#x27;.webp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">download_image</span>(<span class="params">url, save_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;下载单张图片&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        headers = &#123;</span><br><span class="line">            <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        res = requests.get(url, headers=headers, timeout=<span class="number">15</span>)</span><br><span class="line">        res.raise_for_status()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(save_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(res.content)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ 下载失败：<span class="subst">&#123;url&#125;</span>，错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_markdown_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理单个Markdown文件&quot;&quot;&quot;</span></span><br><span class="line">    article_name = os.path.splitext(os.path.basename(file_path))[<span class="number">0</span>]</span><br><span class="line">    image_dir = os.path.join(os.path.dirname(file_path), article_name)</span><br><span class="line">    os.makedirs(image_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        content = f.read()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查找所有CSDN网络图片链接</span></span><br><span class="line">    img_pattern = <span class="string">r&#x27;!\[([^\]]*)\]\((https?://[^\s)]+\.(?:png|jpg|jpeg|gif|bmp|webp))\)&#x27;</span></span><br><span class="line">    matches = <span class="built_in">list</span>(re.finditer(img_pattern, content))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;🔍 找到 <span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span> 张图片&quot;</span>)</span><br><span class="line"></span><br><span class="line">    success_count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, <span class="keyword">match</span> <span class="keyword">in</span> <span class="built_in">enumerate</span>(matches):</span><br><span class="line">        alt_text = <span class="keyword">match</span>.group(<span class="number">1</span>) <span class="keyword">or</span> <span class="string">&#x27;图片描述&#x27;</span></span><br><span class="line">        url = <span class="keyword">match</span>.group(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;⬇️ 正在下载 (<span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span>): <span class="subst">&#123;os.path.basename(url)&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 生成图片文件名</span></span><br><span class="line">        parsed = urlparse(url)</span><br><span class="line">        ext = os.path.splitext(parsed.path)[<span class="number">1</span>].lower()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> ext <span class="keyword">or</span> ext <span class="keyword">not</span> <span class="keyword">in</span> IMG_EXTENSIONS:</span><br><span class="line">            ext = <span class="string">&#x27;.png&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清理文件名中的特殊字符</span></span><br><span class="line">        clean_alt = re.sub(<span class="string">r&#x27;[^\w\u4e00-\u9fa5-]&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, alt_text)</span><br><span class="line">        filename_on_disk = <span class="string">f&quot;<span class="subst">&#123;clean_alt&#125;</span>_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span> <span class="keyword">if</span> clean_alt <span class="keyword">else</span> <span class="string">f&quot;image_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">        local_path = os.path.join(image_dir, filename_on_disk)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> download_image(url, local_path):</span><br><span class="line">            <span class="comment"># 使用标准Markdown语法，引用本地文件</span></span><br><span class="line">            new_link = <span class="string">f&quot;![<span class="subst">&#123;alt_text&#125;</span>](<span class="subst">&#123;filename_on_disk&#125;</span>)&quot;</span></span><br><span class="line">            content = content.replace(<span class="keyword">match</span>.group(<span class="number">0</span>), new_link)</span><br><span class="line">            success_count += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;✅ 已保存：<span class="subst">&#123;filename_on_disk&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存修改后的内容</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> success_count, <span class="built_in">len</span>(matches)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;🚀 开始处理CSDN导出的图片...&quot;</span>)</span><br><span class="line">    total_success = <span class="number">0</span></span><br><span class="line">    total_images = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(POSTS_DIR):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> filename.endswith(<span class="string">&#x27;.md&#x27;</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        blog_path = os.path.join(POSTS_DIR, filename)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n📄 正在处理：<span class="subst">&#123;filename&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        success, total = process_markdown_file(blog_path)</span><br><span class="line">        total_success += success</span><br><span class="line">        total_images += total</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;🎉 <span class="subst">&#123;filename&#125;</span> 处理完成：<span class="subst">&#123;success&#125;</span>/<span class="subst">&#123;total&#125;</span> 张图片成功&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n🎊 全部完成！总计处理 <span class="subst">&#123;total_success&#125;</span>/<span class="subst">&#123;total_images&#125;</span> 张图片&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n📝 接下来执行：&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;   hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.2 使用说明</strong></p>
-<ol>
-<li><strong>修改路径</strong>：将脚本中的 <code>POSTS_DIR</code> 修改为你博客文章的实际路径（如 <code>F:\myBlog\source\_posts</code>）。</li>
-<li><strong>运行脚本</strong>：在命令行中进入脚本所在目录，执行 <code>python fix_csdn_images.py</code>。</li>
-<li><strong>验证结构</strong>：脚本执行后，你的文章目录结构应变为：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source/_posts/</span><br><span class="line">├── SSH隧道技术.md</span><br><span class="line">└── SSH隧道技术/</span><br><span class="line">    ├── 图片描述_1.png</span><br><span class="line">    ├── 图片描述_2.jpg</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure></li>
-<li><strong>本地预览</strong>：执行 <code>hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</code>，在浏览器中访问 <code>http://localhost:4000</code>，确认图片已正常加载。</li>
-</ol>
-<hr>
-<h1 id="四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）"><a href="#四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）" class="headerlink" title="四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）"></a>四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）</h1><p>分类是博客的“骨架”，标签是“索引”，两者结合让读者快速找到内容，也让你的博客结构更规整。</p>
-<p><strong>4.1 先明确规则（避免混乱）</strong></p>
-<ul>
-<li><strong>分类</strong>：层级化、不重复（例如：<code>技术</code> → <code>网络安全</code>，<code>工具</code> → <code>Hexo配置</code>）。一篇文章建议1-2个主分类。</li>
-<li><strong>标签</strong>：扁平化、多维度（例如：一篇「Hexo分类配置」的文章，标签可设 <code>Hexo</code>、<code>博客搭建</code>、<code>分类管理</code>）。一篇文章可多个标签。</li>
-</ul>
-<p><strong>4.2 步骤1：创建「分类页」「标签页」（让导航能访问）</strong><br>Hexo需要手动创建分类&#x2F;标签的“容器页面”，否则导航栏点击后会404：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建分类页面</span></span><br><span class="line">hexo new page <span class="string">&quot;categories&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建标签页面</span></span><br><span class="line">hexo new page <span class="string">&quot;tags&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>然后分别编辑这两个文件的 Front-matter，添加 <code>type</code> 标识：</p>
-<ul>
-<li><code>source/categories/index.md</code>：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">分类</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;categories&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
-<li><code>source/tags/index.md</code>：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">标签</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;tags&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>4.3 步骤2：给文章分配「分类&#x2F;标签」</strong><br>编辑每篇文章（<code>source/_posts/xxx.md</code>）的 Front-matter：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">&quot;什么是SSH隧道及相关技术&quot;</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-10</span></span><br><span class="line"><span class="attr">updated:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">categories:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">网络安全</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">SSH</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">隧道技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">服务器</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>4.4 步骤3：让分类&#x2F;标签显示在导航栏</strong><br>在 <code>themes/next/_config.yml</code> 的 <code>menu</code> 配置中，添加 <code>categories</code> 和 <code>tags</code> 菜单项（已在上文2.2节中包含）。</p>
-<hr>
-<p><strong>二、优化导航与功能：让博客更好用</strong></p>
-<p><strong>1. 开启「搜索功能」（必备！）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>local_search</code>，确保已安装 <code>hexo-generator-searchdb</code> 插件。</p>
-<p><strong>2. 代码高亮优化（程序员必备）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>codeblock.copy_button</code>，并在 <code>hexo/_config.yml</code> 中启用了 <code>highlight.line_number</code>。</p>
-<p><strong>3. 图片处理：避免失效+优化显示</strong></p>
-<ul>
-<li><strong>方案1：本地图片（推荐）</strong>：通过 <code>post_asset_folder: true</code> + <code>marked.post_asset: true</code> 配置，脚本已自动将图片存入文章同名文件夹，使用 <code>![描述](图片名.png)</code> 的相对路径，<strong>永不失效</strong>。</li>
-<li><strong>方案2：图床</strong>：若需多设备编辑，可用PicGo上传至GitHub图床，复制链接粘贴。<strong>但强烈推荐方案1</strong>，数据完全可控。</li>
-<li><strong>优化显示</strong>：在Markdown中，使用以下代码让图片居中并限制宽度：<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&lt;!-- 居中+限制宽度 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;图片链接&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; margin: 0 auto; max-width: 80%;&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h1 id="五、外观优化：让博客更个性化"><a href="#五、外观优化：让博客更个性化" class="headerlink" title="五、外观优化：让博客更个性化"></a>五、外观优化：让博客更个性化</h1><p><strong>5.1 选择Next主题风格（Scheme）</strong><br>在 <code>themes/next/_config.yml</code> 中设置：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span>  <span class="comment"># 推荐：简洁大气，适配分类/标签</span></span><br><span class="line"><span class="comment"># scheme: Mist  # 更紧凑</span></span><br><span class="line"><span class="comment"># scheme: Pisces # 卡片式</span></span><br><span class="line"><span class="comment"># scheme: Muse  # 默认</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>5.2 自定义颜色&#x2F;字体</strong><br>编辑 <code>themes/next/source/css/_custom/custom.styl</code> 文件：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 自定义导航栏背景色</span></span><br><span class="line"><span class="selector-class">.header</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#2c3e50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义链接颜色</span></span><br><span class="line"><span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#3498db</span>;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#e74c3c</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局字体（推荐思源黑体）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Source Han Sans CN&quot;</span>, <span class="string">&quot;PingFang SC&quot;</span>, <span class="string">&quot;Microsoft YaHei&quot;</span>, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码字体（推荐Fira Code）</span></span><br><span class="line"><span class="selector-tag">code</span>, pre &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Fira Code&quot;</span>, <span class="string">&quot;Consolas&quot;</span>, monospace;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 页面背景图（可选）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;/images/bg.jpg&#x27;</span>);</span><br><span class="line">  <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">  <span class="attribute">background-size</span>: cover;</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.9</span>);</span><br><span class="line">  <span class="attribute">background-blend-mode</span>: overlay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意</strong>：将背景图 <code>bg.jpg</code> 放入 <code>source/images/</code> 目录下。</p>
-</blockquote>
-<p><strong>5.3 添加背景图&#x2F;头像</strong></p>
-<ul>
-<li><strong>头像</strong>：在 <code>themes/next/_config.yml</code> 中设置：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpg</span>  <span class="comment"># 图片放在 source/images/ 目录下</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">opacity:</span> <span class="number">1.0</span></span><br></pre></td></tr></table></figure></li>
-<li><strong>背景图</strong>：已在上文 <code>custom.styl</code> 中配置。</li>
-</ul>
-<hr>
-<h1 id="六、增强互动与体验：添加评论-阅读量"><a href="#六、增强互动与体验：添加评论-阅读量" class="headerlink" title="六、增强互动与体验：添加评论&#x2F;阅读量"></a>六、增强互动与体验：添加评论&#x2F;阅读量</h1><p><strong>6.1 评论系统（推荐 Gitalk，适配 GitHub Pages）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>gitalk</code>，请按说明申请GitHub OAuth App并填入 <code>client_id</code> 和 <code>client_secret</code>。</p>
-<p><strong>2. 阅读量统计（不蒜子，无需注册）</strong><br>已在 <code>themes/next/_config.yml</code> 中启用 <code>busuanzi_count</code>。</p>
-<hr>
-<h1 id="七、SEO优化：让博客被搜索引擎收录"><a href="#七、SEO优化：让博客被搜索引擎收录" class="headerlink" title="七、SEO优化：让博客被搜索引擎收录"></a>七、SEO优化：让博客被搜索引擎收录</h1><p><strong>7.1 配置站点信息（Hexo根目录 <code>_config.yml</code>）</strong><br>已在上文2.1节中包含 <code>title</code>, <code>subtitle</code>, <code>description</code>, <code>keywords</code>, <code>author</code>, <code>language</code>, <code>timezone</code>。</p>
-<p><strong>7.2 生成站点地图</strong><br>已在上文1.3节安装了 <code>hexo-generator-sitemap</code> 和 <code>hexo-generator-baidu-sitemap</code> 插件。无需额外配置，它们会自动生成 <code>sitemap.xml</code> 和 <code>baidu_sitemap.xml</code>。</p>
-<p><strong>7.3 提交站点到搜索引擎</strong></p>
-<ul>
-<li><strong>Google 搜索控制台</strong>：添加你的域名，提交 <code>https://你的博客地址/sitemap.xml</code>。</li>
-<li><strong>百度搜索资源平台</strong>：添加你的域名，提交 <code>https://你的博客地址/baidu_sitemap.xml</code>。</li>
-</ul>
-<hr>
-<h1 id="八、细节优化：提升质感"><a href="#八、细节优化：提升质感" class="headerlink" title="八、细节优化：提升质感"></a>八、细节优化：提升质感</h1><p><strong>8.1 文章排版</strong></p>
-<ul>
-<li><strong>折叠块</strong>（适合长代码&#x2F;补充说明）：<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">summary</span>&gt;</span></span>点击查看补充说明<span class="language-xml"><span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span></span><br><span class="line">这里是折叠的内容...</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-<li><strong>每篇文章添加「前言&#x2F;小结」</strong>，让结构更清晰。</li>
-</ul>
-<p><strong>8.2 404 页面</strong><br>创建 <code>source/404.md</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">页面不存在</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">&lt;div</span> <span class="string">style=&quot;text-align:</span> <span class="string">center;</span> <span class="attr">margin-top:</span> <span class="string">50px;&quot;&gt;</span></span><br><span class="line">  <span class="string">&lt;h1&gt;404</span> <span class="bullet">-</span> <span class="string">页面走丢啦～&lt;/h1&gt;</span></span><br><span class="line">  <span class="string">&lt;p&gt;你访问的页面不存在或已被移动&lt;/p&gt;</span></span><br><span class="line">  <span class="string">&lt;a</span> <span class="string">href=&quot;/&quot;</span> <span class="string">style=&quot;color:</span> <span class="comment">#3498db; font-size: 18px;&quot;&gt;返回首页&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>8.3 关闭无用功能</strong><br>在 <code>themes/next/_config.yml</code> 中关闭不需要的功能：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">reward:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">sharejs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="九、部署与备份"><a href="#九、部署与备份" class="headerlink" title="九、部署与备份**"></a>九、部署与备份**</h1><p><strong>9.1 部署流程</strong><br>每次修改后，执行以下命令部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p><strong>9.2 本地测试</strong><br>在部署前，务必先在本地测试：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate --debug</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-<p>访问 <code>http://localhost:4000</code>，检查：</p>
-<ul>
-<li>✅ 文章正常显示</li>
-<li>✅ 图片正确加载</li>
-<li>✅ 样式正常</li>
-<li>✅ 搜索、分类、标签功能正常</li>
-</ul>
-<p><strong>9.3 备份</strong><br>将 Hexo 根目录的 <code>_config.yml</code>、<code>themes/next/_config.yml</code>、<code>source/</code> 目录（文章+图片）备份到 GitHub（新建一个仓库，比如 <code>blog-source</code>），避免电脑故障丢失数据。</p>
-<hr>
-<h1 id="十、故障排除大全"><a href="#十、故障排除大全" class="headerlink" title="十、故障排除大全"></a>十、故障排除大全</h1><p><strong>10.1 图片不显示问题</strong></p>
-<ul>
-<li><strong>症状</strong>：图片显示为空白或404。</li>
-<li><strong>解决方案</strong>：<ol>
-<li><strong>检查配置</strong>：确保 <code>_config.yml</code> 中 <code>post_asset_folder: true</code> 和 <code>marked.prepend_root: true</code> 已开启。</li>
-<li><strong>清理缓存</strong>：执行 <code>hexo clean</code> 后重新 <code>hexo generate</code>。</li>
-<li><strong>检查路径</strong>：浏览器F12查看Network标签，确认图片请求的URL是 <code>文章名/图片名.png</code> 的相对路径。</li>
-</ol>
-</li>
-</ul>
-<p><strong>10.2 部署失败问题</strong></p>
-<ul>
-<li><strong>常见错误1：权限拒绝</strong><ul>
-<li><strong>解决方案</strong>：使用HTTPS地址或配置SSH密钥。</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure></li>
-<li><strong>常见错误2：分支不存在</strong><ul>
-<li><strong>解决方案</strong>：确认你的GitHub仓库默认分支是 <code>main</code> 还是 <code>gh-pages</code>，并相应修改 <code>branch</code> 配置。</li>
-</ul>
-</li>
-</ul>
-<p><strong>10.3 主题显示异常</strong></p>
-<ul>
-<li><strong>解决方案</strong>：<ol>
-<li>确认主题安装：<code>npm list hexo-theme-next</code>。</li>
-<li>检查 <code>hexo/_config.yml</code> 中 <code>theme: next</code>。</li>
-<li>清理重新安装：<code>rm -rf node_modules &amp;&amp; npm install</code>。</li>
-</ol>
-</li>
-</ul>
-<p><strong>10.4 时间显示问题</strong></p>
-<ul>
-<li><strong>症状</strong>：文章时间相差8小时。</li>
-<li><strong>解决方案</strong>：确保 <code>hexo/_config.yml</code> 中 <code>timezone: &#39;Asia/Shanghai&#39;</code>。</li>
-</ul>
-<hr>
-<h1 id="十一、优化与进阶"><a href="#十一、优化与进阶" class="headerlink" title="十一、优化与进阶"></a>十一、优化与进阶</h1><p><strong>11.1 性能优化</strong></p>
-<ul>
-<li>在 <code>themes/next/_config.yml</code> 中启用 <code>lazyload: enable: true</code>。</li>
-<li>在 <code>hexo/_config.yml</code> 中启用 <code>highlight.line_number: true</code>。</li>
-</ul>
-<p><strong>11.2 自定义域名</strong></p>
-<ul>
-<li>在 <code>source/</code> 目录下创建一个名为 <code>CNAME</code> 的文件。</li>
-<li>文件内容写入你的域名，例如：<code>yourdomain.com</code>。</li>
-<li>在你的域名DNS服务商处，添加一条CNAME记录，指向 <code>你的用户名.github.io</code>。</li>
-</ul>
-<hr>
-<h1 id="十二、实用命令速查"><a href="#十二、实用命令速查" class="headerlink" title="十二、实用命令速查"></a>十二、实用命令速查</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;文章标题&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地写作（预览草稿）</span></span><br><span class="line">hexo server --draft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制清理缓存</span></span><br><span class="line">hexo clean --debug</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Hexo版本</span></span><br><span class="line">hexo version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一键部署（最常用）</span></span><br><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-
-<hr>
-]]></content>
-      <categories>
-        <category>知识杂碎</category>
-      </categories>
-      <tags>
-        <tag>Blog</tag>
-        <tag>Hexo</tag>
-        <tag>Next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git-Note</title>
-    <url>/2024/12/10/git_note/</url>
-    <content><![CDATA[<h1 id="Git-操作指南（终极整合版）"><a href="#Git-操作指南（终极整合版）" class="headerlink" title="Git 操作指南（终极整合版）"></a>Git 操作指南（终极整合版）</h1><h2 id="一、基础命令"><a href="#一、基础命令" class="headerlink" title="一、基础命令"></a>一、基础命令</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>功能说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>git init</code></td>
-<td>初始化一个新的 Git 仓库</td>
-</tr>
-<tr>
-<td><code>git log</code></td>
-<td>查看提交历史</td>
-</tr>
-<tr>
-<td><code>git add [文件名]</code></td>
-<td>将文件添加到暂存区（<code>git add .</code> 添加所有修改）</td>
-</tr>
-<tr>
-<td><code>git commit -m &quot;提交信息&quot;</code></td>
-<td>提交暂存区的更改到本地仓库</td>
-</tr>
-<tr>
-<td><code>git status</code></td>
-<td>查看当前仓库状态（修改、暂存、提交情况）</td>
-</tr>
-</tbody></table>
-<h2 id="二、远程仓库管理"><a href="#二、远程仓库管理" class="headerlink" title="二、远程仓库管理"></a>二、远程仓库管理</h2><h3 id="添加-管理远程仓库"><a href="#添加-管理远程仓库" class="headerlink" title="添加&#x2F;管理远程仓库"></a>添加&#x2F;管理远程仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin [仓库地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git remote add origin https://github.com/用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git remote add origin git@github.com:用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程仓库地址</span></span><br><span class="line">git remote set-url origin [新地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已配置的远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
-
-<h3 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/你的GitHub用户名/仓库名.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:你的GitHub用户名/仓库名.git</span><br></pre></td></tr></table></figure>
-
-<h2 id="三、多设备同步工作流"><a href="#三、多设备同步工作流" class="headerlink" title="三、多设备同步工作流"></a>三、多设备同步工作流</h2><h3 id="核心逻辑"><a href="#核心逻辑" class="headerlink" title="核心逻辑"></a>核心逻辑</h3><ul>
-<li>多台电脑共享同一个 GitHub 远程仓库作为”中央存储”</li>
-<li>任意电脑修改后通过 <code>git push</code> 推送到 GitHub</li>
-<li>其他电脑通过 <code>git pull</code> 拉取最新修改</li>
-</ul>
-<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="1-在新设备上拉取仓库"><a href="#1-在新设备上拉取仓库" class="headerlink" title="1. 在新设备上拉取仓库"></a>1. 在新设备上拉取仓库</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:用户名/仓库.git  <span class="comment"># SSH方式</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/用户名/仓库.git  <span class="comment"># HTTPS方式</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="2-修改并推送代码"><a href="#2-修改并推送代码" class="headerlink" title="2. 修改并推送代码"></a>2. 修改并推送代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .          <span class="comment"># 添加修改</span></span><br><span class="line">git commit -m <span class="string">&quot;描述&quot;</span> <span class="comment"># 提交更改</span></span><br><span class="line">git push origin main  <span class="comment"># 推送到远程</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="3-同步最新代码"><a href="#3-同步最新代码" class="headerlink" title="3. 同步最新代码"></a>3. 同步最新代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git pull origin main  <span class="comment"># 拉取并合并远程更改</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="四、SSH-配置与问题解决"><a href="#四、SSH-配置与问题解决" class="headerlink" title="四、SSH 配置与问题解决"></a>四、SSH 配置与问题解决</h2><h3 id="核心步骤"><a href="#核心步骤" class="headerlink" title="核心步骤"></a>核心步骤</h3><p>确认密钥添加正确 → 配置 SSH 识别密钥 → 修复文件权限</p>
-<h4 id="1-确认公钥添加到-GitHub"><a href="#1-确认公钥添加到-GitHub" class="headerlink" title="1. 确认公钥添加到 GitHub"></a>1. 确认公钥添加到 GitHub</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看公钥内容</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub    <span class="comment"># 默认密钥</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/自定义密钥名.pub  <span class="comment"># 自定义密钥</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>复制完整文本（从 <code>ssh-rsa</code> 开头到邮箱结尾）</li>
-<li>GitHub → Settings → SSH and GPG keys → 添加新 Key</li>
-</ul>
-<h4 id="2-配置-SSH-识别密钥"><a href="#2-配置-SSH-识别密钥" class="headerlink" title="2. 配置 SSH 识别密钥"></a>2. 配置 SSH 识别密钥</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">notepad ~/.ssh/config</span><br></pre></td></tr></table></figure>
-<p>粘贴配置（根据实际情况修改）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile C:/Users/你的用户名/.ssh/密钥文件名</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>路径使用 <code>/</code> 或 <code>\\</code>，例如：<code>C:/Users/张三/.ssh/id_rsa</code></p>
-</blockquote>
-<h4 id="3-修复密钥文件权限"><a href="#3-修复密钥文件权限" class="headerlink" title="3. 修复密钥文件权限"></a>3. 修复密钥文件权限</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 600 密钥文件名      <span class="comment"># 私钥权限</span></span><br><span class="line"><span class="built_in">chmod</span> 644 密钥文件名.pub  <span class="comment"># 公钥权限</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="4-测试连接"><a href="#4-测试连接" class="headerlink" title="4. 测试连接"></a>4. 测试连接</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment"># 成功显示：Hi 用户名! You&#x27;ve successfully authenticated...</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="五、提交历史管理"><a href="#五、提交历史管理" class="headerlink" title="五、提交历史管理"></a>五、提交历史管理</h2><h3 id="1-撤销错误提交"><a href="#1-撤销错误提交" class="headerlink" title="1. 撤销错误提交"></a>1. 撤销错误提交</h3><h4 id="方法一：直接回退历史（个人仓库适用）"><a href="#方法一：直接回退历史（个人仓库适用）" class="headerlink" title="方法一：直接回退历史（个人仓库适用）"></a>方法一：直接回退历史（个人仓库适用）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 回退到正确提交（92d433f 为正确提交ID）</span></span><br><span class="line">git reset --hard 92d433f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制推送到远程</span></span><br><span class="line">git push origin main --force</span><br></pre></td></tr></table></figure>
-
-<h4 id="方法二：创建撤销提交（多人协作适用）"><a href="#方法二：创建撤销提交（多人协作适用）" class="headerlink" title="方法二：创建撤销提交（多人协作适用）"></a>方法二：创建撤销提交（多人协作适用）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 生成撤销提交（0dec4f6 为错误提交ID）</span></span><br><span class="line">git revert 0dec4f6</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 推送撤销提交</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-
-<h4 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;正确的提交信息&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-修复本地分支与远程分支偏离问题"><a href="#2-修复本地分支与远程分支偏离问题" class="headerlink" title="2. 修复本地分支与远程分支偏离问题"></a>2. 修复本地分支与远程分支偏离问题</h3><h4 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h4><p>本地分支历史与远程分支历史不一致（本地包含远程已移除的提交）</p>
-<h4 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 保存未提交的修改（如有）</span></span><br><span class="line">git stash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制同步本地分支与远程分支</span></span><br><span class="line">git reset --hard origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 确认同步完成</span></span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
-
-<h4 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h4><p>通过 <code>git reset --hard origin/main</code> 将本地分支完全重置为与远程分支一致的状态，覆盖本地与远程不一致的历史。</p>
-<h2 id="六、高级分支同步技巧"><a href="#六、高级分支同步技巧" class="headerlink" title="六、高级分支同步技巧"></a>六、高级分支同步技巧</h2><h3 id="1-同步特定远程分支"><a href="#1-同步特定远程分支" class="headerlink" title="1. 同步特定远程分支"></a>1. 同步特定远程分支</h3><p>当需要同步特定远程分支时，可以使用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先获取所有远程分支</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建本地分支跟踪远程分支</span></span><br><span class="line">git checkout -b 本地分支名 origin/远程分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或直接重置当前分支到远程分支</span></span><br><span class="line">git reset --hard origin/远程分支名</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-同步多个特定分支"><a href="#2-同步多个特定分支" class="headerlink" title="2. 同步多个特定分支"></a>2. 同步多个特定分支</h3><p>Git 本身不支持一次性同步多个分支，但可以通过脚本批量操作：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步多个分支</span></span><br><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br><span class="line">git checkout dev</span><br><span class="line">git reset --hard origin/dev</span><br><span class="line">git checkout feature-branch</span><br><span class="line">git reset --hard origin/feature-branch</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-同步远程仓库的所有分支"><a href="#3-同步远程仓库的所有分支" class="headerlink" title="3. 同步远程仓库的所有分支"></a>3. 同步远程仓库的所有分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取所有远程分支</span></span><br><span class="line">git fetch --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为每个远程分支创建本地分支</span></span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或删除所有本地分支后重新创建</span></span><br><span class="line">git branch | grep -v <span class="string">&quot;main&quot;</span> | xargs git branch -D</span><br><span class="line">git fetch --all</span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-重置远程分支到特定提交"><a href="#4-重置远程分支到特定提交" class="headerlink" title="4. 重置远程分支到特定提交"></a>4. 重置远程分支到特定提交</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 需要有权限</span></span><br><span class="line">git push origin --force 0dec4f6:main</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-查看分支差异"><a href="#5-查看分支差异" class="headerlink" title="5. 查看分支差异"></a>5. 查看分支差异</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看本地比远程多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> origin/main..main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程比本地多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> main..origin/main</span><br></pre></td></tr></table></figure>
-
-<h2 id="七、其他实用技巧"><a href="#七、其他实用技巧" class="headerlink" title="七、其他实用技巧"></a>七、其他实用技巧</h2><h3 id="1-分支管理"><a href="#1-分支管理" class="headerlink" title="1. 分支管理"></a>1. 分支管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -a  <span class="comment"># 查看所有分支（本地和远程）</span></span><br><span class="line">git branch -d 分支名  <span class="comment"># 安全删除（已合并）</span></span><br><span class="line">git branch -D 分支名  <span class="comment"># 强制删除（未合并）</span></span><br><span class="line">git branch -m 旧分支名 新分支名  <span class="comment"># 重命名当前分支</span></span><br><span class="line">git branch --set-upstream-to=origin/分支名 本地分支名  <span class="comment"># 重置远程跟踪分支</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-暂存与恢复"><a href="#2-暂存与恢复" class="headerlink" title="2. 暂存与恢复"></a>2. 暂存与恢复</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash  <span class="comment"># 暂存未提交修改</span></span><br><span class="line">git stash list  <span class="comment"># 查看所有暂存</span></span><br><span class="line">git stash pop  <span class="comment"># 恢复最新暂存</span></span><br><span class="line">git stash pop stash@&#123;n&#125;  <span class="comment"># 恢复指定暂存</span></span><br><span class="line">git stash drop stash@&#123;n&#125;  <span class="comment"># 删除指定暂存</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-撤销修改"><a href="#3-撤销修改" class="headerlink" title="3. 撤销修改"></a>3. 撤销修改</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -- 文件名  <span class="comment"># 撤销工作区修改</span></span><br><span class="line">git checkout .  <span class="comment"># 撤销所有工作区修改</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-提交历史查看"><a href="#4-提交历史查看" class="headerlink" title="4. 提交历史查看"></a>4. 提交历史查看</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p  <span class="comment"># 显示每次提交的详细变化</span></span><br><span class="line">git <span class="built_in">log</span> --<span class="built_in">stat</span>  <span class="comment"># 显示每次提交的统计信息</span></span><br><span class="line">git <span class="built_in">log</span> --graph --oneline --all  <span class="comment"># 图形化显示分支历史</span></span><br><span class="line">git show 提交ID  <span class="comment"># 查看某次提交的详细内容</span></span><br><span class="line">git add -p  <span class="comment"># 交互式选择要添加的修改</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="5-拉取特定文件"><a href="#5-拉取特定文件" class="headerlink" title="5. 拉取特定文件"></a>5. 拉取特定文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout origin/分支名 -- 文件路径  <span class="comment"># 从远程分支拉取特定文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="八、多仓库协作"><a href="#八、多仓库协作" class="headerlink" title="八、多仓库协作"></a>八、多仓库协作</h2><h3 id="1-添加多个远程仓库"><a href="#1-添加多个远程仓库" class="headerlink" title="1. 添加多个远程仓库"></a>1. 添加多个远程仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加上游仓库（原始项目）</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加自己的fork</span></span><br><span class="line">git remote add fork https://github.com/你的用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-从上游仓库拉取更新"><a href="#2-从上游仓库拉取更新" class="headerlink" title="2. 从上游仓库拉取更新"></a>2. 从上游仓库拉取更新</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取上游仓库更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并到当前分支</span></span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或使用rebase保持提交历史线性</span></span><br><span class="line">git rebase upstream/main</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-同步fork与上游仓库"><a href="#3-同步fork与上游仓库" class="headerlink" title="3. 同步fork与上游仓库"></a>3. 同步fork与上游仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 添加上游仓库</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 获取上游更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 合并到本地main分支</span></span><br><span class="line">git checkout main</span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 推送到自己的fork</span></span><br><span class="line">git push fork main</span><br></pre></td></tr></table></figure>
-
-<h2 id="九、GitHub高级功能"><a href="#九、GitHub高级功能" class="headerlink" title="九、GitHub高级功能"></a>九、GitHub高级功能</h2><h3 id="1-GitHub-Copilot"><a href="#1-GitHub-Copilot" class="headerlink" title="1. GitHub Copilot"></a>1. GitHub Copilot</h3><ul>
-<li>AI辅助编程，从简单模板到复杂功能</li>
-<li>支持多种编程语言</li>
-<li>集成在VS Code、JetBrains等IDE中</li>
-</ul>
-<h3 id="2-GitHub-Actions"><a href="#2-GitHub-Actions" class="headerlink" title="2. GitHub Actions"></a>2. GitHub Actions</h3><ul>
-<li>自动化工作流</li>
-<li>CI&#x2F;CD流水线</li>
-<li>自动测试和部署</li>
-<li>示例配置：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        npm install</span></span><br><span class="line"><span class="string">        npm test</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="3-GitHub-Security"><a href="#3-GitHub-Security" class="headerlink" title="3. GitHub Security"></a>3. GitHub Security</h3><ul>
-<li><strong>Code Scanning</strong>：自动扫描代码漏洞</li>
-<li><strong>Dependabot</strong>：自动更新依赖项</li>
-<li><strong>Secret Scanning</strong>：检测泄露的密钥</li>
-<li><strong>Security Alerts</strong>：安全漏洞通知</li>
-</ul>
-<h3 id="4-GitHub-Projects"><a href="#4-GitHub-Projects" class="headerlink" title="4. GitHub Projects"></a>4. GitHub Projects</h3><ul>
-<li>项目管理工具</li>
-<li>Kanban看板</li>
-<li>任务跟踪</li>
-<li>与Issues集成</li>
-</ul>
-<h3 id="5-GitHub-Codespaces"><a href="#5-GitHub-Codespaces" class="headerlink" title="5. GitHub Codespaces"></a>5. GitHub Codespaces</h3><ul>
-<li>云端开发环境</li>
-<li>集成VS Code</li>
-<li>按需启动</li>
-<li>无缝协作</li>
-</ul>
-<h2 id="十、最佳实践"><a href="#十、最佳实践" class="headerlink" title="十、最佳实践"></a>十、最佳实践</h2><h3 id="1-分支策略"><a href="#1-分支策略" class="headerlink" title="1. 分支策略"></a>1. 分支策略</h3><ul>
-<li><strong>主分支</strong>：main&#x2F;master - 用于生产环境</li>
-<li><strong>开发分支</strong>：dev - 用于集成测试</li>
-<li><strong>功能分支</strong>：feature&#x2F;xxx - 用于开发新功能</li>
-<li><strong>修复分支</strong>：hotfix&#x2F;xxx - 用于紧急修复</li>
-</ul>
-<h3 id="2-提交规范"><a href="#2-提交规范" class="headerlink" title="2. 提交规范"></a>2. 提交规范</h3><ul>
-<li>提交信息应清晰描述修改内容</li>
-<li>使用”feat:”, “fix:”, “docs:”, “style:”, “refactor:”, “test:”, “chore:”等前缀</li>
-<li>示例：<code>feat: 添加用户登录功能</code></li>
-</ul>
-<h3 id="3-代码审查"><a href="#3-代码审查" class="headerlink" title="3. 代码审查"></a>3. 代码审查</h3><ul>
-<li>一次审查不超过200行代码</li>
-<li>专注于逻辑问题而非风格问题</li>
-<li>提供具体建议而非泛泛而谈</li>
-<li>使用GitHub的Review功能</li>
-</ul>
-<h3 id="4-定期同步"><a href="#4-定期同步" class="headerlink" title="4. 定期同步"></a>4. 定期同步</h3><ul>
-<li>每天至少pull一次最新代码</li>
-<li>在开始新功能前先同步远程代码</li>
-</ul>
-<h3 id="5-小步提交"><a href="#5-小步提交" class="headerlink" title="5. 小步提交"></a>5. 小步提交</h3><ul>
-<li>每次提交只包含一个逻辑变更</li>
-<li>不要将多个不相关的修改放在一个提交中</li>
-</ul>
-<h2 id="十一、常见问题解决方案"><a href="#十一、常见问题解决方案" class="headerlink" title="十一、常见问题解决方案"></a>十一、常见问题解决方案</h2><h3 id="1-“Permission-denied-publickey-”-错误"><a href="#1-“Permission-denied-publickey-”-错误" class="headerlink" title="1. “Permission denied (publickey)” 错误"></a>1. “Permission denied (publickey)” 错误</h3><ul>
-<li>确认SSH密钥已添加到GitHub</li>
-<li>检查密钥权限是否正确</li>
-<li>测试SSH连接：<code>ssh -T git@github.com</code></li>
-</ul>
-<h3 id="2-“fatal-not-a-git-repository”-错误"><a href="#2-“fatal-not-a-git-repository”-错误" class="headerlink" title="2. “fatal: not a git repository” 错误"></a>2. “fatal: not a git repository” 错误</h3><ul>
-<li>确保在Git仓库目录内操作</li>
-<li>使用<code>git init</code>初始化仓库</li>
-</ul>
-<h3 id="3-“remote-origin-already-exists”-错误"><a href="#3-“remote-origin-already-exists”-错误" class="headerlink" title="3. “remote origin already exists” 错误"></a>3. “remote origin already exists” 错误</h3><ul>
-<li>使用<code>git remote set-url origin [新地址]</code>修改地址</li>
-<li>或先删除远程：<code>git remote remove origin</code></li>
-</ul>
-<h3 id="4-“unable-to-update-local-ref”-错误"><a href="#4-“unable-to-update-local-ref”-错误" class="headerlink" title="4. “unable to update local ref” 错误"></a>4. “unable to update local ref” 错误</h3><ul>
-<li>清理本地引用：<code>git remote prune origin</code></li>
-<li>重置本地分支：<code>git reset --hard origin/main</code></li>
-</ul>
-<h3 id="5-“detached-HEAD”-状态"><a href="#5-“detached-HEAD”-状态" class="headerlink" title="5. “detached HEAD” 状态"></a>5. “detached HEAD” 状态</h3><ul>
-<li>创建新分支：<code>git checkout -b 新分支名</code></li>
-<li>或回到已有分支：<code>git checkout main</code></li>
-</ul>
-<h3 id="6-“refusing-to-merge-unrelated-histories”-错误"><a href="#6-“refusing-to-merge-unrelated-histories”-错误" class="headerlink" title="6. “refusing to merge unrelated histories” 错误"></a>6. “refusing to merge unrelated histories” 错误</h3><ul>
-<li>使用<code>git pull origin main --allow-unrelated-histories</code></li>
-</ul>
-<h3 id="7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误"><a href="#7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误" class="headerlink" title="7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误"></a>7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
-<li>确认是否需要强制推送：<code>git push --force</code></li>
-<li>或拉取远程更改：<code>git pull origin main</code></li>
-</ul>
-<h3 id="8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误"><a href="#8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误" class="headerlink" title="8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误"></a>8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
-<li>拉取远程更改：<code>git pull origin main</code></li>
-</ul>
-<h3 id="9-“conflict”-错误"><a href="#9-“conflict”-错误" class="headerlink" title="9. “conflict” 错误"></a>9. “conflict” 错误</h3><ul>
-<li>手动解决冲突文件</li>
-<li>使用<code>git add</code>标记冲突已解决</li>
-<li>完成合并：<code>git commit</code></li>
-</ul>
-<h3 id="10-“untracked-files”-问题"><a href="#10-“untracked-files”-问题" class="headerlink" title="10. “untracked files” 问题"></a>10. “untracked files” 问题</h3><ul>
-<li>添加未跟踪文件：<code>git add .</code></li>
-<li>或忽略文件：在.gitignore中添加文件模式</li>
-</ul>
-<h2 id="十二、Git与GitHub的未来趋势"><a href="#十二、Git与GitHub的未来趋势" class="headerlink" title="十二、Git与GitHub的未来趋势"></a>十二、Git与GitHub的未来趋势</h2><h3 id="1-AI辅助开发"><a href="#1-AI辅助开发" class="headerlink" title="1. AI辅助开发"></a>1. AI辅助开发</h3><ul>
-<li>GitHub Copilot</li>
-<li>自动代码生成</li>
-<li>智能代码补全</li>
-</ul>
-<h3 id="2-云原生开发"><a href="#2-云原生开发" class="headerlink" title="2. 云原生开发"></a>2. 云原生开发</h3><ul>
-<li>GitHub Codespaces</li>
-<li>云端开发环境</li>
-<li>无缝协作</li>
-</ul>
-<h3 id="3-安全增强"><a href="#3-安全增强" class="headerlink" title="3. 安全增强"></a>3. 安全增强</h3><ul>
-<li>自动漏洞扫描</li>
-<li>依赖项安全检查</li>
-<li>密钥泄露检测</li>
-</ul>
-<h3 id="4-开源生态"><a href="#4-开源生态" class="headerlink" title="4. 开源生态"></a>4. 开源生态</h3><ul>
-<li>更多开源项目</li>
-<li>更广泛的社区协作</li>
-<li>更多贡献机会</li>
-</ul>
-<h3 id="5-企业级功能"><a href="#5-企业级功能" class="headerlink" title="5. 企业级功能"></a>5. 企业级功能</h3><ul>
-<li>更强大的权限管理</li>
-<li>更安全的代码存储</li>
-<li>更完善的审计功能</li>
-</ul>
-<h2 id="十三、学习资源"><a href="#十三、学习资源" class="headerlink" title="十三、学习资源"></a>十三、学习资源</h2><h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><ul>
-<li><a href="https://docs.github.com/">GitHub官方文档</a></li>
-<li><a href="https://git-scm.com/docs">Git官方文档</a></li>
-</ul>
-<h3 id="学习资源"><a href="#学习资源" class="headerlink" title="学习资源"></a>学习资源</h3><ul>
-<li><a href="https://git-scm.com/book/en/v2">Pro Git 书籍</a></li>
-<li><a href="https://lab.github.com/">GitHub Learning Lab</a></li>
-<li><a href="http://gitimmersion.com/">Git Immersion</a></li>
-</ul>
-<h3 id="社区"><a href="#社区" class="headerlink" title="社区"></a>社区</h3><ul>
-<li>Stack Overflow</li>
-<li>GitHub社区论坛</li>
-<li>Reddit的r&#x2F;git和r&#x2F;github</li>
-</ul>
-<h3 id="实践项目"><a href="#实践项目" class="headerlink" title="实践项目"></a>实践项目</h3><ul>
-<li>贡献开源项目</li>
-<li>创建自己的项目</li>
-<li>参与GitHub Hacktoberfest</li>
-</ul>
-<blockquote>
-<p><strong>提示</strong>：在多人协作项目中，避免使用 <code>--force</code> 推送，以免影响其他开发者的工作。使用 <code>git pull --rebase</code> 代替 <code>git pull</code> 可以保持提交历史的线性。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>知识杂碎</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSH隧道技术</title>
     <url>/2024/11/10/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<h2 id="1-什么是SSH隧道-为什么需要SSH隧道？"><a href="#1-什么是SSH隧道-为什么需要SSH隧道？" class="headerlink" title="1.什么是SSH隧道+为什么需要SSH隧道？"></a><code>1.什么是SSH隧道+为什么需要SSH隧道？</code></h2><blockquote>
@@ -637,6 +206,411 @@
         <tag>SSH</tag>
         <tag>隧道技术</tag>
         <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Blog-Building</title>
+    <url>/2024/09/10/Blog-Building/</url>
+    <content><![CDATA[<h1 id="从CSDN迁移博客到Hexo-Next-GitHub-Pages"><a href="#从CSDN迁移博客到Hexo-Next-GitHub-Pages" class="headerlink" title="从CSDN迁移博客到Hexo+Next+GitHub Pages"></a>从CSDN迁移博客到Hexo+Next+GitHub Pages</h1><p>本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：</p>
+<ul>
+<li>CSDN导出图片不显示问题</li>
+<li>Hexo配置错误导致部署失败</li>
+<li>路径解析和缓存冲突</li>
+<li>GitHub Pages部署疑难杂症</li>
+<li>博客结构混乱、功能缺失、体验不佳</li>
+</ul>
+<h1 id="一、环境准备与项目初始化"><a href="#一、环境准备与项目初始化" class="headerlink" title="一、环境准备与项目初始化"></a>一、环境准备与项目初始化</h1><p><strong>1.1 必备环境安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装Node.js（必需v14+，推荐v18+）</span></span><br><span class="line"><span class="comment"># 官网下载：https://nodejs.org/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Git</span></span><br><span class="line"><span class="comment"># 官网下载：https://git-scm.com/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证安装</span></span><br><span class="line">node --version</span><br><span class="line">npm --version</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<p><strong>1.2 GitHub仓库准备</strong></p>
+<ul>
+<li>创建一个名为 <code>你的用户名.github.io</code> 的仓库（必须是此格式）。</li>
+<li><strong>推荐</strong>：配置SSH密钥以实现免密推送。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;your_email@example.com&quot;</span></span><br><span class="line"><span class="comment"># 将 ~/.ssh/id_rsa.pub 内容添加到 GitHub 的 SSH Keys 设置中</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>1.3 Hexo项目初始化</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装Hexo命令行工具</span></span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建博客项目</span></span><br><span class="line">hexo init myBlog</span><br><span class="line"><span class="built_in">cd</span> myBlog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Next主题</span></span><br><span class="line">npm install hexo-theme-next --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装部署插件</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装搜索插件（用于本地搜索）</span></span><br><span class="line">npm install hexo-generator-searchdb --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装站点地图插件（用于SEO）</span></span><br><span class="line">npm install hexo-generator-sitemap --save</span><br><span class="line">npm install hexo-generator-baidu-sitemap --save  <span class="comment"># 可选，百度专用</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="二、核心配置文件详解"><a href="#二、核心配置文件详解" class="headerlink" title="二、核心配置文件详解"></a>二、核心配置文件详解</h1><p><strong>2.1 Hexo主配置文件 (<code>_config.yml</code>)</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">ZQ-Rookie-Hacker的技术博客</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;分享编程、网络安全、工具使用技巧&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;专注于Hexo博客搭建、前端开发、网络安全的技术分享平台&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> [<span class="string">&#x27;Hexo&#x27;</span>, <span class="string">&#x27;博客搭建&#x27;</span>, <span class="string">&#x27;网络安全&#x27;</span>, <span class="string">&#x27;SSH&#x27;</span>, <span class="string">&#x27;编程技巧&#x27;</span>]</span><br><span class="line"><span class="attr">author:</span> <span class="string">ZQ-Rookie-Hacker</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://你的用户名.github.io</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="attr">source_dir:</span> <span class="string">source</span></span><br><span class="line"><span class="attr">public_dir:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">tag_dir:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">archive_dir:</span> <span class="string">archives</span></span><br><span class="line"><span class="attr">category_dir:</span> <span class="string">categories</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Writing</span></span><br><span class="line"><span class="attr">new_post_name:</span> <span class="string">:title.md</span></span><br><span class="line"><span class="attr">default_layout:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">titlecase:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">external_link:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">site</span></span><br><span class="line">  <span class="attr">exclude:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">filename_case:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">render_drafts:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span>  <span class="comment"># 🔑 关键：启用文章资源文件夹（每篇文章一个文件夹存放图片）</span></span><br><span class="line"><span class="attr">relative_link:</span> <span class="literal">false</span>     <span class="comment"># 🔑 关键：禁用相对链接，确保路径正确</span></span><br><span class="line"><span class="attr">future:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Markdown配置（解决图片核心问题）</span></span><br><span class="line"><span class="attr">syntax_highlighter:</span> <span class="string">highlight.js</span></span><br><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">auto_detect:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">wrap:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">hljs:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line">  <span class="attr">prepend_root:</span> <span class="literal">true</span>    <span class="comment"># 🔑 关键：自动为相对路径添加根路径</span></span><br><span class="line">  <span class="attr">post_asset:</span> <span class="literal">true</span>      <span class="comment"># 🔑 关键：识别文章资源文件夹中的图片</span></span><br><span class="line"></span><br><span class="line"><span class="attr">prismjs:</span></span><br><span class="line">  <span class="attr">preprocess:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭缓存避免路径问题</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2.2 Next主题配置 (<code>themes/next/_config.yml</code>)</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Scheme Settings (推荐简洁大气的Gemini或Mist)</span></span><br><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span></span><br><span class="line"><span class="comment"># scheme: Mist</span></span><br><span class="line"><span class="comment"># scheme: Pisces</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line"><span class="attr">darkmode:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Menu Settings</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-folder</span>  <span class="comment"># 新增：分类页</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-tags</span>              <span class="comment"># 新增：标签页</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-user</span>            <span class="comment"># 可选：需先创建about页</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sidebar Settings</span></span><br><span class="line"><span class="attr">sidebar:</span></span><br><span class="line">  <span class="attr">position:</span> <span class="string">left</span></span><br><span class="line">  <span class="attr">display:</span> <span class="string">post</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Post Settings</span></span><br><span class="line"><span class="attr">excerpt_description:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">read_more_btn:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 图片懒加载（提升加载速度）</span></span><br><span class="line"><span class="attr">lazyload:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代码高亮优化</span></span><br><span class="line"><span class="attr">codeblock:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地搜索</span></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">搜索文章...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 阅读量统计（不蒜子）</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_visitors:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">post_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">archive_views:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 评论系统（推荐Gitalk）</span></span><br><span class="line"><span class="attr">gitalk:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">client_id:</span> <span class="string">你的Client</span> <span class="string">ID</span></span><br><span class="line">  <span class="attr">client_secret:</span> <span class="string">你的Client</span> <span class="string">Secret</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">blog-comments</span>  <span class="comment"># 用于存储评论的GitHub仓库名</span></span><br><span class="line">  <span class="attr">owner:</span> <span class="string">你的GitHub用户名</span></span><br><span class="line">  <span class="attr">admin:</span> [<span class="string">你的GitHub用户名</span>]</span><br><span class="line">  <span class="attr">distraction_free_mode:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SEO</span></span><br><span class="line"><span class="attr">seo:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="三、CSDN图片处理终极方案"><a href="#三、CSDN图片处理终极方案" class="headerlink" title="三、CSDN图片处理终极方案"></a>三、CSDN图片处理终极方案</h1><p><strong>3.1 自动化图片下载与修复脚本 (<code>fix_csdn_images.py</code>)</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># ====== 你只需要改这一行：你的文章放哪儿？ ======</span></span><br><span class="line">POSTS_DIR = <span class="string">r&quot;F:\myBlog\source\_posts&quot;</span>  <span class="comment"># 修改为你的实际路径</span></span><br><span class="line"><span class="comment"># ================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 支持的图片格式</span></span><br><span class="line">IMG_EXTENSIONS = (<span class="string">&#x27;.png&#x27;</span>, <span class="string">&#x27;.jpg&#x27;</span>, <span class="string">&#x27;.jpeg&#x27;</span>, <span class="string">&#x27;.gif&#x27;</span>, <span class="string">&#x27;.bmp&#x27;</span>, <span class="string">&#x27;.webp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">download_image</span>(<span class="params">url, save_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;下载单张图片&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        headers = &#123;</span><br><span class="line">            <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        res = requests.get(url, headers=headers, timeout=<span class="number">15</span>)</span><br><span class="line">        res.raise_for_status()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(save_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(res.content)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ 下载失败：<span class="subst">&#123;url&#125;</span>，错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_markdown_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理单个Markdown文件&quot;&quot;&quot;</span></span><br><span class="line">    article_name = os.path.splitext(os.path.basename(file_path))[<span class="number">0</span>]</span><br><span class="line">    image_dir = os.path.join(os.path.dirname(file_path), article_name)</span><br><span class="line">    os.makedirs(image_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        content = f.read()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查找所有CSDN网络图片链接</span></span><br><span class="line">    img_pattern = <span class="string">r&#x27;!\[([^\]]*)\]\((https?://[^\s)]+\.(?:png|jpg|jpeg|gif|bmp|webp))\)&#x27;</span></span><br><span class="line">    matches = <span class="built_in">list</span>(re.finditer(img_pattern, content))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;🔍 找到 <span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span> 张图片&quot;</span>)</span><br><span class="line"></span><br><span class="line">    success_count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, <span class="keyword">match</span> <span class="keyword">in</span> <span class="built_in">enumerate</span>(matches):</span><br><span class="line">        alt_text = <span class="keyword">match</span>.group(<span class="number">1</span>) <span class="keyword">or</span> <span class="string">&#x27;图片描述&#x27;</span></span><br><span class="line">        url = <span class="keyword">match</span>.group(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;⬇️ 正在下载 (<span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span>): <span class="subst">&#123;os.path.basename(url)&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 生成图片文件名</span></span><br><span class="line">        parsed = urlparse(url)</span><br><span class="line">        ext = os.path.splitext(parsed.path)[<span class="number">1</span>].lower()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> ext <span class="keyword">or</span> ext <span class="keyword">not</span> <span class="keyword">in</span> IMG_EXTENSIONS:</span><br><span class="line">            ext = <span class="string">&#x27;.png&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清理文件名中的特殊字符</span></span><br><span class="line">        clean_alt = re.sub(<span class="string">r&#x27;[^\w\u4e00-\u9fa5-]&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, alt_text)</span><br><span class="line">        filename_on_disk = <span class="string">f&quot;<span class="subst">&#123;clean_alt&#125;</span>_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span> <span class="keyword">if</span> clean_alt <span class="keyword">else</span> <span class="string">f&quot;image_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">        local_path = os.path.join(image_dir, filename_on_disk)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> download_image(url, local_path):</span><br><span class="line">            <span class="comment"># 使用标准Markdown语法，引用本地文件</span></span><br><span class="line">            new_link = <span class="string">f&quot;![<span class="subst">&#123;alt_text&#125;</span>](<span class="subst">&#123;filename_on_disk&#125;</span>)&quot;</span></span><br><span class="line">            content = content.replace(<span class="keyword">match</span>.group(<span class="number">0</span>), new_link)</span><br><span class="line">            success_count += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;✅ 已保存：<span class="subst">&#123;filename_on_disk&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存修改后的内容</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> success_count, <span class="built_in">len</span>(matches)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;🚀 开始处理CSDN导出的图片...&quot;</span>)</span><br><span class="line">    total_success = <span class="number">0</span></span><br><span class="line">    total_images = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(POSTS_DIR):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> filename.endswith(<span class="string">&#x27;.md&#x27;</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        blog_path = os.path.join(POSTS_DIR, filename)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n📄 正在处理：<span class="subst">&#123;filename&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        success, total = process_markdown_file(blog_path)</span><br><span class="line">        total_success += success</span><br><span class="line">        total_images += total</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;🎉 <span class="subst">&#123;filename&#125;</span> 处理完成：<span class="subst">&#123;success&#125;</span>/<span class="subst">&#123;total&#125;</span> 张图片成功&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n🎊 全部完成！总计处理 <span class="subst">&#123;total_success&#125;</span>/<span class="subst">&#123;total_images&#125;</span> 张图片&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n📝 接下来执行：&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;   hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.2 使用说明</strong></p>
+<ol>
+<li><strong>修改路径</strong>：将脚本中的 <code>POSTS_DIR</code> 修改为你博客文章的实际路径（如 <code>F:\myBlog\source\_posts</code>）。</li>
+<li><strong>运行脚本</strong>：在命令行中进入脚本所在目录，执行 <code>python fix_csdn_images.py</code>。</li>
+<li><strong>验证结构</strong>：脚本执行后，你的文章目录结构应变为：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source/_posts/</span><br><span class="line">├── SSH隧道技术.md</span><br><span class="line">└── SSH隧道技术/</span><br><span class="line">    ├── 图片描述_1.png</span><br><span class="line">    ├── 图片描述_2.jpg</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure></li>
+<li><strong>本地预览</strong>：执行 <code>hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</code>，在浏览器中访问 <code>http://localhost:4000</code>，确认图片已正常加载。</li>
+</ol>
+<hr>
+<h1 id="四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）"><a href="#四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）" class="headerlink" title="四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）"></a>四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）</h1><p>分类是博客的“骨架”，标签是“索引”，两者结合让读者快速找到内容，也让你的博客结构更规整。</p>
+<p><strong>4.1 先明确规则（避免混乱）</strong></p>
+<ul>
+<li><strong>分类</strong>：层级化、不重复（例如：<code>技术</code> → <code>网络安全</code>，<code>工具</code> → <code>Hexo配置</code>）。一篇文章建议1-2个主分类。</li>
+<li><strong>标签</strong>：扁平化、多维度（例如：一篇「Hexo分类配置」的文章，标签可设 <code>Hexo</code>、<code>博客搭建</code>、<code>分类管理</code>）。一篇文章可多个标签。</li>
+</ul>
+<p><strong>4.2 步骤1：创建「分类页」「标签页」（让导航能访问）</strong><br>Hexo需要手动创建分类&#x2F;标签的“容器页面”，否则导航栏点击后会404：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建分类页面</span></span><br><span class="line">hexo new page <span class="string">&quot;categories&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建标签页面</span></span><br><span class="line">hexo new page <span class="string">&quot;tags&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后分别编辑这两个文件的 Front-matter，添加 <code>type</code> 标识：</p>
+<ul>
+<li><code>source/categories/index.md</code>：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">分类</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;categories&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
+<li><code>source/tags/index.md</code>：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">标签</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;tags&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>4.3 步骤2：给文章分配「分类&#x2F;标签」</strong><br>编辑每篇文章（<code>source/_posts/xxx.md</code>）的 Front-matter：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">&quot;什么是SSH隧道及相关技术&quot;</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-10</span></span><br><span class="line"><span class="attr">updated:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">categories:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">网络安全</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">SSH</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">隧道技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">服务器</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>4.4 步骤3：让分类&#x2F;标签显示在导航栏</strong><br>在 <code>themes/next/_config.yml</code> 的 <code>menu</code> 配置中，添加 <code>categories</code> 和 <code>tags</code> 菜单项（已在上文2.2节中包含）。</p>
+<hr>
+<p><strong>二、优化导航与功能：让博客更好用</strong></p>
+<p><strong>1. 开启「搜索功能」（必备！）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>local_search</code>，确保已安装 <code>hexo-generator-searchdb</code> 插件。</p>
+<p><strong>2. 代码高亮优化（程序员必备）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>codeblock.copy_button</code>，并在 <code>hexo/_config.yml</code> 中启用了 <code>highlight.line_number</code>。</p>
+<p><strong>3. 图片处理：避免失效+优化显示</strong></p>
+<ul>
+<li><strong>方案1：本地图片（推荐）</strong>：通过 <code>post_asset_folder: true</code> + <code>marked.post_asset: true</code> 配置，脚本已自动将图片存入文章同名文件夹，使用 <code>![描述](图片名.png)</code> 的相对路径，<strong>永不失效</strong>。</li>
+<li><strong>方案2：图床</strong>：若需多设备编辑，可用PicGo上传至GitHub图床，复制链接粘贴。<strong>但强烈推荐方案1</strong>，数据完全可控。</li>
+<li><strong>优化显示</strong>：在Markdown中，使用以下代码让图片居中并限制宽度：<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&lt;!-- 居中+限制宽度 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;图片链接&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; margin: 0 auto; max-width: 80%;&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="五、外观优化：让博客更个性化"><a href="#五、外观优化：让博客更个性化" class="headerlink" title="五、外观优化：让博客更个性化"></a>五、外观优化：让博客更个性化</h1><p><strong>5.1 选择Next主题风格（Scheme）</strong><br>在 <code>themes/next/_config.yml</code> 中设置：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span>  <span class="comment"># 推荐：简洁大气，适配分类/标签</span></span><br><span class="line"><span class="comment"># scheme: Mist  # 更紧凑</span></span><br><span class="line"><span class="comment"># scheme: Pisces # 卡片式</span></span><br><span class="line"><span class="comment"># scheme: Muse  # 默认</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>5.2 自定义颜色&#x2F;字体</strong><br>编辑 <code>themes/next/source/css/_custom/custom.styl</code> 文件：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 自定义导航栏背景色</span></span><br><span class="line"><span class="selector-class">.header</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#2c3e50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义链接颜色</span></span><br><span class="line"><span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#3498db</span>;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#e74c3c</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局字体（推荐思源黑体）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Source Han Sans CN&quot;</span>, <span class="string">&quot;PingFang SC&quot;</span>, <span class="string">&quot;Microsoft YaHei&quot;</span>, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码字体（推荐Fira Code）</span></span><br><span class="line"><span class="selector-tag">code</span>, pre &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Fira Code&quot;</span>, <span class="string">&quot;Consolas&quot;</span>, monospace;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 页面背景图（可选）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;/images/bg.jpg&#x27;</span>);</span><br><span class="line">  <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">  <span class="attribute">background-size</span>: cover;</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.9</span>);</span><br><span class="line">  <span class="attribute">background-blend-mode</span>: overlay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>：将背景图 <code>bg.jpg</code> 放入 <code>source/images/</code> 目录下。</p>
+</blockquote>
+<p><strong>5.3 添加背景图&#x2F;头像</strong></p>
+<ul>
+<li><strong>头像</strong>：在 <code>themes/next/_config.yml</code> 中设置：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpg</span>  <span class="comment"># 图片放在 source/images/ 目录下</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">opacity:</span> <span class="number">1.0</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>背景图</strong>：已在上文 <code>custom.styl</code> 中配置。</li>
+</ul>
+<hr>
+<h1 id="六、增强互动与体验：添加评论-阅读量"><a href="#六、增强互动与体验：添加评论-阅读量" class="headerlink" title="六、增强互动与体验：添加评论&#x2F;阅读量"></a>六、增强互动与体验：添加评论&#x2F;阅读量</h1><p><strong>6.1 评论系统（推荐 Gitalk，适配 GitHub Pages）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>gitalk</code>，请按说明申请GitHub OAuth App并填入 <code>client_id</code> 和 <code>client_secret</code>。</p>
+<p><strong>2. 阅读量统计（不蒜子，无需注册）</strong><br>已在 <code>themes/next/_config.yml</code> 中启用 <code>busuanzi_count</code>。</p>
+<hr>
+<h1 id="七、SEO优化：让博客被搜索引擎收录"><a href="#七、SEO优化：让博客被搜索引擎收录" class="headerlink" title="七、SEO优化：让博客被搜索引擎收录"></a>七、SEO优化：让博客被搜索引擎收录</h1><p><strong>7.1 配置站点信息（Hexo根目录 <code>_config.yml</code>）</strong><br>已在上文2.1节中包含 <code>title</code>, <code>subtitle</code>, <code>description</code>, <code>keywords</code>, <code>author</code>, <code>language</code>, <code>timezone</code>。</p>
+<p><strong>7.2 生成站点地图</strong><br>已在上文1.3节安装了 <code>hexo-generator-sitemap</code> 和 <code>hexo-generator-baidu-sitemap</code> 插件。无需额外配置，它们会自动生成 <code>sitemap.xml</code> 和 <code>baidu_sitemap.xml</code>。</p>
+<p><strong>7.3 提交站点到搜索引擎</strong></p>
+<ul>
+<li><strong>Google 搜索控制台</strong>：添加你的域名，提交 <code>https://你的博客地址/sitemap.xml</code>。</li>
+<li><strong>百度搜索资源平台</strong>：添加你的域名，提交 <code>https://你的博客地址/baidu_sitemap.xml</code>。</li>
+</ul>
+<hr>
+<h1 id="八、细节优化：提升质感"><a href="#八、细节优化：提升质感" class="headerlink" title="八、细节优化：提升质感"></a>八、细节优化：提升质感</h1><p><strong>8.1 文章排版</strong></p>
+<ul>
+<li><strong>折叠块</strong>（适合长代码&#x2F;补充说明）：<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">summary</span>&gt;</span></span>点击查看补充说明<span class="language-xml"><span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span></span><br><span class="line">这里是折叠的内容...</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
+<li><strong>每篇文章添加「前言&#x2F;小结」</strong>，让结构更清晰。</li>
+</ul>
+<p><strong>8.2 404 页面</strong><br>创建 <code>source/404.md</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">页面不存在</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">&lt;div</span> <span class="string">style=&quot;text-align:</span> <span class="string">center;</span> <span class="attr">margin-top:</span> <span class="string">50px;&quot;&gt;</span></span><br><span class="line">  <span class="string">&lt;h1&gt;404</span> <span class="bullet">-</span> <span class="string">页面走丢啦～&lt;/h1&gt;</span></span><br><span class="line">  <span class="string">&lt;p&gt;你访问的页面不存在或已被移动&lt;/p&gt;</span></span><br><span class="line">  <span class="string">&lt;a</span> <span class="string">href=&quot;/&quot;</span> <span class="string">style=&quot;color:</span> <span class="comment">#3498db; font-size: 18px;&quot;&gt;返回首页&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>8.3 关闭无用功能</strong><br>在 <code>themes/next/_config.yml</code> 中关闭不需要的功能：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">reward:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">sharejs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="九、部署与备份"><a href="#九、部署与备份" class="headerlink" title="九、部署与备份**"></a>九、部署与备份**</h1><p><strong>9.1 部署流程</strong><br>每次修改后，执行以下命令部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p><strong>9.2 本地测试</strong><br>在部署前，务必先在本地测试：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate --debug</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>访问 <code>http://localhost:4000</code>，检查：</p>
+<ul>
+<li>✅ 文章正常显示</li>
+<li>✅ 图片正确加载</li>
+<li>✅ 样式正常</li>
+<li>✅ 搜索、分类、标签功能正常</li>
+</ul>
+<p><strong>9.3 备份</strong><br>将 Hexo 根目录的 <code>_config.yml</code>、<code>themes/next/_config.yml</code>、<code>source/</code> 目录（文章+图片）备份到 GitHub（新建一个仓库，比如 <code>blog-source</code>），避免电脑故障丢失数据。</p>
+<hr>
+<h1 id="十、故障排除大全"><a href="#十、故障排除大全" class="headerlink" title="十、故障排除大全"></a>十、故障排除大全</h1><p><strong>10.1 图片不显示问题</strong></p>
+<ul>
+<li><strong>症状</strong>：图片显示为空白或404。</li>
+<li><strong>解决方案</strong>：<ol>
+<li><strong>检查配置</strong>：确保 <code>_config.yml</code> 中 <code>post_asset_folder: true</code> 和 <code>marked.prepend_root: true</code> 已开启。</li>
+<li><strong>清理缓存</strong>：执行 <code>hexo clean</code> 后重新 <code>hexo generate</code>。</li>
+<li><strong>检查路径</strong>：浏览器F12查看Network标签，确认图片请求的URL是 <code>文章名/图片名.png</code> 的相对路径。</li>
+</ol>
+</li>
+</ul>
+<p><strong>10.2 部署失败问题</strong></p>
+<ul>
+<li><strong>常见错误1：权限拒绝</strong><ul>
+<li><strong>解决方案</strong>：使用HTTPS地址或配置SSH密钥。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>常见错误2：分支不存在</strong><ul>
+<li><strong>解决方案</strong>：确认你的GitHub仓库默认分支是 <code>main</code> 还是 <code>gh-pages</code>，并相应修改 <code>branch</code> 配置。</li>
+</ul>
+</li>
+</ul>
+<p><strong>10.3 主题显示异常</strong></p>
+<ul>
+<li><strong>解决方案</strong>：<ol>
+<li>确认主题安装：<code>npm list hexo-theme-next</code>。</li>
+<li>检查 <code>hexo/_config.yml</code> 中 <code>theme: next</code>。</li>
+<li>清理重新安装：<code>rm -rf node_modules &amp;&amp; npm install</code>。</li>
+</ol>
+</li>
+</ul>
+<p><strong>10.4 时间显示问题</strong></p>
+<ul>
+<li><strong>症状</strong>：文章时间相差8小时。</li>
+<li><strong>解决方案</strong>：确保 <code>hexo/_config.yml</code> 中 <code>timezone: &#39;Asia/Shanghai&#39;</code>。</li>
+</ul>
+<hr>
+<h1 id="十一、优化与进阶"><a href="#十一、优化与进阶" class="headerlink" title="十一、优化与进阶"></a>十一、优化与进阶</h1><p><strong>11.1 性能优化</strong></p>
+<ul>
+<li>在 <code>themes/next/_config.yml</code> 中启用 <code>lazyload: enable: true</code>。</li>
+<li>在 <code>hexo/_config.yml</code> 中启用 <code>highlight.line_number: true</code>。</li>
+</ul>
+<p><strong>11.2 自定义域名</strong></p>
+<ul>
+<li>在 <code>source/</code> 目录下创建一个名为 <code>CNAME</code> 的文件。</li>
+<li>文件内容写入你的域名，例如：<code>yourdomain.com</code>。</li>
+<li>在你的域名DNS服务商处，添加一条CNAME记录，指向 <code>你的用户名.github.io</code>。</li>
+</ul>
+<hr>
+<h1 id="十二、实用命令速查"><a href="#十二、实用命令速查" class="headerlink" title="十二、实用命令速查"></a>十二、实用命令速查</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;文章标题&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地写作（预览草稿）</span></span><br><span class="line">hexo server --draft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制清理缓存</span></span><br><span class="line">hexo clean --debug</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Hexo版本</span></span><br><span class="line">hexo version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一键部署（最常用）</span></span><br><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
+<ul>
+<li>git clone <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git init (初始化刚拉取的myBlog)</li>
+<li>git remote add origin <a href="mailto:&#103;&#105;&#x74;&#64;&#103;&#105;&#x74;&#104;&#117;&#x62;&#46;&#99;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+</ul>
+<p>13.2 下载nodejs + hexo</p>
+<ul>
+<li>官网下载nodejs</li>
+<li>下载 hexo npm install -g hexo-cli</li>
+</ul>
+<p>13.3 nmp 相关插件下载</p>
+<ul>
+<li>npm install</li>
+<li>npm install hexo-deployer-git –save</li>
+</ul>
+<blockquote>
+<p>因为 myBlog 已经hexo 初始化完毕，不需要再进行初始化<br>myBlog 私仓用于博客协作更新（用git）, 用hexo deploy 更新博客仓</p>
+</blockquote>
+<p>注意：每次修改文章或其他文件时，hexo clean -&gt; hexo g -&gt; hexo deploy -&gt; git add . -&gt; git commit …. -&gt; git push origin main</p>
+]]></content>
+      <categories>
+        <category>知识杂碎</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
+        <tag>Hexo</tag>
+        <tag>Next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git-Note</title>
+    <url>/2024/12/10/git_note/</url>
+    <content><![CDATA[<h1 id="Git-操作指南（终极整合版）"><a href="#Git-操作指南（终极整合版）" class="headerlink" title="Git 操作指南（终极整合版）"></a>Git 操作指南（终极整合版）</h1><h2 id="一、基础命令"><a href="#一、基础命令" class="headerlink" title="一、基础命令"></a>一、基础命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>git init</code></td>
+<td>初始化一个新的 Git 仓库</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>查看提交历史</td>
+</tr>
+<tr>
+<td><code>git add [文件名]</code></td>
+<td>将文件添加到暂存区（<code>git add .</code> 添加所有修改）</td>
+</tr>
+<tr>
+<td><code>git commit -m &quot;提交信息&quot;</code></td>
+<td>提交暂存区的更改到本地仓库</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>查看当前仓库状态（修改、暂存、提交情况）</td>
+</tr>
+</tbody></table>
+<h2 id="二、远程仓库管理"><a href="#二、远程仓库管理" class="headerlink" title="二、远程仓库管理"></a>二、远程仓库管理</h2><h3 id="添加-管理远程仓库"><a href="#添加-管理远程仓库" class="headerlink" title="添加&#x2F;管理远程仓库"></a>添加&#x2F;管理远程仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin [仓库地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git remote add origin https://github.com/用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git remote add origin git@github.com:用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程仓库地址</span></span><br><span class="line">git remote set-url origin [新地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已配置的远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/你的GitHub用户名/仓库名.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:你的GitHub用户名/仓库名.git</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、多设备同步工作流"><a href="#三、多设备同步工作流" class="headerlink" title="三、多设备同步工作流"></a>三、多设备同步工作流</h2><h3 id="核心逻辑"><a href="#核心逻辑" class="headerlink" title="核心逻辑"></a>核心逻辑</h3><ul>
+<li>多台电脑共享同一个 GitHub 远程仓库作为”中央存储”</li>
+<li>任意电脑修改后通过 <code>git push</code> 推送到 GitHub</li>
+<li>其他电脑通过 <code>git pull</code> 拉取最新修改</li>
+</ul>
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="1-在新设备上拉取仓库"><a href="#1-在新设备上拉取仓库" class="headerlink" title="1. 在新设备上拉取仓库"></a>1. 在新设备上拉取仓库</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:用户名/仓库.git  <span class="comment"># SSH方式</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/用户名/仓库.git  <span class="comment"># HTTPS方式</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-修改并推送代码"><a href="#2-修改并推送代码" class="headerlink" title="2. 修改并推送代码"></a>2. 修改并推送代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .          <span class="comment"># 添加修改</span></span><br><span class="line">git commit -m <span class="string">&quot;描述&quot;</span> <span class="comment"># 提交更改</span></span><br><span class="line">git push origin main  <span class="comment"># 推送到远程</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-同步最新代码"><a href="#3-同步最新代码" class="headerlink" title="3. 同步最新代码"></a>3. 同步最新代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git pull origin main  <span class="comment"># 拉取并合并远程更改</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、SSH-配置与问题解决"><a href="#四、SSH-配置与问题解决" class="headerlink" title="四、SSH 配置与问题解决"></a>四、SSH 配置与问题解决</h2><h3 id="核心步骤"><a href="#核心步骤" class="headerlink" title="核心步骤"></a>核心步骤</h3><p>确认密钥添加正确 → 配置 SSH 识别密钥 → 修复文件权限</p>
+<h4 id="1-确认公钥添加到-GitHub"><a href="#1-确认公钥添加到-GitHub" class="headerlink" title="1. 确认公钥添加到 GitHub"></a>1. 确认公钥添加到 GitHub</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看公钥内容</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub    <span class="comment"># 默认密钥</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/自定义密钥名.pub  <span class="comment"># 自定义密钥</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制完整文本（从 <code>ssh-rsa</code> 开头到邮箱结尾）</li>
+<li>GitHub → Settings → SSH and GPG keys → 添加新 Key</li>
+</ul>
+<h4 id="2-配置-SSH-识别密钥"><a href="#2-配置-SSH-识别密钥" class="headerlink" title="2. 配置 SSH 识别密钥"></a>2. 配置 SSH 识别密钥</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">notepad ~/.ssh/config</span><br></pre></td></tr></table></figure>
+<p>粘贴配置（根据实际情况修改）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile C:/Users/你的用户名/.ssh/密钥文件名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>路径使用 <code>/</code> 或 <code>\\</code>，例如：<code>C:/Users/张三/.ssh/id_rsa</code></p>
+</blockquote>
+<h4 id="3-修复密钥文件权限"><a href="#3-修复密钥文件权限" class="headerlink" title="3. 修复密钥文件权限"></a>3. 修复密钥文件权限</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 600 密钥文件名      <span class="comment"># 私钥权限</span></span><br><span class="line"><span class="built_in">chmod</span> 644 密钥文件名.pub  <span class="comment"># 公钥权限</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-测试连接"><a href="#4-测试连接" class="headerlink" title="4. 测试连接"></a>4. 测试连接</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment"># 成功显示：Hi 用户名! You&#x27;ve successfully authenticated...</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、提交历史管理"><a href="#五、提交历史管理" class="headerlink" title="五、提交历史管理"></a>五、提交历史管理</h2><h3 id="1-撤销错误提交"><a href="#1-撤销错误提交" class="headerlink" title="1. 撤销错误提交"></a>1. 撤销错误提交</h3><h4 id="方法一：直接回退历史（个人仓库适用）"><a href="#方法一：直接回退历史（个人仓库适用）" class="headerlink" title="方法一：直接回退历史（个人仓库适用）"></a>方法一：直接回退历史（个人仓库适用）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 回退到正确提交（92d433f 为正确提交ID）</span></span><br><span class="line">git reset --hard 92d433f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制推送到远程</span></span><br><span class="line">git push origin main --force</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：创建撤销提交（多人协作适用）"><a href="#方法二：创建撤销提交（多人协作适用）" class="headerlink" title="方法二：创建撤销提交（多人协作适用）"></a>方法二：创建撤销提交（多人协作适用）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 生成撤销提交（0dec4f6 为错误提交ID）</span></span><br><span class="line">git revert 0dec4f6</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 推送撤销提交</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+<h4 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;正确的提交信息&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-修复本地分支与远程分支偏离问题"><a href="#2-修复本地分支与远程分支偏离问题" class="headerlink" title="2. 修复本地分支与远程分支偏离问题"></a>2. 修复本地分支与远程分支偏离问题</h3><h4 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h4><p>本地分支历史与远程分支历史不一致（本地包含远程已移除的提交）</p>
+<h4 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 保存未提交的修改（如有）</span></span><br><span class="line">git stash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制同步本地分支与远程分支</span></span><br><span class="line">git reset --hard origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 确认同步完成</span></span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+
+<h4 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h4><p>通过 <code>git reset --hard origin/main</code> 将本地分支完全重置为与远程分支一致的状态，覆盖本地与远程不一致的历史。</p>
+<h2 id="六、高级分支同步技巧"><a href="#六、高级分支同步技巧" class="headerlink" title="六、高级分支同步技巧"></a>六、高级分支同步技巧</h2><h3 id="1-同步特定远程分支"><a href="#1-同步特定远程分支" class="headerlink" title="1. 同步特定远程分支"></a>1. 同步特定远程分支</h3><p>当需要同步特定远程分支时，可以使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先获取所有远程分支</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建本地分支跟踪远程分支</span></span><br><span class="line">git checkout -b 本地分支名 origin/远程分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或直接重置当前分支到远程分支</span></span><br><span class="line">git reset --hard origin/远程分支名</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-同步多个特定分支"><a href="#2-同步多个特定分支" class="headerlink" title="2. 同步多个特定分支"></a>2. 同步多个特定分支</h3><p>Git 本身不支持一次性同步多个分支，但可以通过脚本批量操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步多个分支</span></span><br><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br><span class="line">git checkout dev</span><br><span class="line">git reset --hard origin/dev</span><br><span class="line">git checkout feature-branch</span><br><span class="line">git reset --hard origin/feature-branch</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-同步远程仓库的所有分支"><a href="#3-同步远程仓库的所有分支" class="headerlink" title="3. 同步远程仓库的所有分支"></a>3. 同步远程仓库的所有分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取所有远程分支</span></span><br><span class="line">git fetch --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为每个远程分支创建本地分支</span></span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或删除所有本地分支后重新创建</span></span><br><span class="line">git branch | grep -v <span class="string">&quot;main&quot;</span> | xargs git branch -D</span><br><span class="line">git fetch --all</span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-重置远程分支到特定提交"><a href="#4-重置远程分支到特定提交" class="headerlink" title="4. 重置远程分支到特定提交"></a>4. 重置远程分支到特定提交</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 需要有权限</span></span><br><span class="line">git push origin --force 0dec4f6:main</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-查看分支差异"><a href="#5-查看分支差异" class="headerlink" title="5. 查看分支差异"></a>5. 查看分支差异</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看本地比远程多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> origin/main..main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程比本地多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> main..origin/main</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、其他实用技巧"><a href="#七、其他实用技巧" class="headerlink" title="七、其他实用技巧"></a>七、其他实用技巧</h2><h3 id="1-分支管理"><a href="#1-分支管理" class="headerlink" title="1. 分支管理"></a>1. 分支管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -a  <span class="comment"># 查看所有分支（本地和远程）</span></span><br><span class="line">git branch -d 分支名  <span class="comment"># 安全删除（已合并）</span></span><br><span class="line">git branch -D 分支名  <span class="comment"># 强制删除（未合并）</span></span><br><span class="line">git branch -m 旧分支名 新分支名  <span class="comment"># 重命名当前分支</span></span><br><span class="line">git branch --set-upstream-to=origin/分支名 本地分支名  <span class="comment"># 重置远程跟踪分支</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-暂存与恢复"><a href="#2-暂存与恢复" class="headerlink" title="2. 暂存与恢复"></a>2. 暂存与恢复</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash  <span class="comment"># 暂存未提交修改</span></span><br><span class="line">git stash list  <span class="comment"># 查看所有暂存</span></span><br><span class="line">git stash pop  <span class="comment"># 恢复最新暂存</span></span><br><span class="line">git stash pop stash@&#123;n&#125;  <span class="comment"># 恢复指定暂存</span></span><br><span class="line">git stash drop stash@&#123;n&#125;  <span class="comment"># 删除指定暂存</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-撤销修改"><a href="#3-撤销修改" class="headerlink" title="3. 撤销修改"></a>3. 撤销修改</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -- 文件名  <span class="comment"># 撤销工作区修改</span></span><br><span class="line">git checkout .  <span class="comment"># 撤销所有工作区修改</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-提交历史查看"><a href="#4-提交历史查看" class="headerlink" title="4. 提交历史查看"></a>4. 提交历史查看</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p  <span class="comment"># 显示每次提交的详细变化</span></span><br><span class="line">git <span class="built_in">log</span> --<span class="built_in">stat</span>  <span class="comment"># 显示每次提交的统计信息</span></span><br><span class="line">git <span class="built_in">log</span> --graph --oneline --all  <span class="comment"># 图形化显示分支历史</span></span><br><span class="line">git show 提交ID  <span class="comment"># 查看某次提交的详细内容</span></span><br><span class="line">git add -p  <span class="comment"># 交互式选择要添加的修改</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-拉取特定文件"><a href="#5-拉取特定文件" class="headerlink" title="5. 拉取特定文件"></a>5. 拉取特定文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout origin/分支名 -- 文件路径  <span class="comment"># 从远程分支拉取特定文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="八、多仓库协作"><a href="#八、多仓库协作" class="headerlink" title="八、多仓库协作"></a>八、多仓库协作</h2><h3 id="1-添加多个远程仓库"><a href="#1-添加多个远程仓库" class="headerlink" title="1. 添加多个远程仓库"></a>1. 添加多个远程仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加上游仓库（原始项目）</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加自己的fork</span></span><br><span class="line">git remote add fork https://github.com/你的用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-从上游仓库拉取更新"><a href="#2-从上游仓库拉取更新" class="headerlink" title="2. 从上游仓库拉取更新"></a>2. 从上游仓库拉取更新</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取上游仓库更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并到当前分支</span></span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或使用rebase保持提交历史线性</span></span><br><span class="line">git rebase upstream/main</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-同步fork与上游仓库"><a href="#3-同步fork与上游仓库" class="headerlink" title="3. 同步fork与上游仓库"></a>3. 同步fork与上游仓库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 添加上游仓库</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 获取上游更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 合并到本地main分支</span></span><br><span class="line">git checkout main</span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 推送到自己的fork</span></span><br><span class="line">git push fork main</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、GitHub高级功能"><a href="#九、GitHub高级功能" class="headerlink" title="九、GitHub高级功能"></a>九、GitHub高级功能</h2><h3 id="1-GitHub-Copilot"><a href="#1-GitHub-Copilot" class="headerlink" title="1. GitHub Copilot"></a>1. GitHub Copilot</h3><ul>
+<li>AI辅助编程，从简单模板到复杂功能</li>
+<li>支持多种编程语言</li>
+<li>集成在VS Code、JetBrains等IDE中</li>
+</ul>
+<h3 id="2-GitHub-Actions"><a href="#2-GitHub-Actions" class="headerlink" title="2. GitHub Actions"></a>2. GitHub Actions</h3><ul>
+<li>自动化工作流</li>
+<li>CI&#x2F;CD流水线</li>
+<li>自动测试和部署</li>
+<li>示例配置：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        npm install</span></span><br><span class="line"><span class="string">        npm test</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-GitHub-Security"><a href="#3-GitHub-Security" class="headerlink" title="3. GitHub Security"></a>3. GitHub Security</h3><ul>
+<li><strong>Code Scanning</strong>：自动扫描代码漏洞</li>
+<li><strong>Dependabot</strong>：自动更新依赖项</li>
+<li><strong>Secret Scanning</strong>：检测泄露的密钥</li>
+<li><strong>Security Alerts</strong>：安全漏洞通知</li>
+</ul>
+<h3 id="4-GitHub-Projects"><a href="#4-GitHub-Projects" class="headerlink" title="4. GitHub Projects"></a>4. GitHub Projects</h3><ul>
+<li>项目管理工具</li>
+<li>Kanban看板</li>
+<li>任务跟踪</li>
+<li>与Issues集成</li>
+</ul>
+<h3 id="5-GitHub-Codespaces"><a href="#5-GitHub-Codespaces" class="headerlink" title="5. GitHub Codespaces"></a>5. GitHub Codespaces</h3><ul>
+<li>云端开发环境</li>
+<li>集成VS Code</li>
+<li>按需启动</li>
+<li>无缝协作</li>
+</ul>
+<h2 id="十、最佳实践"><a href="#十、最佳实践" class="headerlink" title="十、最佳实践"></a>十、最佳实践</h2><h3 id="1-分支策略"><a href="#1-分支策略" class="headerlink" title="1. 分支策略"></a>1. 分支策略</h3><ul>
+<li><strong>主分支</strong>：main&#x2F;master - 用于生产环境</li>
+<li><strong>开发分支</strong>：dev - 用于集成测试</li>
+<li><strong>功能分支</strong>：feature&#x2F;xxx - 用于开发新功能</li>
+<li><strong>修复分支</strong>：hotfix&#x2F;xxx - 用于紧急修复</li>
+</ul>
+<h3 id="2-提交规范"><a href="#2-提交规范" class="headerlink" title="2. 提交规范"></a>2. 提交规范</h3><ul>
+<li>提交信息应清晰描述修改内容</li>
+<li>使用”feat:”, “fix:”, “docs:”, “style:”, “refactor:”, “test:”, “chore:”等前缀</li>
+<li>示例：<code>feat: 添加用户登录功能</code></li>
+</ul>
+<h3 id="3-代码审查"><a href="#3-代码审查" class="headerlink" title="3. 代码审查"></a>3. 代码审查</h3><ul>
+<li>一次审查不超过200行代码</li>
+<li>专注于逻辑问题而非风格问题</li>
+<li>提供具体建议而非泛泛而谈</li>
+<li>使用GitHub的Review功能</li>
+</ul>
+<h3 id="4-定期同步"><a href="#4-定期同步" class="headerlink" title="4. 定期同步"></a>4. 定期同步</h3><ul>
+<li>每天至少pull一次最新代码</li>
+<li>在开始新功能前先同步远程代码</li>
+</ul>
+<h3 id="5-小步提交"><a href="#5-小步提交" class="headerlink" title="5. 小步提交"></a>5. 小步提交</h3><ul>
+<li>每次提交只包含一个逻辑变更</li>
+<li>不要将多个不相关的修改放在一个提交中</li>
+</ul>
+<h2 id="十一、常见问题解决方案"><a href="#十一、常见问题解决方案" class="headerlink" title="十一、常见问题解决方案"></a>十一、常见问题解决方案</h2><h3 id="1-“Permission-denied-publickey-”-错误"><a href="#1-“Permission-denied-publickey-”-错误" class="headerlink" title="1. “Permission denied (publickey)” 错误"></a>1. “Permission denied (publickey)” 错误</h3><ul>
+<li>确认SSH密钥已添加到GitHub</li>
+<li>检查密钥权限是否正确</li>
+<li>测试SSH连接：<code>ssh -T git@github.com</code></li>
+</ul>
+<h3 id="2-“fatal-not-a-git-repository”-错误"><a href="#2-“fatal-not-a-git-repository”-错误" class="headerlink" title="2. “fatal: not a git repository” 错误"></a>2. “fatal: not a git repository” 错误</h3><ul>
+<li>确保在Git仓库目录内操作</li>
+<li>使用<code>git init</code>初始化仓库</li>
+</ul>
+<h3 id="3-“remote-origin-already-exists”-错误"><a href="#3-“remote-origin-already-exists”-错误" class="headerlink" title="3. “remote origin already exists” 错误"></a>3. “remote origin already exists” 错误</h3><ul>
+<li>使用<code>git remote set-url origin [新地址]</code>修改地址</li>
+<li>或先删除远程：<code>git remote remove origin</code></li>
+</ul>
+<h3 id="4-“unable-to-update-local-ref”-错误"><a href="#4-“unable-to-update-local-ref”-错误" class="headerlink" title="4. “unable to update local ref” 错误"></a>4. “unable to update local ref” 错误</h3><ul>
+<li>清理本地引用：<code>git remote prune origin</code></li>
+<li>重置本地分支：<code>git reset --hard origin/main</code></li>
+</ul>
+<h3 id="5-“detached-HEAD”-状态"><a href="#5-“detached-HEAD”-状态" class="headerlink" title="5. “detached HEAD” 状态"></a>5. “detached HEAD” 状态</h3><ul>
+<li>创建新分支：<code>git checkout -b 新分支名</code></li>
+<li>或回到已有分支：<code>git checkout main</code></li>
+</ul>
+<h3 id="6-“refusing-to-merge-unrelated-histories”-错误"><a href="#6-“refusing-to-merge-unrelated-histories”-错误" class="headerlink" title="6. “refusing to merge unrelated histories” 错误"></a>6. “refusing to merge unrelated histories” 错误</h3><ul>
+<li>使用<code>git pull origin main --allow-unrelated-histories</code></li>
+</ul>
+<h3 id="7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误"><a href="#7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误" class="headerlink" title="7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误"></a>7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
+<li>确认是否需要强制推送：<code>git push --force</code></li>
+<li>或拉取远程更改：<code>git pull origin main</code></li>
+</ul>
+<h3 id="8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误"><a href="#8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误" class="headerlink" title="8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误"></a>8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
+<li>拉取远程更改：<code>git pull origin main</code></li>
+</ul>
+<h3 id="9-“conflict”-错误"><a href="#9-“conflict”-错误" class="headerlink" title="9. “conflict” 错误"></a>9. “conflict” 错误</h3><ul>
+<li>手动解决冲突文件</li>
+<li>使用<code>git add</code>标记冲突已解决</li>
+<li>完成合并：<code>git commit</code></li>
+</ul>
+<h3 id="10-“untracked-files”-问题"><a href="#10-“untracked-files”-问题" class="headerlink" title="10. “untracked files” 问题"></a>10. “untracked files” 问题</h3><ul>
+<li>添加未跟踪文件：<code>git add .</code></li>
+<li>或忽略文件：在.gitignore中添加文件模式</li>
+</ul>
+<hr>
+]]></content>
+      <categories>
+        <category>知识杂碎</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
 </search>

@@ -903,7 +903,7 @@
 </blockquote>
 <p>攻击原理：</p>
 <blockquote>
-<p>默认情况下的，ng-include 只能加载当前页面同源的（相同域名，协议，端口）的文件<br>ng - include加载level1.php时，将name&#x3D;<script>alert(/xss/)</script>作为参数传递给level1.php。<br>由于level1.php未对name参数做严格过滤，浏览器解析level1.php返回的 HTML 时，会执行恶意脚本alert(&#x2F;xss&#x2F;)，从而触发 XSS 攻击。</p>
+<p>默认情况下的，ng-include 只能加载当前页面同源的（相同域名，协议，端口）的文件<br>ng - include加载level1.php时，将name&#x3D;[script]alert(&#x2F;xss&#x2F;)[&#x2F;script]作为参数传递给level1.php。<br>由于level1.php未对name参数做严格过滤，浏览器解析level1.php返回的 HTML 时，会执行恶意脚本alert(&#x2F;xss&#x2F;)，从而触发 XSS 攻击。</p>
 </blockquote>
 <p>关卡：</p>
 <blockquote>
@@ -1860,9 +1860,9 @@
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#103;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#103;&#105;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#99;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#99;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>

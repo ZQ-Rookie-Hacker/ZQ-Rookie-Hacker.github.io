@@ -382,9 +382,9 @@
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#116;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#105;&#116;&#104;&#x75;&#x62;&#46;&#99;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>
@@ -408,226 +408,6 @@
         <tag>Blog</tag>
         <tag>Hexo</tag>
         <tag>Next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VPN代理与流量流向分析</title>
-    <url>/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h2 id="一、代理层级架构与优先级原理"><a href="#一、代理层级架构与优先级原理" class="headerlink" title="一、代理层级架构与优先级原理"></a>一、代理层级架构与优先级原理</h2><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_1.png" class="" title="在这里插入图片描述">
-
-
-
-
-<h3 id="1-网络层代理（VPN）-最底层"><a href="#1-网络层代理（VPN）-最底层" class="headerlink" title="1. 网络层代理（VPN）- 最底层"></a>1.<code> 网络层代理</code>（VPN）- 最底层</h3><ul>
-<li><strong>工作层级</strong>：操作系统内核层</li>
-<li><strong>技术代表</strong>：OpenVPN、WireGuard、IPsec</li>
-<li><strong>控制粒度</strong>：<strong>全局代理</strong> - 所有应用程序流量</li>
-<li><strong>技术比喻</strong>：给电脑<strong>虚拟搬迁</strong>到VPN服务器机房</li>
-<li><strong>特点</strong>：透明性高、安全性强，但灵活性差</li>
-</ul>
-<h3 id="2-系统层代理-中间层"><a href="#2-系统层代理-中间层" class="headerlink" title="2. 系统层代理 - 中间层"></a>2. <code>系统层代理 </code>- 中间层</h3><ul>
-<li><strong>工作层级</strong>：操作系统应用层协议</li>
-<li><strong>技术代表</strong>：Windows&#x2F;MacOS系统代理设置</li>
-<li><strong>控制粒度</strong>：<strong>系统级</strong> - 影响遵守系统设置的应用程序</li>
-<li><strong>技术比喻</strong>：设立<strong>总的收发室</strong>处理外寄信件</li>
-<li><strong>特点</strong>：配置方便，但容易被应用程序绕过</li>
-</ul>
-<h3 id="3-应用层代理-最高层"><a href="#3-应用层代理-最高层" class="headerlink" title="3. 应用层代理 - 最高层"></a>3. <code>应用层代理</code> - 最高层</h3><ul>
-<li><p><strong>浏览器插件</strong>（SwitchyOmega等）：</p>
-<ul>
-<li><strong>控制粒度</strong>：<strong>进程级</strong> - 仅控制浏览器流量</li>
-<li><strong>技术比喻</strong>：书房内的<strong>智能路由器</strong></li>
-<li><strong>存在意义</strong>：提供最精细的流量控制，实现国内外网站分流</li>
-</ul>
-</li>
-<li><p><strong>应用程序内置代理</strong>：</p>
-<ul>
-<li><strong>控制粒度</strong>：<strong>应用级</strong> - 仅影响单个应用程序</li>
-<li><strong>特点</strong>：配置独立，针对性强的网络通道</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="二、四大核心场景流量走向详解"><a href="#二、四大核心场景流量走向详解" class="headerlink" title="二、四大核心场景流量走向详解"></a>二、四大核心场景流量走向详解</h2><h3 id="场景1：主机标准VPN模式（无冲突）"><a href="#场景1：主机标准VPN模式（无冲突）" class="headerlink" title="场景1：主机标准VPN模式（无冲突）"></a>场景1：主机标准VPN模式（无冲突）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_2.png" class="" title="在这里插入图片描述">
-
-
-
-<p><strong>核心逻辑</strong>：最标准的VPN使用场景。所有应用程序流量都遵循系统级代理设置，通过VPN隧道加密转发，实现全局网络匿名化。</p>
-<p><strong>适用场景</strong>：需要完全匿名、安全加密所有流量的环境。</p>
-<h3 id="场景2：主机浏览器代理分流（主动绕行）"><a href="#场景2：主机浏览器代理分流（主动绕行）" class="headerlink" title="场景2：主机浏览器代理分流（主动绕行）"></a>场景2：主机浏览器代理分流（主动绕行）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_3.png" class="" title="在这里插入图片描述">
-
-
-<p><strong>核心逻辑</strong>：浏览器插件优先级高于系统代理，实现<strong>精细化流量分流</strong>。浏览器按插件规则转发（国内外网站分流），其他应用仍走VPN通道。</p>
-<p><strong>存在意义</strong>：解决VPN”一刀切”的弊端，优化访问速度，避免国内流量绕行。</p>
-<h3 id="场景3：虚拟机理想共享模式（透明代理）"><a href="#场景3：虚拟机理想共享模式（透明代理）" class="headerlink" title="场景3：虚拟机理想共享模式（透明代理）"></a>场景3：虚拟机理想共享模式（透明代理）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_4.png" class="" title="在这里插入图片描述">
-
-
-<p><strong>核心逻辑</strong>：虚拟机通过NAT模式完全依赖主机网络路由，继承主机VPN设置，实现”透明代理”效果。</p>
-<p><strong>前提条件</strong>：</p>
-<ul>
-<li>虚拟机设为<strong>NAT模式</strong></li>
-<li>关闭虚拟机内所有代理插件</li>
-<li>主机运行全局VPN</li>
-</ul>
-<h3 id="场景4：虚拟机代理冲突（嵌套绕行）"><a href="#场景4：虚拟机代理冲突（嵌套绕行）" class="headerlink" title="场景4：虚拟机代理冲突（嵌套绕行）"></a>场景4：虚拟机代理冲突（嵌套绕行）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_5.png" class="" title="在这里插入图片描述">
-
-
-<p><strong>核心逻辑</strong>：虚拟机内浏览器插件拦截流量，导致浏览器绕开主机VPN，形成<strong>代理嵌套冲突</strong>。</p>
-<p><strong>问题根源</strong>：虚拟机内的高优先级代理规则覆盖了主机的低优先级代理规则。</p>
-<hr>
-<h2 id="三、Kali-虚拟机配置"><a href="#三、Kali-虚拟机配置" class="headerlink" title="三、Kali 虚拟机配置"></a>三、Kali 虚拟机配置</h2><h3 id="完整配置检查清单"><a href="#完整配置检查清单" class="headerlink" title="完整配置检查清单"></a>完整配置检查清单</h3><p>为确保Kali虚拟机正确共享主机VPN，请按以下流程系统配置：</p>
-<img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_6.png" class="" title="在这里插入图片描述">
-
-
-<h3 id="关键配置步骤"><a href="#关键配置步骤" class="headerlink" title="关键配置步骤"></a>关键配置步骤</h3><h4 id="1-基础环境配置"><a href="#1-基础环境配置" class="headerlink" title="1. 基础环境配置"></a>1. 基础环境配置</h4><ul>
-<li><strong>主机VPN</strong>：必须使用系统级全局VPN（OpenVPN、WireGuard等）</li>
-<li><strong>网络模式</strong>：虚拟机设置为<strong>NAT模式</strong>（默认）</li>
-</ul>
-<h4 id="2-DNS泄漏解决方案"><a href="#2-DNS泄漏解决方案" class="headerlink" title="2. DNS泄漏解决方案"></a>2. DNS泄漏解决方案</h4><p><strong>临时方案（测试用）</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/resolv.conf</span><br><span class="line"><span class="comment"># 添加：nameserver 10.8.0.1 （替换为实际VPN DNS）</span></span><br><span class="line"><span class="built_in">sudo</span> chattr +i /etc/resolv.conf  <span class="comment"># 锁定文件</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>永久方案（推荐）</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> systemd-resolved</span><br><span class="line"><span class="built_in">sudo</span> systemctl stop systemd-resolved</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> -f /etc/resolv.conf</span><br><span class="line"><span class="built_in">sudo</span> nano /etc/resolv.conf  <span class="comment"># 配置VPN DNS</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart NetworkManager</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="四、验证与故障排除"><a href="#四、验证与故障排除" class="headerlink" title="四、验证与故障排除"></a>四、验证与故障排除</h2><h3 id="基础验证方法"><a href="#基础验证方法" class="headerlink" title="基础验证方法"></a>基础验证方法</h3><ol>
-<li><p><strong>IP地址检测</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl ifconfig.me</span><br><span class="line"><span class="comment"># 访问：WhatIsMyIPAddress.com</span></span><br></pre></td></tr></table></figure>
-<p><strong>预期</strong>：显示IP应与VPN服务器位置一致</p>
-</li>
-<li><p><strong>DNS泄漏测试</strong>：</p>
-<ul>
-<li>访问 <a href="https://www.dnsleaktest.com/">DNS Leak Test</a></li>
-<li>执行 <strong>Extended Test</strong><br><strong>预期</strong>：不应出现本地ISP的DNS服务器</li>
-</ul>
-</li>
-</ol>
-<h3 id="故障排除-checklist"><a href="#故障排除-checklist" class="headerlink" title="故障排除 checklist"></a>故障排除 checklist</h3><ul>
-<li>✅ 主机VPN是否正常连接</li>
-<li>✅ 虚拟机是否为NAT模式  </li>
-<li>✅ 虚拟机浏览器代理插件是否关闭</li>
-<li>✅ DNS是否配置正确且无泄漏</li>
-<li>✅ 系统时间是否同步（影响HTTPS）</li>
-</ul>
-<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><h3 id="代理选择策略"><a href="#代理选择策略" class="headerlink" title="代理选择策略"></a>代理选择策略</h3><table>
-<thead>
-<tr>
-<th>需求场景</th>
-<th>推荐代理方式</th>
-<th>理由</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>全局匿名安全</td>
-<td><strong>网络层VPN</strong></td>
-<td>所有流量加密，完全匿名</td>
-</tr>
-<tr>
-<td>网页浏览优化</td>
-<td><strong>浏览器插件</strong></td>
-<td>国内外分流，速度最优</td>
-</tr>
-<tr>
-<td>办公环境统一</td>
-<td><strong>系统代理</strong></td>
-<td>统一管理，配置简便</td>
-</tr>
-<tr>
-<td>虚拟机共享</td>
-<td><strong>NAT模式+VPN</strong></td>
-<td>透明代理，无需复杂配置</td>
-</tr>
-</tbody></table>
-<h3 id="关键原则"><a href="#关键原则" class="headerlink" title="关键原则"></a>关键原则</h3><ol>
-<li><strong>理解代理层级</strong>：浏览器插件 &gt; 系统代理 &gt; VPN</li>
-<li><strong>虚拟机前提</strong>：NAT模式是共享主机VPN的基础</li>
-<li><strong>DNS安全</strong>：DNS泄漏是最大的安全隐患</li>
-<li><strong>按需配置</strong>：根据实际需求选择合适的代理层级</li>
-</ol>
-<hr>
-<h2 id="六、浏览器插件使用"><a href="#六、浏览器插件使用" class="headerlink" title="六、浏览器插件使用"></a>六、浏览器插件使用</h2><h3 id="方法一：SwitchyOmega-系统VPN联动（推荐）"><a href="#方法一：SwitchyOmega-系统VPN联动（推荐）" class="headerlink" title="方法一：SwitchyOmega + 系统VPN联动（推荐）"></a>方法一：SwitchyOmega + 系统VPN联动（推荐）</h3><ul>
-<li><p>基础环境准备</p>
-<ul>
-<li><strong>系统VPN</strong>：连接你的全局VPN（OpenVPN、WireGuard等）</li>
-<li><strong>SwitchyOmega</strong>：在浏览器中安装并配置</li>
-</ul>
-</li>
-<li><p>SwitchyOmega配置步骤： 创建两个情景模式：</p>
-<ul>
-<li><p><strong>直连模式</strong>（Direct）<br>- 类型：直接连接<br>- 用于访问国内网站</p>
-</li>
-<li><p><strong>VPN模式</strong>（System VPN）<br>- 类型：直接连接（是的，直接连接！）<br>- 因为系统VPN已经在全局工作，这里选择直接连接就会走系统VPN</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>配置自动切换模式（Auto Switch）：</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在自动切换的规则列表中配置</span></span><br><span class="line"><span class="comment">// 国内网站直连，国外网站走系统VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 直连规则（国内网站）</span></span><br><span class="line">||baidu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||taobao.<span class="property">com</span>^ → <span class="title class_">Direct</span>  </span><br><span class="line">||qq.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||weibo.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||zhihu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||alipay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||jd.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||<span class="number">163.</span>com^ → <span class="title class_">Direct</span></span><br><span class="line">||sina.<span class="property">com</span>.<span class="property">cn</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||sohu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用系统VPN（国外网站）</span></span><br><span class="line">||google.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||youtube.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||facebook.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||twitter.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||github.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||wikipedia.<span class="property">org</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认规则：直连（保守策略）</span></span><br><span class="line">* → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
-
-<p>使用更智能的方案：使用规则列表</p>
-<p><strong>导入现成的规则列表：</strong></p>
-<ol>
-<li>在Auto Switch模式中点击”从文件恢复”</li>
-<li>导入以下规则列表之一：<ul>
-<li><strong>GFWList</strong>：最全面的被墙网站列表</li>
-<li><strong>ChinaList</strong>：中国国内网站列表</li>
-</ul>
-</li>
-</ol>
-<p><strong>或者使用在线规则列表：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt</span><br></pre></td></tr></table></figure>
-
-<p>配置完成后，流量走向如下：</p>
-<img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_7.png" class="" title="在这里插入图片描述">
-
-
-<h3 id="方法二：纯SwitchyOmega代理方案（替代方案）"><a href="#方法二：纯SwitchyOmega代理方案（替代方案）" class="headerlink" title="方法二：纯SwitchyOmega代理方案（替代方案）"></a>方法二：纯SwitchyOmega代理方案（替代方案）</h3><p>如果系统VPN不稳定，可以在SwitchyOmega中直接配置代理：</p>
-<p>配置代理服务器情景模式：</p>
-<ul>
-<li><strong>名称</strong>：My VPN</li>
-<li><strong>协议</strong>：SOCKS5 或 HTTP</li>
-<li><strong>服务器</strong>：你的VPN服务器地址</li>
-<li><strong>端口</strong>：对应的代理端口</li>
-</ul>
-<p> 自动切换规则</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 国内CDN和常用服务直连</span></span><br><span class="line">||cn^ → <span class="title class_">Direct</span></span><br><span class="line">||taobao.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||baidu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 国外网站走代理</span></span><br><span class="line">||google.<span class="property">com</span>^ → <span class="title class_">My</span> <span class="variable constant_">VPN</span></span><br><span class="line">||youtube.<span class="property">com</span>^ → <span class="title class_">My</span> <span class="variable constant_">VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认直连</span></span><br><span class="line">* → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="方法三：进阶优化配置"><a href="#方法三：进阶优化配置" class="headerlink" title="方法三：进阶优化配置"></a>方法三：进阶优化配置</h3><ol>
-<li>性能优化规则</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 图片、视频直连（加速加载）</span></span><br><span class="line">||jpg|png|gif|mp4|webm^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 国内CDN直连</span></span><br><span class="line">||cloudflare.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||akamai.<span class="property">net</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 银行支付网站直连（安全）</span></span><br><span class="line">||alipay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||unionpay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||icbc.<span class="property">com</span>.<span class="property">cn</span>^ → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>条件规则</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据网络环境自动调整</span></span><br><span class="line"><span class="comment">// 如果在国内网络，启用分流</span></span><br><span class="line"><span class="comment">// 如果在国外网络，全部直连</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 本地网络直连</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span> → <span class="title class_">Direct</span></span><br><span class="line"><span class="number">10.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">8</span> → <span class="title class_">Direct</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="验证配置效果"><a href="#验证配置效果" class="headerlink" title="验证配置效果"></a>验证配置效果</h2><ol>
-<li>测试国内网站</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 访问以下网站应显示国内IP</span></span><br><span class="line">百度、淘宝、京东</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>测试国外网站</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 访问以下网站应显示VPN服务器IP</span></span><br><span class="line">Google、YouTube、Twitter</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>使用检测网站</li>
-</ol>
-<ul>
-<li><strong>IP检测</strong>：whatismyipaddress.com</li>
-<li><strong>DNS检测</strong>：dnsleaktest.com</li>
-</ul>
-]]></content>
-      <categories>
-        <category>网络安全</category>
-        <category>基础知识</category>
-      </categories>
-      <tags>
-        <tag>VPN</tag>
-        <tag>代理</tag>
-        <tag>虚拟及网络</tag>
       </tags>
   </entry>
   <entry>
@@ -1617,6 +1397,226 @@
       </categories>
       <tags>
         <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VPN代理与流量流向分析</title>
+    <url>/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h2 id="一、代理层级架构与优先级原理"><a href="#一、代理层级架构与优先级原理" class="headerlink" title="一、代理层级架构与优先级原理"></a>一、代理层级架构与优先级原理</h2><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_1.png" class="" title="在这里插入图片描述">
+
+
+
+
+<h3 id="1-网络层代理（VPN）-最底层"><a href="#1-网络层代理（VPN）-最底层" class="headerlink" title="1. 网络层代理（VPN）- 最底层"></a>1.<code> 网络层代理</code>（VPN）- 最底层</h3><ul>
+<li><strong>工作层级</strong>：操作系统内核层</li>
+<li><strong>技术代表</strong>：OpenVPN、WireGuard、IPsec</li>
+<li><strong>控制粒度</strong>：<strong>全局代理</strong> - 所有应用程序流量</li>
+<li><strong>技术比喻</strong>：给电脑<strong>虚拟搬迁</strong>到VPN服务器机房</li>
+<li><strong>特点</strong>：透明性高、安全性强，但灵活性差</li>
+</ul>
+<h3 id="2-系统层代理-中间层"><a href="#2-系统层代理-中间层" class="headerlink" title="2. 系统层代理 - 中间层"></a>2. <code>系统层代理 </code>- 中间层</h3><ul>
+<li><strong>工作层级</strong>：操作系统应用层协议</li>
+<li><strong>技术代表</strong>：Windows&#x2F;MacOS系统代理设置</li>
+<li><strong>控制粒度</strong>：<strong>系统级</strong> - 影响遵守系统设置的应用程序</li>
+<li><strong>技术比喻</strong>：设立<strong>总的收发室</strong>处理外寄信件</li>
+<li><strong>特点</strong>：配置方便，但容易被应用程序绕过</li>
+</ul>
+<h3 id="3-应用层代理-最高层"><a href="#3-应用层代理-最高层" class="headerlink" title="3. 应用层代理 - 最高层"></a>3. <code>应用层代理</code> - 最高层</h3><ul>
+<li><p><strong>浏览器插件</strong>（SwitchyOmega等）：</p>
+<ul>
+<li><strong>控制粒度</strong>：<strong>进程级</strong> - 仅控制浏览器流量</li>
+<li><strong>技术比喻</strong>：书房内的<strong>智能路由器</strong></li>
+<li><strong>存在意义</strong>：提供最精细的流量控制，实现国内外网站分流</li>
+</ul>
+</li>
+<li><p><strong>应用程序内置代理</strong>：</p>
+<ul>
+<li><strong>控制粒度</strong>：<strong>应用级</strong> - 仅影响单个应用程序</li>
+<li><strong>特点</strong>：配置独立，针对性强的网络通道</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、四大核心场景流量走向详解"><a href="#二、四大核心场景流量走向详解" class="headerlink" title="二、四大核心场景流量走向详解"></a>二、四大核心场景流量走向详解</h2><h3 id="场景1：主机标准VPN模式（无冲突）"><a href="#场景1：主机标准VPN模式（无冲突）" class="headerlink" title="场景1：主机标准VPN模式（无冲突）"></a>场景1：主机标准VPN模式（无冲突）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_2.png" class="" title="在这里插入图片描述">
+
+
+
+<p><strong>核心逻辑</strong>：最标准的VPN使用场景。所有应用程序流量都遵循系统级代理设置，通过VPN隧道加密转发，实现全局网络匿名化。</p>
+<p><strong>适用场景</strong>：需要完全匿名、安全加密所有流量的环境。</p>
+<h3 id="场景2：主机浏览器代理分流（主动绕行）"><a href="#场景2：主机浏览器代理分流（主动绕行）" class="headerlink" title="场景2：主机浏览器代理分流（主动绕行）"></a>场景2：主机浏览器代理分流（主动绕行）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_3.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>核心逻辑</strong>：浏览器插件优先级高于系统代理，实现<strong>精细化流量分流</strong>。浏览器按插件规则转发（国内外网站分流），其他应用仍走VPN通道。</p>
+<p><strong>存在意义</strong>：解决VPN”一刀切”的弊端，优化访问速度，避免国内流量绕行。</p>
+<h3 id="场景3：虚拟机理想共享模式（透明代理）"><a href="#场景3：虚拟机理想共享模式（透明代理）" class="headerlink" title="场景3：虚拟机理想共享模式（透明代理）"></a>场景3：虚拟机理想共享模式（透明代理）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_4.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>核心逻辑</strong>：虚拟机通过NAT模式完全依赖主机网络路由，继承主机VPN设置，实现”透明代理”效果。</p>
+<p><strong>前提条件</strong>：</p>
+<ul>
+<li>虚拟机设为<strong>NAT模式</strong></li>
+<li>关闭虚拟机内所有代理插件</li>
+<li>主机运行全局VPN</li>
+</ul>
+<h3 id="场景4：虚拟机代理冲突（嵌套绕行）"><a href="#场景4：虚拟机代理冲突（嵌套绕行）" class="headerlink" title="场景4：虚拟机代理冲突（嵌套绕行）"></a>场景4：虚拟机代理冲突（嵌套绕行）</h3><img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_5.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>核心逻辑</strong>：虚拟机内浏览器插件拦截流量，导致浏览器绕开主机VPN，形成<strong>代理嵌套冲突</strong>。</p>
+<p><strong>问题根源</strong>：虚拟机内的高优先级代理规则覆盖了主机的低优先级代理规则。</p>
+<hr>
+<h2 id="三、Kali-虚拟机配置"><a href="#三、Kali-虚拟机配置" class="headerlink" title="三、Kali 虚拟机配置"></a>三、Kali 虚拟机配置</h2><h3 id="完整配置检查清单"><a href="#完整配置检查清单" class="headerlink" title="完整配置检查清单"></a>完整配置检查清单</h3><p>为确保Kali虚拟机正确共享主机VPN，请按以下流程系统配置：</p>
+<img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_6.png" class="" title="在这里插入图片描述">
+
+
+<h3 id="关键配置步骤"><a href="#关键配置步骤" class="headerlink" title="关键配置步骤"></a>关键配置步骤</h3><h4 id="1-基础环境配置"><a href="#1-基础环境配置" class="headerlink" title="1. 基础环境配置"></a>1. 基础环境配置</h4><ul>
+<li><strong>主机VPN</strong>：必须使用系统级全局VPN（OpenVPN、WireGuard等）</li>
+<li><strong>网络模式</strong>：虚拟机设置为<strong>NAT模式</strong>（默认）</li>
+</ul>
+<h4 id="2-DNS泄漏解决方案"><a href="#2-DNS泄漏解决方案" class="headerlink" title="2. DNS泄漏解决方案"></a>2. DNS泄漏解决方案</h4><p><strong>临时方案（测试用）</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/resolv.conf</span><br><span class="line"><span class="comment"># 添加：nameserver 10.8.0.1 （替换为实际VPN DNS）</span></span><br><span class="line"><span class="built_in">sudo</span> chattr +i /etc/resolv.conf  <span class="comment"># 锁定文件</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>永久方案（推荐）</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> systemd-resolved</span><br><span class="line"><span class="built_in">sudo</span> systemctl stop systemd-resolved</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> -f /etc/resolv.conf</span><br><span class="line"><span class="built_in">sudo</span> nano /etc/resolv.conf  <span class="comment"># 配置VPN DNS</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart NetworkManager</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、验证与故障排除"><a href="#四、验证与故障排除" class="headerlink" title="四、验证与故障排除"></a>四、验证与故障排除</h2><h3 id="基础验证方法"><a href="#基础验证方法" class="headerlink" title="基础验证方法"></a>基础验证方法</h3><ol>
+<li><p><strong>IP地址检测</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl ifconfig.me</span><br><span class="line"><span class="comment"># 访问：WhatIsMyIPAddress.com</span></span><br></pre></td></tr></table></figure>
+<p><strong>预期</strong>：显示IP应与VPN服务器位置一致</p>
+</li>
+<li><p><strong>DNS泄漏测试</strong>：</p>
+<ul>
+<li>访问 <a href="https://www.dnsleaktest.com/">DNS Leak Test</a></li>
+<li>执行 <strong>Extended Test</strong><br><strong>预期</strong>：不应出现本地ISP的DNS服务器</li>
+</ul>
+</li>
+</ol>
+<h3 id="故障排除-checklist"><a href="#故障排除-checklist" class="headerlink" title="故障排除 checklist"></a>故障排除 checklist</h3><ul>
+<li>✅ 主机VPN是否正常连接</li>
+<li>✅ 虚拟机是否为NAT模式  </li>
+<li>✅ 虚拟机浏览器代理插件是否关闭</li>
+<li>✅ DNS是否配置正确且无泄漏</li>
+<li>✅ 系统时间是否同步（影响HTTPS）</li>
+</ul>
+<h2 id="五、知识总结"><a href="#五、知识总结" class="headerlink" title="五、知识总结"></a>五、知识总结</h2><h3 id="代理选择策略"><a href="#代理选择策略" class="headerlink" title="代理选择策略"></a>代理选择策略</h3><table>
+<thead>
+<tr>
+<th>需求场景</th>
+<th>推荐代理方式</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局匿名安全</td>
+<td><strong>网络层VPN</strong></td>
+<td>所有流量加密，完全匿名</td>
+</tr>
+<tr>
+<td>网页浏览优化</td>
+<td><strong>浏览器插件</strong></td>
+<td>国内外分流，速度最优</td>
+</tr>
+<tr>
+<td>办公环境统一</td>
+<td><strong>系统代理</strong></td>
+<td>统一管理，配置简便</td>
+</tr>
+<tr>
+<td>虚拟机共享</td>
+<td><strong>NAT模式+VPN</strong></td>
+<td>透明代理，无需复杂配置</td>
+</tr>
+</tbody></table>
+<h3 id="关键原则"><a href="#关键原则" class="headerlink" title="关键原则"></a>关键原则</h3><ol>
+<li><strong>理解代理层级</strong>：浏览器插件 &gt; 系统代理 &gt; VPN</li>
+<li><strong>虚拟机前提</strong>：NAT模式是共享主机VPN的基础</li>
+<li><strong>DNS安全</strong>：DNS泄漏是最大的安全隐患</li>
+<li><strong>按需配置</strong>：根据实际需求选择合适的代理层级</li>
+</ol>
+<hr>
+<h2 id="六、浏览器插件使用"><a href="#六、浏览器插件使用" class="headerlink" title="六、浏览器插件使用"></a>六、浏览器插件使用</h2><h3 id="方法一：SwitchyOmega-系统VPN联动（推荐）"><a href="#方法一：SwitchyOmega-系统VPN联动（推荐）" class="headerlink" title="方法一：SwitchyOmega + 系统VPN联动（推荐）"></a>方法一：SwitchyOmega + 系统VPN联动（推荐）</h3><ul>
+<li><p>基础环境准备</p>
+<ul>
+<li><strong>系统VPN</strong>：连接你的全局VPN（OpenVPN、WireGuard等）</li>
+<li><strong>SwitchyOmega</strong>：在浏览器中安装并配置</li>
+</ul>
+</li>
+<li><p>SwitchyOmega配置步骤： 创建两个情景模式：</p>
+<ul>
+<li><p><strong>直连模式</strong>（Direct）<br>- 类型：直接连接<br>- 用于访问国内网站</p>
+</li>
+<li><p><strong>VPN模式</strong>（System VPN）<br>- 类型：直接连接（是的，直接连接！）<br>- 因为系统VPN已经在全局工作，这里选择直接连接就会走系统VPN</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>配置自动切换模式（Auto Switch）：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在自动切换的规则列表中配置</span></span><br><span class="line"><span class="comment">// 国内网站直连，国外网站走系统VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 直连规则（国内网站）</span></span><br><span class="line">||baidu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||taobao.<span class="property">com</span>^ → <span class="title class_">Direct</span>  </span><br><span class="line">||qq.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||weibo.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||zhihu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||alipay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||jd.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||<span class="number">163.</span>com^ → <span class="title class_">Direct</span></span><br><span class="line">||sina.<span class="property">com</span>.<span class="property">cn</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||sohu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用系统VPN（国外网站）</span></span><br><span class="line">||google.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||youtube.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||facebook.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||twitter.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||github.<span class="property">com</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line">||wikipedia.<span class="property">org</span>^ → <span class="title class_">System</span> <span class="variable constant_">VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认规则：直连（保守策略）</span></span><br><span class="line">* → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
+
+<p>使用更智能的方案：使用规则列表</p>
+<p><strong>导入现成的规则列表：</strong></p>
+<ol>
+<li>在Auto Switch模式中点击”从文件恢复”</li>
+<li>导入以下规则列表之一：<ul>
+<li><strong>GFWList</strong>：最全面的被墙网站列表</li>
+<li><strong>ChinaList</strong>：中国国内网站列表</li>
+</ul>
+</li>
+</ol>
+<p><strong>或者使用在线规则列表：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，流量走向如下：</p>
+<img src="/2025/11/13/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_7.png" class="" title="在这里插入图片描述">
+
+
+<h3 id="方法二：纯SwitchyOmega代理方案（替代方案）"><a href="#方法二：纯SwitchyOmega代理方案（替代方案）" class="headerlink" title="方法二：纯SwitchyOmega代理方案（替代方案）"></a>方法二：纯SwitchyOmega代理方案（替代方案）</h3><p>如果系统VPN不稳定，可以在SwitchyOmega中直接配置代理：</p>
+<p>配置代理服务器情景模式：</p>
+<ul>
+<li><strong>名称</strong>：My VPN</li>
+<li><strong>协议</strong>：SOCKS5 或 HTTP</li>
+<li><strong>服务器</strong>：你的VPN服务器地址</li>
+<li><strong>端口</strong>：对应的代理端口</li>
+</ul>
+<p> 自动切换规则</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 国内CDN和常用服务直连</span></span><br><span class="line">||cn^ → <span class="title class_">Direct</span></span><br><span class="line">||taobao.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||baidu.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 国外网站走代理</span></span><br><span class="line">||google.<span class="property">com</span>^ → <span class="title class_">My</span> <span class="variable constant_">VPN</span></span><br><span class="line">||youtube.<span class="property">com</span>^ → <span class="title class_">My</span> <span class="variable constant_">VPN</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认直连</span></span><br><span class="line">* → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="方法三：进阶优化配置"><a href="#方法三：进阶优化配置" class="headerlink" title="方法三：进阶优化配置"></a>方法三：进阶优化配置</h3><ol>
+<li>性能优化规则</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 图片、视频直连（加速加载）</span></span><br><span class="line">||jpg|png|gif|mp4|webm^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 国内CDN直连</span></span><br><span class="line">||cloudflare.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||akamai.<span class="property">net</span>^ → <span class="title class_">Direct</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 银行支付网站直连（安全）</span></span><br><span class="line">||alipay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||unionpay.<span class="property">com</span>^ → <span class="title class_">Direct</span></span><br><span class="line">||icbc.<span class="property">com</span>.<span class="property">cn</span>^ → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>条件规则</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据网络环境自动调整</span></span><br><span class="line"><span class="comment">// 如果在国内网络，启用分流</span></span><br><span class="line"><span class="comment">// 如果在国外网络，全部直连</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 本地网络直连</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span> → <span class="title class_">Direct</span></span><br><span class="line"><span class="number">10.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">8</span> → <span class="title class_">Direct</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> → <span class="title class_">Direct</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="验证配置效果"><a href="#验证配置效果" class="headerlink" title="验证配置效果"></a>验证配置效果</h2><ol>
+<li>测试国内网站</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 访问以下网站应显示国内IP</span></span><br><span class="line">百度、淘宝、京东</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>测试国外网站</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 访问以下网站应显示VPN服务器IP</span></span><br><span class="line">Google、YouTube、Twitter</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用检测网站</li>
+</ol>
+<ul>
+<li><strong>IP检测</strong>：whatismyipaddress.com</li>
+<li><strong>DNS检测</strong>：dnsleaktest.com</li>
+</ul>
+]]></content>
+      <categories>
+        <category>网络安全</category>
+        <category>基础知识</category>
+      </categories>
+      <tags>
+        <tag>VPN</tag>
+        <tag>代理</tag>
+        <tag>虚拟及网络</tag>
       </tags>
   </entry>
 </search>

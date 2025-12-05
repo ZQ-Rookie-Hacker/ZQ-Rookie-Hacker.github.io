@@ -23,7 +23,7 @@
     <meta name="description" content="一、环境前置准备1. 验证现有Ubuntu镜像1docker images  预期结果：需包含 ubuntu:16.04、ubuntu:18.04、ubuntu:20.04 三个镜像  2. 拉取缺失镜像（若验证不通过）12345678# Ubuntu 16.04（对应libc-2.23，端口9997）docker pull ubuntu:16.04# Ubuntu 18.04（对应libc-2.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pwn专属Docker环境配置与操作">
-<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/02/docker%E6%8C%87%E4%BB%A4/">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/">
 <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
 <meta property="og:description" content="一、环境前置准备1. 验证现有Ubuntu镜像1docker images  预期结果：需包含 ubuntu:16.04、ubuntu:18.04、ubuntu:20.04 三个镜像  2. 拉取缺失镜像（若验证不通过）12345678# Ubuntu 16.04（对应libc-2.23，端口9997）docker pull ubuntu:16.04# Ubuntu 18.04（对应libc-2.">
 <meta property="og:locale" content="zh_CN">
@@ -35,10 +35,10 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/02/docker%E6%8C%87%E4%BB%A4/">
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/02/docker%E6%8C%87%E4%BB%A4/","path":"2025/12/02/docker指令/","title":"Pwn专属Docker环境配置与操作"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/","path":"2025/12/02/Pwn专属Docker环境配置与操作/","title":"Pwn专属Docker环境配置与操作"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Pwn专属Docker环境配置与操作 | ZQ-Rookie-Hacker's Blog</title>
@@ -176,18 +176,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -219,7 +219,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/02/docker%E6%8C%87%E4%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zhuzhuxia.jpg">
@@ -439,6 +439,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/12/05/WEB%E5%AE%89%E5%85%A8HTML%E5%9F%BA%E7%A1%80/" rel="next" title="WEB安全 HTML基础">
+                  WEB安全 HTML基础 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>

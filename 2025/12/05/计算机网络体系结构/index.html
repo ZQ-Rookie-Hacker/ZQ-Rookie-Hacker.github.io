@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="1.1   计算机网络概述1.1.1   计算机网络的概念 计算机网络的概念 定义 将众多分散的、自治的计算机系统，通过通信设备与线路连接起来 由功能完善的软件实现资源共享和信息传递的系统   组成 节点(Node) 计算机 集线器 交换机 路由器   链路(Link)   互连网(internet) 网络之间通过路由器互连 构成覆盖范围更广的计算机网络   名词区分 internet(互连网)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第 1 章 计算机网络体系结构">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="1.1   计算机网络概述1.1.1   计算机网络的概念 计算机网络的概念 定义 将众多分散的、自治的计算机系统，通过通信设备与线路连接起来 由功能完善的软件实现资源共享和信息传递的系统   组成 节点(Node) 计算机 集线器 交换机 路由器   链路(Link)   互连网(internet) 网络之间通过路由器互连 构成覆盖范围更广的计算机网络   名词区分 internet(互连网)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-05T09:43:12.213Z">
+<meta property="article:modified_time" content="2025-12-05T09:46:15.930Z">
+<meta property="article:author" content="ZQ-Rooie-Hacker">
+<meta property="article:tag" content="计算机体系架构">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/","path":"2025/12/05/计算机网络体系结构/","title":"第 1 章 计算机网络体系结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第 1 章 计算机网络体系结构 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1   计算机网络概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">1.1.1   计算机网络的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-text">1.1.2   计算机网络的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-text">1.1.3    计算机网络的功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-4-%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2%E3%80%81%E6%8A%A5%E6%96%87%E4%BA%A4%E6%8D%A2%E4%B8%8E%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2"><span class="nav-text">1.1.4    电路交换、报文交换与分组交换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-5-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-text">1.1.5    计算机网络的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-6-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-text">1.1.6    计算机网络的性能指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="nav-text">1.2   计算机网络体系结构与参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">1.2.1    计算机网络分层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%81%E6%8E%A5%E5%8F%A3%E3%80%81%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">1.2.2    计算机网络协议、接口、服务的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-ISO-OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E5%92%8CTCP-IP%E6%A8%A1-%E5%9E%8B"><span class="nav-text">1.2.3   ISO&#x2F;OSI 参考模型和TCP&#x2F;IP模 型</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rooie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rooie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rooie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="第 1 章 计算机网络体系结构 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第 1 章 计算机网络体系结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-05 17:43:12 / 修改时间：17:46:15" itemprop="dateCreated datePublished" datetime="2025-12-05T17:43:12+08:00">2025-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
+<li>计算机网络的概念<ul>
+<li>定义<ul>
+<li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
+<li>由功能完善的软件实现资源共享和信息传递的系统</li>
+</ul>
+</li>
+<li>组成<ul>
+<li>节点(Node)<ul>
+<li>计算机</li>
+<li>集线器</li>
+<li>交换机</li>
+<li>路由器</li>
+</ul>
+</li>
+<li>链路(Link)</li>
+</ul>
+</li>
+<li>互连网(internet)<ul>
+<li>网络之间通过路由器互连</li>
+<li>构成覆盖范围更广的计算机网络</li>
+</ul>
+</li>
+<li>名词区分<ul>
+<li>internet(互连网)<ul>
+<li>通用名词</li>
+<li>多个计算机网络互连而成</li>
+<li>可使用任意通信协议</li>
+</ul>
+</li>
+<li>Internet(互联网&#x2F;因特网)<ul>
+<li>专用名词</li>
+<li>全球最大、开放的特定计算机网络</li>
+<li>采用TCP&#x2F;IP族作为通信规则</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-2-计算机网络的组成"><a href="#1-1-2-计算机网络的组成" class="headerlink" title="1.1.2   计算机网络的组成"></a>1.1.2   计算机网络的组成</h3><ul>
+<li>从组成部分看<ul>
+<li>硬件<ul>
+<li>主机(端系统)</li>
+<li>通信链路<ul>
+<li>双绞线</li>
+<li>光纤</li>
+</ul>
+</li>
+<li>交换设备<ul>
+<li>路由器</li>
+<li>交换机</li>
+</ul>
+</li>
+<li>通信处理机<ul>
+<li>网卡</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>软件<ul>
+<li>资源共享软件</li>
+<li>工具软件<ul>
+<li>E-mail程序</li>
+<li>FTP程序</li>
+<li>聊天程序</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>协议<ul>
+<li>网络传输数据规范</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从工作方式看(Internet)<ul>
+<li>边缘部分<ul>
+<li>用户直接使用的主机</li>
+<li>功能<ul>
+<li>通信<ul>
+<li>数据传输</li>
+<li>音频&#x2F;视频</li>
+</ul>
+</li>
+<li>资源共享</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>核心部分<ul>
+<li>网络和路由器</li>
+<li>功能<ul>
+<li>提供连通性</li>
+<li>交换服务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从功能组成看<ul>
+<li>通信子网<ul>
+<li>组成<ul>
+<li>传输介质</li>
+<li>通信设备</li>
+<li>网络协议</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>数据传输</li>
+<li>交换</li>
+<li>控制</li>
+<li>存储</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源子网<ul>
+<li>组成<ul>
+<li>资源共享设备</li>
+<li>软件</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>提供硬件资源共享服务</li>
+<li>提供软件资源共享服务</li>
+<li>提供数据资源共享服务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-3-计算机网络的功能"><a href="#1-1-3-计算机网络的功能" class="headerlink" title="1.1.3    计算机网络的功能"></a>1.1.3    计算机网络的功能</h3><ul>
+<li>数据通信<ul>
+<li>最基本和最重要的功能</li>
+<li>实现联网计算机之间各种信息的传输</li>
+<li>应用示例<ul>
+<li>文件传输</li>
+<li>电子邮件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源共享<ul>
+<li>共享类型<ul>
+<li>软件共享</li>
+<li>数据共享</li>
+<li>硬件共享</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>互通有无、分工协作</li>
+<li>提高资源利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分布式处理<ul>
+<li>定义<ul>
+<li>将复杂任务分配给网络中空闲计算机</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>提高系统利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提高可靠性<ul>
+<li>定义<ul>
+<li>各台计算机互为替代机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>负载均衡<ul>
+<li>定义<ul>
+<li>均衡分配工作任务给各台计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他功能<ul>
+<li>电子化办公与服务</li>
+<li>远程教育</li>
+<li>娱乐功能</li>
+<li>社会效益<ul>
+<li>满足社会需求</li>
+<li>方便学习、工作和生活</li>
+<li>巨大经济效益</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-4-电路交换、报文交换与分组交换"><a href="#1-1-4-电路交换、报文交换与分组交换" class="headerlink" title="1.1.4    电路交换、报文交换与分组交换"></a>1.1.4    电路交换、报文交换与分组交换</h3><ul>
+<li>电路交换<ul>
+<li>特点<ul>
+<li>建立连接、传输数据、释放连接</li>
+<li>物理通信路径独占</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信时延小</li>
+<li>有序传输</li>
+<li>没有冲突</li>
+<li>实时性强</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建立连接时间长</li>
+<li>线路利用率低</li>
+<li>灵活性差</li>
+<li>难以实现差错控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>报文交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>报文为单位传输</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>无建立连接时延</li>
+<li>灵活分配线路</li>
+<li>线路利用率高</li>
+<li>支持差错控制</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>转发时延高</li>
+<li>缓存开销大</li>
+<li>错误处理低效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>将报文划分为分组</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>方便存储管理</li>
+<li>传输效率高</li>
+<li>减少出错概率和重传代价</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>存在存储转发时延</li>
+<li>需要传输额外信息量</li>
+<li>可能出现失序、丢失或重复分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三种交换方式比较<ul>
+<li>电路交换适合连续大量数据传输</li>
+<li>报文交换和分组交换信道利用率更高</li>
+<li>分组交换更适合突发式数据传送</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-5-计算机网络的分类"><a href="#1-1-5-计算机网络的分类" class="headerlink" title="1.1.5    计算机网络的分类"></a>1.1.5    计算机网络的分类</h3><ul>
+<li>按分布范围分类<ul>
+<li>广域网 (WAN)<ul>
+<li>任务: 提供长距离通信</li>
+<li>覆盖范围: 几十米到几千千米</li>
+<li>特点: 互联网核心部分, 高速链路</li>
+</ul>
+</li>
+<li>城域网 (MAN)<ul>
+<li>覆盖范围: 5～50km</li>
+<li>技术: 以太网技术</li>
+</ul>
+</li>
+<li>局域网 (LAN)<ul>
+<li>覆盖范围: 几十到几千米</li>
+<li>特点: 主机高速线路相连, 广播技术</li>
+</ul>
+</li>
+<li>个人区域网 (PAN)<ul>
+<li>定义: 个人电子设备无线连接</li>
+<li>别名: 无线个人区域网 (WPAN)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>按传输技术分类<ul>
+<li>广播式网络<ul>
+<li>特点: 共享公共通信信道</li>
+<li>应用: 局域网, 无线&#x2F;卫星通信</li>
+</ul>
+</li>
+<li>点对点网络<ul>
+<li>特点: 物理线路连接一对计算机</li>
+<li>传输方式: 存储转发</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>按拓扑结构分类<ul>
+<li>总线形网络<ul>
+<li>特点: 单根传输线连接</li>
+<li>优点: 建网容易, 节省线路</li>
+<li>缺点: 重负载效率低</li>
+</ul>
+</li>
+<li>星形网络<ul>
+<li>特点: 单独线路连接中央设备</li>
+<li>优点: 便于集中控制</li>
+<li>缺点: 成本高</li>
+</ul>
+</li>
+<li>环形网络<ul>
+<li>特点: 接口设备连接成环</li>
+<li>例子: 令牌环局域网</li>
+</ul>
+</li>
+<li>网状网络<ul>
+<li>特点: 每个节点多条路径</li>
+<li>应用: 广域网</li>
+<li>优点: 可靠性高</li>
+<li>缺点: 控制复杂</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>按使用者分类<ul>
+<li>公用网 (Public Network)<ul>
+<li>特点: 电信公司建造, 付费使用</li>
+</ul>
+</li>
+<li>专用网 (Private Network)<ul>
+<li>特点: 单位专用, 不对外开放</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>按传输介质分类<ul>
+<li>有线网络<ul>
+<li>类型<ul>
+<li>双绞线</li>
+<li>同轴电缆</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>无线网络<ul>
+<li>类型<ul>
+<li>蓝牙</li>
+<li>微波</li>
+<li>无线电</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-6-计算机网络的性能指标"><a href="#1-1-6-计算机网络的性能指标" class="headerlink" title="1.1.6    计算机网络的性能指标"></a>1.1.6    计算机网络的性能指标</h3><ul>
+<li>1)速率 (Speed)<ul>
+<li>定义:节点在数字信道上传送数据的速率</li>
+<li>别名:数据传输速率&#x2F;数据率&#x2F;比特率</li>
+<li>单位:b&#x2F;s(bit&#x2F;s&#x2F;bps)</li>
+<li>高数据率表示:kb&#x2F;s(10³)&#x2F;Mb&#x2F;s(10⁶)&#x2F;Gb&#x2F;s(10⁹)</li>
+</ul>
+</li>
+<li>2)带宽(Bandwidth)<ul>
+<li>原义:通信线路允许通过的信号频率范围(Hz)</li>
+<li>网络定义:通信线路传送数据的能力(最高数据传输速率)</li>
+<li>单位:b&#x2F;s</li>
+</ul>
+</li>
+<li>3)吞吐量(Throughput)<ul>
+<li>定义:单位时间通过网络的实际数据量</li>
+<li>用途:实际网络测量</li>
+</ul>
+</li>
+<li>4)时延(Delay)<ul>
+<li>定义:数据从网络一端传送到另一端的总时间</li>
+<li>组成:<ul>
+<li>发送时延(传输时延)<ul>
+<li>公式:分组长度&#x2F;发送速率</li>
+</ul>
+</li>
+<li>传播时延<ul>
+<li>公式:信道长度&#x2F;电磁波传播速率</li>
+</ul>
+</li>
+<li>处理时延</li>
+<li>排队时延</li>
+</ul>
+</li>
+<li>总时延公式:发送+传播+处理+排队</li>
+</ul>
+</li>
+<li>5)时延带宽积<ul>
+<li>定义:传播时延×信道带宽</li>
+<li>物理意义:链路可容纳的比特数量</li>
+</ul>
+</li>
+<li>6)往返时延(RTT)<ul>
+<li>定义:发送分组到收到确认的总时间</li>
+<li>包含:中间节点处理&#x2F;排队&#x2F;发送时延</li>
+</ul>
+</li>
+<li>7)信道利用率<ul>
+<li>定义:信道有数据通过的时间百分比</li>
+<li>公式:有数据时间&#x2F;(有数据+无数据时间)</li>
+<li>注意事项:过高会导致时延增大</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-计算机网络体系结构与参考模型"><a href="#1-2-计算机网络体系结构与参考模型" class="headerlink" title="1.2   计算机网络体系结构与参考模型"></a>1.2   计算机网络体系结构与参考模型</h2><h3 id="1-2-1-计算机网络分层结构"><a href="#1-2-1-计算机网络分层结构" class="headerlink" title="1.2.1    计算机网络分层结构"></a>1.2.1    计算机网络分层结构</h3><ul>
+<li>网络体系结构的定义<ul>
+<li>计算机网络的各层及其协议的集合称为网络的体系结构</li>
+<li>体系结构是抽象的，实现是具体的</li>
+</ul>
+</li>
+<li>分层的基本原则<ul>
+<li>1)每层实现相对独立的功能</li>
+<li>2)各层接口清晰，交流少</li>
+<li>3)功能定义独立于实现方法</li>
+<li>4)下层对上层的独立性</li>
+<li>5)促进标准化工作</li>
+</ul>
+</li>
+<li>分层结构中的概念<ul>
+<li>实体<ul>
+<li>第n层的活动元素</li>
+<li>对等层和对等实体</li>
+</ul>
+</li>
+<li>服务关系<ul>
+<li>第n层向第n+1层提供服务</li>
+<li>服务提供者与服务用户</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据单元<ul>
+<li>协议数据单元(PDU)<ul>
+<li>n-PDU &#x3D; n-SDU + n-PCI</li>
+<li>各层PDU名称<ul>
+<li>物理层：比特流</li>
+<li>数据链路层：帧</li>
+<li>网络层：分组</li>
+<li>传输层：报文段</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务数据单元(SDU)</li>
+<li>协议控制信息(PCI)</li>
+</ul>
+</li>
+<li>层次结构的含义<ul>
+<li>1)第n层使用n-1层服务，并向n+1层提供服务</li>
+<li>2)最低层只提供服务，最高层面向用户</li>
+<li>3)上层只能通过相邻层接口使用下层服务</li>
+<li>4)对等层在逻辑上有直接信道</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-2-计算机网络协议、接口、服务的概念"><a href="#1-2-2-计算机网络协议、接口、服务的概念" class="headerlink" title="1.2.2    计算机网络协议、接口、服务的概念"></a>1.2.2    计算机网络协议、接口、服务的概念</h3><ul>
+<li>协议<ul>
+<li>定义<ul>
+<li>控制对等实体之间通信的规则的集合</li>
+<li>是水平的</li>
+</ul>
+</li>
+<li>组成<ul>
+<li>语法<ul>
+<li>数据与控制信息的格式</li>
+</ul>
+</li>
+<li>语义<ul>
+<li>需要发出何种控制信息、完成何种动作及做出何种应答</li>
+</ul>
+</li>
+<li>同步(时序)<ul>
+<li>执行各种操作的条件、时序关系</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>接口<ul>
+<li>定义<ul>
+<li>同一节点内相邻两层实体交换信息的逻辑接口(SAP)</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>只能在紧邻层之间定义</li>
+<li>第n层SAP是第n+1层访问第n层服务的入口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务<ul>
+<li>定义<ul>
+<li>下层为紧邻上层提供的功能调用</li>
+<li>是垂直的</li>
+</ul>
+</li>
+<li>服务与协议的区别<ul>
+<li>协议是水平的，服务是垂直的</li>
+<li>只有本层协议实现才能向上层提供服务</li>
+<li>下层协议对上层服务用户透明</li>
+</ul>
+</li>
+<li>服务分类<ul>
+<li>面向连接服务与无连接服务<ul>
+<li>面向连接服务<ul>
+<li>三个阶段：连接建立、数据传输、连接释放</li>
+</ul>
+</li>
+<li>无连接服务<ul>
+<li>直接发送数据包</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可靠服务和不可靠服务<ul>
+<li>可靠服务<ul>
+<li>具有纠错、检错、应答机制</li>
+</ul>
+</li>
+<li>不可靠服务<ul>
+<li>尽力而为的服务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>有应答服务和无应答服务<ul>
+<li>有应答服务<ul>
+<li>传输系统内部自动实现应答</li>
+</ul>
+</li>
+<li>无应答服务<ul>
+<li>需要应答由高层实现</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-3-ISO-OSI-参考模型和TCP-IP模-型"><a href="#1-2-3-ISO-OSI-参考模型和TCP-IP模-型" class="headerlink" title="1.2.3   ISO&#x2F;OSI 参考模型和TCP&#x2F;IP模 型"></a>1.2.3   ISO&#x2F;OSI 参考模型和TCP&#x2F;IP模 型</h3><ul>
+<li>OSI 参考模型<ul>
+<li>层次结构<ul>
+<li>物理层<ul>
+<li>传输单位:比特</li>
+<li>功能:透明传输原始比特流</li>
+<li>研究内容<ul>
+<li>电路接口参数</li>
+<li>信号意义和电气特征</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据链路层<ul>
+<li>传输单位:帧</li>
+<li>功能<ul>
+<li>差错控制</li>
+<li>流量控制</li>
+<li>广播信道访问控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络层<ul>
+<li>传输单位:数据报</li>
+<li>功能<ul>
+<li>路由选择</li>
+<li>流量控制</li>
+<li>拥塞控制</li>
+<li>差错控制</li>
+<li>网际互联</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>传输层<ul>
+<li>传输单位:报文段&#x2F;用户数据报</li>
+<li>功能<ul>
+<li>端到端通信</li>
+<li>流量控制</li>
+<li>差错控制</li>
+<li>连接管理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>会话层<ul>
+<li>功能<ul>
+<li>建立&#x2F;管理&#x2F;终止会话</li>
+<li>同步机制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>表示层<ul>
+<li>功能<ul>
+<li>数据表示转换</li>
+<li>数据压缩</li>
+<li>加密解密</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用层<ul>
+<li>功能:用户与网络接口</li>
+<li>协议:多种应用协议</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP 模型<ul>
+<li>层次结构<ul>
+<li>网络接口层<ul>
+<li>对应OSI:物理层+数据链路层</li>
+</ul>
+</li>
+<li>网际层<ul>
+<li>核心协议:IP</li>
+<li>功能:分组路由选择</li>
+</ul>
+</li>
+<li>传输层<ul>
+<li>协议<ul>
+<li>TCP:面向连接可靠传输</li>
+<li>UDP:无连接不可靠传输</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用层<ul>
+<li>协议<ul>
+<li>Telnet</li>
+<li>FTP</li>
+<li>DNS</li>
+<li>SMTP</li>
+<li>HTTP</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP模型与OSI参考模型比较<ul>
+<li>相似之处<ul>
+<li>分层体系结构</li>
+<li>独立协议栈</li>
+<li>解决异构网络互联</li>
+</ul>
+</li>
+<li>差异<ul>
+<li>概念区分<ul>
+<li>OSI明确区分服务&#x2F;协议&#x2F;接口</li>
+<li>TCP&#x2F;IP未明确区分</li>
+</ul>
+</li>
+<li>层次数量<ul>
+<li>OSI:7层</li>
+<li>TCP&#x2F;IP:4层</li>
+</ul>
+</li>
+<li>设计顺序<ul>
+<li>OSI:先模型后协议</li>
+<li>TCP&#x2F;IP:先协议后模型</li>
+</ul>
+</li>
+<li>通信模式<ul>
+<li>OSI网络层:无连接+面向连接</li>
+<li>TCP&#x2F;IP网际层:仅无连接</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/" rel="tag"># 计算机体系架构</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/05/WEB%E5%AE%89%E5%85%A8HTML%E5%9F%BA%E7%A1%80/" rel="prev" title="WEB安全 HTML基础">
+                  <i class="fa fa-angle-left"></i> WEB安全 HTML基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/" rel="next" title="第 2 章 物理层">
+                  第 2 章 物理层 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rooie-Hacker</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

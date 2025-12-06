@@ -169,7 +169,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -180,7 +180,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -202,6 +202,246 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rooie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/02/Pwn%E4%B8%93%E5%B1%9EDocker%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Pwn专属Docker环境配置与操作</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-02 21:59:15 / 修改时间：21:59:05" itemprop="dateCreated datePublished" datetime="2025-12-02T21:59:15+08:00">2025-12-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Pwn/" itemprop="url" rel="index"><span itemprop="name">Pwn</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="一、环境前置准备"><a href="#一、环境前置准备" class="headerlink" title="一、环境前置准备"></a>一、环境前置准备</h2><h3 id="1-验证现有Ubuntu镜像"><a href="#1-验证现有Ubuntu镜像" class="headerlink" title="1. 验证现有Ubuntu镜像"></a>1. 验证现有Ubuntu镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<ul>
+<li>预期结果：需包含 <code>ubuntu:16.04</code>、<code>ubuntu:18.04</code>、<code>ubuntu:20.04</code> 三个镜像</li>
+</ul>
+<h3 id="2-拉取缺失镜像（若验证不通过）"><a href="#2-拉取缺失镜像（若验证不通过）" class="headerlink" title="2. 拉取缺失镜像（若验证不通过）"></a>2. 拉取缺失镜像（若验证不通过）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ubuntu 16.04（对应libc-2.23，端口9997）</span></span><br><span class="line">docker pull ubuntu:16.04</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ubuntu 18.04（对应libc-2.27，端口9998）</span></span><br><span class="line">docker pull ubuntu:18.04</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ubuntu 20.04（对应libc-2.31，端口9999）</span></span><br><span class="line">docker pull ubuntu:20.04</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、核心容器创建（3个Pwn专用环境）"><a href="#二、核心容器创建（3个Pwn专用环境）" class="headerlink" title="二、核心容器创建（3个Pwn专用环境）"></a>二、核心容器创建（3个Pwn专用环境）</h2><h3 id="容器1：Ubuntu-16-04-libc-2-23"><a href="#容器1：Ubuntu-16-04-libc-2-23" class="headerlink" title="容器1：Ubuntu 16.04 + libc-2.23"></a>容器1：Ubuntu 16.04 + libc-2.23</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged \</span><br><span class="line">  -v ~/Pwn/myPwn:/root/myPwn \  <span class="comment"># 本地仓库挂载到容器</span></span><br><span class="line">  -p 9997:9997 \                                  <span class="comment"># 端口映射（主机:容器）</span></span><br><span class="line">  --name pwn-2.23 \                               <span class="comment"># 容器名称</span></span><br><span class="line">  ubuntu:16.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>容器内首次启动需执行（安装调试工具）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt install -y gdbserver net-tools git</span><br></pre></td></tr></table></figure>
+
+<h3 id="容器2：Ubuntu-18-04-libc-2-27"><a href="#容器2：Ubuntu-18-04-libc-2-27" class="headerlink" title="容器2：Ubuntu 18.04 + libc-2.27"></a>容器2：Ubuntu 18.04 + libc-2.27</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged \</span><br><span class="line">  -v ~/Pwn/myPwn:/root/myPwn \</span><br><span class="line">  -p 9998:9998 \</span><br><span class="line">  --name pwn-2.27 \</span><br><span class="line">  ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>容器内首次启动需执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt install -y gdbserver net-tools git</span><br></pre></td></tr></table></figure>
+
+<h3 id="容器3：Ubuntu-20-04-libc-2-31"><a href="#容器3：Ubuntu-20-04-libc-2-31" class="headerlink" title="容器3：Ubuntu 20.04 + libc-2.31"></a>容器3：Ubuntu 20.04 + libc-2.31</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged \</span><br><span class="line">  -v ~/Pwn/myPwn:/root/myPwn \</span><br><span class="line">  -p 9999:9999 \</span><br><span class="line">  --name pwn-2.31 \</span><br><span class="line">  ubuntu:20.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>容器内首次启动需执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt install -y gdbserver net-tools git</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、容器日常管理指令"><a href="#三、容器日常管理指令" class="headerlink" title="三、容器日常管理指令"></a>三、容器日常管理指令</h2><h3 id="1-启动容器"><a href="#1-启动容器" class="headerlink" title="1. 启动容器"></a>1. 启动容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动单个容器（示例：pwn-2.27）</span></span><br><span class="line">docker start pwn-2.27</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动所有Pwn容器（一键操作）</span></span><br><span class="line">docker start pwn-2.23 pwn-2.27 pwn-2.31</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-进入已启动的容器"><a href="#2-进入已启动的容器" class="headerlink" title="2. 进入已启动的容器"></a>2. 进入已启动的容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入单个容器（示例：pwn-2.27）</span></span><br><span class="line">docker <span class="built_in">exec</span> -it pwn-2.27 /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入其他容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it pwn-2.23 /bin/bash  <span class="comment"># 16.04环境</span></span><br><span class="line">docker <span class="built_in">exec</span> -it pwn-2.31 /bin/bash  <span class="comment"># 20.04环境</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-停止容器"><a href="#3-停止容器" class="headerlink" title="3. 停止容器"></a>3. 停止容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止单个容器（示例：pwn-2.27）</span></span><br><span class="line">docker stop pwn-2.27</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止所有Pwn容器</span></span><br><span class="line">docker stop pwn-2.23 pwn-2.27 pwn-2.31</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止所有运行中的容器（快速清理）</span></span><br><span class="line">docker stop $(docker ps -q)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-查看容器状态"><a href="#4-查看容器状态" class="headerlink" title="4. 查看容器状态"></a>4. 查看容器状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看运行中的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有容器（运行中+已停止）</span></span><br><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-重启容器（解决卡死或配置生效）"><a href="#5-重启容器（解决卡死或配置生效）" class="headerlink" title="5. 重启容器（解决卡死或配置生效）"></a>5. 重启容器（解决卡死或配置生效）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例：重启pwn-2.27</span></span><br><span class="line">docker restart pwn-2.27</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、Pwn调试核心操作"><a href="#四、Pwn调试核心操作" class="headerlink" title="四、Pwn调试核心操作"></a>四、Pwn调试核心操作</h2><h3 id="1-单步调试模式（推荐）"><a href="#1-单步调试模式（推荐）" class="headerlink" title="1. 单步调试模式（推荐）"></a>1. 单步调试模式（推荐）</h3><p>进入对应容器后，执行以下步骤（替换题目路径&#x2F;文件名）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入题目目录（示例）</span></span><br><span class="line"><span class="built_in">cd</span> /root/myPwn/babyheap-2.27</span><br><span class="line"></span><br><span class="line"><span class="comment"># 赋予执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> +x ./babyheap</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动gdbserver（等待主机连接）</span></span><br><span class="line">gdbserver 0.0.0.0:9998 ./babyheap</span><br></pre></td></tr></table></figure>
+<ul>
+<li>成功标志：容器内显示 <code>Listening on port 9998</code></li>
+</ul>
+<h3 id="2-快速测试模式（无需单步调试）"><a href="#2-快速测试模式（无需单步调试）" class="headerlink" title="2. 快速测试模式（无需单步调试）"></a>2. 快速测试模式（无需单步调试）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/myPwn/题目文件夹名</span><br><span class="line"><span class="built_in">chmod</span> +x ./题目文件名</span><br><span class="line">./题目文件名 | nc -l 0.0.0.0 9998  <span class="comment"># 用nc转发端口</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-验证端口监听状态（排查连接问题）"><a href="#3-验证端口监听状态（排查连接问题）" class="headerlink" title="3. 验证端口监听状态（排查连接问题）"></a>3. 验证端口监听状态（排查连接问题）</h3><p>容器内执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -tuln</span><br></pre></td></tr></table></figure>
+<ul>
+<li>预期结果：调试时对应端口（9997&#x2F;9998&#x2F;9999）显示为 <code>LISTEN</code> 状态</li>
+</ul>
+<h3 id="4-主机与容器文件互传（应急用）"><a href="#4-主机与容器文件互传（应急用）" class="headerlink" title="4. 主机与容器文件互传（应急用）"></a>4. 主机与容器文件互传（应急用）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 主机 → 容器（示例：传exp.py到pwn-2.27）</span></span><br><span class="line">docker <span class="built_in">cp</span> ~/Pwn/myPwn/exp.py pwn-2.27:/root/myPwn/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器 → 主机（示例：传flag.txt到本地）</span></span><br><span class="line">docker <span class="built_in">cp</span> pwn-2.27:/root/myPwn/flag.txt ~/Pwn/</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、容器退出方式"><a href="#五、容器退出方式" class="headerlink" title="五、容器退出方式"></a>五、容器退出方式</h2><h3 id="1-退出后停止容器（调试完成）"><a href="#1-退出后停止容器（调试完成）" class="headerlink" title="1. 退出后停止容器（调试完成）"></a>1. 退出后停止容器（调试完成）</h3><p>容器内输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>效果：返回主机终端，容器状态变为 <code>Exited</code></li>
+</ul>
+<h3 id="2-退出后保留运行（暂时离开）"><a href="#2-退出后保留运行（暂时离开）" class="headerlink" title="2. 退出后保留运行（暂时离开）"></a>2. 退出后保留运行（暂时离开）</h3><p>容器内按组合键：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + P + Q  <span class="comment"># 先按Ctrl+P，再按Ctrl+Q（顺序不可换）</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>效果：返回主机终端，容器仍在后台运行（状态为 <code>Up</code>）</li>
+</ul>
+<h2 id="六、镜像管理（备份-恢复）"><a href="#六、镜像管理（备份-恢复）" class="headerlink" title="六、镜像管理（备份&#x2F;恢复）"></a>六、镜像管理（备份&#x2F;恢复）</h2><h3 id="1-查看本地镜像"><a href="#1-查看本地镜像" class="headerlink" title="1. 查看本地镜像"></a>1. 查看本地镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-备份镜像（换设备-重装系统）"><a href="#2-备份镜像（换设备-重装系统）" class="headerlink" title="2. 备份镜像（换设备&#x2F;重装系统）"></a>2. 备份镜像（换设备&#x2F;重装系统）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建备份目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/docker-backup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份单个镜像（示例：ubuntu:18.04）</span></span><br><span class="line">docker save -o ~/docker-backup/ubuntu18.04-pwn.tar ubuntu:18.04</span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份所有Pwn基础镜像</span></span><br><span class="line">docker save -o ~/docker-backup/ubuntu-all-pwn.tar ubuntu:16.04 ubuntu:18.04 ubuntu:20.04</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-恢复备份的镜像"><a href="#3-恢复备份的镜像" class="headerlink" title="3. 恢复备份的镜像"></a>3. 恢复备份的镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 恢复单个镜像（示例：ubuntu:18.04）</span></span><br><span class="line">docker load -i ~/docker-backup/ubuntu18.04-pwn.tar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复所有镜像</span></span><br><span class="line">docker load -i ~/docker-backup/ubuntu-all-pwn.tar</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除镜像（谨慎操作）"><a href="#4-删除镜像（谨慎操作）" class="headerlink" title="4. 删除镜像（谨慎操作）"></a>4. 删除镜像（谨慎操作）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先删除依赖容器，再删除镜像（示例：ubuntu:16.04）</span></span><br><span class="line">docker stop pwn-2.23 &amp;&amp; docker <span class="built_in">rm</span> pwn-2.23</span><br><span class="line">docker rmi ubuntu:16.04</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、容器删除（谨慎使用）"><a href="#七、容器删除（谨慎使用）" class="headerlink" title="七、容器删除（谨慎使用）"></a>七、容器删除（谨慎使用）</h2><h3 id="1-删除单个容器"><a href="#1-删除单个容器" class="headerlink" title="1. 删除单个容器"></a>1. 删除单个容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先停止，再删除（示例：pwn-2.23）</span></span><br><span class="line">docker stop pwn-2.23 &amp;&amp; docker <span class="built_in">rm</span> pwn-2.23</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-清理所有已停止的容器"><a href="#2-清理所有已停止的容器" class="headerlink" title="2. 清理所有已停止的容器"></a>2. 清理所有已停止的容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> $(docker ps -a -q)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-强制删除运行中的容器（不推荐）"><a href="#3-强制删除运行中的容器（不推荐）" class="headerlink" title="3. 强制删除运行中的容器（不推荐）"></a>3. 强制删除运行中的容器（不推荐）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> -f pwn-2.23</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、问题排查指令"><a href="#八、问题排查指令" class="headerlink" title="八、问题排查指令"></a>八、问题排查指令</h2><h3 id="1-查看容器详细配置（IP-挂载-端口）"><a href="#1-查看容器详细配置（IP-挂载-端口）" class="headerlink" title="1. 查看容器详细配置（IP&#x2F;挂载&#x2F;端口）"></a>1. 查看容器详细配置（IP&#x2F;挂载&#x2F;端口）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看pwn-2.27详细信息</span></span><br><span class="line">docker inspect pwn-2.27</span><br><span class="line"></span><br><span class="line"><span class="comment"># 快速获取容器IP</span></span><br><span class="line">docker inspect pwn-2.27 | grep <span class="string">&quot;IPAddress&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-查看容器运行日志（题目崩溃-报错时）"><a href="#2-查看容器运行日志（题目崩溃-报错时）" class="headerlink" title="2. 查看容器运行日志（题目崩溃&#x2F;报错时）"></a>2. 查看容器运行日志（题目崩溃&#x2F;报错时）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看pwn-2.27日志</span></span><br><span class="line">docker logs pwn-2.27</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-检查端口映射是否生效"><a href="#3-检查端口映射是否生效" class="headerlink" title="3. 检查端口映射是否生效"></a>3. 检查端口映射是否生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有容器端口映射</span></span><br><span class="line">docker port $(docker ps -q)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看单个容器映射（示例：pwn-2.27）</span></span><br><span class="line">docker port pwn-2.27</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、快捷指令（一键复用）"><a href="#九、快捷指令（一键复用）" class="headerlink" title="九、快捷指令（一键复用）"></a>九、快捷指令（一键复用）</h2><ol>
+<li>一键启动所有容器并进入pwn-2.27：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start pwn-2.23 pwn-2.27 pwn-2.31 &amp;&amp; docker <span class="built_in">exec</span> -it pwn-2.27 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>一键停止所有容器并查看状态：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop pwn-2.23 pwn-2.27 pwn-2.31 &amp;&amp; docker ps -a</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>容器内快速启动题目（pwn-2.27示例）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/myPwn/题目文件夹名 &amp;&amp; <span class="built_in">chmod</span> +x ./题目文件名 &amp;&amp; gdbserver 0.0.0.0:9998 ./题目文件名</span><br></pre></td></tr></table></figure>
+
+<h2 id="十、核心配置对照表"><a href="#十、核心配置对照表" class="headerlink" title="十、核心配置对照表"></a>十、核心配置对照表</h2><table>
+<thead>
+<tr>
+<th align="left">容器名</th>
+<th align="left">Ubuntu版本</th>
+<th align="left">libc版本</th>
+<th align="left">映射端口</th>
+<th align="left">本地挂载路径</th>
+<th align="left">容器内挂载路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">pwn-2.23</td>
+<td align="left">16.04</td>
+<td align="left">2.23</td>
+<td align="left">9997</td>
+<td align="left">~&#x2F;Pwn&#x2F;myPwn</td>
+<td align="left">&#x2F;root&#x2F;myPwn</td>
+</tr>
+<tr>
+<td align="left">pwn-2.27</td>
+<td align="left">18.04</td>
+<td align="left">2.27</td>
+<td align="left">9998</td>
+<td align="left">~&#x2F;Pwn&#x2F;myPwn</td>
+<td align="left">&#x2F;root&#x2F;myPwn</td>
+</tr>
+<tr>
+<td align="left">pwn-2.31</td>
+<td align="left">20.04</td>
+<td align="left">2.31</td>
+<td align="left">9999</td>
+<td align="left">~&#x2F;Pwn&#x2F;myPwn</td>
+<td align="left">&#x2F;root&#x2F;myPwn</td>
+</tr>
+</tbody></table>
+<h2 id="十一、日常调试流程总结"><a href="#十一、日常调试流程总结" class="headerlink" title="十一、日常调试流程总结"></a>十一、日常调试流程总结</h2><ol>
+<li>启动容器：<code>docker start pwn-2.27</code>（按需替换容器名）</li>
+<li>进入容器：<code>docker exec -it pwn-2.27 /bin/bash</code></li>
+<li>启动题目：<code>cd /root/myPwn/题目目录 &amp;&amp; gdbserver 0.0.0.0:9998 ./题目名</code></li>
+<li>主机调试：激活Python环境 → 运行脚本（连接对应端口）</li>
+<li>结束操作：<code>exit</code>（退出容器）→ <code>docker stop pwn-2.27</code>（停止容器）</li>
+</ol>
+<h2 id="十二、Ubuntu-16-04-安装zsh（解决软件源问题）"><a href="#十二、Ubuntu-16-04-安装zsh（解决软件源问题）" class="headerlink" title="十二、Ubuntu 16.04 安装zsh（解决软件源问题）"></a>十二、Ubuntu 16.04 安装zsh（解决软件源问题）</h2><h3 id="Ubuntu-16-04-zsh安装步骤"><a href="#Ubuntu-16-04-zsh安装步骤" class="headerlink" title="Ubuntu 16.04 zsh安装步骤"></a>Ubuntu 16.04 zsh安装步骤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 更换软件源（解决Ubuntu 16.04软件源过期问题）</span></span><br><span class="line"><span class="built_in">cp</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用archive.ubuntu.com（最稳定的源）</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/apt/sources.list &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">deb http://archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse</span><br><span class="line">deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse</span><br><span class="line">deb http://archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb http://security.ubuntu.com/ubuntu/ xenial-security main restricted universe multiverse</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 更新软件源</span></span><br><span class="line">apt update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 只安装最基本的zsh</span></span><br><span class="line">apt install -y zsh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 创建极简配置</span></span><br><span class="line"><span class="built_in">cat</span> &gt; ~/.zshrc &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm-256color</span><br><span class="line">PS1=<span class="string">&quot;[%n@%m %~]$ &quot;</span></span><br><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -la&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> pwn-cd=<span class="string">&#x27;cd /root/myPwn&#x27;</span></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 设置默认shell</span></span><br><span class="line">chsh -s $(<span class="built_in">which</span> zsh)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 退出并重新进入测试</span></span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line">docker <span class="built_in">exec</span> -it pwn-2.23 zsh</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ubuntu-16-04-zsh颜色配置（可选）"><a href="#Ubuntu-16-04-zsh颜色配置（可选）" class="headerlink" title="Ubuntu 16.04 zsh颜色配置（可选）"></a>Ubuntu 16.04 zsh颜色配置（可选）</h3><p>如果极简配置工作正常，可以添加颜色：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份当前配置</span></span><br><span class="line"><span class="built_in">cp</span> ~/.zshrc ~/.zshrc.backup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建带颜色的配置</span></span><br><span class="line"><span class="built_in">cat</span> &gt; ~/.zshrc &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"><span class="comment"># 启用颜色支持</span></span><br><span class="line"><span class="built_in">autoload</span> -U colors &amp;&amp; colors</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置彩色提示符</span></span><br><span class="line">PS1=<span class="string">&quot;%&#123;<span class="variable">$fg</span>[green]%&#125;%n@%m%&#123;<span class="variable">$reset_color</span>%&#125;:%&#123;<span class="variable">$fg</span>[blue]%&#125;%~%&#123;<span class="variable">$reset_color</span>%&#125;$ &quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置终端类型</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm-256color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用自动补全</span></span><br><span class="line"><span class="built_in">autoload</span> -U compinit</span><br><span class="line">compinit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置别名（带颜色）</span></span><br><span class="line"><span class="built_in">alias</span> <span class="built_in">ls</span>=<span class="string">&#x27;ls --color=auto&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -la --color=auto&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> grep=<span class="string">&#x27;grep --color=auto&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> pwn-cd=<span class="string">&#x27;cd /root/myPwn&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> gdb-start=<span class="string">&#x27;gdbserver 0.0.0.0:9997&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> pwn-env=<span class="string">&#x27;echo &quot;Ubuntu 16.04 - libc 2.23 - Port 9997&quot;&#x27;</span></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="十三、Ubuntu-18-04-20-04-安装zsh（标准方法）"><a href="#十三、Ubuntu-18-04-20-04-安装zsh（标准方法）" class="headerlink" title="十三、Ubuntu 18.04&#x2F;20.04 安装zsh（标准方法）"></a>十三、Ubuntu 18.04&#x2F;20.04 安装zsh（标准方法）</h2><h3 id="Ubuntu-18-04-20-04-zsh安装步骤"><a href="#Ubuntu-18-04-20-04-zsh安装步骤" class="headerlink" title="Ubuntu 18.04&#x2F;20.04 zsh安装步骤"></a>Ubuntu 18.04&#x2F;20.04 zsh安装步骤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it pwn-2.27 /bin/bash  <span class="comment"># 或 pwn-2.31</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装zsh</span></span><br><span class="line">apt update &amp;&amp; apt install -y zsh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建配置（可根据需要选择极简或彩色版本）</span></span><br><span class="line"><span class="built_in">cat</span> &gt; ~/.zshrc &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm-256color</span><br><span class="line">PS1=<span class="string">&quot;[%n@%m %~]$ &quot;</span></span><br><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -la&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> pwn-cd=<span class="string">&#x27;cd /root/myPwn&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> gdb-start=<span class="string">&#x27;gdbserver 0.0.0.0:9998&#x27;</span>  <span class="comment"># 18.04用9998，20.04用9999</span></span><br><span class="line"><span class="built_in">alias</span> pwn-env=<span class="string">&#x27;echo &quot;Ubuntu 18.04 - libc 2.27 - Port 9998&quot;&#x27;</span>  <span class="comment"># 相应修改版本信息</span></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置默认shell</span></span><br><span class="line">chsh -s $(<span class="built_in">which</span> zsh)</span><br></pre></td></tr></table></figure>
+
+<h2 id="十四、注意事项"><a href="#十四、注意事项" class="headerlink" title="十四、注意事项"></a>十四、注意事项</h2><ol>
+<li><strong>Ubuntu 16.04必须更换软件源</strong>后才能正常安装zsh</li>
+<li>如果遇到locale错误，可执行：<code>export LANG=C</code></li>
+<li>极简配置确保兼容性，彩色配置提供更好体验</li>
+<li>建议先测试极简配置，确认正常后再尝试彩色配置</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3919,9 +4159,9 @@
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#103;&#105;&#116;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#46;&#99;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#117;&#x62;&#46;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>
@@ -3979,14 +4219,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">100k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:06</span>
+    <span title="站点阅读时长">5:34</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

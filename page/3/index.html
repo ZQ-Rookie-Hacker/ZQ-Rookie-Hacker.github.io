@@ -20,29 +20,22 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="从CSDN迁移博客到Hexo+Next+GitHub Pages本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：  CSDN导出图片不显示问题 Hexo配置错误导致部署失败 路径解析和缓存冲突 GitHub Pages部署疑难杂症 博客结构混乱、功能缺失、体验不佳  一、环境准备与项目初始化1.1 必备环境安装 12345678910#">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Blog-Building">
-<meta property="og:url" content="https://zq-rookie-hacker.github.io/2024/09/10/Blog-Building/">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/page/3/">
 <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
-<meta property="og:description" content="从CSDN迁移博客到Hexo+Next+GitHub Pages本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：  CSDN导出图片不显示问题 Hexo配置错误导致部署失败 路径解析和缓存冲突 GitHub Pages部署疑难杂症 博客结构混乱、功能缺失、体验不佳  一、环境准备与项目初始化1.1 必备环境安装 12345678910#">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-10T04:00:00.000Z">
-<meta property="article:modified_time" content="2024-11-11T02:30:00.000Z">
 <meta property="article:author" content="ZQ-Rookie-Hacker">
-<meta property="article:tag" content="Blog">
-<meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="Next">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zq-rookie-hacker.github.io/2024/09/10/Blog-Building/">
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/page/3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2024/09/10/Blog-Building/","path":"2024/09/10/Blog-Building/","title":"Blog-Building"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/3/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Blog-Building | ZQ-Rookie-Hacker's Blog</title>
+<title>ZQ-Rookie-Hacker's Blog</title>
   
 
 
@@ -98,7 +91,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <h1 class="site-title">ZQ-Rookie-Hacker's Blog</h1>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -151,7 +144,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -164,7 +157,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8ECSDN%E8%BF%81%E7%A7%BB%E5%8D%9A%E5%AE%A2%E5%88%B0Hexo-Next-GitHub-Pages"><span class="nav-text">从CSDN迁移博客到Hexo+Next+GitHub Pages</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%E4%B8%8E%E9%A1%B9%E7%9B%AE%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">一、环境准备与项目初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="nav-text">二、核心配置文件详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81CSDN%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%96%B9%E6%A1%88"><span class="nav-text">三、CSDN图片处理终极方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A0%B8%E5%BF%83%EF%BC%9A%E6%90%AD%E5%BB%BA%E6%B8%85%E6%99%B0%E7%9A%84%E3%80%8C%E5%88%86%E7%B1%BB-%E6%A0%87%E7%AD%BE%E3%80%8D%E4%BD%93%E7%B3%BB%EF%BC%88%E8%A7%A3%E5%86%B3%E6%96%87%E7%AB%A0%E5%BD%92%E7%B1%BB%E9%97%AE%E9%A2%98%EF%BC%89"><span class="nav-text">四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%A4%96%E8%A7%82%E4%BC%98%E5%8C%96%EF%BC%9A%E8%AE%A9%E5%8D%9A%E5%AE%A2%E6%9B%B4%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="nav-text">五、外观优化：让博客更个性化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%A2%9E%E5%BC%BA%E4%BA%92%E5%8A%A8%E4%B8%8E%E4%BD%93%E9%AA%8C%EF%BC%9A%E6%B7%BB%E5%8A%A0%E8%AF%84%E8%AE%BA-%E9%98%85%E8%AF%BB%E9%87%8F"><span class="nav-text">六、增强互动与体验：添加评论&#x2F;阅读量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81SEO%E4%BC%98%E5%8C%96%EF%BC%9A%E8%AE%A9%E5%8D%9A%E5%AE%A2%E8%A2%AB%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95"><span class="nav-text">七、SEO优化：让博客被搜索引擎收录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%BB%86%E8%8A%82%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E5%8D%87%E8%B4%A8%E6%84%9F"><span class="nav-text">八、细节优化：提升质感</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%A4%87%E4%BB%BD"><span class="nav-text">九、部署与备份**</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4%E5%A4%A7%E5%85%A8"><span class="nav-text">十、故障排除大全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E4%BC%98%E5%8C%96%E4%B8%8E%E8%BF%9B%E9%98%B6"><span class="nav-text">十一、优化与进阶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5"><span class="nav-text">十二、实用命令速查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E5%8D%9A%E5%AE%A2%E5%8D%8F%E4%BD%9C%E6%9B%B4%E6%96%B0"><span class="nav-text">十三、博客协作更新</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,17 +203,16 @@
 
     </div>
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2024/09/10/Blog-Building/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -235,13 +226,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Blog-Building | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Blog-Building
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/09/10/Blog-Building/" class="post-title-link" itemprop="url">Blog-Building</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -301,7 +292,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="从CSDN迁移博客到Hexo-Next-GitHub-Pages"><a href="#从CSDN迁移博客到Hexo-Next-GitHub-Pages" class="headerlink" title="从CSDN迁移博客到Hexo+Next+GitHub Pages"></a>从CSDN迁移博客到Hexo+Next+GitHub Pages</h1><p>本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：</p>
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="从CSDN迁移博客到Hexo-Next-GitHub-Pages"><a href="#从CSDN迁移博客到Hexo-Next-GitHub-Pages" class="headerlink" title="从CSDN迁移博客到Hexo+Next+GitHub Pages"></a>从CSDN迁移博客到Hexo+Next+GitHub Pages</h1><p>本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：</p>
 <ul>
 <li>CSDN导出图片不显示问题</li>
 <li>Hexo配置错误导致部署失败</li>
@@ -491,6 +483,7 @@
 </blockquote>
 <p>注意：每次修改文章或其他文件时，hexo clean -&gt; hexo g -&gt; hexo deploy -&gt; git add . -&gt; git commit …. -&gt; git push origin main</p>
 
+      
     </div>
 
     
@@ -498,23 +491,8 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Blog/" rel="tag"># Blog</a>
-              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
-              <a href="/tags/Next/" rel="tag"># Next</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-            </div>
-            <div class="post-nav-item">
-                <a href="/2024/11/10/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/" rel="next" title="SSH隧道技术">
-                  SSH隧道技术 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -522,9 +500,10 @@
 
 
 
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 
-
-    <div class="comments utterances-container"></div>
 </div>
   </main>
 

@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,697 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/13/%E7%AB%AF%E5%8F%A3%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/13/%E7%AB%AF%E5%8F%A3%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">端口协议</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-13 23:48:20 / 修改时间：23:58:03" itemprop="dateCreated datePublished" datetime="2025-12-13T23:48:20+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/13/%E7%AB%AF%E5%8F%A3%E5%8D%8F%E8%AE%AE/" class="post-meta-item leancloud_visitors" data-flag-title="端口协议" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="一、端口基础概念"><a href="#一、端口基础概念" class="headerlink" title="一、端口基础概念"></a>一、端口基础概念</h2><h3 id="1-端口的作用"><a href="#1-端口的作用" class="headerlink" title="1. 端口的作用"></a>1. 端口的作用</h3><ul>
+<li>一台拥有IP地址的主机可以提供多种网络服务（如Web、FTP、SMTP等）</li>
+<li>通过”IP地址+端口号”的组合来区分不同的网络服务</li>
+<li>解决了IP地址与网络服务之间”一对多”的关系问题</li>
+</ul>
+<h3 id="2-端口类型"><a href="#2-端口类型" class="headerlink" title="2. 端口类型"></a>2. 端口类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+<th>特点</th>
+<th>常见端口示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TCP端口</strong></td>
+<td>传输控制协议端口</td>
+<td>需要在客户端和服务器之间建立连接，提供可靠的数据传输</td>
+<td>21(FTP)、23(Telnet)、25(SMTP)、80(HTTP)</td>
+</tr>
+<tr>
+<td><strong>UDP端口</strong></td>
+<td>用户数据包协议端口</td>
+<td>无需建立连接，传输速度快但安全性低</td>
+<td>53(DNS)、161(SNMP)、8000(QQ)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>重要提示</strong>：TCP和UDP端口号相互独立，例如TCP 235端口与UDP 235端口不冲突</p>
+</blockquote>
+<h3 id="3-端口范围划分"><a href="#3-端口范围划分" class="headerlink" title="3. 端口范围划分"></a>3. 端口范围划分</h3><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>类型</th>
+<th>描述</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-1023</td>
+<td>预留端口</td>
+<td>由操作系统保留，仅超级用户特权应用可使用</td>
+<td>系统关键服务</td>
+</tr>
+<tr>
+<td>1024-49151</td>
+<td>登记端口</td>
+<td>一般服务器程序使用的端口范围</td>
+<td>自定义服务端口</td>
+</tr>
+<tr>
+<td>49152-65535</td>
+<td>临时端口</td>
+<td>客户端进程动态选择的端口</td>
+<td>临时通信使用</td>
+</tr>
+</tbody></table>
+<h2 id="二、TCP协议详解"><a href="#二、TCP协议详解" class="headerlink" title="二、TCP协议详解"></a>二、TCP协议详解</h2><h3 id="1-TCP三次握手建立连接"><a href="#1-TCP三次握手建立连接" class="headerlink" title="1. TCP三次握手建立连接"></a>1. TCP三次握手建立连接</h3><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>方向</th>
+<th>数据包</th>
+<th>状态变化</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一次</td>
+<td>客户端→服务器</td>
+<td>[SYN], Seq &#x3D; x</td>
+<td>客户端: SYN_SEND</td>
+<td>客户端发送SYN包，初始化序列号</td>
+</tr>
+<tr>
+<td>第二次</td>
+<td>服务器→客户端</td>
+<td>[SYN,ACK], Seq &#x3D; y, ACK &#x3D; x+1</td>
+<td>服务器: SYN_RCVD</td>
+<td>服务器确认并发送SYN包</td>
+</tr>
+<tr>
+<td>第三次</td>
+<td>客户端→服务器</td>
+<td>[ACK], ACK &#x3D; y+1</td>
+<td>客户端: ESTABLISHED<br>服务器: ESTABLISHED</td>
+<td>客户端确认，连接建立</td>
+</tr>
+</tbody></table>
+<h3 id="2-TCP四次挥手断开连接"><a href="#2-TCP四次挥手断开连接" class="headerlink" title="2. TCP四次挥手断开连接"></a>2. TCP四次挥手断开连接</h3><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>方向</th>
+<th>数据包</th>
+<th>状态变化</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一次</td>
+<td>客户端→服务器</td>
+<td>[FIN]</td>
+<td>客户端: FIN_WAIT_1</td>
+<td>客户端请求断开连接</td>
+</tr>
+<tr>
+<td>第二次</td>
+<td>服务器→客户端</td>
+<td>[ACK]</td>
+<td>服务器: CLOSE_WAIT<br>客户端: FIN_WAIT_2</td>
+<td>服务器确认收到断开请求</td>
+</tr>
+<tr>
+<td>第三次</td>
+<td>服务器→客户端</td>
+<td>[FIN]</td>
+<td>服务器: LAST_ACK<br>客户端: TIME_WAIT</td>
+<td>服务器发送断开请求</td>
+</tr>
+<tr>
+<td>第四次</td>
+<td>客户端→服务器</td>
+<td>[ACK]</td>
+<td>服务器: CLOSED<br>客户端: TIME_WAIT</td>
+<td>客户端确认，进入等待期</td>
+</tr>
+</tbody></table>
+<h3 id="3-TCP关键状态解析"><a href="#3-TCP关键状态解析" class="headerlink" title="3. TCP关键状态解析"></a>3. TCP关键状态解析</h3><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LISTENING</strong></td>
+<td>服务正在监听连接请求</td>
+<td>FTP服务启动后首先处于此状态</td>
+</tr>
+<tr>
+<td><strong>ESTABLISHED</strong></td>
+<td>连接已建立，正在通信</td>
+<td>表示两台机器正在正常通信</td>
+</tr>
+<tr>
+<td><strong>CLOSE_WAIT</strong></td>
+<td>对方已关闭连接，等待本端关闭</td>
+<td>本端需调用close()关闭连接</td>
+</tr>
+<tr>
+<td><strong>TIME_WAIT</strong></td>
+<td>本端主动关闭连接，等待2MSL时间</td>
+<td>持续2倍最大分段生存期，防止旧连接影响新连接</td>
+</tr>
+</tbody></table>
+<h2 id="三、端口检测与管理"><a href="#三、端口检测与管理" class="headerlink" title="三、端口检测与管理"></a>三、端口检测与管理</h2><h3 id="1-常用端口检测命令"><a href="#1-常用端口检测命令" class="headerlink" title="1. 常用端口检测命令"></a>1. 常用端口检测命令</h3><h4 id="Windows系统"><a href="#Windows系统" class="headerlink" title="Windows系统"></a>Windows系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano</span><br><span class="line">netstat -ano | findstr <span class="string">&quot;80&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Linux系统"><a href="#Linux系统" class="headerlink" title="Linux系统"></a>Linux系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat -tuln</span><br><span class="line">lsof -i :80</span><br><span class="line">ss -tuln</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-netstat命令详解"><a href="#2-netstat命令详解" class="headerlink" title="2. netstat命令详解"></a>2. netstat命令详解</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-a</code></td>
+<td>显示所有连接和侦听端口</td>
+<td>包含已建立和等待连接</td>
+</tr>
+<tr>
+<td><code>-b</code></td>
+<td>显示创建连接的可执行程序</td>
+<td>可能需要管理员权限</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>以数字形式显示地址和端口</td>
+<td>避免DNS解析，显示更快</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>显示进程ID(PID)</td>
+<td>用于关联进程与端口</td>
+</tr>
+<tr>
+<td><code>-p proto</code></td>
+<td>指定协议</td>
+<td>proto: TCP, UDP, TCPv6, UDPv6</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>显示路由表</td>
+<td>显示网络路由信息</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>按协议统计</td>
+<td>显示各协议的统计信息</td>
+</tr>
+</tbody></table>
+<h2 id="四、常见端口参考表"><a href="#四、常见端口参考表" class="headerlink" title="四、常见端口参考表"></a>四、常见端口参考表</h2><h3 id="1-Web服务类端口"><a href="#1-Web服务类端口" class="headerlink" title="1. Web服务类端口"></a>1. Web服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>80</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>Web服务</td>
+<td>XSS、SQL注入等Web漏洞</td>
+</tr>
+<tr>
+<td>80-89</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>备用Web服务</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>443</td>
+<td>HTTPS</td>
+<td>TCP</td>
+<td>加密Web服务</td>
+<td>SSL&#x2F;TLS漏洞、心脏滴血</td>
+</tr>
+<tr>
+<td>8000-9090</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>备用Web服务</td>
+<td>管理后台常在此范围</td>
+</tr>
+<tr>
+<td>8080</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>Tomcat&#x2F;WDCP</td>
+<td>默认弱口令</td>
+</tr>
+<tr>
+<td>8089</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>JBOSS</td>
+<td>默认弱口令、反序列化</td>
+</tr>
+<tr>
+<td>8888</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>amh&#x2F;LuManager</td>
+<td>主机管理系统</td>
+</tr>
+</tbody></table>
+<h3 id="2-数据库服务类端口"><a href="#2-数据库服务类端口" class="headerlink" title="2. 数据库服务类端口"></a>2. 数据库服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1433</td>
+<td>MSSQL</td>
+<td>TCP</td>
+<td>Microsoft SQL Server</td>
+<td>弱口令、SQL注入</td>
+</tr>
+<tr>
+<td>1521</td>
+<td>Oracle</td>
+<td>TCP</td>
+<td>Oracle数据库</td>
+<td>弱口令、默认账户</td>
+</tr>
+<tr>
+<td>3306</td>
+<td>MySQL</td>
+<td>TCP</td>
+<td>MySQL数据库</td>
+<td>弱口令、未授权访问</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td>TCP</td>
+<td>PostgreSQL数据库</td>
+<td>弱口令、配置错误</td>
+</tr>
+<tr>
+<td>27017-27018</td>
+<td>MongoDB</td>
+<td>TCP</td>
+<td>MongoDB数据库</td>
+<td>未授权访问</td>
+</tr>
+</tbody></table>
+<h3 id="3-特殊服务类端口"><a href="#3-特殊服务类端口" class="headerlink" title="3. 特殊服务类端口"></a>3. 特殊服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>445</td>
+<td>SMB</td>
+<td>TCP</td>
+<td>Windows文件共享</td>
+<td>永恒之蓝等漏洞</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>TCP</td>
+<td>Redis缓存服务</td>
+<td>未授权访问、RCE</td>
+</tr>
+<tr>
+<td>873</td>
+<td>Rsync</td>
+<td>TCP</td>
+<td>文件同步服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>9200-9300</td>
+<td>Elasticsearch</td>
+<td>TCP</td>
+<td>搜索引擎服务</td>
+<td>命令执行漏洞</td>
+</tr>
+<tr>
+<td>11211</td>
+<td>Memcached</td>
+<td>TCP</td>
+<td>缓存服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>5984</td>
+<td>CouchDB</td>
+<td>TCP</td>
+<td>NoSQL数据库</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>7001-7002</td>
+<td>WebLogic</td>
+<td>TCP</td>
+<td>Java应用服务器</td>
+<td>默认弱口令、反序列化</td>
+</tr>
+</tbody></table>
+<h3 id="4-常用管理类端口"><a href="#4-常用管理类端口" class="headerlink" title="4. 常用管理类端口"></a>4. 常用管理类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>21</td>
+<td>FTP</td>
+<td>TCP</td>
+<td>文件传输</td>
+<td>弱口令、匿名访问</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH</td>
+<td>TCP</td>
+<td>安全远程登录</td>
+<td>弱口令、暴力破解</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Telnet</td>
+<td>TCP</td>
+<td>远程登录</td>
+<td>明文传输、弱口令</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>RDP</td>
+<td>TCP</td>
+<td>Windows远程桌面</td>
+<td>弱口令、爆破</td>
+</tr>
+<tr>
+<td>5900</td>
+<td>VNC</td>
+<td>TCP</td>
+<td>远程桌面控制</td>
+<td>弱口令、未授权访问</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>Webmin</td>
+<td>TCP</td>
+<td>服务器管理</td>
+<td>默认弱口令</td>
+</tr>
+<tr>
+<td>50000</td>
+<td>SAP</td>
+<td>TCP</td>
+<td>企业资源计划</td>
+<td>命令执行漏洞</td>
+</tr>
+</tbody></table>
+<h3 id="5-其他重要端口"><a href="#5-其他重要端口" class="headerlink" title="5. 其他重要端口"></a>5. 其他重要端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>53</td>
+<td>DNS</td>
+<td>UDP&#x2F;TCP</td>
+<td>域名解析</td>
+<td>DNS劫持、缓存投毒</td>
+</tr>
+<tr>
+<td>161</td>
+<td>SNMP</td>
+<td>UDP</td>
+<td>网络管理</td>
+<td>信息泄露、未授权访问</td>
+</tr>
+<tr>
+<td>389</td>
+<td>LDAP</td>
+<td>TCP</td>
+<td>目录服务</td>
+<td>信息泄露</td>
+</tr>
+<tr>
+<td>4440</td>
+<td>Rundeck</td>
+<td>TCP</td>
+<td>任务调度</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>6082</td>
+<td>Varnish</td>
+<td>TCP</td>
+<td>Web加速</td>
+<td>未授权访问、网站篡改</td>
+</tr>
+<tr>
+<td>8649</td>
+<td>Ganglia</td>
+<td>TCP</td>
+<td>监控系统</td>
+<td>信息泄露</td>
+</tr>
+</tbody></table>
+<h2 id="五、端口安全建议"><a href="#五、端口安全建议" class="headerlink" title="五、端口安全建议"></a>五、端口安全建议</h2><ol>
+<li><p><strong>最小化原则</strong>：</p>
+<ul>
+<li>只开放必要的端口</li>
+<li>关闭非必要服务</li>
+</ul>
+</li>
+<li><p><strong>安全配置</strong>：</p>
+<ul>
+<li>为管理端口设置强密码</li>
+<li>限制访问IP范围</li>
+<li>使用防火墙规则控制访问</li>
+</ul>
+</li>
+<li><p><strong>定期检测</strong>：</p>
+<ul>
+<li>使用端口扫描工具定期检查开放端口</li>
+<li>及时修补已知漏洞</li>
+<li>监控异常连接</li>
+</ul>
+</li>
+<li><p><strong>特殊端口处理</strong>：</p>
+<ul>
+<li>Web管理后台避免使用默认端口</li>
+<li>敏感服务（如数据库）不应直接暴露在公网</li>
+<li>使用跳板机访问内部服务</li>
+</ul>
+</li>
+<li><p><strong>渗透测试注意事项</strong>：</p>
+<ul>
+<li>在授权范围内进行端口扫描</li>
+<li>避免对关键服务进行暴力测试</li>
+<li>遵守相关法律法规和道德规范</li>
+</ul>
+</li>
+</ol>
+<h2 id="六、端口扫描工具推荐"><a href="#六、端口扫描工具推荐" class="headerlink" title="六、端口扫描工具推荐"></a>六、端口扫描工具推荐</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>类型</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nmap</td>
+<td>命令行</td>
+<td>功能强大，支持多种扫描技术</td>
+<td>专业渗透测试</td>
+</tr>
+<tr>
+<td>Masscan</td>
+<td>命令行</td>
+<td>速度极快，可全网扫描</td>
+<td>大规模网络扫描</td>
+</tr>
+<tr>
+<td>Zenmap</td>
+<td>GUI</td>
+<td>Nmap的图形界面，易于使用</td>
+<td>初学者使用</td>
+</tr>
+<tr>
+<td>Angry IP Scanner</td>
+<td>GUI</td>
+<td>简单易用，跨平台</td>
+<td>快速网络扫描</td>
+</tr>
+<tr>
+<td>Netcat</td>
+<td>命令行</td>
+<td>“网络瑞士军刀”，多功能</td>
+<td>网络调试与测试</td>
+</tr>
+</tbody></table>
+<h2 id="七、端口安全加固示例"><a href="#七、端口安全加固示例" class="headerlink" title="七、端口安全加固示例"></a>七、端口安全加固示例</h2><h3 id="1-关闭不必要端口（Linux）"><a href="#1-关闭不必要端口（Linux）" class="headerlink" title="1. 关闭不必要端口（Linux）"></a>1. 关闭不必要端口（Linux）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看监听端口</span></span><br><span class="line"><span class="built_in">sudo</span> netstat -tuln</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭特定端口（例如111端口）</span></span><br><span class="line"><span class="built_in">sudo</span> ufw deny 111</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用iptables</span></span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 111 -j DROP</span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p udp --dport 111 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-限制访问IP（Windows）"><a href="#2-限制访问IP（Windows）" class="headerlink" title="2. 限制访问IP（Windows）"></a>2. 限制访问IP（Windows）</h3><ol>
+<li>打开”高级安全Windows防火墙”</li>
+<li>选择”入站规则”</li>
+<li>找到对应服务的规则</li>
+<li>右键选择”属性”</li>
+<li>在”作用域”选项卡中，添加允许的IP地址</li>
+</ol>
+<h3 id="3-服务安全配置"><a href="#3-服务安全配置" class="headerlink" title="3. 服务安全配置"></a>3. 服务安全配置</h3><ul>
+<li><p><strong>SSH服务</strong>：</p>
+<ul>
+<li>禁用root远程登录</li>
+<li>使用密钥认证代替密码</li>
+<li>限制访问IP范围</li>
+</ul>
+</li>
+<li><p><strong>Web服务</strong>：</p>
+<ul>
+<li>使用HTTPS代替HTTP</li>
+<li>配置安全头（如CSP、HSTS）</li>
+<li>限制管理后台访问IP</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3279,7 +3970,7 @@
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#x61;&#98;&#99;&#64;&#x63;&#x73;&#107;&#97;&#111;&#x79;&#x61;&#x6e;&#46;&#99;&#111;&#x6d;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#x61;&#x62;&#99;&#x40;&#99;&#x73;&#x6b;&#97;&#x6f;&#x79;&#x61;&#110;&#46;&#99;&#x6f;&#109;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>
@@ -8114,601 +8805,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/" class="post-title-link" itemprop="url">第 2 章 物理层</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-05 17:43:14 / 修改时间：21:55:57" itemprop="dateCreated datePublished" datetime="2025-12-05T17:43:14+08:00">2025-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/" class="post-meta-item leancloud_visitors" data-flag-title="第 2 章 物理层" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>7 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
-<li>①. 数据、信号与码元<ul>
-<li>通信目的：传输信息（文字、图像、视频等）</li>
-<li>数据：传送信息的实体</li>
-<li>信号：数据的电气或电磁表现</li>
-<li>分类：<ul>
-<li>模拟数据&#x2F;信号：取值连续</li>
-<li>数字数据&#x2F;信号：取值离散</li>
-</ul>
-</li>
-<li>码元：<ul>
-<li>定义：固定时长的信号波形表示k进制数</li>
-<li>码元宽度：信号周期</li>
-<li>信息量：1码元可携带若干比特</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>②. 信源、信道与信宿<ul>
-<li>通信系统模型：<ul>
-<li>信源：产生和发送数据的源头</li>
-<li>信道：信号的传输介质<ul>
-<li>分类：<ul>
-<li>按信号形式：模拟信道、数字信道</li>
-<li>按传输介质：无线信道、有线信道</li>
-</ul>
-</li>
-<li>信号类型：<ul>
-<li>基带信号：未调制的原始电信号</li>
-<li>宽带信号：调制后的频分复用模拟信号</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>信宿：接收数据的终点</li>
-</ul>
-</li>
-<li>数据传输方式：<ul>
-<li>串行传输：逐比特按序传输（长距离）</li>
-<li>并行传输：多比特同时传输（近距离）</li>
-</ul>
-</li>
-<li>通信交互方式：<ul>
-<li>单向通信：单方向（广播）</li>
-<li>半双工通信：双向但不能同时</li>
-<li>全双工通信：双向同时</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>③. 速率、波特与带宽<ul>
-<li>速率：<ul>
-<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
-<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
-<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
-</ul>
-</li>
-<li>带宽：<ul>
-<li>模拟系统：频率范围（Hz）</li>
-<li>计算机网络：最高数据率（b&#x2F;s）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
-<li>信道失真影响<ul>
-<li>失真不影响通信质量的条件</li>
-<li>导致严重失真的因素<ul>
-<li>码元传输速率高</li>
-<li>信号传输距离远</li>
-<li>噪声干扰大</li>
-<li>传输介质质量差</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>奈奎斯特定理(奈氏准则)<ul>
-<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
-<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
-<li>关键参数<ul>
-<li>W: 信道频率带宽(Hz)</li>
-<li>V: 码元离散电平数量</li>
-</ul>
-</li>
-<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
-<li>提高数据速率的方法: 多元制调制</li>
-</ul>
-</li>
-<li>香农定理<ul>
-<li>适用场景: 带宽受限且有高斯噪声的信道</li>
-<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
-<li>关键参数<ul>
-<li>W: 信道频率带宽(Hz)</li>
-<li>S: 信号平均功率</li>
-<li>N: 高斯噪声功率</li>
-</ul>
-</li>
-<li>信噪比表示方法<ul>
-<li>无单位记法: S&#x2F;N</li>
-<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
-</ul>
-</li>
-<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
-</ul>
-</li>
-<li>奈氏准则 vs 香农定理<ul>
-<li>奈氏准则: 仅考虑带宽与码元速率</li>
-<li>香农定理: 同时考虑带宽和信噪比</li>
-<li>共同结论: 单个码元携带比特数有限</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
-<li>信号与数据转换<ul>
-<li>编码: 数据→数字信号</li>
-<li>调制: 数据→模拟信号</li>
-</ul>
-</li>
-<li>数字数据转换方式<ul>
-<li>数字发送器→数字信号</li>
-<li>调制器→模拟信号</li>
-</ul>
-</li>
-<li>模拟数据转换方式<ul>
-<li>PCM编码器→数字信号</li>
-<li>放大器调制器→模拟信号</li>
-</ul>
-</li>
-<li>四种编码与调制方式<ul>
-<li>数字数据编码为数字信号<ul>
-<li>常用编码方式<ul>
-<li>归零(RZ)编码<ul>
-<li>特点: 码元中间跳变到零电平</li>
-<li>优点: 提供自同步机制</li>
-<li>缺点: 占用带宽</li>
-</ul>
-</li>
-<li>非归零(NRZ)编码<ul>
-<li>特点: 不归零</li>
-<li>优点: 编码效率最高</li>
-<li>缺点: 需要时钟线同步</li>
-</ul>
-</li>
-<li>反向非归零(NRZI)编码<ul>
-<li>特点: 电平跳变表示0,不变表示1</li>
-<li>应用: USB 2.0</li>
-</ul>
-</li>
-<li>曼彻斯特编码<ul>
-<li>特点: 码元中间电平跳变</li>
-<li>应用: 标准以太网</li>
-</ul>
-</li>
-<li>差分曼彻斯特编码<ul>
-<li>特点: 码元开始处跳变表示0</li>
-<li>优点: 抗干扰能力强</li>
-<li>应用: 宽带高速网</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>模拟数据编码为数字信号<ul>
-<li>步骤<ul>
-<li>采样<ul>
-<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
-</ul>
-</li>
-<li>量化<ul>
-<li>电平幅值→离散数字量</li>
-</ul>
-</li>
-<li>编码<ul>
-<li>离散整数→二进制编码</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>应用: PCM编码</li>
-</ul>
-</li>
-<li>数字数据调制为模拟信号<ul>
-<li>调制方式<ul>
-<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
-<li>特点: 改变振幅表示1和0</li>
-<li>缺点: 抗干扰能力差</li>
-</ul>
-</li>
-<li>调频(FM)&#x2F;频移键控(FSK)<ul>
-<li>特点: 改变频率表示1和0</li>
-<li>优点: 抗干扰能力强</li>
-</ul>
-</li>
-<li>调相(PM)&#x2F;相移键控(PSK)<ul>
-<li>特点: 改变相位表示1和0</li>
-<li>变种: DPSK(差分相移键控)</li>
-</ul>
-</li>
-<li>正交幅度调制(QAM)<ul>
-<li>特点: AM与PM结合</li>
-<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>模拟数据调制为模拟信号<ul>
-<li>应用<ul>
-<li>电话机和本地局交换机</li>
-</ul>
-</li>
-<li>技术: 频分复用(FDM)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
-<li>传输介质分类<ul>
-<li>导向传输介质<ul>
-<li>铜线或光纤</li>
-<li>电磁波沿固体介质传播</li>
-</ul>
-</li>
-<li>非导向传输介质<ul>
-<li>自由空间（空气、真空或海水）</li>
-<li>无线传输</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>①. 双绞线<ul>
-<li>特点<ul>
-<li>最常用传输介质</li>
-<li>两根绝缘铜导线绞合</li>
-<li>减少电磁干扰</li>
-</ul>
-</li>
-<li>分类<ul>
-<li>屏蔽双绞线(STP)</li>
-<li>非屏蔽双绞线(UTP)</li>
-</ul>
-</li>
-<li>性能<ul>
-<li>价格便宜</li>
-<li>模拟&#x2F;数字传输</li>
-<li>通信距离：几千米到数十千米</li>
-<li>带宽取决于铜线粗细和传输距离</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>②. 同轴电缆<ul>
-<li>结构<ul>
-<li>内导体</li>
-<li>绝缘层</li>
-<li>外导体屏蔽层</li>
-<li>绝缘保护套层</li>
-</ul>
-</li>
-<li>分类<ul>
-<li>50Ω同轴电缆<ul>
-<li>传送基带数字信号</li>
-<li>早期局域网应用</li>
-</ul>
-</li>
-<li>75Ω同轴电缆<ul>
-<li>传送宽带信号</li>
-<li>有线电视系统应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>特点<ul>
-<li>良好抗干扰特性</li>
-<li>传输较高速率数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>③. 光纤<ul>
-<li>原理<ul>
-<li>利用光脉冲通信</li>
-<li>1：有光脉冲</li>
-<li>0：无光脉冲</li>
-</ul>
-</li>
-<li>结构<ul>
-<li>纤芯（8-100μm）</li>
-<li>包层（较低折射率）</li>
-</ul>
-</li>
-<li>传输原理<ul>
-<li>全反射现象</li>
-</ul>
-</li>
-<li>分类<ul>
-<li>多模光纤<ul>
-<li>多条光线传输</li>
-<li>适合近距离</li>
-</ul>
-</li>
-<li>单模光纤<ul>
-<li>单波长传输</li>
-<li>适合远距离</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>优点<ul>
-<li>通信容量大</li>
-<li>传输损耗小</li>
-<li>抗干扰性能好</li>
-<li>无串音干扰</li>
-<li>体积小重量轻</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>④. 无线传输介质<ul>
-<li>应用场景<ul>
-<li>蜂窝移动电话</li>
-<li>无线局域网(WLAN)</li>
-<li>特殊场合移动联网</li>
-</ul>
-</li>
-<li>(1) 无线电波<ul>
-<li>特点<ul>
-<li>穿透能力强</li>
-<li>传输距离长</li>
-<li>全向传播</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>(2) 微波、红外线和激光<ul>
-<li>共同特点<ul>
-<li>需要视线通路</li>
-<li>指向性强</li>
-</ul>
-</li>
-<li>微波通信<ul>
-<li>频率：2-40GHz</li>
-<li>容量大</li>
-<li>直线传播</li>
-<li>需中继站</li>
-</ul>
-</li>
-<li>卫星通信<ul>
-<li>地球同步卫星中继</li>
-<li>优点<ul>
-<li>容量大</li>
-<li>距离远</li>
-<li>覆盖广</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>保密性差</li>
-<li>传播时延长</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-2-2-物理层接口的特性"><a href="#2-2-2-物理层接口的特性" class="headerlink" title="2.2.2    物理层接口的特性"></a>2.2.2    物理层接口的特性</h3><ul>
-<li>定义<ul>
-<li>在连接各种计算机的传输介质上传输比特流</li>
-<li>屏蔽硬件设备和传输介质的差异</li>
-</ul>
-</li>
-<li>主要任务<ul>
-<li>确定与传输介质接口有关的特性<ul>
-<li>机械特性<ul>
-<li>接线器的形状和尺寸</li>
-<li>引脚数量和排列</li>
-<li>固定和锁定装置</li>
-</ul>
-</li>
-<li>电气特性<ul>
-<li>各条线上的电压范围</li>
-<li>传输速率</li>
-<li>距离限制</li>
-</ul>
-</li>
-<li>功能特性<ul>
-<li>电平电压的意义</li>
-<li>每条线的功能</li>
-</ul>
-</li>
-<li>过程特性（规程特性）<ul>
-<li>不同功能事件的出现顺序</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-3-物理层设备"><a href="#2-3-物理层设备" class="headerlink" title="2.3   物理层设备"></a>2.3   物理层设备</h2><h3 id="2-3-1-中继器"><a href="#2-3-1-中继器" class="headerlink" title="2.3.1    中继器"></a>2.3.1    中继器</h3><ul>
-<li>主要功能<ul>
-<li>放大、整形并转发信号</li>
-<li>消除信号失真和衰减</li>
-<li>扩大网络传输距离</li>
-</ul>
-</li>
-<li>工作原理<ul>
-<li>信号再生（非简单放大）</li>
-<li>双端口设计<ul>
-<li>数据从一个端口输入</li>
-<li>从另一个端口发出</li>
-</ul>
-</li>
-<li>仅作用于信号电气部分</li>
-</ul>
-</li>
-<li>网络特性<ul>
-<li>连接的是网段而非子网</li>
-<li>仍属于同一局域网</li>
-<li>故障影响<ul>
-<li>对相邻两个网段产生影响</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>使用限制<ul>
-<li>理论上数量无限</li>
-<li>实际限制因素<ul>
-<li>信号延迟范围规定</li>
-<li>5-4-3规则示例<ul>
-<li>10BASE5以太网规范</li>
-<li>最多4个中继器串联</li>
-<li>5段介质中3段可接计算机</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>与放大器的区别<ul>
-<li>放大器<ul>
-<li>放大模拟信号</li>
-<li>原理：放大衰减信号</li>
-</ul>
-</li>
-<li>中继器<ul>
-<li>放大数字信号</li>
-<li>原理：整形再生信号</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-3-2-集线器"><a href="#2-3-2-集线器" class="headerlink" title="2.3.2    集线器"></a>2.3.2    集线器</h3><ul>
-<li>定义<ul>
-<li>集线器(Hub)实质上是一个多端口的中继器</li>
-</ul>
-</li>
-<li>工作原理<ul>
-<li>端口接收数据信号</li>
-<li>信号整形放大（再生）</li>
-<li>转发到其他所有工作端口（除输入端口外）</li>
-<li>多端口输入时会发生冲突导致数据无效</li>
-</ul>
-</li>
-<li>功能特点<ul>
-<li>信号放大和转发</li>
-<li>扩大网络传输范围</li>
-<li>不具备信号定向传送能力</li>
-<li>标准的共享式设备</li>
-</ul>
-</li>
-<li>组网特性<ul>
-<li>组网灵活</li>
-<li>所有节点通信集中在中心节点</li>
-<li>组成共享式网络</li>
-<li>逻辑上仍是总线网</li>
-<li>每个端口连接同一网络的不同网段</li>
-<li>只能半双工工作</li>
-<li>网络吞吐率受限</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -8731,14 +8829,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">111k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:08</span>
+    <span title="站点阅读时长">6:15</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

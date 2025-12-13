@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,599 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/" class="post-title-link" itemprop="url">第 2 章 物理层</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-05 17:43:14 / 修改时间：21:55:57" itemprop="dateCreated datePublished" datetime="2025-12-05T17:43:14+08:00">2025-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/05/%E7%89%A9%E7%90%86%E5%B1%82/" class="post-meta-item leancloud_visitors" data-flag-title="第 2 章 物理层" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
+<li>①. 数据、信号与码元<ul>
+<li>通信目的：传输信息（文字、图像、视频等）</li>
+<li>数据：传送信息的实体</li>
+<li>信号：数据的电气或电磁表现</li>
+<li>分类：<ul>
+<li>模拟数据&#x2F;信号：取值连续</li>
+<li>数字数据&#x2F;信号：取值离散</li>
+</ul>
+</li>
+<li>码元：<ul>
+<li>定义：固定时长的信号波形表示k进制数</li>
+<li>码元宽度：信号周期</li>
+<li>信息量：1码元可携带若干比特</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 信源、信道与信宿<ul>
+<li>通信系统模型：<ul>
+<li>信源：产生和发送数据的源头</li>
+<li>信道：信号的传输介质<ul>
+<li>分类：<ul>
+<li>按信号形式：模拟信道、数字信道</li>
+<li>按传输介质：无线信道、有线信道</li>
+</ul>
+</li>
+<li>信号类型：<ul>
+<li>基带信号：未调制的原始电信号</li>
+<li>宽带信号：调制后的频分复用模拟信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信宿：接收数据的终点</li>
+</ul>
+</li>
+<li>数据传输方式：<ul>
+<li>串行传输：逐比特按序传输（长距离）</li>
+<li>并行传输：多比特同时传输（近距离）</li>
+</ul>
+</li>
+<li>通信交互方式：<ul>
+<li>单向通信：单方向（广播）</li>
+<li>半双工通信：双向但不能同时</li>
+<li>全双工通信：双向同时</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 速率、波特与带宽<ul>
+<li>速率：<ul>
+<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
+<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
+<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
+</ul>
+</li>
+<li>带宽：<ul>
+<li>模拟系统：频率范围（Hz）</li>
+<li>计算机网络：最高数据率（b&#x2F;s）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
+<li>信道失真影响<ul>
+<li>失真不影响通信质量的条件</li>
+<li>导致严重失真的因素<ul>
+<li>码元传输速率高</li>
+<li>信号传输距离远</li>
+<li>噪声干扰大</li>
+<li>传输介质质量差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>奈奎斯特定理(奈氏准则)<ul>
+<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>V: 码元离散电平数量</li>
+</ul>
+</li>
+<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
+<li>提高数据速率的方法: 多元制调制</li>
+</ul>
+</li>
+<li>香农定理<ul>
+<li>适用场景: 带宽受限且有高斯噪声的信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>S: 信号平均功率</li>
+<li>N: 高斯噪声功率</li>
+</ul>
+</li>
+<li>信噪比表示方法<ul>
+<li>无单位记法: S&#x2F;N</li>
+<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
+</ul>
+</li>
+<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
+</ul>
+</li>
+<li>奈氏准则 vs 香农定理<ul>
+<li>奈氏准则: 仅考虑带宽与码元速率</li>
+<li>香农定理: 同时考虑带宽和信噪比</li>
+<li>共同结论: 单个码元携带比特数有限</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
+<li>信号与数据转换<ul>
+<li>编码: 数据→数字信号</li>
+<li>调制: 数据→模拟信号</li>
+</ul>
+</li>
+<li>数字数据转换方式<ul>
+<li>数字发送器→数字信号</li>
+<li>调制器→模拟信号</li>
+</ul>
+</li>
+<li>模拟数据转换方式<ul>
+<li>PCM编码器→数字信号</li>
+<li>放大器调制器→模拟信号</li>
+</ul>
+</li>
+<li>四种编码与调制方式<ul>
+<li>数字数据编码为数字信号<ul>
+<li>常用编码方式<ul>
+<li>归零(RZ)编码<ul>
+<li>特点: 码元中间跳变到零电平</li>
+<li>优点: 提供自同步机制</li>
+<li>缺点: 占用带宽</li>
+</ul>
+</li>
+<li>非归零(NRZ)编码<ul>
+<li>特点: 不归零</li>
+<li>优点: 编码效率最高</li>
+<li>缺点: 需要时钟线同步</li>
+</ul>
+</li>
+<li>反向非归零(NRZI)编码<ul>
+<li>特点: 电平跳变表示0,不变表示1</li>
+<li>应用: USB 2.0</li>
+</ul>
+</li>
+<li>曼彻斯特编码<ul>
+<li>特点: 码元中间电平跳变</li>
+<li>应用: 标准以太网</li>
+</ul>
+</li>
+<li>差分曼彻斯特编码<ul>
+<li>特点: 码元开始处跳变表示0</li>
+<li>优点: 抗干扰能力强</li>
+<li>应用: 宽带高速网</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据编码为数字信号<ul>
+<li>步骤<ul>
+<li>采样<ul>
+<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
+</ul>
+</li>
+<li>量化<ul>
+<li>电平幅值→离散数字量</li>
+</ul>
+</li>
+<li>编码<ul>
+<li>离散整数→二进制编码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用: PCM编码</li>
+</ul>
+</li>
+<li>数字数据调制为模拟信号<ul>
+<li>调制方式<ul>
+<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
+<li>特点: 改变振幅表示1和0</li>
+<li>缺点: 抗干扰能力差</li>
+</ul>
+</li>
+<li>调频(FM)&#x2F;频移键控(FSK)<ul>
+<li>特点: 改变频率表示1和0</li>
+<li>优点: 抗干扰能力强</li>
+</ul>
+</li>
+<li>调相(PM)&#x2F;相移键控(PSK)<ul>
+<li>特点: 改变相位表示1和0</li>
+<li>变种: DPSK(差分相移键控)</li>
+</ul>
+</li>
+<li>正交幅度调制(QAM)<ul>
+<li>特点: AM与PM结合</li>
+<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据调制为模拟信号<ul>
+<li>应用<ul>
+<li>电话机和本地局交换机</li>
+</ul>
+</li>
+<li>技术: 频分复用(FDM)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
+<li>传输介质分类<ul>
+<li>导向传输介质<ul>
+<li>铜线或光纤</li>
+<li>电磁波沿固体介质传播</li>
+</ul>
+</li>
+<li>非导向传输介质<ul>
+<li>自由空间（空气、真空或海水）</li>
+<li>无线传输</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>①. 双绞线<ul>
+<li>特点<ul>
+<li>最常用传输介质</li>
+<li>两根绝缘铜导线绞合</li>
+<li>减少电磁干扰</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>屏蔽双绞线(STP)</li>
+<li>非屏蔽双绞线(UTP)</li>
+</ul>
+</li>
+<li>性能<ul>
+<li>价格便宜</li>
+<li>模拟&#x2F;数字传输</li>
+<li>通信距离：几千米到数十千米</li>
+<li>带宽取决于铜线粗细和传输距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 同轴电缆<ul>
+<li>结构<ul>
+<li>内导体</li>
+<li>绝缘层</li>
+<li>外导体屏蔽层</li>
+<li>绝缘保护套层</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>50Ω同轴电缆<ul>
+<li>传送基带数字信号</li>
+<li>早期局域网应用</li>
+</ul>
+</li>
+<li>75Ω同轴电缆<ul>
+<li>传送宽带信号</li>
+<li>有线电视系统应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>良好抗干扰特性</li>
+<li>传输较高速率数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 光纤<ul>
+<li>原理<ul>
+<li>利用光脉冲通信</li>
+<li>1：有光脉冲</li>
+<li>0：无光脉冲</li>
+</ul>
+</li>
+<li>结构<ul>
+<li>纤芯（8-100μm）</li>
+<li>包层（较低折射率）</li>
+</ul>
+</li>
+<li>传输原理<ul>
+<li>全反射现象</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>多模光纤<ul>
+<li>多条光线传输</li>
+<li>适合近距离</li>
+</ul>
+</li>
+<li>单模光纤<ul>
+<li>单波长传输</li>
+<li>适合远距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信容量大</li>
+<li>传输损耗小</li>
+<li>抗干扰性能好</li>
+<li>无串音干扰</li>
+<li>体积小重量轻</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>④. 无线传输介质<ul>
+<li>应用场景<ul>
+<li>蜂窝移动电话</li>
+<li>无线局域网(WLAN)</li>
+<li>特殊场合移动联网</li>
+</ul>
+</li>
+<li>(1) 无线电波<ul>
+<li>特点<ul>
+<li>穿透能力强</li>
+<li>传输距离长</li>
+<li>全向传播</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(2) 微波、红外线和激光<ul>
+<li>共同特点<ul>
+<li>需要视线通路</li>
+<li>指向性强</li>
+</ul>
+</li>
+<li>微波通信<ul>
+<li>频率：2-40GHz</li>
+<li>容量大</li>
+<li>直线传播</li>
+<li>需中继站</li>
+</ul>
+</li>
+<li>卫星通信<ul>
+<li>地球同步卫星中继</li>
+<li>优点<ul>
+<li>容量大</li>
+<li>距离远</li>
+<li>覆盖广</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>保密性差</li>
+<li>传播时延长</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-2-物理层接口的特性"><a href="#2-2-2-物理层接口的特性" class="headerlink" title="2.2.2    物理层接口的特性"></a>2.2.2    物理层接口的特性</h3><ul>
+<li>定义<ul>
+<li>在连接各种计算机的传输介质上传输比特流</li>
+<li>屏蔽硬件设备和传输介质的差异</li>
+</ul>
+</li>
+<li>主要任务<ul>
+<li>确定与传输介质接口有关的特性<ul>
+<li>机械特性<ul>
+<li>接线器的形状和尺寸</li>
+<li>引脚数量和排列</li>
+<li>固定和锁定装置</li>
+</ul>
+</li>
+<li>电气特性<ul>
+<li>各条线上的电压范围</li>
+<li>传输速率</li>
+<li>距离限制</li>
+</ul>
+</li>
+<li>功能特性<ul>
+<li>电平电压的意义</li>
+<li>每条线的功能</li>
+</ul>
+</li>
+<li>过程特性（规程特性）<ul>
+<li>不同功能事件的出现顺序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-物理层设备"><a href="#2-3-物理层设备" class="headerlink" title="2.3   物理层设备"></a>2.3   物理层设备</h2><h3 id="2-3-1-中继器"><a href="#2-3-1-中继器" class="headerlink" title="2.3.1    中继器"></a>2.3.1    中继器</h3><ul>
+<li>主要功能<ul>
+<li>放大、整形并转发信号</li>
+<li>消除信号失真和衰减</li>
+<li>扩大网络传输距离</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>信号再生（非简单放大）</li>
+<li>双端口设计<ul>
+<li>数据从一个端口输入</li>
+<li>从另一个端口发出</li>
+</ul>
+</li>
+<li>仅作用于信号电气部分</li>
+</ul>
+</li>
+<li>网络特性<ul>
+<li>连接的是网段而非子网</li>
+<li>仍属于同一局域网</li>
+<li>故障影响<ul>
+<li>对相邻两个网段产生影响</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用限制<ul>
+<li>理论上数量无限</li>
+<li>实际限制因素<ul>
+<li>信号延迟范围规定</li>
+<li>5-4-3规则示例<ul>
+<li>10BASE5以太网规范</li>
+<li>最多4个中继器串联</li>
+<li>5段介质中3段可接计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>与放大器的区别<ul>
+<li>放大器<ul>
+<li>放大模拟信号</li>
+<li>原理：放大衰减信号</li>
+</ul>
+</li>
+<li>中继器<ul>
+<li>放大数字信号</li>
+<li>原理：整形再生信号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-2-集线器"><a href="#2-3-2-集线器" class="headerlink" title="2.3.2    集线器"></a>2.3.2    集线器</h3><ul>
+<li>定义<ul>
+<li>集线器(Hub)实质上是一个多端口的中继器</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>端口接收数据信号</li>
+<li>信号整形放大（再生）</li>
+<li>转发到其他所有工作端口（除输入端口外）</li>
+<li>多端口输入时会发生冲突导致数据无效</li>
+</ul>
+</li>
+<li>功能特点<ul>
+<li>信号放大和转发</li>
+<li>扩大网络传输范围</li>
+<li>不具备信号定向传送能力</li>
+<li>标准的共享式设备</li>
+</ul>
+</li>
+<li>组网特性<ul>
+<li>组网灵活</li>
+<li>所有节点通信集中在中心节点</li>
+<li>组成共享式网络</li>
+<li>逻辑上仍是总线网</li>
+<li>每个端口连接同一网络的不同网段</li>
+<li>只能半双工工作</li>
+<li>网络吞吐率受限</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -5094,303 +5687,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2024/09/10/Blog-Building/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/09/10/Blog-Building/" class="post-title-link" itemprop="url">Blog-Building</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-09-10 12:00:00" itemprop="dateCreated datePublished" datetime="2024-09-10T12:00:00+08:00">2024-09-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-11-11 10:30:00" itemprop="dateModified" datetime="2024-11-11T10:30:00+08:00">2024-11-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/" itemprop="url" rel="index"><span itemprop="name">知识杂碎</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2024/09/10/Blog-Building/" class="post-meta-item leancloud_visitors" data-flag-title="Blog-Building" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3.3k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="从CSDN迁移博客到Hexo-Next-GitHub-Pages"><a href="#从CSDN迁移博客到Hexo-Next-GitHub-Pages" class="headerlink" title="从CSDN迁移博客到Hexo+Next+GitHub Pages"></a>从CSDN迁移博客到Hexo+Next+GitHub Pages</h1><p>本指南专为「从CSDN导出博客，部署到Hexo+Next主题GitHub Pages」的用户设计，全面解决：</p>
-<ul>
-<li>CSDN导出图片不显示问题</li>
-<li>Hexo配置错误导致部署失败</li>
-<li>路径解析和缓存冲突</li>
-<li>GitHub Pages部署疑难杂症</li>
-<li>博客结构混乱、功能缺失、体验不佳</li>
-</ul>
-<h1 id="一、环境准备与项目初始化"><a href="#一、环境准备与项目初始化" class="headerlink" title="一、环境准备与项目初始化"></a>一、环境准备与项目初始化</h1><p><strong>1.1 必备环境安装</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Node.js（必需v14+，推荐v18+）</span></span><br><span class="line"><span class="comment"># 官网下载：https://nodejs.org/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Git</span></span><br><span class="line"><span class="comment"># 官网下载：https://git-scm.com/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证安装</span></span><br><span class="line">node --version</span><br><span class="line">npm --version</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<p><strong>1.2 GitHub仓库准备</strong></p>
-<ul>
-<li>创建一个名为 <code>你的用户名.github.io</code> 的仓库（必须是此格式）。</li>
-<li><strong>推荐</strong>：配置SSH密钥以实现免密推送。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;your_email@example.com&quot;</span></span><br><span class="line"><span class="comment"># 将 ~/.ssh/id_rsa.pub 内容添加到 GitHub 的 SSH Keys 设置中</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>1.3 Hexo项目初始化</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Hexo命令行工具</span></span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建博客项目</span></span><br><span class="line">hexo init myBlog</span><br><span class="line"><span class="built_in">cd</span> myBlog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Next主题</span></span><br><span class="line">npm install hexo-theme-next --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装部署插件</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装搜索插件（用于本地搜索）</span></span><br><span class="line">npm install hexo-generator-searchdb --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装站点地图插件（用于SEO）</span></span><br><span class="line">npm install hexo-generator-sitemap --save</span><br><span class="line">npm install hexo-generator-baidu-sitemap --save  <span class="comment"># 可选，百度专用</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="二、核心配置文件详解"><a href="#二、核心配置文件详解" class="headerlink" title="二、核心配置文件详解"></a>二、核心配置文件详解</h1><p><strong>2.1 Hexo主配置文件 (<code>_config.yml</code>)</strong></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">ZQ-Rookie-Hacker的技术博客</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;分享编程、网络安全、工具使用技巧&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;专注于Hexo博客搭建、前端开发、网络安全的技术分享平台&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> [<span class="string">&#x27;Hexo&#x27;</span>, <span class="string">&#x27;博客搭建&#x27;</span>, <span class="string">&#x27;网络安全&#x27;</span>, <span class="string">&#x27;SSH&#x27;</span>, <span class="string">&#x27;编程技巧&#x27;</span>]</span><br><span class="line"><span class="attr">author:</span> <span class="string">ZQ-Rookie-Hacker</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://你的用户名.github.io</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="attr">source_dir:</span> <span class="string">source</span></span><br><span class="line"><span class="attr">public_dir:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">tag_dir:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">archive_dir:</span> <span class="string">archives</span></span><br><span class="line"><span class="attr">category_dir:</span> <span class="string">categories</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Writing</span></span><br><span class="line"><span class="attr">new_post_name:</span> <span class="string">:title.md</span></span><br><span class="line"><span class="attr">default_layout:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">titlecase:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">external_link:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">site</span></span><br><span class="line">  <span class="attr">exclude:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">filename_case:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">render_drafts:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span>  <span class="comment"># 🔑 关键：启用文章资源文件夹（每篇文章一个文件夹存放图片）</span></span><br><span class="line"><span class="attr">relative_link:</span> <span class="literal">false</span>     <span class="comment"># 🔑 关键：禁用相对链接，确保路径正确</span></span><br><span class="line"><span class="attr">future:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Markdown配置（解决图片核心问题）</span></span><br><span class="line"><span class="attr">syntax_highlighter:</span> <span class="string">highlight.js</span></span><br><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">auto_detect:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">wrap:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">hljs:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line">  <span class="attr">prepend_root:</span> <span class="literal">true</span>    <span class="comment"># 🔑 关键：自动为相对路径添加根路径</span></span><br><span class="line">  <span class="attr">post_asset:</span> <span class="literal">true</span>      <span class="comment"># 🔑 关键：识别文章资源文件夹中的图片</span></span><br><span class="line"></span><br><span class="line"><span class="attr">prismjs:</span></span><br><span class="line">  <span class="attr">preprocess:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭缓存避免路径问题</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>2.2 Next主题配置 (<code>themes/next/_config.yml</code>)</strong></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Scheme Settings (推荐简洁大气的Gemini或Mist)</span></span><br><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span></span><br><span class="line"><span class="comment"># scheme: Mist</span></span><br><span class="line"><span class="comment"># scheme: Pisces</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line"><span class="attr">darkmode:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Menu Settings</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-folder</span>  <span class="comment"># 新增：分类页</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-tags</span>              <span class="comment"># 新增：标签页</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-user</span>            <span class="comment"># 可选：需先创建about页</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sidebar Settings</span></span><br><span class="line"><span class="attr">sidebar:</span></span><br><span class="line">  <span class="attr">position:</span> <span class="string">left</span></span><br><span class="line">  <span class="attr">display:</span> <span class="string">post</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Post Settings</span></span><br><span class="line"><span class="attr">excerpt_description:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">read_more_btn:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 图片懒加载（提升加载速度）</span></span><br><span class="line"><span class="attr">lazyload:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代码高亮优化</span></span><br><span class="line"><span class="attr">codeblock:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地搜索</span></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">搜索文章...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 阅读量统计（不蒜子）</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_visitors:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">total_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">post_views:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">archive_views:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 评论系统（推荐Gitalk）</span></span><br><span class="line"><span class="attr">gitalk:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">client_id:</span> <span class="string">你的Client</span> <span class="string">ID</span></span><br><span class="line">  <span class="attr">client_secret:</span> <span class="string">你的Client</span> <span class="string">Secret</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">blog-comments</span>  <span class="comment"># 用于存储评论的GitHub仓库名</span></span><br><span class="line">  <span class="attr">owner:</span> <span class="string">你的GitHub用户名</span></span><br><span class="line">  <span class="attr">admin:</span> [<span class="string">你的GitHub用户名</span>]</span><br><span class="line">  <span class="attr">distraction_free_mode:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SEO</span></span><br><span class="line"><span class="attr">seo:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="三、CSDN图片处理终极方案"><a href="#三、CSDN图片处理终极方案" class="headerlink" title="三、CSDN图片处理终极方案"></a>三、CSDN图片处理终极方案</h1><p><strong>3.1 自动化图片下载与修复脚本 (<code>fix_csdn_images.py</code>)</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># ====== 你只需要改这一行：你的文章放哪儿？ ======</span></span><br><span class="line">POSTS_DIR = <span class="string">r&quot;F:\myBlog\source\_posts&quot;</span>  <span class="comment"># 修改为你的实际路径</span></span><br><span class="line"><span class="comment"># ================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 支持的图片格式</span></span><br><span class="line">IMG_EXTENSIONS = (<span class="string">&#x27;.png&#x27;</span>, <span class="string">&#x27;.jpg&#x27;</span>, <span class="string">&#x27;.jpeg&#x27;</span>, <span class="string">&#x27;.gif&#x27;</span>, <span class="string">&#x27;.bmp&#x27;</span>, <span class="string">&#x27;.webp&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">download_image</span>(<span class="params">url, save_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;下载单张图片&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        headers = &#123;</span><br><span class="line">            <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        res = requests.get(url, headers=headers, timeout=<span class="number">15</span>)</span><br><span class="line">        res.raise_for_status()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(save_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(res.content)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ 下载失败：<span class="subst">&#123;url&#125;</span>，错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_markdown_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理单个Markdown文件&quot;&quot;&quot;</span></span><br><span class="line">    article_name = os.path.splitext(os.path.basename(file_path))[<span class="number">0</span>]</span><br><span class="line">    image_dir = os.path.join(os.path.dirname(file_path), article_name)</span><br><span class="line">    os.makedirs(image_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        content = f.read()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查找所有CSDN网络图片链接</span></span><br><span class="line">    img_pattern = <span class="string">r&#x27;!\[([^\]]*)\]\((https?://[^\s)]+\.(?:png|jpg|jpeg|gif|bmp|webp))\)&#x27;</span></span><br><span class="line">    matches = <span class="built_in">list</span>(re.finditer(img_pattern, content))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;🔍 找到 <span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span> 张图片&quot;</span>)</span><br><span class="line"></span><br><span class="line">    success_count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, <span class="keyword">match</span> <span class="keyword">in</span> <span class="built_in">enumerate</span>(matches):</span><br><span class="line">        alt_text = <span class="keyword">match</span>.group(<span class="number">1</span>) <span class="keyword">or</span> <span class="string">&#x27;图片描述&#x27;</span></span><br><span class="line">        url = <span class="keyword">match</span>.group(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;⬇️ 正在下载 (<span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(matches)&#125;</span>): <span class="subst">&#123;os.path.basename(url)&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 生成图片文件名</span></span><br><span class="line">        parsed = urlparse(url)</span><br><span class="line">        ext = os.path.splitext(parsed.path)[<span class="number">1</span>].lower()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> ext <span class="keyword">or</span> ext <span class="keyword">not</span> <span class="keyword">in</span> IMG_EXTENSIONS:</span><br><span class="line">            ext = <span class="string">&#x27;.png&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清理文件名中的特殊字符</span></span><br><span class="line">        clean_alt = re.sub(<span class="string">r&#x27;[^\w\u4e00-\u9fa5-]&#x27;</span>, <span class="string">&#x27;_&#x27;</span>, alt_text)</span><br><span class="line">        filename_on_disk = <span class="string">f&quot;<span class="subst">&#123;clean_alt&#125;</span>_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span> <span class="keyword">if</span> clean_alt <span class="keyword">else</span> <span class="string">f&quot;image_<span class="subst">&#123;i+<span class="number">1</span>&#125;</span><span class="subst">&#123;ext&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">        local_path = os.path.join(image_dir, filename_on_disk)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> download_image(url, local_path):</span><br><span class="line">            <span class="comment"># 使用标准Markdown语法，引用本地文件</span></span><br><span class="line">            new_link = <span class="string">f&quot;![<span class="subst">&#123;alt_text&#125;</span>](<span class="subst">&#123;filename_on_disk&#125;</span>)&quot;</span></span><br><span class="line">            content = content.replace(<span class="keyword">match</span>.group(<span class="number">0</span>), new_link)</span><br><span class="line">            success_count += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;✅ 已保存：<span class="subst">&#123;filename_on_disk&#125;</span> &quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存修改后的内容</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> success_count, <span class="built_in">len</span>(matches)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;🚀 开始处理CSDN导出的图片...&quot;</span>)</span><br><span class="line">    total_success = <span class="number">0</span></span><br><span class="line">    total_images = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(POSTS_DIR):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> filename.endswith(<span class="string">&#x27;.md&#x27;</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        blog_path = os.path.join(POSTS_DIR, filename)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n📄 正在处理：<span class="subst">&#123;filename&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        success, total = process_markdown_file(blog_path)</span><br><span class="line">        total_success += success</span><br><span class="line">        total_images += total</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;🎉 <span class="subst">&#123;filename&#125;</span> 处理完成：<span class="subst">&#123;success&#125;</span>/<span class="subst">&#123;total&#125;</span> 张图片成功&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n🎊 全部完成！总计处理 <span class="subst">&#123;total_success&#125;</span>/<span class="subst">&#123;total_images&#125;</span> 张图片&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n📝 接下来执行：&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;   hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.2 使用说明</strong></p>
-<ol>
-<li><strong>修改路径</strong>：将脚本中的 <code>POSTS_DIR</code> 修改为你博客文章的实际路径（如 <code>F:\myBlog\source\_posts</code>）。</li>
-<li><strong>运行脚本</strong>：在命令行中进入脚本所在目录，执行 <code>python fix_csdn_images.py</code>。</li>
-<li><strong>验证结构</strong>：脚本执行后，你的文章目录结构应变为：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">source/_posts/</span><br><span class="line">├── SSH隧道技术.md</span><br><span class="line">└── SSH隧道技术/</span><br><span class="line">    ├── 图片描述_1.png</span><br><span class="line">    ├── 图片描述_2.jpg</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure></li>
-<li><strong>本地预览</strong>：执行 <code>hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</code>，在浏览器中访问 <code>http://localhost:4000</code>，确认图片已正常加载。</li>
-</ol>
-<hr>
-<h1 id="四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）"><a href="#四、核心：搭建清晰的「分类-标签」体系（解决文章归类问题）" class="headerlink" title="四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）"></a>四、核心：搭建清晰的「分类&#x2F;标签」体系（解决文章归类问题）</h1><p>分类是博客的“骨架”，标签是“索引”，两者结合让读者快速找到内容，也让你的博客结构更规整。</p>
-<p><strong>4.1 先明确规则（避免混乱）</strong></p>
-<ul>
-<li><strong>分类</strong>：层级化、不重复（例如：<code>技术</code> → <code>网络安全</code>，<code>工具</code> → <code>Hexo配置</code>）。一篇文章建议1-2个主分类。</li>
-<li><strong>标签</strong>：扁平化、多维度（例如：一篇「Hexo分类配置」的文章，标签可设 <code>Hexo</code>、<code>博客搭建</code>、<code>分类管理</code>）。一篇文章可多个标签。</li>
-</ul>
-<p><strong>4.2 步骤1：创建「分类页」「标签页」（让导航能访问）</strong><br>Hexo需要手动创建分类&#x2F;标签的“容器页面”，否则导航栏点击后会404：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建分类页面</span></span><br><span class="line">hexo new page <span class="string">&quot;categories&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建标签页面</span></span><br><span class="line">hexo new page <span class="string">&quot;tags&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>然后分别编辑这两个文件的 Front-matter，添加 <code>type</code> 标识：</p>
-<ul>
-<li><code>source/categories/index.md</code>：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">分类</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;categories&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
-<li><code>source/tags/index.md</code>：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">标签</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;tags&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>4.3 步骤2：给文章分配「分类&#x2F;标签」</strong><br>编辑每篇文章（<code>source/_posts/xxx.md</code>）的 Front-matter：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">&quot;什么是SSH隧道及相关技术&quot;</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-10</span></span><br><span class="line"><span class="attr">updated:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="attr">categories:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">网络安全</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">SSH</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">隧道技术</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">服务器</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>4.4 步骤3：让分类&#x2F;标签显示在导航栏</strong><br>在 <code>themes/next/_config.yml</code> 的 <code>menu</code> 配置中，添加 <code>categories</code> 和 <code>tags</code> 菜单项（已在上文2.2节中包含）。</p>
-<hr>
-<p><strong>二、优化导航与功能：让博客更好用</strong></p>
-<p><strong>1. 开启「搜索功能」（必备！）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>local_search</code>，确保已安装 <code>hexo-generator-searchdb</code> 插件。</p>
-<p><strong>2. 代码高亮优化（程序员必备）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>codeblock.copy_button</code>，并在 <code>hexo/_config.yml</code> 中启用了 <code>highlight.line_number</code>。</p>
-<p><strong>3. 图片处理：避免失效+优化显示</strong></p>
-<ul>
-<li><strong>方案1：本地图片（推荐）</strong>：通过 <code>post_asset_folder: true</code> + <code>marked.post_asset: true</code> 配置，脚本已自动将图片存入文章同名文件夹，使用 <code>![描述](图片名.png)</code> 的相对路径，<strong>永不失效</strong>。</li>
-<li><strong>方案2：图床</strong>：若需多设备编辑，可用PicGo上传至GitHub图床，复制链接粘贴。<strong>但强烈推荐方案1</strong>，数据完全可控。</li>
-<li><strong>优化显示</strong>：在Markdown中，使用以下代码让图片居中并限制宽度：<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 居中+限制宽度 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;图片链接&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;描述&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: block; margin: 0 auto; max-width: 80%;&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h1 id="五、外观优化：让博客更个性化"><a href="#五、外观优化：让博客更个性化" class="headerlink" title="五、外观优化：让博客更个性化"></a>五、外观优化：让博客更个性化</h1><p><strong>5.1 选择Next主题风格（Scheme）</strong><br>在 <code>themes/next/_config.yml</code> 中设置：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span>  <span class="comment"># 推荐：简洁大气，适配分类/标签</span></span><br><span class="line"><span class="comment"># scheme: Mist  # 更紧凑</span></span><br><span class="line"><span class="comment"># scheme: Pisces # 卡片式</span></span><br><span class="line"><span class="comment"># scheme: Muse  # 默认</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>5.2 自定义颜色&#x2F;字体</strong><br>编辑 <code>themes/next/source/css/_custom/custom.styl</code> 文件：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义导航栏背景色</span></span><br><span class="line"><span class="selector-class">.header</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#2c3e50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义链接颜色</span></span><br><span class="line"><span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#3498db</span>;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#e74c3c</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局字体（推荐思源黑体）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Source Han Sans CN&quot;</span>, <span class="string">&quot;PingFang SC&quot;</span>, <span class="string">&quot;Microsoft YaHei&quot;</span>, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码字体（推荐Fira Code）</span></span><br><span class="line"><span class="selector-tag">code</span>, pre &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&quot;Fira Code&quot;</span>, <span class="string">&quot;Consolas&quot;</span>, monospace;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 页面背景图（可选）</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;/images/bg.jpg&#x27;</span>);</span><br><span class="line">  <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">  <span class="attribute">background-size</span>: cover;</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.9</span>);</span><br><span class="line">  <span class="attribute">background-blend-mode</span>: overlay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意</strong>：将背景图 <code>bg.jpg</code> 放入 <code>source/images/</code> 目录下。</p>
-</blockquote>
-<p><strong>5.3 添加背景图&#x2F;头像</strong></p>
-<ul>
-<li><strong>头像</strong>：在 <code>themes/next/_config.yml</code> 中设置：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpg</span>  <span class="comment"># 图片放在 source/images/ 目录下</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">opacity:</span> <span class="number">1.0</span></span><br></pre></td></tr></table></figure></li>
-<li><strong>背景图</strong>：已在上文 <code>custom.styl</code> 中配置。</li>
-</ul>
-<hr>
-<h1 id="六、增强互动与体验：添加评论-阅读量"><a href="#六、增强互动与体验：添加评论-阅读量" class="headerlink" title="六、增强互动与体验：添加评论&#x2F;阅读量"></a>六、增强互动与体验：添加评论&#x2F;阅读量</h1><p><strong>6.1 评论系统（推荐 Gitalk，适配 GitHub Pages）</strong><br>已在 <code>themes/next/_config.yml</code> 中配置 <code>gitalk</code>，请按说明申请GitHub OAuth App并填入 <code>client_id</code> 和 <code>client_secret</code>。</p>
-<p><strong>2. 阅读量统计（不蒜子，无需注册）</strong><br>已在 <code>themes/next/_config.yml</code> 中启用 <code>busuanzi_count</code>。</p>
-<hr>
-<h1 id="七、SEO优化：让博客被搜索引擎收录"><a href="#七、SEO优化：让博客被搜索引擎收录" class="headerlink" title="七、SEO优化：让博客被搜索引擎收录"></a>七、SEO优化：让博客被搜索引擎收录</h1><p><strong>7.1 配置站点信息（Hexo根目录 <code>_config.yml</code>）</strong><br>已在上文2.1节中包含 <code>title</code>, <code>subtitle</code>, <code>description</code>, <code>keywords</code>, <code>author</code>, <code>language</code>, <code>timezone</code>。</p>
-<p><strong>7.2 生成站点地图</strong><br>已在上文1.3节安装了 <code>hexo-generator-sitemap</code> 和 <code>hexo-generator-baidu-sitemap</code> 插件。无需额外配置，它们会自动生成 <code>sitemap.xml</code> 和 <code>baidu_sitemap.xml</code>。</p>
-<p><strong>7.3 提交站点到搜索引擎</strong></p>
-<ul>
-<li><strong>Google 搜索控制台</strong>：添加你的域名，提交 <code>https://你的博客地址/sitemap.xml</code>。</li>
-<li><strong>百度搜索资源平台</strong>：添加你的域名，提交 <code>https://你的博客地址/baidu_sitemap.xml</code>。</li>
-</ul>
-<hr>
-<h1 id="八、细节优化：提升质感"><a href="#八、细节优化：提升质感" class="headerlink" title="八、细节优化：提升质感"></a>八、细节优化：提升质感</h1><p><strong>8.1 文章排版</strong></p>
-<ul>
-<li><strong>折叠块</strong>（适合长代码&#x2F;补充说明）：<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">summary</span>&gt;</span></span>点击查看补充说明<span class="language-xml"><span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span></span><br><span class="line">这里是折叠的内容...</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-<li><strong>每篇文章添加「前言&#x2F;小结」</strong>，让结构更清晰。</li>
-</ul>
-<p><strong>8.2 404 页面</strong><br>创建 <code>source/404.md</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">页面不存在</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2025-11-11</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">&lt;div</span> <span class="string">style=&quot;text-align:</span> <span class="string">center;</span> <span class="attr">margin-top:</span> <span class="string">50px;&quot;&gt;</span></span><br><span class="line">  <span class="string">&lt;h1&gt;404</span> <span class="bullet">-</span> <span class="string">页面走丢啦～&lt;/h1&gt;</span></span><br><span class="line">  <span class="string">&lt;p&gt;你访问的页面不存在或已被移动&lt;/p&gt;</span></span><br><span class="line">  <span class="string">&lt;a</span> <span class="string">href=&quot;/&quot;</span> <span class="string">style=&quot;color:</span> <span class="comment">#3498db; font-size: 18px;&quot;&gt;返回首页&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>8.3 关闭无用功能</strong><br>在 <code>themes/next/_config.yml</code> 中关闭不需要的功能：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">reward:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">sharejs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="九、部署与备份"><a href="#九、部署与备份" class="headerlink" title="九、部署与备份**"></a>九、部署与备份**</h1><p><strong>9.1 部署流程</strong><br>每次修改后，执行以下命令部署：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p><strong>9.2 本地测试</strong><br>在部署前，务必先在本地测试：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate --debug</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-<p>访问 <code>http://localhost:4000</code>，检查：</p>
-<ul>
-<li>✅ 文章正常显示</li>
-<li>✅ 图片正确加载</li>
-<li>✅ 样式正常</li>
-<li>✅ 搜索、分类、标签功能正常</li>
-</ul>
-<p><strong>9.3 备份</strong><br>将 Hexo 根目录的 <code>_config.yml</code>、<code>themes/next/_config.yml</code>、<code>source/</code> 目录（文章+图片）备份到 GitHub（新建一个仓库，比如 <code>blog-source</code>），避免电脑故障丢失数据。</p>
-<hr>
-<h1 id="十、故障排除大全"><a href="#十、故障排除大全" class="headerlink" title="十、故障排除大全"></a>十、故障排除大全</h1><p><strong>10.1 图片不显示问题</strong></p>
-<ul>
-<li><strong>症状</strong>：图片显示为空白或404。</li>
-<li><strong>解决方案</strong>：<ol>
-<li><strong>检查配置</strong>：确保 <code>_config.yml</code> 中 <code>post_asset_folder: true</code> 和 <code>marked.prepend_root: true</code> 已开启。</li>
-<li><strong>清理缓存</strong>：执行 <code>hexo clean</code> 后重新 <code>hexo generate</code>。</li>
-<li><strong>检查路径</strong>：浏览器F12查看Network标签，确认图片请求的URL是 <code>文章名/图片名.png</code> 的相对路径。</li>
-</ol>
-</li>
-</ul>
-<p><strong>10.2 部署失败问题</strong></p>
-<ul>
-<li><strong>常见错误1：权限拒绝</strong><ul>
-<li><strong>解决方案</strong>：使用HTTPS地址或配置SSH密钥。</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure></li>
-<li><strong>常见错误2：分支不存在</strong><ul>
-<li><strong>解决方案</strong>：确认你的GitHub仓库默认分支是 <code>main</code> 还是 <code>gh-pages</code>，并相应修改 <code>branch</code> 配置。</li>
-</ul>
-</li>
-</ul>
-<p><strong>10.3 主题显示异常</strong></p>
-<ul>
-<li><strong>解决方案</strong>：<ol>
-<li>确认主题安装：<code>npm list hexo-theme-next</code>。</li>
-<li>检查 <code>hexo/_config.yml</code> 中 <code>theme: next</code>。</li>
-<li>清理重新安装：<code>rm -rf node_modules &amp;&amp; npm install</code>。</li>
-</ol>
-</li>
-</ul>
-<p><strong>10.4 时间显示问题</strong></p>
-<ul>
-<li><strong>症状</strong>：文章时间相差8小时。</li>
-<li><strong>解决方案</strong>：确保 <code>hexo/_config.yml</code> 中 <code>timezone: &#39;Asia/Shanghai&#39;</code>。</li>
-</ul>
-<hr>
-<h1 id="十一、优化与进阶"><a href="#十一、优化与进阶" class="headerlink" title="十一、优化与进阶"></a>十一、优化与进阶</h1><p><strong>11.1 性能优化</strong></p>
-<ul>
-<li>在 <code>themes/next/_config.yml</code> 中启用 <code>lazyload: enable: true</code>。</li>
-<li>在 <code>hexo/_config.yml</code> 中启用 <code>highlight.line_number: true</code>。</li>
-</ul>
-<p><strong>11.2 自定义域名</strong></p>
-<ul>
-<li>在 <code>source/</code> 目录下创建一个名为 <code>CNAME</code> 的文件。</li>
-<li>文件内容写入你的域名，例如：<code>yourdomain.com</code>。</li>
-<li>在你的域名DNS服务商处，添加一条CNAME记录，指向 <code>你的用户名.github.io</code>。</li>
-</ul>
-<hr>
-<h1 id="十二、实用命令速查"><a href="#十二、实用命令速查" class="headerlink" title="十二、实用命令速查"></a>十二、实用命令速查</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;文章标题&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地写作（预览草稿）</span></span><br><span class="line">hexo server --draft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制清理缓存</span></span><br><span class="line">hexo clean --debug</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Hexo版本</span></span><br><span class="line">hexo version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一键部署（最常用）</span></span><br><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
-<ul>
-<li>git clone <a href="mailto:&#103;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
-<li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#103;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#46;&#99;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
-</ul>
-<p>13.2 下载nodejs + hexo</p>
-<ul>
-<li>官网下载nodejs</li>
-<li>下载 hexo npm install -g hexo-cli</li>
-</ul>
-<p>13.3 nmp 相关插件下载</p>
-<ul>
-<li>npm install</li>
-<li>npm install hexo-deployer-git –save</li>
-</ul>
-<blockquote>
-<p>因为 myBlog 已经hexo 初始化完毕，不需要再进行初始化<br>myBlog 私仓用于博客协作更新（用git）, 用hexo deploy 更新博客仓</p>
-</blockquote>
-<p>注意：每次修改文章或其他文件时，hexo clean -&gt; hexo g -&gt; hexo deploy -&gt; git add . -&gt; git commit …. -&gt; git push origin main</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -5413,14 +5711,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">111k</span>
+    <span title="站点总字数">112k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:08</span>
+    <span title="站点阅读时长">6:15</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

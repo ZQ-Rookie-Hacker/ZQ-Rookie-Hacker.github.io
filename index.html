@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,546 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">Kali Linux 常用命令笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-13 17:00:21 / 修改时间：17:00:15" itemprop="dateCreated datePublished" datetime="2025-12-13T17:00:21+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-meta-item leancloud_visitors" data-flag-title="Kali Linux 常用命令笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-系统基本操作"><a href="#1-系统基本操作" class="headerlink" title="1. 系统基本操作"></a>1. 系统基本操作</h2><h3 id="系统控制"><a href="#系统控制" class="headerlink" title="系统控制"></a>系统控制</h3><ul>
+<li><code>reboot</code> - 重启系统</li>
+<li><code>shutdown -h now</code> - 立即关闭系统</li>
+<li><code>shutdown -h hours:minutes &amp;</code> - 按预定时间关闭系统</li>
+<li><code>shutdown -c</code> - 取消预定的关机操作</li>
+<li><code>shutdown -r now</code> - 立即重启系统</li>
+<li><code>init 0</code> - 关闭系统</li>
+<li><code>telinit 0</code> - 关闭系统</li>
+<li><code>clear</code> - 清屏</li>
+</ul>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><ul>
+<li><code>env</code> - 显示当前所有环境变量</li>
+<li><code>echo $PATH</code> - 查看PATH环境变量</li>
+<li><code>echo $JAVA_HOME</code> - 查看JAVA_HOME环境变量</li>
+<li><code>echo $PATH | grep jdk</code> - 检查PATH中是否包含JDK路径</li>
+</ul>
+<h3 id="用户切换与管理"><a href="#用户切换与管理" class="headerlink" title="用户切换与管理"></a>用户切换与管理</h3><ul>
+<li><code>su -l</code> - 切换登录用户</li>
+<li><code>su - root</code> - 切换到root用户</li>
+<li><code>su 用户名</code> - 切换到普通用户</li>
+<li><code>logout</code> - 注销当前用户</li>
+<li><code>passwd</code> - 修改当前用户密码</li>
+<li><code>passwd root</code> - 修改root用户密码</li>
+</ul>
+<h3 id="历史命令"><a href="#历史命令" class="headerlink" title="历史命令"></a>历史命令</h3><ul>
+<li><code>history</code> - 查看历史命令</li>
+<li><code>!!</code> - 重复上一条命令</li>
+<li><code>!n</code> - 重复第n条命令</li>
+</ul>
+<h2 id="2-文件和目录操作"><a href="#2-文件和目录操作" class="headerlink" title="2. 文件和目录操作"></a>2. 文件和目录操作</h2><h3 id="目录导航"><a href="#目录导航" class="headerlink" title="目录导航"></a>目录导航</h3><ul>
+<li><code>pwd</code> - 显示当前工作路径</li>
+<li><code>cd ..</code> - 返回上一级目录</li>
+<li><code>cd ../..</code> - 返回上级两级目录</li>
+<li><code>cd -</code> - 返回上次所在的目录</li>
+<li><code>cd 文件夹名</code> - 进入指定文件夹</li>
+<li><code>cd ~</code> - 进入当前用户主目录</li>
+</ul>
+<h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><ul>
+<li><code>touch 文件名</code> - 创建空文件</li>
+<li><code>cat 文件名</code> - 读取文件内容</li>
+<li><code>mkdir 文件名</code> - 创建文件夹</li>
+<li><code>mkdir -p 文件夹</code> - 递归创建文件夹</li>
+<li><code>mkdir 文件名 文件名</code> - 创建多个文件夹</li>
+<li><code>cp 源文件 目标文件</code> - 复制文件</li>
+<li><code>cp -r 源文件夹 目标文件夹</code> - 递归复制文件夹</li>
+<li><code>mv 旧文件名 新文件名</code> - 移动&#x2F;重命名文件</li>
+<li><code>rm 文件</code> - 删除文件</li>
+<li><code>rm -f 文件</code> - 强制删除文件</li>
+<li><code>rm 文件夹名</code> - 删除文件夹</li>
+<li><code>rm -rf 文件/文件夹</code> - 强制递归删除文件&#x2F;文件夹及其内容</li>
+</ul>
+<h3 id="文件搜索"><a href="#文件搜索" class="headerlink" title="文件搜索"></a>文件搜索</h3><ul>
+<li><code>find / -name file1</code> - 从根目录开始搜索文件和目录</li>
+<li><code>find / -user user1</code> - 搜索属于指定用户的文件和目录</li>
+<li><code>find /home/user1 -name *.bin</code> - 在指定目录中搜索特定扩展名的文件</li>
+<li><code>find /usr/bin -type f -atime +100</code> - 搜索过去100天未被使用的执行文件</li>
+<li><code>find /usr/bin -type f -mtime -10</code> - 搜索10天内被修改过的文件</li>
+<li><code>find . -name &#39;.php&#39; -mmin -30</code> - 查找最近30分钟修改的当前目录下的.php文件</li>
+<li><code>find . -name &#39;*.inc&#39; -mtime 0 -ls</code> - 查找最近24小时修改的文件并列出详细信息</li>
+<li><code>find / -name *.rpm -exec chmod 755 &#39;{}&#39; \;</code> - 搜索并修改权限</li>
+<li><code>find / -xdev -name *.rpm</code> - 搜索忽略可移动设备</li>
+<li><code>locate *.ps</code> - 快速查找以.ps结尾的文件（需先运行<code>updatedb</code>）</li>
+<li><code>whereis halt</code> - 显示二进制文件、源码或man的位置</li>
+<li><code>which halt</code> - 显示二进制文件或可执行文件的完整路径</li>
+<li><code>find / -name moonsec 2&gt;/dev/null</code> - 搜索文件&#x2F;文件夹并屏蔽错误信息</li>
+</ul>
+<h2 id="3-系统信息"><a href="#3-系统信息" class="headerlink" title="3. 系统信息"></a>3. 系统信息</h2><h3 id="硬件信息"><a href="#硬件信息" class="headerlink" title="硬件信息"></a>硬件信息</h3><ul>
+<li><code>arch</code> - 显示机器的处理器架构</li>
+<li><code>uname -m</code> - 显示机器的处理器架构</li>
+<li><code>cat /proc/cpuinfo</code> - 显示CPU信息</li>
+<li><code>cat /proc/mounts</code> - 显示已加载的文件系统</li>
+<li><code>cat /proc/net/dev</code> - 显示网络适配器及统计</li>
+</ul>
+<h3 id="操作系统信息"><a href="#操作系统信息" class="headerlink" title="操作系统信息"></a>操作系统信息</h3><ul>
+<li><code>uname -r</code> - 显示正在使用的内核版本</li>
+<li><code>cat /proc/version</code> - 显示内核版本</li>
+<li><code>ver</code> - 查看操作系统版本</li>
+<li><code>systeminfo</code> - 查看计算机详细信息（Windows命令，Kali中不适用）</li>
+</ul>
+<h3 id="磁盘和内存信息"><a href="#磁盘和内存信息" class="headerlink" title="磁盘和内存信息"></a>磁盘和内存信息</h3><ul>
+<li><code>df</code> - 显示磁盘空间使用情况（默认不带单位）</li>
+<li><code>df -h</code> - 友好显示磁盘空间使用情况（带单位）</li>
+<li><code>free</code> - 显示内存使用情况（默认以KB为单位）</li>
+<li><code>free -m</code> - 以MB为单位显示内存使用情况</li>
+<li><code>free -h</code> - 友好显示内存使用情况（自动选择合适单位）</li>
+</ul>
+<h2 id="4-用户和群组管理"><a href="#4-用户和群组管理" class="headerlink" title="4. 用户和群组管理"></a>4. 用户和群组管理</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><code>useradd moonsec</code> - 创建用户</li>
+<li><code>useradd -r -m -s /bin/bash moonsec</code> - 创建系统用户并指定shell<ul>
+<li><code>-r</code> - 建立系统账号</li>
+<li><code>-m</code> - 自动建立用户的登录目录</li>
+<li><code>-s /bin/bash</code> - 指定用户登录后使用的shell</li>
+</ul>
+</li>
+<li><code>passwd moonsec</code> - 设置用户密码</li>
+<li><code>usermod -a -G moontea k1</code> - 将用户k1添加到其他用户组</li>
+</ul>
+<h3 id="群组管理"><a href="#群组管理" class="headerlink" title="群组管理"></a>群组管理</h3><ul>
+<li><code>groupadd group_name</code> - 创建新用户组</li>
+<li><code>groupdel group_name</code> - 删除用户组</li>
+<li><code>cat /etc/group | grep group_name</code> - 查看特定群组信息</li>
+</ul>
+<h2 id="5-进程管理"><a href="#5-进程管理" class="headerlink" title="5. 进程管理"></a>5. 进程管理</h2><h3 id="进程查看"><a href="#进程查看" class="headerlink" title="进程查看"></a>进程查看</h3><ul>
+<li><code>top</code> - 实时查看系统进程和资源使用情况</li>
+<li><code>ps -ef</code> - 查看所有进程信息</li>
+<li><code>ps -ef | grep tomcat</code> - 查找指定进程</li>
+<li><code>query user</code> - 查看当前在线的用户（Windows命令，Kali中不适用）</li>
+</ul>
+<h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><ul>
+<li><code>kill -9 PID</code> - 强制杀死指定PID的进程</li>
+<li><code>taskkill /pid PID数</code> - 终止指定PID的进程（Windows命令，Kali中不适用）</li>
+</ul>
+<h2 id="6-网络相关命令"><a href="#6-网络相关命令" class="headerlink" title="6. 网络相关命令"></a>6. 网络相关命令</h2><h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><ul>
+<li><code>ifconfig</code> - 查看和配置网络接口信息</li>
+<li><code>iwconfig</code> - 配置或获取无线网络设备信息</li>
+<li><code>route print</code> - 显示IP路由表（Windows命令）</li>
+<li><code>arp</code> - 查看和处理ARP缓存</li>
+<li><code>arp -a</code> - 显示所有ARP缓存信息</li>
+<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（Windows命令）</li>
+</ul>
+<h3 id="网络诊断"><a href="#网络诊断" class="headerlink" title="网络诊断"></a>网络诊断</h3><ul>
+<li><code>ping www.baidu.com</code> - 测试网络连接</li>
+<li><code>ping www.baidu.com -c 3</code> - 执行3次ping测试</li>
+<li><code>netstat -a</code> - 查看所有端口</li>
+<li><code>netstat -an</code> - 查看端口的网络连接情况</li>
+<li><code>netstat -o</code> - 查看所有网络连接的进程ID</li>
+<li><code>netstat -ano | findstr &quot;:80&quot;</code> - 查找包含”80”的连接（Windows命令）</li>
+<li><code>netstat -v</code> - 查看正在进行的工作</li>
+<li><code>netstat -p 协议名</code> - 查看某协议使用情况</li>
+<li><code>netstat -s</code> - 查看所有协议使用情况</li>
+<li><code>netstat -lntup</code> - 查看所有TCP和UDP端口</li>
+<li><code>nslookup</code> - 查询DNS记录</li>
+<li><code>nslookup -qt=type domain</code> - 查询特定类型的DNS记录</li>
+<li><code>traceroute</code> - 检测数据包到达目标主机经过的网关数量</li>
+<li><code>telnet</code> - 远程登录（常用于端口检测）</li>
+<li><code>finger username @host</code> - 查看最近登录的用户信息</li>
+</ul>
+<h3 id="网络服务"><a href="#网络服务" class="headerlink" title="网络服务"></a>网络服务</h3><ul>
+<li><code>http协议</code> - 使用curl和wget进行HTTP操作</li>
+<li><code>curl</code> - 传输数据的命令行工具</li>
+<li><code>wget</code> - 从网络下载文件</li>
+</ul>
+<h2 id="7-服务管理"><a href="#7-服务管理" class="headerlink" title="7. 服务管理"></a>7. 服务管理</h2><h3 id="服务控制"><a href="#服务控制" class="headerlink" title="服务控制"></a>服务控制</h3><ul>
+<li><code>/etc/init.d/apache2 start</code> - 启动Apache2服务</li>
+<li><code>/etc/init.d/apache2 restart</code> - 重启Apache2服务</li>
+<li><code>/etc/init.d/apache2 stop</code> - 停止Apache2服务</li>
+<li><code>/etc/init.d/network start</code> - 启动网络服务</li>
+<li><code>service networking restart</code> - 重启网络服务</li>
+<li><code>systemctl restart networking</code> - 使用systemctl重启网络服务</li>
+</ul>
+<h3 id="服务配置"><a href="#服务配置" class="headerlink" title="服务配置"></a>服务配置</h3><ul>
+<li><code>/etc/rc.d/rc.local</code> - 开机自启动脚本配置文件</li>
+<li><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code> - 开启路由转发</li>
+</ul>
+<h2 id="8-包管理"><a href="#8-包管理" class="headerlink" title="8. 包管理"></a>8. 包管理</h2><h3 id="Debian-Ubuntu包管理"><a href="#Debian-Ubuntu包管理" class="headerlink" title="Debian&#x2F;Ubuntu包管理"></a>Debian&#x2F;Ubuntu包管理</h3><ul>
+<li><code>apt-get update</code> - 更新软件包列表</li>
+<li><code>apt-get upgrade</code> - 升级已安装的软件包</li>
+<li><code>apt-get dist-upgrade</code> - 智能升级，处理依赖关系变化</li>
+<li><code>apt-get install package</code> - 安装软件包</li>
+<li><code>apt-get install python-模块名</code> - 安装Python模块</li>
+<li><code>apt-get autoremove --purge 软件名</code> - 删除包及其依赖和配置文件</li>
+<li><code>dpkg -i package.deb</code> - 安装&#x2F;更新deb包</li>
+<li><code>dpkg -r package_name</code> - 从系统删除deb包</li>
+<li><code>dpkg -l</code> - 显示所有已安装的deb包</li>
+<li><code>dpkg -l | grep httpd</code> - 显示包含特定名称的deb包</li>
+<li><code>dpkg -s package_name</code> - 获取已安装包的信息</li>
+<li><code>dpkg -L package_name</code> - 显示已安装包提供的文件列表</li>
+</ul>
+<h3 id="压缩与解压"><a href="#压缩与解压" class="headerlink" title="压缩与解压"></a>压缩与解压</h3><ul>
+<li><code>bzip2 file1</code> - 压缩文件</li>
+<li><code>gunzip file1.gz</code> - 解压gzip文件</li>
+<li><code>gzip file1</code> - 压缩文件</li>
+<li><code>gzip -9 file1</code> - 最大程度压缩</li>
+<li><code>rar a file1.rar test_file</code> - 创建rar压缩包</li>
+<li><code>rar x file1.rar</code> - 解压rar包</li>
+<li><code>unrar x file1.rar</code> - 解压rar包</li>
+<li><code>tar zcvf 压缩文件名 压缩文件</code> - 创建gzip压缩的tar包</li>
+<li><code>tar zxvf 解压包名</code> - 解压gzip压缩的tar包</li>
+<li><code>tar -jcvf 压缩文件名</code> - 创建bzip2压缩的tar包</li>
+<li><code>tar jxvf 解压包名</code> - 解压bzip2压缩的tar包</li>
+<li><code>zip -q -r 压缩文件名 目录</code> - 创建zip压缩包</li>
+<li><code>unzip 压缩文件名</code> - 解压zip压缩包</li>
+</ul>
+<h2 id="9-文本编辑"><a href="#9-文本编辑" class="headerlink" title="9. 文本编辑"></a>9. 文本编辑</h2><h3 id="vi-vim编辑器"><a href="#vi-vim编辑器" class="headerlink" title="vi&#x2F;vim编辑器"></a>vi&#x2F;vim编辑器</h3><h4 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h4><ol>
+<li><strong>命令模式</strong> - 控制光标移动，进行删除、复制等操作</li>
+<li><strong>插入模式</strong> - 输入文本内容</li>
+<li><strong>底行模式</strong> - 保存、退出、搜索等</li>
+</ol>
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><ul>
+<li><code>vi filename</code> - 打开或新建文件，光标置于第一行首</li>
+<li><code>vi +n filename</code> - 打开文件，光标置于第n行首</li>
+<li><code>vi + filename</code> - 打开文件，光标置于最后一行首</li>
+<li><code>i</code> - 在当前位置前插入</li>
+<li><code>I</code> - 在当前行首插入</li>
+<li><code>a</code> - 在当前位置后插入</li>
+<li><code>A</code> - 在当前行尾插入</li>
+<li><code>o</code> - 在当前行之后插入一行</li>
+<li><code>O</code> - 在当前行之前插入一行</li>
+<li><code>dd</code> - 删除当前行</li>
+<li><code>2dd</code> - 删除2行</li>
+<li><code>yy</code> - 复制当前行</li>
+<li><code>nyy</code> - 复制当前行及之后n行</li>
+<li><code>p</code> - 在当前光标后粘贴</li>
+<li><code>u</code> - 撤销操作</li>
+</ul>
+<h4 id="查找与替换"><a href="#查找与替换" class="headerlink" title="查找与替换"></a>查找与替换</h4><ul>
+<li><code>/text</code> - 向下查找text</li>
+<li><code>?text</code> - 向上查找text</li>
+<li><code>n</code> - 查找下一个匹配</li>
+<li><code>N</code> - 查找上一个匹配</li>
+</ul>
+<h4 id="退出命令"><a href="#退出命令" class="headerlink" title="退出命令"></a>退出命令</h4><ul>
+<li><code>:wq</code> - 保存并退出</li>
+<li><code>:q!</code> - 强制退出忽略更改</li>
+<li><code>:e!</code> - 放弃修改并重新打开文件</li>
+<li><code>:w</code> - 保存修改</li>
+<li><code>set number</code> 或 <code>set nu</code> - 显示行号</li>
+<li><code>:n</code> - 跳转到第n行</li>
+</ul>
+<h2 id="10-其他实用命令"><a href="#10-其他实用命令" class="headerlink" title="10. 其他实用命令"></a>10. 其他实用命令</h2><h3 id="防火墙管理"><a href="#防火墙管理" class="headerlink" title="防火墙管理"></a>防火墙管理</h3><ul>
+<li><code>iptables -L</code> - 查看防火墙规则</li>
+<li><code>iptables -F</code> - 清除防火墙规则</li>
+<li><code>/etc/init.d/iptables stop</code> - 停止iptables防火墙</li>
+<li><code>service iptables stop</code> - 停止iptables防火墙</li>
+<li><code>ufw disable</code> - 禁用UFW防火墙</li>
+<li><code>ufw enable</code> - 启用UFW防火墙</li>
+</ul>
+<h3 id="网络共享"><a href="#网络共享" class="headerlink" title="网络共享"></a>网络共享</h3><ul>
+<li><code>mount -t smbfs -o username=user,password=pass //WinClient/share /mnt/share</code> - 挂载Windows网络共享</li>
+</ul>
+<h3 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h3><ul>
+<li><code>/etc/network/interfaces</code> - 网卡配置文件路径</li>
+<li><code>ifconfig eth0 192.168.0.33</code> - 设置临时IP地址</li>
+</ul>
+<h3 id="DNS配置"><a href="#DNS配置" class="headerlink" title="DNS配置"></a>DNS配置</h3><ul>
+<li><code>/etc/resolv.conf</code> - DNS配置文件路径</li>
+<li><code>nameserver 114.114.114.114</code> - 设置DNS服务器</li>
+</ul>
+<h3 id="系统工具"><a href="#系统工具" class="headerlink" title="系统工具"></a>系统工具</h3><ul>
+<li><code>wmic product &gt; ins.txt</code> - 查看安装软件信息（Windows命令）</li>
+<li><code>systeminfo</code> - 查看系统信息（Windows命令）</li>
+<li><code>whoami</code> - 查看当前用户及权限（Windows命令）</li>
+<li><code>whoami /all</code> - 查看当前用户详细权限信息（Windows命令）</li>
+</ul>
+<hr>
+<p><em>注：本笔记中包含部分Windows命令，已特别标注。Kali Linux主要使用Linux命令，部分命令可能需要root权限才能执行。</em></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">windows常用指令</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-13 16:53:36 / 修改时间：16:53:30" itemprop="dateCreated datePublished" datetime="2025-12-13T16:53:36+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" class="post-meta-item leancloud_visitors" data-flag-title="windows常用指令" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>930</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="网络配置与信息"><a href="#网络配置与信息" class="headerlink" title="网络配置与信息"></a>网络配置与信息</h2><h3 id="基本网络信息"><a href="#基本网络信息" class="headerlink" title="基本网络信息"></a>基本网络信息</h3><ul>
+<li><code>ifconfig /all</code> - 获取域名、IP地址、DHCP服务器、网关、MAC地址、主机名</li>
+<li><code>net config workstation</code> - 查看域名、机器名等</li>
+<li><code>route print</code> - 显示IP路由，主要显示网络地址、子网掩码、网关地址和接口地址</li>
+<li><code>arp</code> - 查看和处理ARP缓存，ARP是名字解析的意思，负责把一个IP解析成一个物理性的MAC地址</li>
+<li><code>arp -a</code> - 查看ARP缓存信息</li>
+<li><code>nslookup</code> - IP地址侦测器</li>
+</ul>
+<h3 id="网络连接状态"><a href="#网络连接状态" class="headerlink" title="网络连接状态"></a>网络连接状态</h3><ul>
+<li><code>netstat -a</code> - 查看开启了哪些端口（常用<code>netstat -an</code>）</li>
+<li><code>netstat -n</code> - 查看端口的网络连接情况（常用<code>netstat -an</code>）</li>
+<li><code>netstat -o</code> - 查看所有网络连接的进程ID（PID）</li>
+<li><code>netstat -ano | findstr &quot;:80&quot;</code> - 查找包含”80”的连接（最常用）</li>
+<li><code>netstat -v</code> - 查看正在进行的工作</li>
+<li><code>netstat -p 协议名</code> - 查看某协议使用情况，如：<code>netstat -p tcp</code></li>
+<li><code>netstat -s</code> - 查看所有协议使用情况</li>
+</ul>
+<h3 id="域网络信息"><a href="#域网络信息" class="headerlink" title="域网络信息"></a>域网络信息</h3><ul>
+<li><code>net time /domain</code> - 查看域名、时间</li>
+<li><code>net view /domain</code> - 查看域内所有共享</li>
+<li><code>net view ip</code> - 查看对方局域网内开启了哪些共享</li>
+<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（需136-139端口开放，参数-A要大写）</li>
+</ul>
+<h2 id="用户与组管理"><a href="#用户与组管理" class="headerlink" title="用户与组管理"></a>用户与组管理</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><code>net user 用户名 密码 /add</code> - 创建新用户</li>
+<li><code>net user 用户名 /del</code> - 删除用户</li>
+<li><code>net user guest /active:yes</code> - 激活guest账户</li>
+<li><code>net user</code> - 查看所有账户</li>
+<li><code>net user 账户名</code> - 查看指定账户信息</li>
+<li><code>net user /domain</code> - 查看域内有哪些用户（Windows NT Workstation计算机上可用，可判断用户是否是域成员）</li>
+<li><code>net user 用户名 /domain</code> - 查看域内指定账户信息</li>
+<li><code>query user</code> - 查看当前在线的用户</li>
+<li><code>whoami</code> - 查看当前用户及权限</li>
+<li><code>whoami /all</code> - 查看当前用户的详细权限信息</li>
+</ul>
+<h3 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h3><ul>
+<li><code>net group /domain</code> - 查看域中的组</li>
+<li><code>net group &quot;domain admins&quot; /domain</code> - 查看当前域的管理员</li>
+<li><code>net localgroup</code> - 查看所有本地组</li>
+<li><code>net localgroup administrators</code> - 查看administrators组中的用户</li>
+<li><code>net localgroup administrators 用户名 /add</code> - 将用户添加到管理员组</li>
+</ul>
+<h2 id="服务与进程管理"><a href="#服务与进程管理" class="headerlink" title="服务与进程管理"></a>服务与进程管理</h2><h3 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h3><ul>
+<li><code>net start</code> - 查看已开启的服务</li>
+<li><code>net start 服务名</code> - 启动指定服务</li>
+<li><code>net stop 服务名</code> - 停止指定服务</li>
+</ul>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
+<li><code>tasklist</code> - 查看当前进程</li>
+<li><code>tasklist /svc</code> - 查看当前计算机进程及对应服务</li>
+<li><code>taskkill /pid PID数</code> - 终止指定PID的进程</li>
+<li><code>netstat -ano</code> - 查看当前计算机进程情况</li>
+</ul>
+<h3 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h3><ul>
+<li><code>systeminfo</code> - 查看计算机信息（版本、位数、补丁情况）</li>
+<li><code>ver</code> - 查看操作系统版本</li>
+</ul>
+<h2 id="文件共享与远程访问"><a href="#文件共享与远程访问" class="headerlink" title="文件共享与远程访问"></a>文件共享与远程访问</h2><h3 id="共享管理"><a href="#共享管理" class="headerlink" title="共享管理"></a>共享管理</h3><ul>
+<li><code>net share</code> - 查看本地开启的共享</li>
+<li><code>net share ipc$</code> - 开启ipc$共享</li>
+<li><code>net share ipc$ /del</code> - 删除ipc$共享</li>
+<li><code>net share c$ /del</code> - 删除C:共享</li>
+<li><code>\\IP\c</code> - 访问默认共享c盘，如：<code>\\192.168.0.108\c</code></li>
+</ul>
+<h3 id="远程连接"><a href="#远程连接" class="headerlink" title="远程连接"></a>远程连接</h3><ul>
+<li><code>net use \\目标IP\ipc$ 密码 /u:用户名</code> - 连接目标机器</li>
+<li><code>at \\目标IP 21:31 c:\server.exe</code> - 在指定时间启动应用（适用于低版本Windows）</li>
+<li><code>wmic /node:&quot;目标IP&quot; /password:&quot;123456&quot; /user:&quot;admin&quot;</code> - 连接目标机器</li>
+<li><code>psexec.exe \\目标IP -u username -p password -s cmd</code> - 在目标机器上执行cmd</li>
+<li><code>finger username @host</code> - 查看最近登录的用户</li>
+</ul>
+<h2 id="域控制器相关"><a href="#域控制器相关" class="headerlink" title="域控制器相关"></a>域控制器相关</h2><ul>
+<li><code>dsquery server</code> - 查看所有域控制器</li>
+<li><code>dsquery subnet</code> - 查看域内子网</li>
+<li><code>dsquery group</code> - 查看域内工作组</li>
+<li><code>dsquery site</code> - 查看域内站点</li>
+</ul>
+<h2 id="注册表与系统备份"><a href="#注册表与系统备份" class="headerlink" title="注册表与系统备份"></a>注册表与系统备份</h2><ul>
+<li><code>reg save hklm\sam sam.hive</code> - 导出用户组信息、权限配置</li>
+<li><code>reg save hklm\system system.hive</code> - 导出SYSKEY</li>
+</ul>
+<h2 id="其他实用命令"><a href="#其他实用命令" class="headerlink" title="其他实用命令"></a>其他实用命令</h2><ul>
+<li><code>wmic product &gt; ins.txt</code> - 查看安装软件及版本路径等信息，输出到ins.txt文件（位于用户目录下）</li>
+</ul>
+<hr>
+<p><em>注：以上命令基于Windows系统，部分命令可能需要管理员权限才能执行。</em></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2739,7 +3279,7 @@
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#97;&#x62;&#99;&#64;&#x63;&#115;&#107;&#97;&#x6f;&#x79;&#97;&#110;&#x2e;&#x63;&#x6f;&#x6d;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#x61;&#98;&#99;&#64;&#x63;&#x73;&#107;&#97;&#111;&#x79;&#x61;&#x6e;&#46;&#99;&#111;&#x6d;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>
@@ -8167,1138 +8707,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">第 1 章 计算机网络体系结构</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-05 17:43:12 / 修改时间：17:46:15" itemprop="dateCreated datePublished" datetime="2025-12-05T17:43:12+08:00">2025-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2025/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-meta-item leancloud_visitors" data-flag-title="第 1 章 计算机网络体系结构" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
-<li>计算机网络的概念<ul>
-<li>定义<ul>
-<li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
-<li>由功能完善的软件实现资源共享和信息传递的系统</li>
-</ul>
-</li>
-<li>组成<ul>
-<li>节点(Node)<ul>
-<li>计算机</li>
-<li>集线器</li>
-<li>交换机</li>
-<li>路由器</li>
-</ul>
-</li>
-<li>链路(Link)</li>
-</ul>
-</li>
-<li>互连网(internet)<ul>
-<li>网络之间通过路由器互连</li>
-<li>构成覆盖范围更广的计算机网络</li>
-</ul>
-</li>
-<li>名词区分<ul>
-<li>internet(互连网)<ul>
-<li>通用名词</li>
-<li>多个计算机网络互连而成</li>
-<li>可使用任意通信协议</li>
-</ul>
-</li>
-<li>Internet(互联网&#x2F;因特网)<ul>
-<li>专用名词</li>
-<li>全球最大、开放的特定计算机网络</li>
-<li>采用TCP&#x2F;IP族作为通信规则</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-2-计算机网络的组成"><a href="#1-1-2-计算机网络的组成" class="headerlink" title="1.1.2   计算机网络的组成"></a>1.1.2   计算机网络的组成</h3><ul>
-<li>从组成部分看<ul>
-<li>硬件<ul>
-<li>主机(端系统)</li>
-<li>通信链路<ul>
-<li>双绞线</li>
-<li>光纤</li>
-</ul>
-</li>
-<li>交换设备<ul>
-<li>路由器</li>
-<li>交换机</li>
-</ul>
-</li>
-<li>通信处理机<ul>
-<li>网卡</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>软件<ul>
-<li>资源共享软件</li>
-<li>工具软件<ul>
-<li>E-mail程序</li>
-<li>FTP程序</li>
-<li>聊天程序</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>协议<ul>
-<li>网络传输数据规范</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>从工作方式看(Internet)<ul>
-<li>边缘部分<ul>
-<li>用户直接使用的主机</li>
-<li>功能<ul>
-<li>通信<ul>
-<li>数据传输</li>
-<li>音频&#x2F;视频</li>
-</ul>
-</li>
-<li>资源共享</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>核心部分<ul>
-<li>网络和路由器</li>
-<li>功能<ul>
-<li>提供连通性</li>
-<li>交换服务</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>从功能组成看<ul>
-<li>通信子网<ul>
-<li>组成<ul>
-<li>传输介质</li>
-<li>通信设备</li>
-<li>网络协议</li>
-</ul>
-</li>
-<li>功能<ul>
-<li>数据传输</li>
-<li>交换</li>
-<li>控制</li>
-<li>存储</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>资源子网<ul>
-<li>组成<ul>
-<li>资源共享设备</li>
-<li>软件</li>
-</ul>
-</li>
-<li>功能<ul>
-<li>提供硬件资源共享服务</li>
-<li>提供软件资源共享服务</li>
-<li>提供数据资源共享服务</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-3-计算机网络的功能"><a href="#1-1-3-计算机网络的功能" class="headerlink" title="1.1.3    计算机网络的功能"></a>1.1.3    计算机网络的功能</h3><ul>
-<li>数据通信<ul>
-<li>最基本和最重要的功能</li>
-<li>实现联网计算机之间各种信息的传输</li>
-<li>应用示例<ul>
-<li>文件传输</li>
-<li>电子邮件</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>资源共享<ul>
-<li>共享类型<ul>
-<li>软件共享</li>
-<li>数据共享</li>
-<li>硬件共享</li>
-</ul>
-</li>
-<li>优势<ul>
-<li>互通有无、分工协作</li>
-<li>提高资源利用率</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分布式处理<ul>
-<li>定义<ul>
-<li>将复杂任务分配给网络中空闲计算机</li>
-</ul>
-</li>
-<li>优势<ul>
-<li>提高系统利用率</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>提高可靠性<ul>
-<li>定义<ul>
-<li>各台计算机互为替代机</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>负载均衡<ul>
-<li>定义<ul>
-<li>均衡分配工作任务给各台计算机</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>其他功能<ul>
-<li>电子化办公与服务</li>
-<li>远程教育</li>
-<li>娱乐功能</li>
-<li>社会效益<ul>
-<li>满足社会需求</li>
-<li>方便学习、工作和生活</li>
-<li>巨大经济效益</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-4-电路交换、报文交换与分组交换"><a href="#1-1-4-电路交换、报文交换与分组交换" class="headerlink" title="1.1.4    电路交换、报文交换与分组交换"></a>1.1.4    电路交换、报文交换与分组交换</h3><ul>
-<li>电路交换<ul>
-<li>特点<ul>
-<li>建立连接、传输数据、释放连接</li>
-<li>物理通信路径独占</li>
-</ul>
-</li>
-<li>优点<ul>
-<li>通信时延小</li>
-<li>有序传输</li>
-<li>没有冲突</li>
-<li>实时性强</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>建立连接时间长</li>
-<li>线路利用率低</li>
-<li>灵活性差</li>
-<li>难以实现差错控制</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>报文交换<ul>
-<li>特点<ul>
-<li>存储转发技术</li>
-<li>报文为单位传输</li>
-</ul>
-</li>
-<li>优点<ul>
-<li>无建立连接时延</li>
-<li>灵活分配线路</li>
-<li>线路利用率高</li>
-<li>支持差错控制</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>转发时延高</li>
-<li>缓存开销大</li>
-<li>错误处理低效</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分组交换<ul>
-<li>特点<ul>
-<li>存储转发技术</li>
-<li>将报文划分为分组</li>
-</ul>
-</li>
-<li>优点<ul>
-<li>方便存储管理</li>
-<li>传输效率高</li>
-<li>减少出错概率和重传代价</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>存在存储转发时延</li>
-<li>需要传输额外信息量</li>
-<li>可能出现失序、丢失或重复分组</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>三种交换方式比较<ul>
-<li>电路交换适合连续大量数据传输</li>
-<li>报文交换和分组交换信道利用率更高</li>
-<li>分组交换更适合突发式数据传送</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-5-计算机网络的分类"><a href="#1-1-5-计算机网络的分类" class="headerlink" title="1.1.5    计算机网络的分类"></a>1.1.5    计算机网络的分类</h3><ul>
-<li>按分布范围分类<ul>
-<li>广域网 (WAN)<ul>
-<li>任务: 提供长距离通信</li>
-<li>覆盖范围: 几十米到几千千米</li>
-<li>特点: 互联网核心部分, 高速链路</li>
-</ul>
-</li>
-<li>城域网 (MAN)<ul>
-<li>覆盖范围: 5～50km</li>
-<li>技术: 以太网技术</li>
-</ul>
-</li>
-<li>局域网 (LAN)<ul>
-<li>覆盖范围: 几十到几千米</li>
-<li>特点: 主机高速线路相连, 广播技术</li>
-</ul>
-</li>
-<li>个人区域网 (PAN)<ul>
-<li>定义: 个人电子设备无线连接</li>
-<li>别名: 无线个人区域网 (WPAN)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>按传输技术分类<ul>
-<li>广播式网络<ul>
-<li>特点: 共享公共通信信道</li>
-<li>应用: 局域网, 无线&#x2F;卫星通信</li>
-</ul>
-</li>
-<li>点对点网络<ul>
-<li>特点: 物理线路连接一对计算机</li>
-<li>传输方式: 存储转发</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>按拓扑结构分类<ul>
-<li>总线形网络<ul>
-<li>特点: 单根传输线连接</li>
-<li>优点: 建网容易, 节省线路</li>
-<li>缺点: 重负载效率低</li>
-</ul>
-</li>
-<li>星形网络<ul>
-<li>特点: 单独线路连接中央设备</li>
-<li>优点: 便于集中控制</li>
-<li>缺点: 成本高</li>
-</ul>
-</li>
-<li>环形网络<ul>
-<li>特点: 接口设备连接成环</li>
-<li>例子: 令牌环局域网</li>
-</ul>
-</li>
-<li>网状网络<ul>
-<li>特点: 每个节点多条路径</li>
-<li>应用: 广域网</li>
-<li>优点: 可靠性高</li>
-<li>缺点: 控制复杂</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>按使用者分类<ul>
-<li>公用网 (Public Network)<ul>
-<li>特点: 电信公司建造, 付费使用</li>
-</ul>
-</li>
-<li>专用网 (Private Network)<ul>
-<li>特点: 单位专用, 不对外开放</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>按传输介质分类<ul>
-<li>有线网络<ul>
-<li>类型<ul>
-<li>双绞线</li>
-<li>同轴电缆</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>无线网络<ul>
-<li>类型<ul>
-<li>蓝牙</li>
-<li>微波</li>
-<li>无线电</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-6-计算机网络的性能指标"><a href="#1-1-6-计算机网络的性能指标" class="headerlink" title="1.1.6    计算机网络的性能指标"></a>1.1.6    计算机网络的性能指标</h3><ul>
-<li>1)速率 (Speed)<ul>
-<li>定义:节点在数字信道上传送数据的速率</li>
-<li>别名:数据传输速率&#x2F;数据率&#x2F;比特率</li>
-<li>单位:b&#x2F;s(bit&#x2F;s&#x2F;bps)</li>
-<li>高数据率表示:kb&#x2F;s(10³)&#x2F;Mb&#x2F;s(10⁶)&#x2F;Gb&#x2F;s(10⁹)</li>
-</ul>
-</li>
-<li>2)带宽(Bandwidth)<ul>
-<li>原义:通信线路允许通过的信号频率范围(Hz)</li>
-<li>网络定义:通信线路传送数据的能力(最高数据传输速率)</li>
-<li>单位:b&#x2F;s</li>
-</ul>
-</li>
-<li>3)吞吐量(Throughput)<ul>
-<li>定义:单位时间通过网络的实际数据量</li>
-<li>用途:实际网络测量</li>
-</ul>
-</li>
-<li>4)时延(Delay)<ul>
-<li>定义:数据从网络一端传送到另一端的总时间</li>
-<li>组成:<ul>
-<li>发送时延(传输时延)<ul>
-<li>公式:分组长度&#x2F;发送速率</li>
-</ul>
-</li>
-<li>传播时延<ul>
-<li>公式:信道长度&#x2F;电磁波传播速率</li>
-</ul>
-</li>
-<li>处理时延</li>
-<li>排队时延</li>
-</ul>
-</li>
-<li>总时延公式:发送+传播+处理+排队</li>
-</ul>
-</li>
-<li>5)时延带宽积<ul>
-<li>定义:传播时延×信道带宽</li>
-<li>物理意义:链路可容纳的比特数量</li>
-</ul>
-</li>
-<li>6)往返时延(RTT)<ul>
-<li>定义:发送分组到收到确认的总时间</li>
-<li>包含:中间节点处理&#x2F;排队&#x2F;发送时延</li>
-</ul>
-</li>
-<li>7)信道利用率<ul>
-<li>定义:信道有数据通过的时间百分比</li>
-<li>公式:有数据时间&#x2F;(有数据+无数据时间)</li>
-<li>注意事项:过高会导致时延增大</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-计算机网络体系结构与参考模型"><a href="#1-2-计算机网络体系结构与参考模型" class="headerlink" title="1.2   计算机网络体系结构与参考模型"></a>1.2   计算机网络体系结构与参考模型</h2><h3 id="1-2-1-计算机网络分层结构"><a href="#1-2-1-计算机网络分层结构" class="headerlink" title="1.2.1    计算机网络分层结构"></a>1.2.1    计算机网络分层结构</h3><ul>
-<li>网络体系结构的定义<ul>
-<li>计算机网络的各层及其协议的集合称为网络的体系结构</li>
-<li>体系结构是抽象的，实现是具体的</li>
-</ul>
-</li>
-<li>分层的基本原则<ul>
-<li>1)每层实现相对独立的功能</li>
-<li>2)各层接口清晰，交流少</li>
-<li>3)功能定义独立于实现方法</li>
-<li>4)下层对上层的独立性</li>
-<li>5)促进标准化工作</li>
-</ul>
-</li>
-<li>分层结构中的概念<ul>
-<li>实体<ul>
-<li>第n层的活动元素</li>
-<li>对等层和对等实体</li>
-</ul>
-</li>
-<li>服务关系<ul>
-<li>第n层向第n+1层提供服务</li>
-<li>服务提供者与服务用户</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>数据单元<ul>
-<li>协议数据单元(PDU)<ul>
-<li>n-PDU &#x3D; n-SDU + n-PCI</li>
-<li>各层PDU名称<ul>
-<li>物理层：比特流</li>
-<li>数据链路层：帧</li>
-<li>网络层：分组</li>
-<li>传输层：报文段</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>服务数据单元(SDU)</li>
-<li>协议控制信息(PCI)</li>
-</ul>
-</li>
-<li>层次结构的含义<ul>
-<li>1)第n层使用n-1层服务，并向n+1层提供服务</li>
-<li>2)最低层只提供服务，最高层面向用户</li>
-<li>3)上层只能通过相邻层接口使用下层服务</li>
-<li>4)对等层在逻辑上有直接信道</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-2-2-计算机网络协议、接口、服务的概念"><a href="#1-2-2-计算机网络协议、接口、服务的概念" class="headerlink" title="1.2.2    计算机网络协议、接口、服务的概念"></a>1.2.2    计算机网络协议、接口、服务的概念</h3><ul>
-<li>协议<ul>
-<li>定义<ul>
-<li>控制对等实体之间通信的规则的集合</li>
-<li>是水平的</li>
-</ul>
-</li>
-<li>组成<ul>
-<li>语法<ul>
-<li>数据与控制信息的格式</li>
-</ul>
-</li>
-<li>语义<ul>
-<li>需要发出何种控制信息、完成何种动作及做出何种应答</li>
-</ul>
-</li>
-<li>同步(时序)<ul>
-<li>执行各种操作的条件、时序关系</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>接口<ul>
-<li>定义<ul>
-<li>同一节点内相邻两层实体交换信息的逻辑接口(SAP)</li>
-</ul>
-</li>
-<li>特点<ul>
-<li>只能在紧邻层之间定义</li>
-<li>第n层SAP是第n+1层访问第n层服务的入口</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>服务<ul>
-<li>定义<ul>
-<li>下层为紧邻上层提供的功能调用</li>
-<li>是垂直的</li>
-</ul>
-</li>
-<li>服务与协议的区别<ul>
-<li>协议是水平的，服务是垂直的</li>
-<li>只有本层协议实现才能向上层提供服务</li>
-<li>下层协议对上层服务用户透明</li>
-</ul>
-</li>
-<li>服务分类<ul>
-<li>面向连接服务与无连接服务<ul>
-<li>面向连接服务<ul>
-<li>三个阶段：连接建立、数据传输、连接释放</li>
-</ul>
-</li>
-<li>无连接服务<ul>
-<li>直接发送数据包</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>可靠服务和不可靠服务<ul>
-<li>可靠服务<ul>
-<li>具有纠错、检错、应答机制</li>
-</ul>
-</li>
-<li>不可靠服务<ul>
-<li>尽力而为的服务</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>有应答服务和无应答服务<ul>
-<li>有应答服务<ul>
-<li>传输系统内部自动实现应答</li>
-</ul>
-</li>
-<li>无应答服务<ul>
-<li>需要应答由高层实现</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-2-3-ISO-OSI-参考模型和TCP-IP模-型"><a href="#1-2-3-ISO-OSI-参考模型和TCP-IP模-型" class="headerlink" title="1.2.3   ISO&#x2F;OSI 参考模型和TCP&#x2F;IP模 型"></a>1.2.3   ISO&#x2F;OSI 参考模型和TCP&#x2F;IP模 型</h3><ul>
-<li>OSI 参考模型<ul>
-<li>层次结构<ul>
-<li>物理层<ul>
-<li>传输单位:比特</li>
-<li>功能:透明传输原始比特流</li>
-<li>研究内容<ul>
-<li>电路接口参数</li>
-<li>信号意义和电气特征</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>数据链路层<ul>
-<li>传输单位:帧</li>
-<li>功能<ul>
-<li>差错控制</li>
-<li>流量控制</li>
-<li>广播信道访问控制</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>网络层<ul>
-<li>传输单位:数据报</li>
-<li>功能<ul>
-<li>路由选择</li>
-<li>流量控制</li>
-<li>拥塞控制</li>
-<li>差错控制</li>
-<li>网际互联</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>传输层<ul>
-<li>传输单位:报文段&#x2F;用户数据报</li>
-<li>功能<ul>
-<li>端到端通信</li>
-<li>流量控制</li>
-<li>差错控制</li>
-<li>连接管理</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>会话层<ul>
-<li>功能<ul>
-<li>建立&#x2F;管理&#x2F;终止会话</li>
-<li>同步机制</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>表示层<ul>
-<li>功能<ul>
-<li>数据表示转换</li>
-<li>数据压缩</li>
-<li>加密解密</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>应用层<ul>
-<li>功能:用户与网络接口</li>
-<li>协议:多种应用协议</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP 模型<ul>
-<li>层次结构<ul>
-<li>网络接口层<ul>
-<li>对应OSI:物理层+数据链路层</li>
-</ul>
-</li>
-<li>网际层<ul>
-<li>核心协议:IP</li>
-<li>功能:分组路由选择</li>
-</ul>
-</li>
-<li>传输层<ul>
-<li>协议<ul>
-<li>TCP:面向连接可靠传输</li>
-<li>UDP:无连接不可靠传输</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>应用层<ul>
-<li>协议<ul>
-<li>Telnet</li>
-<li>FTP</li>
-<li>DNS</li>
-<li>SMTP</li>
-<li>HTTP</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP模型与OSI参考模型比较<ul>
-<li>相似之处<ul>
-<li>分层体系结构</li>
-<li>独立协议栈</li>
-<li>解决异构网络互联</li>
-</ul>
-</li>
-<li>差异<ul>
-<li>概念区分<ul>
-<li>OSI明确区分服务&#x2F;协议&#x2F;接口</li>
-<li>TCP&#x2F;IP未明确区分</li>
-</ul>
-</li>
-<li>层次数量<ul>
-<li>OSI:7层</li>
-<li>TCP&#x2F;IP:4层</li>
-</ul>
-</li>
-<li>设计顺序<ul>
-<li>OSI:先模型后协议</li>
-<li>TCP&#x2F;IP:先协议后模型</li>
-</ul>
-</li>
-<li>通信模式<ul>
-<li>OSI网络层:无连接+面向连接</li>
-<li>TCP&#x2F;IP网际层:仅无连接</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/WEB%E5%AE%89%E5%85%A8HTML%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/05/WEB%E5%AE%89%E5%85%A8HTML%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">WEB安全 HTML基础</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-05 14:58:41 / 修改时间：21:14:40" itemprop="dateCreated datePublished" datetime="2025-12-05T14:58:41+08:00">2025-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/%E5%89%8D%E7%AB%AF-%E5%90%8E%E7%AB%AF%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">前端&后端基础</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2025/12/05/WEB%E5%AE%89%E5%85%A8HTML%E5%9F%BA%E7%A1%80/" class="post-meta-item leancloud_visitors" data-flag-title="WEB安全 HTML基础" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>15 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-简单的HTML页面架构"><a href="#1-简单的HTML页面架构" class="headerlink" title="1. 简单的HTML页面架构"></a>1. 简单的HTML页面架构</h2><p>HTML5标准文档结构是网页的基础框架，包含文档类型声明、根元素、头部和主体部分。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>WEB安全学习平台<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 页面内容将放置在这里 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>关键点解析：</strong></p>
-<ul>
-<li><code>&lt;!DOCTYPE html&gt;</code>：声明文档类型为HTML5，确保浏览器以标准模式渲染页面</li>
-<li><code>&lt;html lang=&quot;zh-CN&quot;&gt;</code>：根元素，<code>lang</code>属性指定页面语言为中文</li>
-<li><code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code>：设置字符编码为UTF-8，确保中文等特殊字符正常显示</li>
-<li><code>&lt;title&gt;</code>：定义浏览器标签页显示的标题</li>
-<li><code>&lt;body&gt;</code>：包含所有页面可见内容的容器</li>
-</ul>
-<p><strong>安全提示</strong>：UTF-8编码是安全首选，避免使用GBK等编码，防止编码转换导致的XSS漏洞。</p>
-<h2 id="2-HTML常见标签详解"><a href="#2-HTML常见标签详解" class="headerlink" title="2. HTML常见标签详解"></a>2. HTML常见标签详解</h2><h3 id="2-1-meta标签"><a href="#2-1-meta标签" class="headerlink" title="2.1 meta标签"></a>2.1 meta标签</h3><p><code>&lt;meta&gt;</code> 元素用于提供关于HTML文档的元数据，对SEO和安全配置至关重要。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 字符编码 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 页面描述（SEO优化） --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;description&quot;</span> <span class="attr">content</span>=<span class="string">&quot;WEB安全HTML基础教程 - 安全渗透必备技能&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 关键词（现代搜索引擎已不依赖，但部分场景仍有用） --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;网络安全, WEB渗透, 数据安全, 渗透测试, 安全培训&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 作者信息 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;author&quot;</span> <span class="attr">content</span>=<span class="string">&quot;moonsec&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 移动设备适配 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 内容安全策略（CSP）- 重要安全配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> </span></span><br><span class="line"><span class="tag">          <span class="attr">content</span>=<span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27; https://trusted.cdn.com; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- X-Frame-Options - 防止点击劫持 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-Frame-Options&quot;</span> <span class="attr">content</span>=<span class="string">&quot;DENY&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 刷新页面（5秒后跳转） --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;refresh&quot;</span> <span class="attr">content</span>=<span class="string">&quot;5;url=https://www.example.com&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>安全说明：</strong></p>
-<ul>
-<li><code>Content-Security-Policy</code> 是防御XSS攻击的重要手段，限制可执行的脚本来源</li>
-<li><code>X-Frame-Options: DENY</code> 防止页面被嵌入到iframe中，避免点击劫持攻击</li>
-<li><code>charset=UTF-8</code> 是安全基础，避免编码转换漏洞</li>
-</ul>
-<h3 id="2-2-标题标签"><a href="#2-2-标题标签" class="headerlink" title="2.2 标题标签"></a>2.2 标题标签</h3><p>HTML提供6级标题标签，从<code>&lt;h1&gt;</code>到<code>&lt;h6&gt;</code>，其中<code>&lt;h1&gt;</code>级别最高，<code>&lt;h6&gt;</code>最低。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>WEB安全核心知识<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>HTML基础<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>表单安全<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>常见漏洞类型<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h5</span>&gt;</span>XSS攻击原理<span class="tag">&lt;/<span class="name">h5</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h6</span>&gt;</span>防御措施<span class="tag">&lt;/<span class="name">h6</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 换行标签 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>这是第一段内容<span class="tag">&lt;<span class="name">br</span>&gt;</span>换行后的内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 水平线标签 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>水平线分割内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>最佳实践：</strong></p>
-<ul>
-<li>一个页面通常只有一个<code>&lt;h1&gt;</code>，用于主标题</li>
-<li>标题层级应逐级下降，不要跳级使用（如不要从<code>&lt;h1&gt;</code>直接到<code>&lt;h4&gt;</code>）</li>
-<li>合理的标题结构有助于屏幕阅读器理解页面结构，提升可访问性</li>
-<li>换行标签<code>&lt;br&gt;</code>应避免过度使用，优先使用CSS控制布局</li>
-</ul>
-<h3 id="2-3-文本属性"><a href="#2-3-文本属性" class="headerlink" title="2.3 文本属性"></a>2.3 文本属性</h3><p>常用文本格式化标签，注意HTML5中已废弃某些标签，应使用CSS替代。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>加粗文本（语义重要）<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> 或 <span class="tag">&lt;<span class="name">b</span>&gt;</span>加粗文本（仅视觉）<span class="tag">&lt;/<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">em</span>&gt;</span>斜体文本（语义强调）<span class="tag">&lt;/<span class="name">em</span>&gt;</span> 或 <span class="tag">&lt;<span class="name">i</span>&gt;</span>斜体文本（仅视觉）<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">u</span>&gt;</span>下划线文本（谨慎使用，通常用于链接）<span class="tag">&lt;/<span class="name">u</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>数学公式: X<span class="tag">&lt;<span class="name">sup</span>&gt;</span>2<span class="tag">&lt;/<span class="name">sup</span>&gt;</span> + H<span class="tag">&lt;<span class="name">sub</span>&gt;</span>2<span class="tag">&lt;/<span class="name">sub</span>&gt;</span>O<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">del</span>&gt;</span>已删除的内容<span class="tag">&lt;/<span class="name">del</span>&gt;</span> <span class="tag">&lt;<span class="name">ins</span>&gt;</span>已添加的内容<span class="tag">&lt;/<span class="name">ins</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span></span><br><span class="line">    预格式化文本示例：</span><br><span class="line">      保留空格和换行</span><br><span class="line">      function example() &#123;</span><br><span class="line">          console.log(&quot;Hello World&quot;);</span><br><span class="line">      &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>安全注意事项：</strong></p>
-<ul>
-<li><code>&lt;font&gt;</code> 标签在HTML5中已被废弃，应使用CSS控制字体样式</li>
-<li><code>&lt;strong&gt;</code> 和 <code>&lt;em&gt;</code> 具有语义含义，表示内容的重要性或强调，对SEO和可访问性有帮助</li>
-<li><code>&lt;del&gt;</code> 和 <code>&lt;ins&gt;</code> 用于表示内容的删除和添加，常用于修订文档</li>
-<li><code>&lt;pre&gt;</code> 保留所有空格和换行，适合展示代码、ASCII艺术等</li>
-</ul>
-<h3 id="2-4-form表单"><a href="#2-4-form表单" class="headerlink" title="2.4 form表单"></a>2.4 form表单</h3><p><code>&lt;form&gt;</code> 用于创建用户可提交数据的表单，是Web交互的核心组件，也是安全漏洞高发区。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/submit&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;username&quot;</span>&gt;</span>用户名:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;username&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;请输入用户名&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;password&quot;</span>&gt;</span>密码:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">id</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">minlength</span>=<span class="string">&quot;8&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>上传头像:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;avatar&quot;</span> <span class="attr">accept</span>=<span class="string">&quot;image/*&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;email&quot;</span>&gt;</span>邮箱:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;email&quot;</span> <span class="attr">id</span>=<span class="string">&quot;email&quot;</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;color&quot;</span>&gt;</span>选择颜色:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;color&quot;</span> <span class="attr">id</span>=<span class="string">&quot;color&quot;</span> <span class="attr">name</span>=<span class="string">&quot;color&quot;</span> <span class="attr">value</span>=<span class="string">&quot;#ff0000&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;checkbox1&quot;</span>&gt;</span>选项1<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">id</span>=<span class="string">&quot;checkbox1&quot;</span> <span class="attr">name</span>=<span class="string">&quot;option&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;checkbox2&quot;</span>&gt;</span>选项2<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">id</span>=<span class="string">&quot;checkbox2&quot;</span> <span class="attr">name</span>=<span class="string">&quot;option&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;radio1&quot;</span>&gt;</span>选项A<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">id</span>=<span class="string">&quot;radio1&quot;</span> <span class="attr">name</span>=<span class="string">&quot;group&quot;</span> <span class="attr">value</span>=<span class="string">&quot;A&quot;</span> <span class="attr">checked</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;radio2&quot;</span>&gt;</span>选项B<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;radio&quot;</span> <span class="attr">id</span>=<span class="string">&quot;radio2&quot;</span> <span class="attr">name</span>=<span class="string">&quot;group&quot;</span> <span class="attr">value</span>=<span class="string">&quot;B&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;reset&quot;</span> <span class="attr">value</span>=<span class="string">&quot;重置&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;abc123&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>安全关键点：</strong></p>
-<ul>
-<li><code>method=&quot;post&quot;</code>：数据通过HTTP请求体发送，适合敏感数据（如登录），GET方法会将数据暴露在URL中</li>
-<li><code>enctype=&quot;multipart/form-data&quot;</code>：文件上传时必须使用此编码类型</li>
-<li><code>required</code>：必填字段，提交时会自动验证</li>
-<li><code>placeholder</code>：输入框提示文本</li>
-<li><code>accept=&quot;image/*&quot;</code>：限制文件类型为图片</li>
-<li><code>minlength</code>：设置密码最小长度</li>
-<li><code>hidden</code>：隐藏域，用于传递不可见数据（如CSRF令牌）</li>
-<li><strong>安全提示</strong>：表单应使用HTTPS传输，对用户输入进行严格验证，防止XSS和SQL注入攻击</li>
-</ul>
-<h3 id="2-5-a标签、img标签、table标签"><a href="#2-5-a标签、img标签、table标签" class="headerlink" title="2.5 a标签、img标签、table标签"></a>2.5 a标签、img标签、table标签</h3><h4 id="a标签（超链接）"><a href="#a标签（超链接）" class="headerlink" title="a标签（超链接）"></a>a标签（超链接）</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 外部链接（新窗口打开） --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://www.baidu.com&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;noopener noreferrer&quot;</span>&gt;</span>百度（新窗口打开）<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 锚点跳转 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#section1&quot;</span>&gt;</span>跳转到章节1<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#section2&quot;</span>&gt;</span>跳转到章节2<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 锚点定义 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;section1&quot;</span>&gt;</span>章节1<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;section2&quot;</span>&gt;</span>章节2<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 邮箱链接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;mailto:example@example.com&quot;</span>&gt;</span>发送邮件<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 电话链接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;tel:+8613800138000&quot;</span>&gt;</span>拨打电话<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>安全注意事项：</strong></p>
-<ul>
-<li><code>rel=&quot;noopener noreferrer&quot;</code> 是必须的，防止新打开的页面通过<code>window.opener</code>访问原页面</li>
-<li>避免直接使用<code>target=&quot;_blank&quot;</code>而不加<code>rel</code>属性，存在安全风险</li>
-<li>锚点跳转应使用<code>id</code>属性，而非<code>name</code>属性</li>
-</ul>
-<h4 id="img标签（图像）"><a href="#img标签（图像）" class="headerlink" title="img标签（图像）"></a>img标签（图像）</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;logo.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;网站Logo&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">loading</span>=<span class="string">&quot;lazy&quot;</span> <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #ccc;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>关键属性：</strong></p>
-<ul>
-<li><code>src</code>：图像URL（必须）</li>
-<li><code>alt</code>：替代文本，当图像无法加载时显示，对SEO和可访问性至关重要，也是防止XSS攻击的关键</li>
-<li><code>width</code>&#x2F;<code>height</code>：设置图像尺寸（建议同时设置以避免布局抖动）</li>
-<li><code>loading=&quot;lazy&quot;</code>：延迟加载，提升页面性能</li>
-<li><strong>安全提示</strong>：始终设置<code>alt</code>属性，避免空alt（alt&#x3D;””）用于装饰性图片</li>
-</ul>
-<h4 id="table标签（表格）"><a href="#table标签（表格）" class="headerlink" title="table标签（表格）"></a>table标签（表格）</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>常见Web安全漏洞类型<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>漏洞类型<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>危害等级<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>检测方法<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>防御措施<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>XSS（跨站脚本）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>输入验证、输出编码检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>对用户输入进行过滤，对输出进行HTML编码<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL注入<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL语句参数化查询检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>使用预编译语句、ORM框架<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>CSRF（跨站请求伪造）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>中<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>检查Referer头、CSRF令牌验证<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>实施CSRF令牌机制、SameSite Cookie属性<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>表格结构详解：</strong></p>
-<table>
-<thead>
-<tr>
-<th>标签</th>
-<th>作用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>&lt;table&gt;</code></td>
-<td>表格容器</td>
-<td>定义表格的开始和结束</td>
-</tr>
-<tr>
-<td><code>&lt;caption&gt;</code></td>
-<td>表格标题</td>
-<td>放置在表格顶部，描述表格内容</td>
-</tr>
-<tr>
-<td><code>&lt;thead&gt;</code></td>
-<td>表头部分</td>
-<td>包含表格的表头行，通常包含<code>&lt;tr&gt;</code>和<code>&lt;th&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;tbody&gt;</code></td>
-<td>表格主体</td>
-<td>包含表格的主要数据行</td>
-</tr>
-<tr>
-<td><code>&lt;tfoot&gt;</code></td>
-<td>表尾部分</td>
-<td>包含表格的总结行（可选）</td>
-</tr>
-<tr>
-<td><code>&lt;tr&gt;</code></td>
-<td>表格行</td>
-<td>定义一行数据</td>
-</tr>
-<tr>
-<td><code>&lt;th&gt;</code></td>
-<td>表头单元格</td>
-<td>默认加粗并居中显示，用于表头</td>
-</tr>
-<tr>
-<td><code>&lt;td&gt;</code></td>
-<td>普通单元格</td>
-<td>用于表格中的常规数据单元格</td>
-</tr>
-</tbody></table>
-<p><strong>合并单元格示例：</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>漏洞类型与防御措施<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>漏洞类型<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span> <span class="attr">colspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>防御措施<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">rowspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>XSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>输入过滤<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>输出编码<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>使用Content Security Policy (CSP)<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL注入<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">&quot;2&quot;</span>&gt;</span>参数化查询、ORM框架<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>现代表格样式（推荐）：</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.security-table</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">border-collapse</span>: collapse;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">margin</span>: <span class="number">20px</span> <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.security-table</span> <span class="selector-tag">th</span>, <span class="selector-class">.security-table</span> <span class="selector-tag">td</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">padding</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ddd</span>;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.security-table</span> <span class="selector-tag">th</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">background-color</span>: <span class="number">#f2f2f2</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.high-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">color</span>: <span class="number">#e74c3c</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.medium-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">color</span>: <span class="number">#f39c12</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-class">.low-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">color</span>: <span class="number">#2ecc71</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">class</span>=<span class="string">&quot;security-table&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>常见Web安全漏洞类型<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>漏洞类型<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>危害等级<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>检测方法<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">th</span>&gt;</span>防御措施<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>XSS（跨站脚本）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;high-risk&quot;</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>输入验证、输出编码检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>对用户输入进行过滤，对输出进行HTML编码<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL注入<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;high-risk&quot;</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL语句参数化查询检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>使用预编译语句、ORM框架<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>CSRF（跨站请求伪造）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;medium-risk&quot;</span>&gt;</span>中<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>检查Referer头、CSRF令牌验证<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>实施CSRF令牌机制、SameSite Cookie属性<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>表格使用注意事项：</strong></p>
-<ul>
-<li>不要用表格做页面布局，现代Web开发应使用CSS Flexbox或Grid</li>
-<li>表格应只用于展示表格形式的数据</li>
-<li>为表格添加适当的标题和描述，提高屏幕阅读器的可访问性</li>
-</ul>
-<h3 id="2-6-锚文本"><a href="#2-6-锚文本" class="headerlink" title="2.6 锚文本"></a>2.6 锚文本</h3><p>锚文本用于页面内跳转，通过<code>id</code>属性定义锚点，然后使用<code>&lt;a href=&quot;#id&quot;&gt;</code>链接到该位置。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 锚点链接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#section3&quot;</span>&gt;</span>跳转到章节3<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 锚点定义 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;section3&quot;</span>&gt;</span>章节3<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>这是章节3的内容，点击上方链接可快速跳转至此<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>最佳实践：</strong></p>
-<ul>
-<li>使用<code>id</code>属性定义锚点（现代标准），而非<code>name</code>属性</li>
-<li>锚点ID应具有语义性，如<code>id=&quot;contact-form&quot;</code>而非<code>id=&quot;section1&quot;</code></li>
-<li>避免在单页应用中过度使用锚点，可能影响用户体验</li>
-</ul>
-<h3 id="2-7-列表标签"><a href="#2-7-列表标签" class="headerlink" title="2.7 列表标签"></a>2.7 列表标签</h3><h4 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">&quot;list-style-type: circle;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>项目1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>项目2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>项目3<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;A&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第一项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第二项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第三项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>列表类型说明：</strong></p>
-<ul>
-<li>无序列表(<code>ul</code>)：项目符号样式可通过CSS控制（disc, circle, square）</li>
-<li>有序列表(<code>ol</code>)：<code>type</code>属性可指定编号样式：<ul>
-<li><code>1</code>：数字（默认）</li>
-<li><code>A</code>：大写字母</li>
-<li><code>a</code>：小写字母</li>
-<li><code>I</code>：大写罗马数字</li>
-<li><code>i</code>：小写罗马数字</li>
-</ul>
-</li>
-<li><strong>现代实践</strong>：列表样式应使用CSS控制，而非HTML属性</li>
-</ul>
-<h3 id="2-8-框架的使用"><a href="#2-8-框架的使用" class="headerlink" title="2.8 框架的使用"></a>2.8 框架的使用</h3><p><strong>重要提示</strong>：<code>&lt;frameset&gt;</code> 在HTML5中已被废弃，<strong>不推荐使用</strong>。现代网页开发中应使用<code>&lt;iframe&gt;</code>嵌入其他页面。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">src</span>=<span class="string">&quot;https://www.example.com&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">width</span>=<span class="string">&quot;800&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">height</span>=<span class="string">&quot;600&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">scrolling</span>=<span class="string">&quot;auto&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">title</span>=<span class="string">&quot;示例嵌入页面&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #ccc;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>iframe属性详解：</strong></p>
-<ul>
-<li><code>src</code>：嵌入页面的URL</li>
-<li><code>width</code>&#x2F;<code>height</code>：尺寸（建议使用CSS控制）</li>
-<li><code>scrolling</code>：滚动条行为（auto&#x2F;yes&#x2F;no）</li>
-<li><code>title</code>：提供描述，提高可访问性</li>
-<li><strong>安全注意</strong>：嵌入第三方内容时需谨慎，防止XSS攻击</li>
-</ul>
-<p><strong>安全提示</strong>：</p>
-<ul>
-<li>使用<code>allow</code>属性限制iframe功能</li>
-<li>设置<code>sandbox</code>属性增强安全性</li>
-<li>避免嵌入不可信的第三方内容</li>
-<li>配置CSP的<code>frame-ancestors</code>指令控制iframe嵌入</li>
-</ul>
-<h2 id="综合示例：WEB安全学习平台"><a href="#综合示例：WEB安全学习平台" class="headerlink" title="综合示例：WEB安全学习平台"></a>综合示例：WEB安全学习平台</h2><p>以下是一个包含所有知识点的完整HTML页面示例，展示如何将各种HTML标签组合成一个实用的WEB安全学习页面：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;description&quot;</span> <span class="attr">content</span>=<span class="string">&quot;WEB安全HTML基础综合示例 - 安全培训课程&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;网络安全, WEB渗透, 数据安全, 渗透测试, 安全培训, HTML基础&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;author&quot;</span> <span class="attr">content</span>=<span class="string">&quot;moonsec&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27; https://trusted.cdn.com; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-Frame-Options&quot;</span> <span class="attr">content</span>=<span class="string">&quot;DENY&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>WEB安全学习平台 - HTML基础教程<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: <span class="string">&#x27;Microsoft YaHei&#x27;</span>, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">line-height</span>: <span class="number">1.6</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">header</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#2c3e50</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-bottom</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">max-width</span>: <span class="number">1200px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span> auto;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.section</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#f9f9f9</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-bottom</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-left</span>: <span class="number">4px</span> solid <span class="number">#3498db</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.security-table</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-collapse</span>: collapse;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">10px</span> <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.security-table</span> <span class="selector-tag">th</span>, <span class="selector-class">.security-table</span> <span class="selector-tag">td</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ddd</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.security-table</span> <span class="selector-tag">th</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f2f2f2</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.high-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#e74c3c</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.medium-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#f39c12</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.low-risk</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#2ecc71</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.code-block</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#2d2d2d</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#f8f8f2</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">15px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">overflow-x</span>: auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: monospace;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">footer</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-top</span>: <span class="number">30px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#2c3e50</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>WEB安全学习平台<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>HTML基础教程 - 安全渗透必备技能<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;section&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;introduction&quot;</span>&gt;</span>一、HTML基础概述<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>HTML（超文本标记语言）是构建Web页面的基础，是WEB安全人员必须掌握的核心技能之一。掌握HTML有助于理解网页结构、识别潜在安全漏洞（如XSS、CSRF等）。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>HTML文档结构<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pre</span> <span class="attr">class</span>=<span class="string">&quot;code-block&quot;</span>&gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>!DOCTYPE html<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>html lang=&quot;zh-CN&quot;<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>head<span class="symbol">&amp;gt;</span></span><br><span class="line">    <span class="symbol">&amp;lt;</span>meta charset=&quot;UTF-8&quot;<span class="symbol">&amp;gt;</span></span><br><span class="line">    <span class="symbol">&amp;lt;</span>title<span class="symbol">&amp;gt;</span>示例页面<span class="symbol">&amp;lt;</span>/title<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>/head<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>body<span class="symbol">&amp;gt;</span></span><br><span class="line">    <span class="symbol">&amp;lt;</span>!-- 页面内容 --<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>/body<span class="symbol">&amp;gt;</span></span><br><span class="line"><span class="symbol">&amp;lt;</span>/html<span class="symbol">&amp;gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;section&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;form-example&quot;</span>&gt;</span>二、表单安全示例<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>表单是WEB应用中常见漏洞来源，了解表单结构有助于识别安全问题。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/submit&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;username&quot;</span>&gt;</span>用户名:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;username&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;请输入用户名&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;password&quot;</span>&gt;</span>密码:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">id</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">minlength</span>=<span class="string">&quot;8&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>上传头像:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;avatar&quot;</span> <span class="attr">accept</span>=<span class="string">&quot;image/*&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;email&quot;</span>&gt;</span>邮箱:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;email&quot;</span> <span class="attr">id</span>=<span class="string">&quot;email&quot;</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;color&quot;</span>&gt;</span>选择颜色:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;color&quot;</span> <span class="attr">id</span>=<span class="string">&quot;color&quot;</span> <span class="attr">name</span>=<span class="string">&quot;color&quot;</span> <span class="attr">value</span>=<span class="string">&quot;#ff0000&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                </span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交表单&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;abc123&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>安全提示：<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>表单应使用HTTPS传输，对用户输入进行严格验证，防止XSS和SQL注入攻击。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;section&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;table-example&quot;</span>&gt;</span>三、数据表格示例<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>表格常用于展示结构化数据，安全人员需理解其结构以识别潜在漏洞。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span> <span class="attr">class</span>=<span class="string">&quot;security-table&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">caption</span>&gt;</span>常见Web安全漏洞类型<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>漏洞类型<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>危害等级<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>检测方法<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>防御措施<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>XSS（跨站脚本）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;high-risk&quot;</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>输入验证、输出编码检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>对用户输入进行过滤，对输出进行HTML编码<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL注入<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;high-risk&quot;</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>SQL语句参数化查询检查<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>使用预编译语句、ORM框架<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>CSRF（跨站请求伪造）<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;medium-risk&quot;</span>&gt;</span>中<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>检查Referer头、CSRF令牌验证<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>实施CSRF令牌机制、SameSite Cookie属性<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>文件上传漏洞<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">&quot;high-risk&quot;</span>&gt;</span>高<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>检查文件类型验证<span class="tag">&lt;<span class="name">br</span>&gt;</span>查看文件存储路径是否可预测<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>限制文件类型<span class="tag">&lt;<span class="name">br</span>&gt;</span>重命名上传文件<span class="tag">&lt;<span class="name">br</span>&gt;</span>将上传文件存储在非Web可访问目录<span class="tag">&lt;<span class="name">br</span>&gt;</span>检查文件内容<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;section&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;resources&quot;</span>&gt;</span>四、学习资源<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>以下是一些WEB安全学习资源：<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://owasp.org&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;noopener noreferrer&quot;</span>&gt;</span>OWASP（开放Web应用安全项目）<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://portswigger.net&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;noopener noreferrer&quot;</span>&gt;</span>PortSwigger（Burp Suite开发者）<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://www.freebuf.com&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;noopener noreferrer&quot;</span>&gt;</span>FreeBuf（安全资讯平台）<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>相关视频教程<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">iframe</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">src</span>=<span class="string">&quot;https://www.youtube.com/embed/dQw4w9WgXcQ&quot;</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">width</span>=<span class="string">&quot;560&quot;</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">height</span>=<span class="string">&quot;315&quot;</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">frameborder</span>=<span class="string">&quot;0&quot;</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">allow</span>=<span class="string">&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot;</span> </span></span><br><span class="line"><span class="tag">                <span class="attr">allowfullscreen</span></span></span><br><span class="line"><span class="tag">                <span class="attr">title</span>=<span class="string">&quot;WEB安全入门视频&quot;</span></span></span><br><span class="line"><span class="tag">                <span class="attr">sandbox</span>=<span class="string">&quot;allow-same-origin allow-scripts allow-popups&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;section&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">&quot;contact&quot;</span>&gt;</span>五、联系我们<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>有任何问题欢迎通过以下方式联系我们：<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span>邮箱：<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;mailto:support@websec.com&quot;</span>&gt;</span>support@websec.com<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span>电话：<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;tel:+8613800138000&quot;</span>&gt;</span>138-0013-8000<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">            </span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>反馈表单<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/feedback&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;feedback&quot;</span>&gt;</span>您的意见:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">&quot;feedback&quot;</span> <span class="attr">name</span>=<span class="string">&quot;feedback&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;4&quot;</span> <span class="attr">required</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交反馈&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="symbol">&amp;copy;</span> 2025 WEB安全学习平台 | 本页面使用HTML5标准构建<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#introduction&quot;</span>&gt;</span>返回顶部<span class="tag">&lt;/<span class="name">a</span>&gt;</span> | <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#form-example&quot;</span>&gt;</span>表单示例<span class="tag">&lt;/<span class="name">a</span>&gt;</span> | <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#table-example&quot;</span>&gt;</span>表格示例<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="安全最佳实践总结"><a href="#安全最佳实践总结" class="headerlink" title="安全最佳实践总结"></a>安全最佳实践总结</h2><ol>
-<li><strong>字符编码</strong>：始终使用UTF-8编码，避免编码转换漏洞</li>
-<li><strong>表单安全</strong>：<ul>
-<li>使用POST方法提交敏感数据</li>
-<li>对用户输入进行严格验证和过滤</li>
-<li>使用CSRF令牌防止跨站请求伪造</li>
-<li>限制文件上传类型和大小</li>
-</ul>
-</li>
-<li><strong>内容安全策略（CSP）</strong>：<ul>
-<li>通过<code>Content-Security-Policy</code>头限制可执行的脚本来源</li>
-<li>防止XSS攻击</li>
-</ul>
-</li>
-<li><strong>X-Frame-Options</strong>：<ul>
-<li>设置为<code>DENY</code>或<code>SAMEORIGIN</code>防止点击劫持</li>
-</ul>
-</li>
-<li><strong>iframe安全</strong>：<ul>
-<li>使用<code>sandbox</code>属性限制iframe功能</li>
-<li>避免嵌入不可信的第三方内容</li>
-</ul>
-</li>
-<li><strong>链接安全</strong>：<ul>
-<li>外部链接使用<code>target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;</code></li>
-<li>防止通过<code>window.opener</code>访问原页面</li>
-</ul>
-</li>
-<li><strong>表格使用</strong>：<ul>
-<li>仅用于展示结构化数据，不用于页面布局</li>
-<li>为表格添加适当的标题和描述</li>
-<li>使用CSS控制样式，而非HTML属性</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p><strong>重要提醒</strong>：HTML是Web安全的基础，掌握HTML标签的正确使用和安全配置是识别和防御各类Web安全漏洞的前提。在实际应用中，应结合后端安全措施，共同构建安全的Web应用。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -9323,14 +8731,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">107k</span>
+    <span title="站点总字数">111k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:58</span>
+    <span title="站点阅读时长">6:08</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

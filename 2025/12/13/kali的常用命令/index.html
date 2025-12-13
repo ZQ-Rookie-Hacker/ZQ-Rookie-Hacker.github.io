@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="1. 系统基本操作系统控制 reboot - 重启系统 shutdown -h now - 立即关闭系统 shutdown -h hours:minutes &amp; - 按预定时间关闭系统 shutdown -c - 取消预定的关机操作 shutdown -r now - 立即重启系统 init 0 - 关闭系统 telinit 0 - 关闭系统 clear - 清屏  环境变量 env -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali Linux 常用命令笔记">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="1. 系统基本操作系统控制 reboot - 重启系统 shutdown -h now - 立即关闭系统 shutdown -h hours:minutes &amp; - 按预定时间关闭系统 shutdown -c - 取消预定的关机操作 shutdown -r now - 立即重启系统 init 0 - 关闭系统 telinit 0 - 关闭系统 clear - 清屏  环境变量 env -">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-13T09:00:21.795Z">
+<meta property="article:modified_time" content="2025-12-13T09:00:15.652Z">
+<meta property="article:author" content="ZQ-Rookie-Hacker">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="指令">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/","path":"2025/12/13/kali的常用命令/","title":"Kali Linux 常用命令笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kali Linux 常用命令笔记 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","app_key":"bIFSRG6LeUO90VdfRBHUXNQs","interval":900,"minimum_time":10,"cache":true,"cache_expire":900,"betterPerformance":true,"id":"path"}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">1. 系统基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%8E%A7%E5%88%B6"><span class="nav-text">系统控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%88%87%E6%8D%A2%E4%B8%8E%E7%AE%A1%E7%90%86"><span class="nav-text">用户切换与管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E5%91%BD%E4%BB%A4"><span class="nav-text">历史命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-text">2. 文件和目录操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%88%AA"><span class="nav-text">目录导航</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-text">文件操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="nav-text">文件搜索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="nav-text">3. 系统信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="nav-text">硬件信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="nav-text">操作系统信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E5%92%8C%E5%86%85%E5%AD%98%E4%BF%A1%E6%81%AF"><span class="nav-text">磁盘和内存信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E5%92%8C%E7%BE%A4%E7%BB%84%E7%AE%A1%E7%90%86"><span class="nav-text">4. 用户和群组管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-text">用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%A4%E7%BB%84%E7%AE%A1%E7%90%86"><span class="nav-text">群组管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-text">5. 进程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B"><span class="nav-text">进程查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="nav-text">进程控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="nav-text">6. 网络相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-text">网络配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AF%8A%E6%96%AD"><span class="nav-text">网络诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1"><span class="nav-text">网络服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">7. 服务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8E%A7%E5%88%B6"><span class="nav-text">服务控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE"><span class="nav-text">服务配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">8. 包管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Debian-Ubuntu%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">Debian&#x2F;Ubuntu包管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E4%B8%8E%E8%A7%A3%E5%8E%8B"><span class="nav-text">压缩与解压</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91"><span class="nav-text">9. 文本编辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vi-vim%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-text">vi&#x2F;vim编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-text">三种模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E4%B8%8E%E6%9B%BF%E6%8D%A2"><span class="nav-text">查找与替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E5%91%BD%E4%BB%A4"><span class="nav-text">退出命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%85%B6%E4%BB%96%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">10. 其他实用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E7%AE%A1%E7%90%86"><span class="nav-text">防火墙管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%85%B1%E4%BA%AB"><span class="nav-text">网络共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="nav-text">网卡配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS%E9%85%8D%E7%BD%AE"><span class="nav-text">DNS配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7"><span class="nav-text">系统工具</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rookie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rookie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kali Linux 常用命令笔记 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kali Linux 常用命令笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-13 17:00:21 / 修改时间：17:00:15" itemprop="dateCreated datePublished" datetime="2025-12-13T17:00:21+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/13/kali%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-meta-item leancloud_visitors" data-flag-title="Kali Linux 常用命令笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="1-系统基本操作"><a href="#1-系统基本操作" class="headerlink" title="1. 系统基本操作"></a>1. 系统基本操作</h2><h3 id="系统控制"><a href="#系统控制" class="headerlink" title="系统控制"></a>系统控制</h3><ul>
+<li><code>reboot</code> - 重启系统</li>
+<li><code>shutdown -h now</code> - 立即关闭系统</li>
+<li><code>shutdown -h hours:minutes &amp;</code> - 按预定时间关闭系统</li>
+<li><code>shutdown -c</code> - 取消预定的关机操作</li>
+<li><code>shutdown -r now</code> - 立即重启系统</li>
+<li><code>init 0</code> - 关闭系统</li>
+<li><code>telinit 0</code> - 关闭系统</li>
+<li><code>clear</code> - 清屏</li>
+</ul>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><ul>
+<li><code>env</code> - 显示当前所有环境变量</li>
+<li><code>echo $PATH</code> - 查看PATH环境变量</li>
+<li><code>echo $JAVA_HOME</code> - 查看JAVA_HOME环境变量</li>
+<li><code>echo $PATH | grep jdk</code> - 检查PATH中是否包含JDK路径</li>
+</ul>
+<h3 id="用户切换与管理"><a href="#用户切换与管理" class="headerlink" title="用户切换与管理"></a>用户切换与管理</h3><ul>
+<li><code>su -l</code> - 切换登录用户</li>
+<li><code>su - root</code> - 切换到root用户</li>
+<li><code>su 用户名</code> - 切换到普通用户</li>
+<li><code>logout</code> - 注销当前用户</li>
+<li><code>passwd</code> - 修改当前用户密码</li>
+<li><code>passwd root</code> - 修改root用户密码</li>
+</ul>
+<h3 id="历史命令"><a href="#历史命令" class="headerlink" title="历史命令"></a>历史命令</h3><ul>
+<li><code>history</code> - 查看历史命令</li>
+<li><code>!!</code> - 重复上一条命令</li>
+<li><code>!n</code> - 重复第n条命令</li>
+</ul>
+<h2 id="2-文件和目录操作"><a href="#2-文件和目录操作" class="headerlink" title="2. 文件和目录操作"></a>2. 文件和目录操作</h2><h3 id="目录导航"><a href="#目录导航" class="headerlink" title="目录导航"></a>目录导航</h3><ul>
+<li><code>pwd</code> - 显示当前工作路径</li>
+<li><code>cd ..</code> - 返回上一级目录</li>
+<li><code>cd ../..</code> - 返回上级两级目录</li>
+<li><code>cd -</code> - 返回上次所在的目录</li>
+<li><code>cd 文件夹名</code> - 进入指定文件夹</li>
+<li><code>cd ~</code> - 进入当前用户主目录</li>
+</ul>
+<h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><ul>
+<li><code>touch 文件名</code> - 创建空文件</li>
+<li><code>cat 文件名</code> - 读取文件内容</li>
+<li><code>mkdir 文件名</code> - 创建文件夹</li>
+<li><code>mkdir -p 文件夹</code> - 递归创建文件夹</li>
+<li><code>mkdir 文件名 文件名</code> - 创建多个文件夹</li>
+<li><code>cp 源文件 目标文件</code> - 复制文件</li>
+<li><code>cp -r 源文件夹 目标文件夹</code> - 递归复制文件夹</li>
+<li><code>mv 旧文件名 新文件名</code> - 移动&#x2F;重命名文件</li>
+<li><code>rm 文件</code> - 删除文件</li>
+<li><code>rm -f 文件</code> - 强制删除文件</li>
+<li><code>rm 文件夹名</code> - 删除文件夹</li>
+<li><code>rm -rf 文件/文件夹</code> - 强制递归删除文件&#x2F;文件夹及其内容</li>
+</ul>
+<h3 id="文件搜索"><a href="#文件搜索" class="headerlink" title="文件搜索"></a>文件搜索</h3><ul>
+<li><code>find / -name file1</code> - 从根目录开始搜索文件和目录</li>
+<li><code>find / -user user1</code> - 搜索属于指定用户的文件和目录</li>
+<li><code>find /home/user1 -name *.bin</code> - 在指定目录中搜索特定扩展名的文件</li>
+<li><code>find /usr/bin -type f -atime +100</code> - 搜索过去100天未被使用的执行文件</li>
+<li><code>find /usr/bin -type f -mtime -10</code> - 搜索10天内被修改过的文件</li>
+<li><code>find . -name &#39;.php&#39; -mmin -30</code> - 查找最近30分钟修改的当前目录下的.php文件</li>
+<li><code>find . -name &#39;*.inc&#39; -mtime 0 -ls</code> - 查找最近24小时修改的文件并列出详细信息</li>
+<li><code>find / -name *.rpm -exec chmod 755 &#39;{}&#39; \;</code> - 搜索并修改权限</li>
+<li><code>find / -xdev -name *.rpm</code> - 搜索忽略可移动设备</li>
+<li><code>locate *.ps</code> - 快速查找以.ps结尾的文件（需先运行<code>updatedb</code>）</li>
+<li><code>whereis halt</code> - 显示二进制文件、源码或man的位置</li>
+<li><code>which halt</code> - 显示二进制文件或可执行文件的完整路径</li>
+<li><code>find / -name moonsec 2&gt;/dev/null</code> - 搜索文件&#x2F;文件夹并屏蔽错误信息</li>
+</ul>
+<h2 id="3-系统信息"><a href="#3-系统信息" class="headerlink" title="3. 系统信息"></a>3. 系统信息</h2><h3 id="硬件信息"><a href="#硬件信息" class="headerlink" title="硬件信息"></a>硬件信息</h3><ul>
+<li><code>arch</code> - 显示机器的处理器架构</li>
+<li><code>uname -m</code> - 显示机器的处理器架构</li>
+<li><code>cat /proc/cpuinfo</code> - 显示CPU信息</li>
+<li><code>cat /proc/mounts</code> - 显示已加载的文件系统</li>
+<li><code>cat /proc/net/dev</code> - 显示网络适配器及统计</li>
+</ul>
+<h3 id="操作系统信息"><a href="#操作系统信息" class="headerlink" title="操作系统信息"></a>操作系统信息</h3><ul>
+<li><code>uname -r</code> - 显示正在使用的内核版本</li>
+<li><code>cat /proc/version</code> - 显示内核版本</li>
+<li><code>ver</code> - 查看操作系统版本</li>
+<li><code>systeminfo</code> - 查看计算机详细信息（Windows命令，Kali中不适用）</li>
+</ul>
+<h3 id="磁盘和内存信息"><a href="#磁盘和内存信息" class="headerlink" title="磁盘和内存信息"></a>磁盘和内存信息</h3><ul>
+<li><code>df</code> - 显示磁盘空间使用情况（默认不带单位）</li>
+<li><code>df -h</code> - 友好显示磁盘空间使用情况（带单位）</li>
+<li><code>free</code> - 显示内存使用情况（默认以KB为单位）</li>
+<li><code>free -m</code> - 以MB为单位显示内存使用情况</li>
+<li><code>free -h</code> - 友好显示内存使用情况（自动选择合适单位）</li>
+</ul>
+<h2 id="4-用户和群组管理"><a href="#4-用户和群组管理" class="headerlink" title="4. 用户和群组管理"></a>4. 用户和群组管理</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><code>useradd moonsec</code> - 创建用户</li>
+<li><code>useradd -r -m -s /bin/bash moonsec</code> - 创建系统用户并指定shell<ul>
+<li><code>-r</code> - 建立系统账号</li>
+<li><code>-m</code> - 自动建立用户的登录目录</li>
+<li><code>-s /bin/bash</code> - 指定用户登录后使用的shell</li>
+</ul>
+</li>
+<li><code>passwd moonsec</code> - 设置用户密码</li>
+<li><code>usermod -a -G moontea k1</code> - 将用户k1添加到其他用户组</li>
+</ul>
+<h3 id="群组管理"><a href="#群组管理" class="headerlink" title="群组管理"></a>群组管理</h3><ul>
+<li><code>groupadd group_name</code> - 创建新用户组</li>
+<li><code>groupdel group_name</code> - 删除用户组</li>
+<li><code>cat /etc/group | grep group_name</code> - 查看特定群组信息</li>
+</ul>
+<h2 id="5-进程管理"><a href="#5-进程管理" class="headerlink" title="5. 进程管理"></a>5. 进程管理</h2><h3 id="进程查看"><a href="#进程查看" class="headerlink" title="进程查看"></a>进程查看</h3><ul>
+<li><code>top</code> - 实时查看系统进程和资源使用情况</li>
+<li><code>ps -ef</code> - 查看所有进程信息</li>
+<li><code>ps -ef | grep tomcat</code> - 查找指定进程</li>
+<li><code>query user</code> - 查看当前在线的用户（Windows命令，Kali中不适用）</li>
+</ul>
+<h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><ul>
+<li><code>kill -9 PID</code> - 强制杀死指定PID的进程</li>
+<li><code>taskkill /pid PID数</code> - 终止指定PID的进程（Windows命令，Kali中不适用）</li>
+</ul>
+<h2 id="6-网络相关命令"><a href="#6-网络相关命令" class="headerlink" title="6. 网络相关命令"></a>6. 网络相关命令</h2><h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><ul>
+<li><code>ifconfig</code> - 查看和配置网络接口信息</li>
+<li><code>iwconfig</code> - 配置或获取无线网络设备信息</li>
+<li><code>route print</code> - 显示IP路由表（Windows命令）</li>
+<li><code>arp</code> - 查看和处理ARP缓存</li>
+<li><code>arp -a</code> - 显示所有ARP缓存信息</li>
+<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（Windows命令）</li>
+</ul>
+<h3 id="网络诊断"><a href="#网络诊断" class="headerlink" title="网络诊断"></a>网络诊断</h3><ul>
+<li><code>ping www.baidu.com</code> - 测试网络连接</li>
+<li><code>ping www.baidu.com -c 3</code> - 执行3次ping测试</li>
+<li><code>netstat -a</code> - 查看所有端口</li>
+<li><code>netstat -an</code> - 查看端口的网络连接情况</li>
+<li><code>netstat -o</code> - 查看所有网络连接的进程ID</li>
+<li><code>netstat -ano | findstr &quot;:80&quot;</code> - 查找包含”80”的连接（Windows命令）</li>
+<li><code>netstat -v</code> - 查看正在进行的工作</li>
+<li><code>netstat -p 协议名</code> - 查看某协议使用情况</li>
+<li><code>netstat -s</code> - 查看所有协议使用情况</li>
+<li><code>netstat -lntup</code> - 查看所有TCP和UDP端口</li>
+<li><code>nslookup</code> - 查询DNS记录</li>
+<li><code>nslookup -qt=type domain</code> - 查询特定类型的DNS记录</li>
+<li><code>traceroute</code> - 检测数据包到达目标主机经过的网关数量</li>
+<li><code>telnet</code> - 远程登录（常用于端口检测）</li>
+<li><code>finger username @host</code> - 查看最近登录的用户信息</li>
+</ul>
+<h3 id="网络服务"><a href="#网络服务" class="headerlink" title="网络服务"></a>网络服务</h3><ul>
+<li><code>http协议</code> - 使用curl和wget进行HTTP操作</li>
+<li><code>curl</code> - 传输数据的命令行工具</li>
+<li><code>wget</code> - 从网络下载文件</li>
+</ul>
+<h2 id="7-服务管理"><a href="#7-服务管理" class="headerlink" title="7. 服务管理"></a>7. 服务管理</h2><h3 id="服务控制"><a href="#服务控制" class="headerlink" title="服务控制"></a>服务控制</h3><ul>
+<li><code>/etc/init.d/apache2 start</code> - 启动Apache2服务</li>
+<li><code>/etc/init.d/apache2 restart</code> - 重启Apache2服务</li>
+<li><code>/etc/init.d/apache2 stop</code> - 停止Apache2服务</li>
+<li><code>/etc/init.d/network start</code> - 启动网络服务</li>
+<li><code>service networking restart</code> - 重启网络服务</li>
+<li><code>systemctl restart networking</code> - 使用systemctl重启网络服务</li>
+</ul>
+<h3 id="服务配置"><a href="#服务配置" class="headerlink" title="服务配置"></a>服务配置</h3><ul>
+<li><code>/etc/rc.d/rc.local</code> - 开机自启动脚本配置文件</li>
+<li><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code> - 开启路由转发</li>
+</ul>
+<h2 id="8-包管理"><a href="#8-包管理" class="headerlink" title="8. 包管理"></a>8. 包管理</h2><h3 id="Debian-Ubuntu包管理"><a href="#Debian-Ubuntu包管理" class="headerlink" title="Debian&#x2F;Ubuntu包管理"></a>Debian&#x2F;Ubuntu包管理</h3><ul>
+<li><code>apt-get update</code> - 更新软件包列表</li>
+<li><code>apt-get upgrade</code> - 升级已安装的软件包</li>
+<li><code>apt-get dist-upgrade</code> - 智能升级，处理依赖关系变化</li>
+<li><code>apt-get install package</code> - 安装软件包</li>
+<li><code>apt-get install python-模块名</code> - 安装Python模块</li>
+<li><code>apt-get autoremove --purge 软件名</code> - 删除包及其依赖和配置文件</li>
+<li><code>dpkg -i package.deb</code> - 安装&#x2F;更新deb包</li>
+<li><code>dpkg -r package_name</code> - 从系统删除deb包</li>
+<li><code>dpkg -l</code> - 显示所有已安装的deb包</li>
+<li><code>dpkg -l | grep httpd</code> - 显示包含特定名称的deb包</li>
+<li><code>dpkg -s package_name</code> - 获取已安装包的信息</li>
+<li><code>dpkg -L package_name</code> - 显示已安装包提供的文件列表</li>
+</ul>
+<h3 id="压缩与解压"><a href="#压缩与解压" class="headerlink" title="压缩与解压"></a>压缩与解压</h3><ul>
+<li><code>bzip2 file1</code> - 压缩文件</li>
+<li><code>gunzip file1.gz</code> - 解压gzip文件</li>
+<li><code>gzip file1</code> - 压缩文件</li>
+<li><code>gzip -9 file1</code> - 最大程度压缩</li>
+<li><code>rar a file1.rar test_file</code> - 创建rar压缩包</li>
+<li><code>rar x file1.rar</code> - 解压rar包</li>
+<li><code>unrar x file1.rar</code> - 解压rar包</li>
+<li><code>tar zcvf 压缩文件名 压缩文件</code> - 创建gzip压缩的tar包</li>
+<li><code>tar zxvf 解压包名</code> - 解压gzip压缩的tar包</li>
+<li><code>tar -jcvf 压缩文件名</code> - 创建bzip2压缩的tar包</li>
+<li><code>tar jxvf 解压包名</code> - 解压bzip2压缩的tar包</li>
+<li><code>zip -q -r 压缩文件名 目录</code> - 创建zip压缩包</li>
+<li><code>unzip 压缩文件名</code> - 解压zip压缩包</li>
+</ul>
+<h2 id="9-文本编辑"><a href="#9-文本编辑" class="headerlink" title="9. 文本编辑"></a>9. 文本编辑</h2><h3 id="vi-vim编辑器"><a href="#vi-vim编辑器" class="headerlink" title="vi&#x2F;vim编辑器"></a>vi&#x2F;vim编辑器</h3><h4 id="三种模式"><a href="#三种模式" class="headerlink" title="三种模式"></a>三种模式</h4><ol>
+<li><strong>命令模式</strong> - 控制光标移动，进行删除、复制等操作</li>
+<li><strong>插入模式</strong> - 输入文本内容</li>
+<li><strong>底行模式</strong> - 保存、退出、搜索等</li>
+</ol>
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><ul>
+<li><code>vi filename</code> - 打开或新建文件，光标置于第一行首</li>
+<li><code>vi +n filename</code> - 打开文件，光标置于第n行首</li>
+<li><code>vi + filename</code> - 打开文件，光标置于最后一行首</li>
+<li><code>i</code> - 在当前位置前插入</li>
+<li><code>I</code> - 在当前行首插入</li>
+<li><code>a</code> - 在当前位置后插入</li>
+<li><code>A</code> - 在当前行尾插入</li>
+<li><code>o</code> - 在当前行之后插入一行</li>
+<li><code>O</code> - 在当前行之前插入一行</li>
+<li><code>dd</code> - 删除当前行</li>
+<li><code>2dd</code> - 删除2行</li>
+<li><code>yy</code> - 复制当前行</li>
+<li><code>nyy</code> - 复制当前行及之后n行</li>
+<li><code>p</code> - 在当前光标后粘贴</li>
+<li><code>u</code> - 撤销操作</li>
+</ul>
+<h4 id="查找与替换"><a href="#查找与替换" class="headerlink" title="查找与替换"></a>查找与替换</h4><ul>
+<li><code>/text</code> - 向下查找text</li>
+<li><code>?text</code> - 向上查找text</li>
+<li><code>n</code> - 查找下一个匹配</li>
+<li><code>N</code> - 查找上一个匹配</li>
+</ul>
+<h4 id="退出命令"><a href="#退出命令" class="headerlink" title="退出命令"></a>退出命令</h4><ul>
+<li><code>:wq</code> - 保存并退出</li>
+<li><code>:q!</code> - 强制退出忽略更改</li>
+<li><code>:e!</code> - 放弃修改并重新打开文件</li>
+<li><code>:w</code> - 保存修改</li>
+<li><code>set number</code> 或 <code>set nu</code> - 显示行号</li>
+<li><code>:n</code> - 跳转到第n行</li>
+</ul>
+<h2 id="10-其他实用命令"><a href="#10-其他实用命令" class="headerlink" title="10. 其他实用命令"></a>10. 其他实用命令</h2><h3 id="防火墙管理"><a href="#防火墙管理" class="headerlink" title="防火墙管理"></a>防火墙管理</h3><ul>
+<li><code>iptables -L</code> - 查看防火墙规则</li>
+<li><code>iptables -F</code> - 清除防火墙规则</li>
+<li><code>/etc/init.d/iptables stop</code> - 停止iptables防火墙</li>
+<li><code>service iptables stop</code> - 停止iptables防火墙</li>
+<li><code>ufw disable</code> - 禁用UFW防火墙</li>
+<li><code>ufw enable</code> - 启用UFW防火墙</li>
+</ul>
+<h3 id="网络共享"><a href="#网络共享" class="headerlink" title="网络共享"></a>网络共享</h3><ul>
+<li><code>mount -t smbfs -o username=user,password=pass //WinClient/share /mnt/share</code> - 挂载Windows网络共享</li>
+</ul>
+<h3 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h3><ul>
+<li><code>/etc/network/interfaces</code> - 网卡配置文件路径</li>
+<li><code>ifconfig eth0 192.168.0.33</code> - 设置临时IP地址</li>
+</ul>
+<h3 id="DNS配置"><a href="#DNS配置" class="headerlink" title="DNS配置"></a>DNS配置</h3><ul>
+<li><code>/etc/resolv.conf</code> - DNS配置文件路径</li>
+<li><code>nameserver 114.114.114.114</code> - 设置DNS服务器</li>
+</ul>
+<h3 id="系统工具"><a href="#系统工具" class="headerlink" title="系统工具"></a>系统工具</h3><ul>
+<li><code>wmic product &gt; ins.txt</code> - 查看安装软件信息（Windows命令）</li>
+<li><code>systeminfo</code> - 查看系统信息（Windows命令）</li>
+<li><code>whoami</code> - 查看当前用户及权限（Windows命令）</li>
+<li><code>whoami /all</code> - 查看当前用户详细权限信息（Windows命令）</li>
+</ul>
+<hr>
+<p><em>注：本笔记中包含部分Windows命令，已特别标注。Kali Linux主要使用Linux命令，部分命令可能需要root权限才能执行。</em></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E6%8C%87%E4%BB%A4/" rel="tag"># 指令</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" rel="prev" title="windows常用指令">
+                  <i class="fa fa-angle-left"></i> windows常用指令
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rookie-Hacker</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">111k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:08</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"ZQ-Rookie-Hacker/ZQ-Rookie-Hacker.github.io","issue_term":"pathname","theme":"preferred-color-scheme","label":"comment"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

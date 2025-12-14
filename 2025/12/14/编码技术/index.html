@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、编码基础概述1.1 为什么需要编码在计算机系统中，不同系统、协议和应用程序对数据的表示和处理方式存在差异。编码技术解决了以下问题：  字符表示：将人类可读的字符转换为计算机可处理的二进制数据 数据传输：确保特殊字符在传输过程中不被误解或破坏 安全过滤：绕过基于特定字符集的过滤机制 数据压缩：在某些情况下提高传输效率  1.2 编码与加密的区别 编码：数据格式的转换，是可逆的、公开的转换过程，不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码技术">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/14/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="一、编码基础概述1.1 为什么需要编码在计算机系统中，不同系统、协议和应用程序对数据的表示和处理方式存在差异。编码技术解决了以下问题：  字符表示：将人类可读的字符转换为计算机可处理的二进制数据 数据传输：确保特殊字符在传输过程中不被误解或破坏 安全过滤：绕过基于特定字符集的过滤机制 数据压缩：在某些情况下提高传输效率  1.2 编码与加密的区别 编码：数据格式的转换，是可逆的、公开的转换过程，不">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-14T03:14:01.515Z">
+<meta property="article:modified_time" content="2025-12-14T03:16:13.349Z">
+<meta property="article:author" content="ZQ-Rookie-Hacker">
+<meta property="article:tag" content="编码技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/14/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/14/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/","path":"2025/12/14/编码技术/","title":"编码技术"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>编码技术 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","app_key":"bIFSRG6LeUO90VdfRBHUXNQs","interval":900,"minimum_time":10,"cache":true,"cache_expire":900,"betterPerformance":true,"id":"path"}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BC%96%E7%A0%81%E5%9F%BA%E7%A1%80%E6%A6%82%E8%BF%B0"><span class="nav-text">一、编码基础概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%BC%96%E7%A0%81"><span class="nav-text">1.1 为什么需要编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%BC%96%E7%A0%81%E4%B8%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.2 编码与加密的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E7%BC%96%E7%A0%81%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-text">1.3 编码在网络安全中的重要性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E7%A1%80%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81"><span class="nav-text">二、基础字符编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-ASCII%E7%BC%96%E7%A0%81"><span class="nav-text">2.1 ASCII编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASCII%E7%BC%96%E7%A0%81%E8%83%8C%E6%99%AF"><span class="nav-text">ASCII编码背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4ASCII%E8%A1%A8"><span class="nav-text">完整ASCII表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84ASCII%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E5%BA%94%E7%94%A8"><span class="nav-text">渗透测试中的ASCII特殊字符应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Unicode%E7%BC%96%E7%A0%81%E4%BD%93%E7%B3%BB"><span class="nav-text">2.2 Unicode编码体系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-ISO-8859%E7%B3%BB%E5%88%97%E7%BC%96%E7%A0%81"><span class="nav-text">2.3 ISO-8859系列编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Web%E7%9B%B8%E5%85%B3%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF"><span class="nav-text">三、Web相关编码技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%A1%B5%E9%9D%A2%E7%BC%96%E7%A0%81"><span class="nav-text">3.1 页面编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-HTML%E7%BC%96%E7%A0%81"><span class="nav-text">3.2 HTML编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-URL%E7%BC%96%E7%A0%81"><span class="nav-text">3.3 URL编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-JavaScript%E7%BC%96%E7%A0%81"><span class="nav-text">3.4 JavaScript编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-CSS%E7%BC%96%E7%A0%81"><span class="nav-text">3.5 CSS编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81"><span class="nav-text">四、数据传输编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Base64%E7%BC%96%E7%A0%81"><span class="nav-text">4.1 Base64编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Hex%E7%BC%96%E7%A0%81"><span class="nav-text">4.2 Hex编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-UUEncode"><span class="nav-text">4.3 UUEncode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Quoted-Printable"><span class="nav-text">4.4 Quoted-Printable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BC%96%E7%A0%81"><span class="nav-text">五、数据结构编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-JSON%E7%BC%96%E7%A0%81"><span class="nav-text">5.1 JSON编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-XML%E7%BC%96%E7%A0%81"><span class="nav-text">5.2 XML编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-text">5.3 序列化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%89%B9%E6%AE%8A%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF"><span class="nav-text">六、特殊编码技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-UTF-7%E7%BC%96%E7%A0%81"><span class="nav-text">6.1 UTF-7编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Punycode"><span class="nav-text">6.2 Punycode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Double-Encoding%EF%BC%88%E5%8F%8C%E9%87%8D%E7%BC%96%E7%A0%81%EF%BC%89"><span class="nav-text">6.3 Double Encoding（双重编码）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-Mixed-Encoding%EF%BC%88%E6%B7%B7%E5%90%88%E7%BC%96%E7%A0%81%EF%BC%89"><span class="nav-text">6.4 Mixed Encoding（混合编码）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%BC%96%E7%A0%81%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-text">七、编码在渗透测试中的实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E7%BB%95%E8%BF%87WAF"><span class="nav-text">7.1 绕过WAF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-XSS%E6%94%BB%E5%87%BB"><span class="nav-text">7.2 XSS攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-SQL%E6%B3%A8%E5%85%A5"><span class="nav-text">7.3 SQL注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="nav-text">7.4 文件包含漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%BC%96%E7%A0%81%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="nav-text">八、编码工具推荐</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7"><span class="nav-text">8.1 在线工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6"><span class="nav-text">8.2 浏览器插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="nav-text">8.3 命令行工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E9%98%B2%E5%BE%A1%E5%BB%BA%E8%AE%AE"><span class="nav-text">九、防御建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-%E5%AE%89%E5%85%A8%E7%BC%96%E7%A0%81%E5%AE%9E%E8%B7%B5"><span class="nav-text">9.1 安全编码实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-WAF%E9%85%8D%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="nav-text">9.2 WAF配置建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E5%BB%BA%E8%AE%AE"><span class="nav-text">9.3 安全开发建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87%E6%A1%88%E4%BE%8B%E7%A0%94%E7%A9%B6"><span class="nav-text">十、编码绕过案例研究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E7%BB%8F%E5%85%B8XSS%E5%8F%8C%E9%87%8D%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-text">10.1 经典XSS双重编码绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-SQL%E6%B3%A8%E5%85%A5Hex%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-text">10.2 SQL注入Hex编码绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-UTF-7-XSS%E6%94%BB%E5%87%BB"><span class="nav-text">10.3 UTF-7 XSS攻击</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rookie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rookie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/14/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="编码技术 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编码技术
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-14 11:14:01 / 修改时间：11:16:13" itemprop="dateCreated datePublished" datetime="2025-12-14T11:14:01+08:00">2025-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/14/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/" class="post-meta-item leancloud_visitors" data-flag-title="编码技术" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、编码基础概述"><a href="#一、编码基础概述" class="headerlink" title="一、编码基础概述"></a>一、编码基础概述</h2><h3 id="1-1-为什么需要编码"><a href="#1-1-为什么需要编码" class="headerlink" title="1.1 为什么需要编码"></a>1.1 为什么需要编码</h3><p>在计算机系统中，不同系统、协议和应用程序对数据的表示和处理方式存在差异。编码技术解决了以下问题：</p>
+<ul>
+<li><strong>字符表示</strong>：将人类可读的字符转换为计算机可处理的二进制数据</li>
+<li><strong>数据传输</strong>：确保特殊字符在传输过程中不被误解或破坏</li>
+<li><strong>安全过滤</strong>：绕过基于特定字符集的过滤机制</li>
+<li><strong>数据压缩</strong>：在某些情况下提高传输效率</li>
+</ul>
+<h3 id="1-2-编码与加密的区别"><a href="#1-2-编码与加密的区别" class="headerlink" title="1.2 编码与加密的区别"></a>1.2 编码与加密的区别</h3><ul>
+<li><strong>编码</strong>：数据格式的转换，是可逆的、公开的转换过程，不提供保密性</li>
+<li><strong>加密</strong>：通过密钥将数据转换为密文，提供保密性和完整性保护</li>
+</ul>
+<h3 id="1-3-编码在网络安全中的重要性"><a href="#1-3-编码在网络安全中的重要性" class="headerlink" title="1.3 编码在网络安全中的重要性"></a>1.3 编码在网络安全中的重要性</h3><p>渗透测试中，攻击者常利用编码技术：</p>
+<ul>
+<li>绕过WAF（Web应用防火墙）和输入过滤</li>
+<li>隐藏恶意负载</li>
+<li>规避安全检测机制</li>
+<li>利用解析差异实施攻击</li>
+</ul>
+<h2 id="二、基础字符编码"><a href="#二、基础字符编码" class="headerlink" title="二、基础字符编码"></a>二、基础字符编码</h2><h3 id="2-1-ASCII编码"><a href="#2-1-ASCII编码" class="headerlink" title="2.1 ASCII编码"></a>2.1 ASCII编码</h3><h4 id="ASCII编码背景"><a href="#ASCII编码背景" class="headerlink" title="ASCII编码背景"></a>ASCII编码背景</h4><ul>
+<li><strong>历史</strong>：1963年由美国国家标准协会(ANSI)制定，最初用于电报通信</li>
+<li><strong>标准范围</strong>：0-127（7位），共128个字符</li>
+<li><strong>扩展ASCII</strong>：8位编码，范围0-255，包含特殊符号和非英语字符</li>
+<li><strong>渗透测试意义</strong>：作为大多数现代编码的基础，理解ASCII对于分析编码绕过至关重要</li>
+</ul>
+<h4 id="完整ASCII表"><a href="#完整ASCII表" class="headerlink" title="完整ASCII表"></a>完整ASCII表</h4><table>
+<thead>
+<tr>
+<th>十进制</th>
+<th>十六进制</th>
+<th>二进制</th>
+<th>字符</th>
+<th>名称&#x2F;说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>控制字符 (0-31, 127)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>0x00</td>
+<td>00000000</td>
+<td>NUL</td>
+<td>空字符 (Null)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0x07</td>
+<td>00000111</td>
+<td>BEL</td>
+<td>响铃 (Bell)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0x08</td>
+<td>00001000</td>
+<td>BS</td>
+<td>退格 (Backspace)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0x09</td>
+<td>00001001</td>
+<td>HT</td>
+<td>水平制表符 (Horizontal Tab)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0x0A</td>
+<td>00001010</td>
+<td>LF</td>
+<td>换行 (Line Feed)</td>
+</tr>
+<tr>
+<td>13</td>
+<td>0x0D</td>
+<td>00001101</td>
+<td>CR</td>
+<td>回车 (Carriage Return)</td>
+</tr>
+<tr>
+<td>27</td>
+<td>0x1B</td>
+<td>00011011</td>
+<td>ESC</td>
+<td>转义 (Escape)</td>
+</tr>
+<tr>
+<td>127</td>
+<td>0x7F</td>
+<td>01111111</td>
+<td>DEL</td>
+<td>删除 (Delete)</td>
+</tr>
+<tr>
+<td><strong>可打印字符 (32-126)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>32</td>
+<td>0x20</td>
+<td>00100000</td>
+<td>[空格]</td>
+<td>空格 (Space)</td>
+</tr>
+<tr>
+<td>33</td>
+<td>0x21</td>
+<td>00100001</td>
+<td>!</td>
+<td>感叹号</td>
+</tr>
+<tr>
+<td>34</td>
+<td>0x22</td>
+<td>00100010</td>
+<td>“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>39</td>
+<td>0x27</td>
+<td>00100111</td>
+<td>‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>40-41</td>
+<td>0x28-0x29</td>
+<td>00101000-00101001</td>
+<td>()</td>
+<td>括号</td>
+</tr>
+<tr>
+<td>42</td>
+<td>0x2A</td>
+<td>00101010</td>
+<td>*</td>
+<td>星号</td>
+</tr>
+<tr>
+<td>43</td>
+<td>0x2B</td>
+<td>00101011</td>
+<td>+</td>
+<td>加号</td>
+</tr>
+<tr>
+<td>44</td>
+<td>0x2C</td>
+<td>00101100</td>
+<td>,</td>
+<td>逗号</td>
+</tr>
+<tr>
+<td>45</td>
+<td>0x2D</td>
+<td>00101101</td>
+<td>-</td>
+<td>连字符</td>
+</tr>
+<tr>
+<td>46</td>
+<td>0x2E</td>
+<td>00101110</td>
+<td>.</td>
+<td>句点</td>
+</tr>
+<tr>
+<td>47</td>
+<td>0x2F</td>
+<td>00101111</td>
+<td>&#x2F;</td>
+<td>斜杠</td>
+</tr>
+<tr>
+<td>58-59</td>
+<td>0x3A-0x3B</td>
+<td>00111010-00111011</td>
+<td>:;</td>
+<td>冒号、分号</td>
+</tr>
+<tr>
+<td>60-62</td>
+<td>0x3C-0x3E</td>
+<td>00111100-00111110</td>
+<td>&lt;&gt;</td>
+<td>小于号、大于号</td>
+</tr>
+<tr>
+<td>63</td>
+<td>0x3F</td>
+<td>00111111</td>
+<td>?</td>
+<td>问号</td>
+</tr>
+<tr>
+<td>64</td>
+<td>0x40</td>
+<td>01000000</td>
+<td>@</td>
+<td>at符号</td>
+</tr>
+<tr>
+<td>65-90</td>
+<td>0x41-0x5A</td>
+<td>01000001-01011010</td>
+<td>A-Z</td>
+<td>大写字母</td>
+</tr>
+<tr>
+<td>91-96</td>
+<td>0x5B-0x60</td>
+<td>01011011-01100000</td>
+<td>[]^_&#96;</td>
+<td>特殊符号</td>
+</tr>
+<tr>
+<td>97-122</td>
+<td>0x61-0x7A</td>
+<td>01100001-01111010</td>
+<td>a-z</td>
+<td>小写字母</td>
+</tr>
+<tr>
+<td>123-126</td>
+<td>0x7B-0x7E</td>
+<td>01111011-01111110</td>
+<td>{</td>
+<td>}~</td>
+</tr>
+</tbody></table>
+<h4 id="渗透测试中的ASCII特殊字符应用"><a href="#渗透测试中的ASCII特殊字符应用" class="headerlink" title="渗透测试中的ASCII特殊字符应用"></a>渗透测试中的ASCII特殊字符应用</h4><ul>
+<li><strong>空格(0x20)</strong>：SQL注入中替代空格的常用字符（如<code>%09</code>、<code>%0A</code>）</li>
+<li><strong>单引号(0x27)</strong>：SQL注入关键字符，常需编码绕过</li>
+<li><strong>双引号(0x22)</strong>：XSS攻击中常用于闭合属性</li>
+<li><strong>尖括号(0x3C, 0x3E)</strong>：HTML标签标识符，XSS攻击核心</li>
+<li><strong>斜杠(0x2F)</strong>：路径分隔符，目录遍历攻击关键</li>
+<li><strong>反斜杠(0x5C)</strong>：在某些语言中作为转义字符</li>
+</ul>
+<h3 id="2-2-Unicode编码体系"><a href="#2-2-Unicode编码体系" class="headerlink" title="2.2 Unicode编码体系"></a>2.2 Unicode编码体系</h3><ul>
+<li><p><strong>UTF-8</strong>：</p>
+<ul>
+<li>可变长度编码（1-4字节）</li>
+<li>向后兼容ASCII</li>
+<li>互联网标准（RFC 3629），现代Web应用首选</li>
+<li>优势：节省空间（ASCII字符仅需1字节），支持全球语言</li>
+</ul>
+</li>
+<li><p><strong>UTF-16</strong>：</p>
+<ul>
+<li>固定2字节或可变4字节编码</li>
+<li>Windows系统内部常用</li>
+<li>BOM（Byte Order Mark）问题可能导致解析异常</li>
+</ul>
+</li>
+<li><p><strong>UTF-32</strong>：</p>
+<ul>
+<li>固定4字节编码</li>
+<li>处理简单但空间效率低</li>
+<li>较少用于网络传输</li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>利用不同系统对Unicode解析的差异</li>
+<li>BOM头注入绕过文件类型检测</li>
+<li>混合编码导致的解析漏洞</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-ISO-8859系列编码"><a href="#2-3-ISO-8859系列编码" class="headerlink" title="2.3 ISO-8859系列编码"></a>2.3 ISO-8859系列编码</h3><ul>
+<li><strong>ISO-8859-1 (Latin-1)</strong>：西欧语言</li>
+<li><strong>ISO-8859-2</strong>：中欧语言</li>
+<li><strong>ISO-8859-5</strong>：西里尔字母</li>
+<li><strong>渗透测试应用</strong>：在未指定编码的Web应用中引发乱码问题，可能导致安全漏洞</li>
+</ul>
+<h2 id="三、Web相关编码技术"><a href="#三、Web相关编码技术" class="headerlink" title="三、Web相关编码技术"></a>三、Web相关编码技术</h2><h3 id="3-1-页面编码"><a href="#3-1-页面编码" class="headerlink" title="3.1 页面编码"></a>3.1 页面编码</h3><ul>
+<li><p><strong>设置方式</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或HTTP响应头：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>常用编码</strong>：</p>
+<ul>
+<li>UTF-8：现代Web标准</li>
+<li>GBK&#x2F;GB2312：中文环境常用</li>
+<li>ISO-8859-1：早期Web应用</li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>利用编码不一致导致的XSS漏洞</li>
+<li>混合编码绕过过滤</li>
+<li>通过修改响应头欺骗客户端解析</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-HTML编码"><a href="#3-2-HTML编码" class="headerlink" title="3.2 HTML编码"></a>3.2 HTML编码</h3><ul>
+<li><p><strong>命名实体</strong>：<code>&amp;nbsp;</code>、<code>&amp;lt;</code>、<code>&amp;gt;</code>等</p>
+</li>
+<li><p><strong>十进制实体</strong>：<code>&amp;#160;</code>、<code>&amp;#60;</code>、<code>&amp;#62;</code></p>
+</li>
+<li><p><strong>十六进制实体</strong>：<code>&amp;#xA0;</code>、<code>&amp;#x3C;</code>、<code>&amp;#x3E;</code></p>
+</li>
+<li><p><strong>HTML5新增实体</strong>：更多特殊字符支持</p>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;x&quot;</span> <span class="attr">onerror</span>=<span class="string">&quot;<span class="symbol">&amp;#97;</span><span class="symbol">&amp;#108;</span><span class="symbol">&amp;#101;</span><span class="symbol">&amp;#114;</span><span class="symbol">&amp;#116;</span><span class="symbol">&amp;#40;</span><span class="symbol">&amp;#49;</span><span class="symbol">&amp;#41;</span>&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>多层编码绕过过滤器</li>
+<li>混合使用不同编码方式</li>
+<li>利用浏览器解析差异</li>
+</ul>
+</li>
+<li><p><strong>注意事项</strong>：</p>
+<ul>
+<li>仅在属性值和文本内容中有效</li>
+<li>不能对标签名、属性名进行HTML编码</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-URL编码"><a href="#3-3-URL编码" class="headerlink" title="3.3 URL编码"></a>3.3 URL编码</h3><ul>
+<li><p><strong>标准</strong>：RFC 3986</p>
+</li>
+<li><p><strong>编码规则</strong>：</p>
+<ul>
+<li>保留字符（如<code>!</code>, <code>*</code>, <code>&#39;</code>, <code>(</code>, <code>)</code>, <code>;</code>, <code>:</code>, <code>@</code>, <code>&amp;</code>, <code>=</code>, <code>+</code>, <code>$</code>, <code>,</code>, <code>/</code>, <code>?</code>, <code>#</code>, <code>[</code>, <code>]</code>）需要编码</li>
+<li>非ASCII字符必须编码</li>
+<li>空格编码为<code>+</code>或<code>%20</code></li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?keyword=aa%20union%20select</span><br></pre></td></tr></table></figure>
+<ul>
+<li>绕过基于关键字的过滤</li>
+<li>多次URL编码绕过WAF</li>
+<li>混合编码技术（如先Base64再URL编码）</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-4-JavaScript编码"><a href="#3-4-JavaScript编码" class="headerlink" title="3.4 JavaScript编码"></a>3.4 JavaScript编码</h3><ul>
+<li><p><strong>十六进制编码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x3C\x73\x63\x72\x69\x70\x74\<span class="title function_">x3Ealert</span>(<span class="number">1</span>)\x3C\x2F\x73\x63\x72\x69\x70\x74\x3E</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>八进制编码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\<span class="number">74</span>\<span class="number">163</span>\<span class="number">143</span>\<span class="number">162</span>\<span class="number">151</span>\<span class="number">160</span>\<span class="number">164</span>\76alert(<span class="number">1</span>)\<span class="number">74</span>\<span class="number">57</span>\<span class="number">163</span>\<span class="number">143</span>\<span class="number">162</span>\<span class="number">151</span>\<span class="number">160</span>\<span class="number">164</span>\<span class="number">76</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Unicode编码</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\u003c\u0073\u0063\u0072\u0069\u0070\u0074\<span class="title function_">u003ealert</span>(<span class="number">1</span>)\u003c\u002f\u0073\u0063\u0072\u0069\u0070\u0074\u003e</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>绕过基于关键字的JS过滤</li>
+<li>混合编码实现高级XSS</li>
+<li>利用<code>&lt;script&gt;</code>标签的编码绕过</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-5-CSS编码"><a href="#3-5-CSS编码" class="headerlink" title="3.5 CSS编码"></a>3.5 CSS编码</h3><ul>
+<li><strong>Unicode编码</strong>：<code>\0000</code>格式</li>
+<li><strong>十六进制编码</strong>：<code>\0000</code>或<code>\x0000</code></li>
+<li><strong>渗透测试应用</strong>：<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">&#x27;\x68\x74\x74\x70\x3a\x2f\x2f\x65\x78\x61\x6d\x70\x6c\x65\x2e\x63\x6f\x6d&#x27;</span>); &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>CSS注入攻击</li>
+<li>绕过内容安全策略(CSP)</li>
+</ul>
+</li>
+</ul>
+<h2 id="四、数据传输编码"><a href="#四、数据传输编码" class="headerlink" title="四、数据传输编码"></a>四、数据传输编码</h2><h3 id="4-1-Base64编码"><a href="#4-1-Base64编码" class="headerlink" title="4.1 Base64编码"></a>4.1 Base64编码</h3><ul>
+<li><p><strong>原理</strong>：将二进制数据转换为64个可打印ASCII字符</p>
+</li>
+<li><p><strong>标准</strong>：RFC 4648</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>编码后数据量增加约33%</li>
+<li>末尾可能有1-2个<code>=</code>作为填充</li>
+<li>URL安全变种使用<code>-</code>和<code>_</code>代替<code>+</code>和<code>/</code></li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&#x27;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>隐藏恶意脚本</li>
+<li>绕过基于关键字的过滤</li>
+<li>多层编码（Base64 + URL编码）</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-Hex编码"><a href="#4-2-Hex编码" class="headerlink" title="4.2 Hex编码"></a>4.2 Hex编码</h3><ul>
+<li><p><strong>原理</strong>：将每个字节转换为两位十六进制数</p>
+</li>
+<li><p><strong>数据库应用</strong>：MySQL中使用<code>0x</code>前缀</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="number">0x48656C6C6F</span>; <span class="comment">-- 输出Hello</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>SQL注入绕过</li>
+<li>文件内容十六进制表示</li>
+<li>混合编码绕过过滤</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-UUEncode"><a href="#4-3-UUEncode" class="headerlink" title="4.3 UUEncode"></a>4.3 UUEncode</h3><ul>
+<li><strong>历史</strong>：早期用于Unix系统间邮件传输</li>
+<li><strong>特点</strong>：将3字节转换为4个可打印字符</li>
+<li><strong>渗透测试应用</strong>：在遗留系统中可能发现的编码方式</li>
+</ul>
+<h3 id="4-4-Quoted-Printable"><a href="#4-4-Quoted-Printable" class="headerlink" title="4.4 Quoted-Printable"></a>4.4 Quoted-Printable</h3><ul>
+<li><p><strong>标准</strong>：RFC 2045，用于MIME编码</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>保留可打印ASCII字符</li>
+<li>非ASCII字符和特殊字符编码为<code>=</code>后跟两位十六进制</li>
+<li>每行不超过76字符</li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>邮件系统漏洞利用</li>
+<li>绕过基于内容的过滤</li>
+</ul>
+</li>
+</ul>
+<h2 id="五、数据结构编码"><a href="#五、数据结构编码" class="headerlink" title="五、数据结构编码"></a>五、数据结构编码</h2><h3 id="5-1-JSON编码"><a href="#5-1-JSON编码" class="headerlink" title="5.1 JSON编码"></a>5.1 JSON编码</h3><ul>
+<li><p><strong>标准</strong>：RFC 8259</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li>轻量级数据交换格式</li>
+<li>支持对象、数组、字符串、数字、布尔值和null</li>
+<li>严格的语法要求</li>
+</ul>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;Name&quot;</span><span class="punctuation">:</span><span class="string">&quot;a1&quot;</span><span class="punctuation">,</span><span class="attr">&quot;Number&quot;</span><span class="punctuation">:</span><span class="string">&quot;123&quot;</span><span class="punctuation">,</span><span class="attr">&quot;Contno&quot;</span><span class="punctuation">:</span><span class="string">&quot;000&quot;</span><span class="punctuation">,</span><span class="attr">&quot;QQNo&quot;</span><span class="punctuation">:</span><span class="string">&quot;&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>JSON注入攻击</li>
+<li>利用解析差异实施攻击</li>
+<li>通过编码绕过JSON验证</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-2-XML编码"><a href="#5-2-XML编码" class="headerlink" title="5.2 XML编码"></a>5.2 XML编码</h3><ul>
+<li><strong>实体编码</strong>：<code>&amp;lt;</code>, <code>&amp;gt;</code>, <code>&amp;amp;</code>等</li>
+<li><strong>CDATA</strong>：<code>&lt;![CDATA[...]]&gt;</code>区域</li>
+<li><strong>渗透测试应用</strong>：<ul>
+<li>XXE（XML External Entity）攻击</li>
+<li>利用编码绕过XML解析器</li>
+<li>混合编码实现高级攻击</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-3-序列化"><a href="#5-3-序列化" class="headerlink" title="5.3 序列化"></a>5.3 序列化</h3><ul>
+<li><p><strong>PHP序列化</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a:<span class="number">3</span>:&#123;i:<span class="number">0</span>;s:<span class="number">3</span>:<span class="string">&quot;Moe&quot;</span>;i:<span class="number">1</span>;s:<span class="number">5</span>:<span class="string">&quot;Larry&quot;</span>;i:<span class="number">2</span>;s:<span class="number">5</span>:<span class="string">&quot;Curly&quot;</span>;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>a</code>表示数组，<code>i</code>表示整数，<code>s</code>表示字符串</li>
+</ul>
+</li>
+<li><p><strong>Java序列化</strong>：二进制格式，易受反序列化漏洞影响</p>
+</li>
+<li><p><strong>Python Pickle</strong>：类似Java序列化，存在安全风险</p>
+</li>
+<li><p><strong>渗透测试应用</strong>：</p>
+<ul>
+<li>反序列化漏洞利用</li>
+<li>操作序列化数据实现远程代码执行</li>
+<li>绕过基于结构的过滤</li>
+</ul>
+</li>
+</ul>
+<h2 id="六、特殊编码技术"><a href="#六、特殊编码技术" class="headerlink" title="六、特殊编码技术"></a>六、特殊编码技术</h2><h3 id="6-1-UTF-7编码"><a href="#6-1-UTF-7编码" class="headerlink" title="6.1 UTF-7编码"></a>6.1 UTF-7编码</h3><ul>
+<li><strong>历史</strong>：设计用于在7位传输通道中传输Unicode</li>
+<li><strong>特点</strong>：使用<code>+</code>开头的编码序列</li>
+<li><strong>渗透测试应用</strong>：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;moonsec +AG0AbwBv-n+AHM-e+AGM-&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>绕过基于ASCII的过滤器</li>
+<li>XSS攻击中的经典绕过技术</li>
+<li>现代浏览器已逐渐弃用，但在旧系统中仍有效</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-2-Punycode"><a href="#6-2-Punycode" class="headerlink" title="6.2 Punycode"></a>6.2 Punycode</h3><ul>
+<li><strong>标准</strong>：RFC 3492</li>
+<li><strong>用途</strong>：将国际化域名转换为ASCII兼容格式</li>
+<li><strong>渗透测试应用</strong>：<ul>
+<li>IDN欺骗（同形异义字攻击）</li>
+<li>钓鱼网站构造</li>
+<li>例如：<code>xn--80ak6aa92e.com</code> 可能显示为 “аpple.com”（使用西里尔字母а）</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-3-Double-Encoding（双重编码）"><a href="#6-3-Double-Encoding（双重编码）" class="headerlink" title="6.3 Double Encoding（双重编码）"></a>6.3 Double Encoding（双重编码）</h3><ul>
+<li><strong>原理</strong>：对同一数据进行两次相同或不同的编码</li>
+<li><strong>渗透测试应用</strong>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%253Cscript%253Ealert(1)%253C/script%253E</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一次解码：<code>%3Cscript%3Ealert(1)%3C/script%3E</code></li>
+<li>第二次解码：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li>绕过仅进行单次解码的WAF</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-4-Mixed-Encoding（混合编码）"><a href="#6-4-Mixed-Encoding（混合编码）" class="headerlink" title="6.4 Mixed Encoding（混合编码）"></a>6.4 Mixed Encoding（混合编码）</h3><ul>
+<li><strong>原理</strong>：结合多种编码方式</li>
+<li><strong>渗透测试应用</strong>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%25%3C%73%63%72%69%70%74%3E%61%6C%65%72%74%28%31%29%3C%2F%73%63%72%69%70%74%3E</span><br></pre></td></tr></table></figure>
+<ul>
+<li>URL编码 + HTML编码混合</li>
+<li>绕过多层过滤系统</li>
+</ul>
+</li>
+</ul>
+<h2 id="七、编码在渗透测试中的实际应用"><a href="#七、编码在渗透测试中的实际应用" class="headerlink" title="七、编码在渗透测试中的实际应用"></a>七、编码在渗透测试中的实际应用</h2><h3 id="7-1-绕过WAF"><a href="#7-1-绕过WAF" class="headerlink" title="7.1 绕过WAF"></a>7.1 绕过WAF</h3><ul>
+<li><strong>多层编码</strong>：对同一内容进行多次编码</li>
+<li><strong>混合编码</strong>：结合URL、HTML、JS等多种编码</li>
+<li><strong>大小写混淆</strong>：利用WAF大小写敏感性</li>
+<li><strong>空格替换</strong>：用<code>%09</code>(TAB)、<code>%0A</code>(换行)等代替空格</li>
+</ul>
+<h3 id="7-2-XSS攻击"><a href="#7-2-XSS攻击" class="headerlink" title="7.2 XSS攻击"></a>7.2 XSS攻击</h3><ul>
+<li><strong>HTML编码绕过</strong>：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onerror</span>=<span class="string">&quot;<span class="symbol">&amp;#x61;</span><span class="symbol">&amp;#x6c;</span><span class="symbol">&amp;#x65;</span><span class="symbol">&amp;#x72;</span><span class="symbol">&amp;#x74;</span><span class="symbol">&amp;#x28;</span><span class="symbol">&amp;#x31;</span><span class="symbol">&amp;#x29;</span>&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>JS编码绕过</strong>：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\u0061\u006c\u0065\u0072\<span class="title function_">u0074</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>混合编码</strong>：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onerror</span>=<span class="string">&quot;eval(&#x27;\x61\x6c\x65\x72\x74\x28\x31\x29&#x27;)&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-3-SQL注入"><a href="#7-3-SQL注入" class="headerlink" title="7.3 SQL注入"></a>7.3 SQL注入</h3><ul>
+<li><strong>Hex编码绕过</strong>：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="number">0x61646D696E</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>URL编码绕过</strong>：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UNION</span><span class="operator">%</span><span class="number">20</span><span class="keyword">SELECT</span><span class="operator">%</span><span class="number">201</span>,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>双重编码绕过</strong>：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">%</span><span class="number">2527</span><span class="operator">%</span><span class="number">20</span><span class="keyword">OR</span><span class="operator">%</span><span class="number">201</span><span class="operator">%</span><span class="number">3</span>D1<span class="comment">--</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-4-文件包含漏洞"><a href="#7-4-文件包含漏洞" class="headerlink" title="7.4 文件包含漏洞"></a>7.4 文件包含漏洞</h3><ul>
+<li><strong>编码路径遍历</strong>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=..%2f..%2fetc%2fpasswd</span><br></pre></td></tr></table></figure></li>
+<li><strong>混合编码绕过</strong>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=%252e%252e%252fetc%252fpasswd</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="八、编码工具推荐"><a href="#八、编码工具推荐" class="headerlink" title="八、编码工具推荐"></a>八、编码工具推荐</h2><h3 id="8-1-在线工具"><a href="#8-1-在线工具" class="headerlink" title="8.1 在线工具"></a>8.1 在线工具</h3><ul>
+<li><strong>CyberChef</strong>：多功能编码&#x2F;解码工具，支持超过200种操作</li>
+<li><strong>URLDecoder</strong>：专门用于URL编码解码</li>
+<li><strong>Base64decode</strong>：Base64编码解码</li>
+<li><strong>Unicode Escape</strong>：Unicode编码转换</li>
+<li><strong>XSS Encoder</strong>：专门用于XSS测试的编码工具</li>
+</ul>
+<h3 id="8-2-浏览器插件"><a href="#8-2-浏览器插件" class="headerlink" title="8.2 浏览器插件"></a>8.2 浏览器插件</h3><ul>
+<li><strong>HackBar</strong>：多功能安全测试工具，包含编码功能</li>
+<li><strong>Burp Suite Encoder</strong>：集成在Burp Suite中的编码工具</li>
+<li><strong>XSStrike</strong>：XSS检测工具，包含编码绕过功能</li>
+</ul>
+<h3 id="8-3-命令行工具"><a href="#8-3-命令行工具" class="headerlink" title="8.3 命令行工具"></a>8.3 命令行工具</h3><ul>
+<li><strong>Python</strong>：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line">urllib.parse.quote(<span class="string">&quot;test string&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>JavaScript (Node.js)</strong>：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">encodeURIComponent</span>(<span class="string">&quot;test string&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>Linux命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Hello&quot;</span> | <span class="built_in">base64</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="九、防御建议"><a href="#九、防御建议" class="headerlink" title="九、防御建议"></a>九、防御建议</h2><h3 id="9-1-安全编码实践"><a href="#9-1-安全编码实践" class="headerlink" title="9.1 安全编码实践"></a>9.1 安全编码实践</h3><ul>
+<li><strong>输入规范化</strong>：在处理前将输入转换为标准格式</li>
+<li><strong>多层解码检查</strong>：避免仅进行单次解码</li>
+<li><strong>白名单过滤</strong>：允许已知安全的字符，拒绝其他所有</li>
+<li><strong>内容安全策略(CSP)</strong>：限制脚本执行来源</li>
+</ul>
+<h3 id="9-2-WAF配置建议"><a href="#9-2-WAF配置建议" class="headerlink" title="9.2 WAF配置建议"></a>9.2 WAF配置建议</h3><ul>
+<li><strong>多层解码</strong>：确保WAF能够处理多层编码</li>
+<li><strong>正则表达式优化</strong>：使用更智能的模式匹配</li>
+<li><strong>上下文感知</strong>：根据不同输入位置应用不同规则</li>
+<li><strong>定期更新规则</strong>：跟上新的编码绕过技术</li>
+</ul>
+<h3 id="9-3-安全开发建议"><a href="#9-3-安全开发建议" class="headerlink" title="9.3 安全开发建议"></a>9.3 安全开发建议</h3><ul>
+<li><strong>使用安全API</strong>：避免手动处理编码&#x2F;解码</li>
+<li><strong>输出编码</strong>：在输出到不同上下文时使用适当编码</li>
+<li><strong>安全库使用</strong>：使用经过验证的安全库处理用户输入</li>
+<li><strong>安全测试</strong>：包括对编码绕过技术的测试</li>
+</ul>
+<h2 id="十、编码绕过案例研究"><a href="#十、编码绕过案例研究" class="headerlink" title="十、编码绕过案例研究"></a>十、编码绕过案例研究</h2><h3 id="10-1-经典XSS双重编码绕过"><a href="#10-1-经典XSS双重编码绕过" class="headerlink" title="10.1 经典XSS双重编码绕过"></a>10.1 经典XSS双重编码绕过</h3><ul>
+<li><strong>原始payload</strong>：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+<li><strong>双重URL编码</strong>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%253Cscript%253Ealert(1)%253C%252Fscript%253E</span><br></pre></td></tr></table></figure></li>
+<li><strong>WAF行为</strong>：仅进行一次URL解码，得到<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，仍然被过滤</li>
+<li><strong>浏览器行为</strong>：进行两次URL解码，最终执行脚本</li>
+</ul>
+<h3 id="10-2-SQL注入Hex编码绕过"><a href="#10-2-SQL注入Hex编码绕过" class="headerlink" title="10.2 SQL注入Hex编码绕过"></a>10.2 SQL注入Hex编码绕过</h3><ul>
+<li><strong>原始payload</strong>：<code>&#39; OR 1=1 --</code></li>
+<li><strong>Hex编码</strong>：<code>0x27204F5220313D31202D2D</code></li>
+<li><strong>绕过原理</strong>：某些WAF无法识别Hex编码的SQL注入</li>
+</ul>
+<h3 id="10-3-UTF-7-XSS攻击"><a href="#10-3-UTF-7-XSS攻击" class="headerlink" title="10.3 UTF-7 XSS攻击"></a>10.3 UTF-7 XSS攻击</h3><ul>
+<li><strong>payload</strong>：<code>+ADw-script+AD4-alert(1)+ADw-/script+AD4-</code></li>
+<li><strong>绕过原理</strong>：旧版IE将UTF-7内容视为脚本执行</li>
+<li><strong>现代影响</strong>：虽然现代浏览器已弃用UTF-7，但某些中间件可能仍存在风险</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/" rel="tag"># 编码技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/13/%E7%AB%AF%E5%8F%A3%E5%8D%8F%E8%AE%AE/" rel="prev" title="端口协议">
+                  <i class="fa fa-angle-left"></i> 端口协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rookie-Hacker</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">115k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:25</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"ZQ-Rookie-Hacker/ZQ-Rookie-Hacker.github.io","issue_term":"pathname","theme":"preferred-color-scheme","label":"comment"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

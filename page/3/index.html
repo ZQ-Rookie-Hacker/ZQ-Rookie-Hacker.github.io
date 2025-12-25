@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,365 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/" class="post-title-link" itemprop="url">Linux中的解压</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-04 12:00:00" itemprop="dateCreated datePublished" datetime="2024-12-04T12:00:00+08:00">2024-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-13 16:52:33" itemprop="dateModified" datetime="2025-12-13T16:52:33+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux中的解压" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="一、前置：工具安装（缺失时执行）"><a href="#一、前置：工具安装（缺失时执行）" class="headerlink" title="一、前置：工具安装（缺失时执行）"></a>一、前置：工具安装（缺失时执行）</h3><table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>所需工具（压缩+解压）</th>
+<th>Kali安装命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAR（.rar）</td>
+<td><code>rar</code>（压缩）、<code>unrar</code>（解压）</td>
+<td><code>sudo apt install -y rar unrar</code></td>
+</tr>
+<tr>
+<td>ZIP（.zip）</td>
+<td><code>zip</code>（压缩）、<code>unzip</code>（解压）</td>
+<td><code>sudo apt install -y zip unzip</code></td>
+</tr>
+<tr>
+<td>7Z（.7z）</td>
+<td><code>p7zip-full</code>（全能工具）</td>
+<td><code>sudo apt install -y p7zip-full</code></td>
+</tr>
+<tr>
+<td>TAR系列（.tar&#x2F;.tar.gz等）</td>
+<td><code>tar</code>（系统内置）</td>
+<td>无需安装，默认自带</td>
+</tr>
+</tbody></table>
+<h3 id="二、分格式完整操作指南（核心）"><a href="#二、分格式完整操作指南（核心）" class="headerlink" title="二、分格式完整操作指南（核心）"></a>二、分格式完整操作指南（核心）</h3><h4 id="1-ZIP格式（-zip）"><a href="#1-ZIP格式（-zip）" class="headerlink" title="1. ZIP格式（.zip）"></a>1. ZIP格式（.zip）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>zip 目标包.zip 源文件1 源文件2 目录/</code></td>
+<td>目录需加 <code>-r</code> 递归压缩：<code>zip -r 目标包.zip 目录/</code></td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>zip -e 目标包.zip 源文件</code></td>
+<td>回车后手动输入密码（安全，密码不显示）</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>zip -P 密码 目标包.zip 源文件</code></td>
+<td>密码直接跟在 <code>-P</code> 后（无空格），如 <code>zip -P123 test.zip file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unzip 压缩包.zip</code></td>
+<td>默认保留文件夹结构，文件散落在当前目录</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>unzip 压缩包.zip -d 目标目录</code></td>
+<td>例：<code>unzip test.zip -d ./5.8attachment</code>（目录自动创建，无需手动建）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unzip -P 密码 压缩包.zip</code></td>
+<td>例：<code>unzip -Pfcmit.cc 5.8attachment.zip</code></td>
+</tr>
+<tr>
+<td>强制覆盖现有文件</td>
+<td><code>unzip -o 压缩包.zip</code></td>
+<td>跳过“是否覆盖”提示，直接替换</td>
+</tr>
+<tr>
+<td>仅查看压缩包内容（不解压）</td>
+<td><code>unzip -l 压缩包.zip</code></td>
+<td>查看文件&#x2F;目录结构，确认后再解压</td>
+</tr>
+</tbody></table>
+<h4 id="2-7Z格式（-7z）"><a href="#2-7Z格式（-7z）" class="headerlink" title="2. 7Z格式（.7z）"></a>2. 7Z格式（.7z）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>7z a 目标包.7z 源文件/目录</code></td>
+<td>自动递归压缩目录，无需额外参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容+文件名）</td>
+<td><code>7z a -p密码 目标包.7z 源文件</code></td>
+<td>密码直接跟 <code>-p</code>（无空格），如 <code>7z a -p123 test.7z dir/</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>7z x 压缩包.7z</code></td>
+<td><code>x</code> 是保留结构的核心参数（用 <code>e</code> 会扁平化解压，不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>7z x 压缩包.7z -o目标目录</code></td>
+<td>例：<code>7z x test.7z -o./5.8attachment</code>（<code>-o</code> 后无空格，直接接目录）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>7z x 压缩包.7z -p密码</code></td>
+<td>例：<code>7z x 5.8attachment.7z -pfcmit.cc</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>7z l 压缩包.7z</code></td>
+<td>列出所有文件&#x2F;目录，不解压</td>
+</tr>
+</tbody></table>
+<h4 id="3-RAR格式（-rar）"><a href="#3-RAR格式（-rar）" class="headerlink" title="3. RAR格式（.rar）"></a>3. RAR格式（.rar）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>rar a 目标包.rar 源文件/目录</code></td>
+<td>自动递归压缩目录，无需 <code>-r</code> 参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>rar a -p 目标包.rar 源文件</code></td>
+<td>回车后输入密码（安全）；<code>-hp</code> 参数可加密文件名+内容</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>rar a -p密码 目标包.rar 源文件</code></td>
+<td>例：<code>rar a -p123 test.rar file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unrar x 压缩包.rar</code></td>
+<td><code>x</code> 保留结构，<code>e</code> 扁平化解压（不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录</td>
+<td><code>unrar x 压缩包.rar 目标目录</code></td>
+<td>例：<code>unrar x test.rar ./5.8attachment</code>（目录需提前创建：<code>mkdir -p 目录</code>）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unrar x -p密码 压缩包.rar</code></td>
+<td>例：<code>unrar x -p123 test.rar</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>unrar l 压缩包.rar</code></td>
+<td>列出文件&#x2F;目录结构</td>
+</tr>
+</tbody></table>
+<h4 id="4-TAR系列格式（打包-压缩）"><a href="#4-TAR系列格式（打包-压缩）" class="headerlink" title="4. TAR系列格式（打包+压缩）"></a>4. TAR系列格式（打包+压缩）</h4><p>tar 本身是“打包工具”，结合 <code>gzip/bzip2/xz</code> 算法形成复合格式，核心参数：<code>c</code>（压缩）、<code>x</code>（解压）、<code>f</code>（指定文件）、<code>v</code>（显示过程）、<code>z</code>（gzip）、<code>J</code>（xz）、<code>j</code>（bzip2）。</p>
+<table>
+<thead>
+<tr>
+<th>格式类型</th>
+<th>压缩命令（打包+压缩）</th>
+<th>解压命令（保留结构）</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.tar（仅打包）</td>
+<td><code>tar -cvf 目标包.tar 源文件/目录</code></td>
+<td><code>tar -xvf 包.tar</code></td>
+<td>不压缩，仅合并文件&#x2F;目录</td>
+</tr>
+<tr>
+<td>.tar.gz（常用）</td>
+<td><code>tar -czvf 目标包.tar.gz 源文件/目录</code></td>
+<td><code>tar -xzvf 包.tar.gz</code></td>
+<td>gzip算法，压缩率中等</td>
+</tr>
+<tr>
+<td>.tar.xz（高压缩）</td>
+<td><code>tar -cJvf 目标包.tar.xz 源文件/目录</code></td>
+<td><code>tar -xJvf 包.tar.xz</code></td>
+<td>xz算法，压缩率最高（耗时久）</td>
+</tr>
+<tr>
+<td>.tar.bz2</td>
+<td><code>tar -cjvf 目标包.tar.bz2 源文件/目录</code></td>
+<td><code>tar -xjvf 包.tar.bz2</code></td>
+<td>bzip2算法，兼容旧系统</td>
+</tr>
+<tr>
+<td>解压到指定目录</td>
+<td>-</td>
+<td><code>tar -xzvf 包.tar.gz -C 目标目录</code></td>
+<td><code>-C</code> 后接目录，例：<code>-C ./5.8attachment</code></td>
+</tr>
+<tr>
+<td>仅查看内容</td>
+<td>-</td>
+<td><code>tar -tvf 包.tar.gz</code></td>
+<td>列出文件&#x2F;目录结构，不解压</td>
+</tr>
+</tbody></table>
+<h3 id="三、通用核心技巧（必看）"><a href="#三、通用核心技巧（必看）" class="headerlink" title="三、通用核心技巧（必看）"></a>三、通用核心技巧（必看）</h3><ol>
+<li><strong>保留文件夹结构</strong>：所有格式的解压命令，用 <code>x</code> 参数（zip&#x2F;7z&#x2F;rar）或 tar 默认命令，即可保留原目录结构；避免用 <code>e</code> 参数（会扁平化所有文件到同一目录）。</li>
+<li><strong>指定解压目录</strong>：<ul>
+<li>zip&#x2F;rar：<code>-d 目录</code>（zip需目录提前存在，rar可自动创建）；</li>
+<li>7z：<code>-o目录</code>（<code>-o</code> 后无空格）；</li>
+<li>tar：<code>-C 目录</code>（大写C）。</li>
+</ul>
+</li>
+<li><strong>强制覆盖</strong>：zip 加 <code>-o</code>，7z 加 <code>-aoa</code>，rar 加 <code>-o+</code>，tar 加 <code>--overwrite</code>。</li>
+<li><strong>批量操作</strong>：压缩时可指定多个源文件（空格分隔），例：<code>zip all.zip 1.txt 2.jpg dir/</code>。</li>
+<li><strong>中文乱码</strong>：解压含中文文件名的压缩包，加 <code>-O UTF-8</code>（zip）或 <code>-scsUTF-8</code>（7z），例：<code>unzip -O UTF-8 中文包.zip</code>。</li>
+</ol>
+<h3 id="四、快速查找命令（按需求检索）"><a href="#四、快速查找命令（按需求检索）" class="headerlink" title="四、快速查找命令（按需求检索）"></a>四、快速查找命令（按需求检索）</h3><table>
+<thead>
+<tr>
+<th>需求场景</th>
+<th>对应命令（以zip为例，替换格式即可）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>解压到名为“5.8attachment”的文件夹</td>
+<td><code>unzip 5.8attachment.zip -d ./5.8attachment</code></td>
+</tr>
+<tr>
+<td>加密压缩文件</td>
+<td><code>zip -e 加密包.zip 源文件</code></td>
+</tr>
+<tr>
+<td>解压加密文件（已知密码）</td>
+<td><code>unzip -P 密码 加密包.zip</code></td>
+</tr>
+<tr>
+<td>查看压缩包内是否有文件夹</td>
+<td><code>unzip -l 压缩包.zip</code></td>
+</tr>
+<tr>
+<td>快速打包目录并压缩</td>
+<td><code>tar -czvf 目录.tar.gz 目标目录/</code></td>
+</tr>
+</tbody></table>
+<p>所有命令均经过实操验证，可直接复制使用，若遇权限问题，在命令前加 <code>sudo</code> 即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -768,9 +1127,9 @@
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#x67;&#x69;&#x74;&#64;&#103;&#105;&#116;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>
@@ -828,14 +1187,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">115k</span>
+    <span title="站点总字数">116k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:25</span>
+    <span title="站点阅读时长">6:27</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

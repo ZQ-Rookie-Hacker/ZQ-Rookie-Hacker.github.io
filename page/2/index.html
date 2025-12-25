@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,2165 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/05/%E7%BD%91%E7%BB%9C%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/05/%E7%BD%91%E7%BB%9C%E5%B1%82/" class="post-title-link" itemprop="url">第 4 章 网络层</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-05 17:43:19 / 修改时间：21:55:52" itemprop="dateCreated datePublished" datetime="2025-12-05T17:43:19+08:00">2025-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/05/%E7%BD%91%E7%BB%9C%E5%B1%82/" class="post-meta-item leancloud_visitors" data-flag-title="第 4 章 网络层" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>32 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="4-1-网络层的功能"><a href="#4-1-网络层的功能" class="headerlink" title="4.1   网络层的功能"></a>4.1   网络层的功能</h2><h3 id="4-1-1-异构网络互连"><a href="#4-1-1-异构网络互连" class="headerlink" title="4.1.1   异构网络互连"></a>4.1.1   异构网络互连</h3><ul>
+<li>定义<ul>
+<li>互联网由全球范围内数以百万计的异构网络互连</li>
+<li>网络层任务之一是实现异构网络互连</li>
+<li>网络互连：将两个以上计算机网络通过中继系统相互连接</li>
+</ul>
+</li>
+<li>中继系统分类（按层次）<ul>
+<li>物理层中继系统<ul>
+<li>转发器</li>
+<li>集线器</li>
+</ul>
+</li>
+<li>数据链路层中继系统<ul>
+<li>网桥</li>
+<li>交换机</li>
+</ul>
+</li>
+<li>网络层中继系统<ul>
+<li>路由器</li>
+</ul>
+</li>
+<li>网络层以上中继系统<ul>
+<li>网关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络互连特点<ul>
+<li>通常指用路由器进行连接和路由选择</li>
+<li>路由器是专用计算机</li>
+<li>历史原因：路由器有时被称为网关</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP网络互连方案<ul>
+<li>网络层采用标准化协议</li>
+<li>可连接异构网络</li>
+<li>IP网络概念<ul>
+<li>实际互连网络（通过路由器连接）</li>
+<li>虚拟IP网络（统一网络视图）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IP网络优势<ul>
+<li>主机通信时如同在单个网络上</li>
+<li>隐藏底层网络异构细节</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-2-路由与转发"><a href="#4-1-2-路由与转发" class="headerlink" title="4.1.2   路由与转发"></a>4.1.2   路由与转发</h3><ul>
+<li>路由器主要完成两个功能<ul>
+<li>路由选择(确定哪一条路径)<ul>
+<li>根据路由选择协议构造并维护路由表</li>
+<li>经常或定期与相邻路由器交换信息</li>
+<li>获取网络最新拓扑</li>
+<li>动态更新维护路由表</li>
+<li>决定分组到达目的地节点的最优路径</li>
+</ul>
+</li>
+<li>分组转发(分组到达时所采取的动作)<ul>
+<li>处理通过路由器的数据流</li>
+<li>关键操作<ul>
+<li>转发表查询</li>
+<li>转发</li>
+<li>队列管理</li>
+<li>任务调度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由表与转发表的关系<ul>
+<li>路由表根据路由选择算法得出</li>
+<li>转发表从路由表得出</li>
+<li>转发表结构优化查找过程</li>
+<li>路由表优化网络拓扑变化计算</li>
+</ul>
+</li>
+<li>注意<ul>
+<li>讨论路由选择原理时<ul>
+<li>不区分转发表和路由表</li>
+<li>笼统使用路由表一词</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-3-网络层提供的两种服务"><a href="#4-1-3-网络层提供的两种服务" class="headerlink" title="4.1.3    网络层提供的两种服务"></a>4.1.3    网络层提供的两种服务</h3><ul>
+<li><p>网络层提供两种通信服务方式</p>
+<ul>
+<li>面向连接的虚电路服务</li>
+<li>无连接的数据报服务</li>
+</ul>
+</li>
+<li><p>①. 虚电路（Virtual Circuit, VC）</p>
+<ul>
+<li>基本概念<ul>
+<li>计算机通信前先建立网络层连接</li>
+<li>连接是一条逻辑上的路径（非物理专用）</li>
+<li>分为三个阶段：建立、传输、释放</li>
+</ul>
+</li>
+<li>虚电路号（VCID）<ul>
+<li>每次建立时分配唯一编号</li>
+<li>区分不同虚电路</li>
+</ul>
+</li>
+<li>数据传输特点<ul>
+<li>首部仅携带VCID，不重复目的地址</li>
+<li>每个节点维护虚电路表<ul>
+<li>包含VCID、入链路、出链路、前后节点等信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>建立连接：发送“呼叫请求”分组 → 接收方确认“呼叫应答”</li>
+<li>数据传输：通过已建立路径传输数据分组</li>
+<li>释放连接：发送“释放请求”分组 → 逐段拆除连接</li>
+</ul>
+</li>
+<li>特点总结<ul>
+<li>建立&#x2F;拆除需要开销，适合长时间频繁通信</li>
+<li>路由选择在连接建立时确定</li>
+<li>提供可靠传输、有序到达、流量控制</li>
+<li>对网络故障适应性差<ul>
+<li>节点或链路失效 → 所有相关虚电路中断</li>
+</ul>
+</li>
+<li>分组首部开销小（只用VCID）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>②. 数据报（Datagram）</p>
+<ul>
+<li>基本概念<ul>
+<li>发送前不需要建立连接</li>
+<li>每个分组独立路由转发</li>
+<li>网络层不承诺服务质量</li>
+</ul>
+</li>
+<li>数据传输特点<ul>
+<li>每个分组包含完整源和目的地址</li>
+<li>中间节点缓存并查找转发表进行转发</li>
+<li>不保证顺序、可靠性、流量控制</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>主机A将分组发给相邻交换节点A</li>
+<li>节点A查找转发表决定下一跳</li>
+<li>其他节点类似转发，直到到达主机B</li>
+</ul>
+</li>
+<li>特点总结<ul>
+<li>无需连接建立，灵活高效</li>
+<li>尽最大努力交付，可能出错、丢失、乱序</li>
+<li>支持资源复用，利用率高</li>
+<li>对网络故障适应性强<ul>
+<li>可动态更新路由避开故障节点</li>
+</ul>
+</li>
+<li>分组需排队转发，可能造成延迟或丢包</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>③. 数据报服务与虚电路服务比较</p>
+<ul>
+<li>连接的建立<ul>
+<li>数据报服务：不需要</li>
+<li>虚电路服务：必须有</li>
+</ul>
+</li>
+<li>目的地址<ul>
+<li>数据报服务：每个分组都有完整的目的地址</li>
+<li>虚电路服务：连接阶段</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-4-SDN-的基本概念"><a href="#4-1-4-SDN-的基本概念" class="headerlink" title="4.1.4   SDN 的基本概念"></a>4.1.4   SDN 的基本概念</h3><ul>
+<li>网络层抽象划分<ul>
+<li>数据平面（转发层面）<ul>
+<li>功能：转发</li>
+</ul>
+</li>
+<li>控制平面<ul>
+<li>功能：路由选择</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN架构特点<ul>
+<li>集中式的控制平面</li>
+<li>分布式的数据平面</li>
+<li>控制平面与数据平面分离</li>
+<li>控制平面通过控制-数据接口集中控制路由器</li>
+</ul>
+</li>
+<li>传统路由器 vs SDN路由器<ul>
+<li>传统路由器<ul>
+<li>包含转发表和路由选择软件</li>
+<li>既有数据平面又有控制平面</li>
+</ul>
+</li>
+<li>SDN路由器<ul>
+<li>简化设计</li>
+<li>无需路由选择软件</li>
+<li>路由器间不交换路由信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN结构<ul>
+<li>远程控制器<ul>
+<li>逻辑上的控制中心</li>
+<li>掌握网络状态</li>
+<li>计算最佳路由</li>
+<li>通过Openflow协议下发流表</li>
+</ul>
+</li>
+<li>路由器工作流程<ul>
+<li>收到分组</li>
+<li>查找转发表</li>
+<li>转发分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN应用场景<ul>
+<li>大型数据中心之间的广域网</li>
+</ul>
+</li>
+<li>SDN接口<ul>
+<li>北向接口<ul>
+<li>面向应用开发者的编程接口</li>
+<li>提供丰富API</li>
+</ul>
+</li>
+<li>南向接口<ul>
+<li>控制器与转发设备间的双向会话接口</li>
+<li>协议示例：Openflow</li>
+</ul>
+</li>
+<li>东西向接口<ul>
+<li>控制器集群内部通信接口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN优点<ul>
+<li>全局集中式控制和分布式高速转发</li>
+<li>灵活可编程与性能的平衡</li>
+<li>降低成本</li>
+</ul>
+</li>
+<li>SDN问题<ul>
+<li>安全风险<ul>
+<li>集中管理易受攻击</li>
+</ul>
+</li>
+<li>瓶颈问题<ul>
+<li>控制器可能成为性能瓶颈</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-5-拥塞控制"><a href="#4-1-5-拥塞控制" class="headerlink" title="4.1.5    拥塞控制"></a>4.1.5    拥塞控制</h3><ul>
+<li>定义<ul>
+<li>因出现过量的分组而引起网络性能下降的现象</li>
+</ul>
+</li>
+<li>判断方法<ul>
+<li>观察吞吐量与网络负载的关系<ul>
+<li>轻度拥塞：吞吐量明显小于正常值</li>
+<li>拥塞状态：吞吐量随负载增大而下降</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>主要问题<ul>
+<li>如何获取拥塞信息</li>
+<li>利用信息进行控制</li>
+</ul>
+</li>
+<li>作用<ul>
+<li>确保网络承载能力</li>
+<li>全局性过程<ul>
+<li>涉及所有主机、路由器</li>
+</ul>
+</li>
+<li>增加资源不能单独解决</li>
+</ul>
+</li>
+<li>与流量控制的区别<ul>
+<li>流量控制：点对点通信量控制</li>
+<li>目的：抑制发送速率使接收方来得及接收</li>
+</ul>
+</li>
+<li>控制方法<ul>
+<li>开环控制<ul>
+<li>特点：静态预防</li>
+<li>手段：<ul>
+<li>确定接收新流量时机</li>
+<li>分组丢弃策略</li>
+<li>调度策略</li>
+</ul>
+</li>
+<li>特点：不考虑当前网络状态</li>
+</ul>
+</li>
+<li>闭环控制<ul>
+<li>特点：动态方法</li>
+<li>原理：基于反馈环路</li>
+<li>过程：<ul>
+<li>监测网络状态</li>
+<li>检测拥塞</li>
+<li>传递拥塞信息</li>
+<li>调整系统运行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-IPV4"><a href="#4-2-IPV4" class="headerlink" title="4.2  IPV4"></a>4.2  IPV4</h2><h3 id="4-2-1-IPv4分组"><a href="#4-2-1-IPv4分组" class="headerlink" title="4.2.1   IPv4分组"></a>4.2.1   IPv4分组</h3><ul>
+<li>IPv4概述<ul>
+<li>IP定义数据传送的基本单元——IP分组及其确切的数据格式</li>
+<li>包含处理规则、错误控制机制</li>
+<li>实现非可靠投递和路由选择思想</li>
+</ul>
+</li>
+<li>IPv4分组格式<ul>
+<li>组成<ul>
+<li>首部<ul>
+<li>固定部分(20B)</li>
+<li>可选字段(长度可变)</li>
+</ul>
+</li>
+<li>数据部分</li>
+</ul>
+</li>
+<li>重要字段<ul>
+<li>版本(4位)<ul>
+<li>值为4表示IPv4</li>
+</ul>
+</li>
+<li>首部长度(4位)<ul>
+<li>以4B为单位</li>
+<li>最大60B(15×4B)</li>
+<li>常用20B(5×4B)</li>
+</ul>
+</li>
+<li>总长度(16位)<ul>
+<li>首部+数据的总长度</li>
+<li>最大65535B</li>
+</ul>
+</li>
+<li>标识(16位)<ul>
+<li>数据报唯一标识</li>
+<li>分片时复制相同标识</li>
+</ul>
+</li>
+<li>标志(3位)<ul>
+<li>MF(More Fragment)</li>
+<li>DF(Don’t Fragment)</li>
+</ul>
+</li>
+<li>片偏移(13位)<ul>
+<li>以8B为单位</li>
+</ul>
+</li>
+<li>生存时间(TTL)(8位)<ul>
+<li>最大路由器跳数</li>
+</ul>
+</li>
+<li>协议(8位)<ul>
+<li>上层协议类型</li>
+<li>6:TCP,17:UDP</li>
+</ul>
+</li>
+<li>首部检验和(16位)<ul>
+<li>仅检验首部</li>
+</ul>
+</li>
+<li>源地址(4B)</li>
+<li>目的地址(4B)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IP数据报分片<ul>
+<li>分片原因<ul>
+<li>链路层MTU限制</li>
+<li>不同链路MTU可能不同</li>
+</ul>
+</li>
+<li>分片过程<ul>
+<li>标识字段保持相同</li>
+<li>设置MF和DF标志</li>
+<li>计算片偏移</li>
+</ul>
+</li>
+<li>重组过程<ul>
+<li>目的主机重组</li>
+<li>使用标识、标志、片偏移字段</li>
+</ul>
+</li>
+<li>分片示例<ul>
+<li>4000B数据报(20B首部+3980B数据)</li>
+<li>MTU&#x3D;1500B</li>
+<li>分3片<ul>
+<li>1480B+1480B+1020B</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-2-IPv4地址与NAT"><a href="#4-2-2-IPv4地址与NAT" class="headerlink" title="4.2.2   IPv4地址与NAT"></a>4.2.2   IPv4地址与NAT</h3><ul>
+<li>IPv4地址<ul>
+<li>IP地址定义<ul>
+<li>32位全球唯一标识符</li>
+<li>由ICANN分配</li>
+<li>点分十进制记法</li>
+</ul>
+</li>
+<li>IP地址结构<ul>
+<li>分类IP地址（A、B、C类）</li>
+<li>组成：网络号 + 主机号<ul>
+<li>网络号：互联网范围内唯一</li>
+<li>主机号：网络范围内唯一</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IP地址特点<ul>
+<li>分等级地址结构<ul>
+<li>优点：<ul>
+<li>方便管理</li>
+<li>减小路由表存储空间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>标志主机和链路接口<ul>
+<li>多网络主机需多个IP地址</li>
+</ul>
+</li>
+<li>同一LAN网络号相同</li>
+<li>所有网络平等</li>
+<li>同一局域网网络号相同</li>
+</ul>
+</li>
+<li>特殊IP地址<ul>
+<li>主机号全0：本网络</li>
+<li>主机号全1：直接广播地址</li>
+<li>127.x.x.x：环回测试</li>
+<li>0.0.0.0：本网络本主机</li>
+<li>255.255.255.255：受限广播地址</li>
+</ul>
+</li>
+<li>IP地址使用范围<ul>
+<li>A类：网络数2⁷-2</li>
+<li>B类&#x2F;C类：早期限制已取消</li>
+<li>主机数减2（全0&#x2F;全1不指派）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>NAT（网络地址转换）<ul>
+<li>定义<ul>
+<li>专用网络地址转公用地址</li>
+<li>隐藏内部管理IP</li>
+<li>节省IP地址</li>
+<li>提高安全性</li>
+</ul>
+</li>
+<li>私有IP地址<ul>
+<li>范围：<ul>
+<li>10.0.0.0&#x2F;8</li>
+<li>172.16.0.0&#x2F;12</li>
+<li>192.168.0.0&#x2F;16</li>
+</ul>
+</li>
+<li>特点：<ul>
+<li>仅用于LAN</li>
+<li>可重复使用</li>
+<li>需NAT转换才能上网</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>NAT工作原理<ul>
+<li>转换表：{本地IP:端口} ↔ {全球IP:端口}</li>
+<li>多私有IP映射单一全球IP</li>
+<li>过程：<ul>
+<li>①. 主机发送请求</li>
+<li>②. NAT修改源地址&#x2F;端口</li>
+<li>③. 服务器响应NAT地址</li>
+<li>④. NAT转换返回主机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务器应用<ul>
+<li>公网访问私网服务器</li>
+<li>配置特定端口映射</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-3-划分子网与路由聚合"><a href="#4-2-3-划分子网与路由聚合" class="headerlink" title="4.2.3    划分子网与路由聚合"></a>4.2.3    划分子网与路由聚合</h3><ul>
+<li><p>划分子网</p>
+<ul>
+<li>两级IP地址的缺点<ul>
+<li>IP地址空间利用率低</li>
+<li>路由表过大影响性能</li>
+<li>灵活性不足</li>
+</ul>
+</li>
+<li>划分子网发展<ul>
+<li>1985年成为标准协议</li>
+<li>增加子网号字段形成三级IP地址</li>
+</ul>
+</li>
+<li>基本思路<ul>
+<li>单位内部行为，对外表现单一网络</li>
+<li>从主机号借位作为子网号</li>
+<li>三级IP地址结构：{网络号,子网号,主机号}</li>
+<li>路由器转发流程<ul>
+<li>先按目的网络号转发</li>
+<li>本单位路由器再按子网号转发</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>子网掩码和默认网关</p>
+<ul>
+<li>子网掩码作用<ul>
+<li>标识主机号借位情况</li>
+<li>32位二进制串（1对应网络&#x2F;子网号，0对应主机号）</li>
+<li>通过AND运算获取网络地址</li>
+</ul>
+</li>
+<li>默认网关<ul>
+<li>子网与外部网络的连接点</li>
+<li>路由器接口IP地址</li>
+<li>转发非本子网数据</li>
+</ul>
+</li>
+<li>使用规范<ul>
+<li>所有网络必须使用子网掩码</li>
+<li>未划分子网时使用默认子网掩码<ul>
+<li>A类：255.0.0.0</li>
+<li>B类：255.255.0.0</li>
+<li>C类：255.255.255.0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置要求<ul>
+<li>主机必须同时配置IP和子网掩码</li>
+<li>同一子网设备需配置相同子网掩码</li>
+<li>路由表关键字段：<ul>
+<li>目的网络地址</li>
+<li>子网掩码</li>
+<li>下一跳地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无分类编址CIDR</p>
+<ul>
+<li>核心概念<ul>
+<li>消除传统ABC类地址划分</li>
+<li>使用可变长网络前缀</li>
+<li>记法：IP地址&#x2F;前缀位数（如128.14.32.5&#x2F;20）</li>
+</ul>
+</li>
+<li>地址块特性<ul>
+<li>最小地址：主机号全0</li>
+<li>最大地址：主机号全1</li>
+<li>可用地址数：2^N-2（N&#x3D;主机号位数）</li>
+</ul>
+</li>
+<li>特殊说明<ul>
+<li>仍可使用”掩码”概念</li>
+<li>单位内部可继续划分子网</li>
+<li>地址块大小必为2的整数次幂</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>路由聚合</p>
+<ul>
+<li>原理<ul>
+<li>用大CIDR地址块代替多个小地址块</li>
+<li>压缩路由表空间</li>
+</ul>
+</li>
+<li>最长前缀匹配规则<ul>
+<li>选择网络前缀最长的路由</li>
+<li>实现方式：层次式数据结构（如二叉线索）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>子网划分应用</p>
+<ul>
+<li>定长子网掩码<ul>
+<li>特点<ul>
+<li>统一子网掩码</li>
+<li>每个子网地址数相同</li>
+<li>可能造成浪费</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>变长子网掩码<ul>
+<li>特点<ul>
+<li>不同子网使用不同掩码</li>
+<li>按需分配地址数量</li>
+<li>减少地址浪费</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特殊场景<ul>
+<li>路由器间链路：使用&#x2F;30地址块（2个可用地址）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-4-网络层转发分组的过程"><a href="#4-2-4-网络层转发分组的过程" class="headerlink" title="4.2.4    网络层转发分组的过程"></a>4.2.4    网络层转发分组的过程</h3><ul>
+<li>分组转发基于目的主机所在网络<ul>
+<li>原因：网络数远小于主机数，压缩转发表大小</li>
+<li>路由器根据目的IP地址网络前缀查找转发表</li>
+</ul>
+</li>
+<li>转发表路由信息格式<ul>
+<li>(目的网络地址，下一跳地址)</li>
+</ul>
+</li>
+<li>CIDR编址时的转发规则<ul>
+<li>最长前缀匹配原则</li>
+<li>转发表排序：前缀长度降序排列</li>
+</ul>
+</li>
+<li>特殊路由类型<ul>
+<li>特定主机路由<ul>
+<li>格式：a.b.c.d&#x2F;32</li>
+<li>用途：网络管理员控制和测试网络</li>
+<li>匹配优先级最高</li>
+</ul>
+</li>
+<li>默认路由<ul>
+<li>格式：0.0.0.0&#x2F;0</li>
+<li>用途：路由器到互联网的路由</li>
+<li>匹配优先级最低</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组转发算法步骤<ol>
+<li>提取目的IP地址D</li>
+<li>检查特定主机路由</li>
+<li>逐行检查转发表</li>
+</ol>
+<ul>
+<li>子网掩码与D进行AND操作</li>
+<li>匹配则转发</li>
+</ul>
+<ol start="4">
+<li>检查默认路由</li>
+</ol>
+</li>
+<li>转发表特点<ul>
+<li>不指明完整路径</li>
+<li>采用逐步查找下一跳的方式</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-5-地址解析协议-ARP"><a href="#4-2-5-地址解析协议-ARP" class="headerlink" title="4.2.5   地址解析协议(ARP)"></a>4.2.5   地址解析协议(ARP)</h3><ul>
+<li>1.IP地址与硬件地址<ul>
+<li>IP地址<ul>
+<li>网络层及以上使用</li>
+<li>分层式结构</li>
+<li>放在IP数据报首部</li>
+</ul>
+</li>
+<li>硬件地址(MAC地址)<ul>
+<li>数据链路层使用</li>
+<li>平面式结构</li>
+<li>放在MAC帧首部</li>
+</ul>
+</li>
+<li>网络层特性<ul>
+<li>只能看到IP数据报</li>
+<li>路由器只根据目的IP地址转发</li>
+<li>局域网链路层只能看到MAC帧</li>
+<li>IP层屏蔽硬件地址细节</li>
+</ul>
+</li>
+<li>路由器特性<ul>
+<li>有多个IP地址</li>
+<li>有多个硬件地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2.地址解析协议(ARP)<ul>
+<li>功能<ul>
+<li>IP地址到MAC地址的映射</li>
+<li>动态维护ARP表</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>检查ARP缓存</li>
+<li>无缓存时广播ARP请求(目的MAC为FF-FF-FF-FF-FF-FF)</li>
+<li>目标主机单播响应</li>
+<li>更新ARP缓存</li>
+</ul>
+</li>
+<li>工作层次<ul>
+<li>网络层(能看到IP地址)</li>
+</ul>
+</li>
+<li>四种典型情况<ul>
+<li>主机→本网络主机</li>
+<li>主机→其他网络主机</li>
+<li>路由器→直连网络主机</li>
+<li>路由器→非直连网络主机</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-6-动态主机配置协议-DHCP"><a href="#4-2-6-动态主机配置协议-DHCP" class="headerlink" title="4.2.6   动态主机配置协议(DHCP)"></a>4.2.6   动态主机配置协议(DHCP)</h3><ul>
+<li>定义<ul>
+<li>动态主机配置协议 (Dynamic Host Configuration Protocol, DHCP)</li>
+<li>用于动态分配IP地址</li>
+<li>提供即插即用联网机制</li>
+<li>应用层协议，基于UDP</li>
+</ul>
+</li>
+<li>配置项目<ul>
+<li>IP地址</li>
+<li>子网掩码</li>
+<li>默认路由器IP地址（默认网关）</li>
+<li>域名服务器IP地址</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>客户&#x2F;服务器模型</li>
+<li>主机启动时广播发送发现报文</li>
+<li>只有DHCP服务器能回应</li>
+<li>服务器查找配置信息<ul>
+<li>找到：返回配置信息</li>
+<li>找不到：从地址池分配IP</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>报文交换过程<ul>
+<li>DHCP发现<ul>
+<li>客户广播”DHCP发现”消息</li>
+<li>源地址：0.0.0.0</li>
+<li>目的地址：255.255.255.255</li>
+</ul>
+</li>
+<li>DHCP提供<ul>
+<li>服务器广播”DHCP提供”消息</li>
+<li>包含提供的IP地址</li>
+<li>源地址：DHCP服务器地址</li>
+<li>目的地址：255.255.255.255</li>
+</ul>
+</li>
+<li>DHCP请求<ul>
+<li>客户广播”DHCP请求”消息</li>
+<li>源地址：0.0.0.0</li>
+<li>目的地址：255.255.255.255</li>
+</ul>
+</li>
+<li>DHCP确认<ul>
+<li>服务器广播”DHCP确认”消息</li>
+<li>分配IP地址给客户</li>
+<li>源地址：DHCP服务器地址</li>
+<li>目的地址：255.255.255.255</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>租用期<ul>
+<li>IP地址是临时的</li>
+<li>租用期由服务器决定</li>
+<li>客户可提出租用期要求</li>
+<li>客户可提前终止租用期<ul>
+<li>发送释放报文</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通信方式<ul>
+<li>采用广播方式的原因<ul>
+<li>初期不知道服务器IP</li>
+<li>中间阶段客户未被分配IP</li>
+</ul>
+</li>
+<li>采用UDP而非TCP的原因<ul>
+<li>TCP需要建立连接</li>
+<li>不知道对方IP无法建立连接</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-7-网际控制报文协议-ICMP"><a href="#4-2-7-网际控制报文协议-ICMP" class="headerlink" title="4.2.7    网际控制报文协议(ICMP)"></a>4.2.7    网际控制报文协议(ICMP)</h3><ul>
+<li>功能<ul>
+<li>报告差错和异常情况</li>
+<li>封装在IP数据报中发送</li>
+<li>网络层协议</li>
+</ul>
+</li>
+<li>ICMP报文类型<ul>
+<li>ICMP差错报告报文<ul>
+<li>常用类型<ul>
+<li>终点不可达</li>
+<li>源点抑制</li>
+<li>时间超过</li>
+<li>参数问题</li>
+<li>改变路由(重定向)</li>
+</ul>
+</li>
+<li>不发送ICMP差错报告报文的情况<ul>
+<li>对ICMP差错报告报文</li>
+<li>对第一个分片的数据报片的所有后续数据报片</li>
+<li>对具有多播地址的数据报</li>
+<li>对具有特殊地址(如127.0.0.0或0.0.0.0)的数据报</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ICMP询问报文<ul>
+<li>常用类型<ul>
+<li>回送请求和回答报文</li>
+<li>时间戳请求和回答报文</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ICMP应用<ul>
+<li>分组网间探测PING<ul>
+<li>使用ICMP回送请求和回答报文</li>
+</ul>
+</li>
+<li>Traceroute&#x2F;Tracert<ul>
+<li>使用ICMP时间超过报文</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-3-IPV6"><a href="#4-3-IPV6" class="headerlink" title="4.3  IPV6"></a>4.3  IPV6</h2><h3 id="4-3-1-IPv6的特点"><a href="#4-3-1-IPv6的特点" class="headerlink" title="4.3.1    IPv6的特点"></a>4.3.1    IPv6的特点</h3><ul>
+<li>IPv4的问题<ul>
+<li>地址耗尽问题<ul>
+<li>解决措施<ul>
+<li>采用无类别编址CIDR</li>
+<li>采用网络地址转换(NAT)</li>
+<li>采用IPv6</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPv6的主要特点<ul>
+<li>更大的地址空间<ul>
+<li>128位地址</li>
+<li>地址空间是IPv4的2^96倍</li>
+</ul>
+</li>
+<li>扩展的地址层次结构</li>
+<li>灵活的首部格式<ul>
+<li>可选的扩展首部</li>
+<li>提高路由器处理效率</li>
+</ul>
+</li>
+<li>改进的选项<ul>
+<li>固定首部长度</li>
+<li>选项放在有效载荷中</li>
+</ul>
+</li>
+<li>允许协议继续扩充</li>
+<li>支持即插即用(自动配置)<ul>
+<li>不需要使用DHCP</li>
+</ul>
+</li>
+<li>支持资源的预分配<ul>
+<li>支持实时音&#x2F;视频应用</li>
+</ul>
+</li>
+<li>分片机制<ul>
+<li>只有源主机才能分片</li>
+<li>端到端分片</li>
+</ul>
+</li>
+<li>固定首部长度<ul>
+<li>40B固定长度</li>
+</ul>
+</li>
+<li>增大了安全性<ul>
+<li>身份鉴别和保密功能</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPv6兼容性<ul>
+<li>与IPv4不兼容</li>
+<li>与其他互联网协议兼容<ul>
+<li>TCP</li>
+<li>UDP</li>
+<li>ICMP</li>
+<li>IGMP</li>
+<li>DNS</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-2-IPv6数据报的基本首部"><a href="#4-3-2-IPv6数据报的基本首部" class="headerlink" title="4.3.2   IPv6数据报的基本首部"></a>4.3.2   IPv6数据报的基本首部</h3><ul>
+<li>IPv6 数据报组成<ul>
+<li>基本首部</li>
+<li>有效载荷<ul>
+<li>扩展首部</li>
+<li>数据部分</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPv6与IPv4首部字段对比<ul>
+<li>取消的字段<ul>
+<li>首部长度字段</li>
+<li>服务类型字段</li>
+<li>总长度字段</li>
+<li>标识、标志和片偏移字段</li>
+<li>TTL字段</li>
+<li>协议字段</li>
+<li>检验和字段</li>
+<li>选项字段</li>
+</ul>
+</li>
+<li>更改的字段<ul>
+<li>跳数限制字段（原TTL字段）</li>
+<li>下一个首部字段（原协议字段）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPv6基本首部特点<ul>
+<li>字段数减少到8个</li>
+<li>长度增大到40B</li>
+</ul>
+</li>
+<li>IPv6基本首部字段<ul>
+<li>版本（4位）</li>
+<li>通信量类（8位）</li>
+<li>流标号（20位）</li>
+<li>有效载荷长度（16位）</li>
+<li>下一个首部（8位）</li>
+<li>跳数限制（8位）</li>
+<li>源地址（128位）</li>
+<li>目的地址（128位）</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-3-IPv6地址"><a href="#4-3-3-IPv6地址" class="headerlink" title="4.3.3   IPv6地址"></a>4.3.3   IPv6地址</h3><ul>
+<li>基本类型<ul>
+<li>单播<ul>
+<li>点对点通信</li>
+</ul>
+</li>
+<li>多播<ul>
+<li>一点对多点通信</li>
+<li>数据报发送到一组计算机中的每一台</li>
+</ul>
+</li>
+<li>任播<ul>
+<li>IPv6新增类型</li>
+<li>终点是一组计算机</li>
+<li>数据报只交付其中一台（通常距离最近）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>表示法<ul>
+<li>冒号十六进制记法<ul>
+<li>每4位用一个十六进制数表示</li>
+<li>冒号分隔每16位</li>
+<li>示例：4BF5:AA12:0216:FEBC:BA5F:039A:BE9A:2170</li>
+</ul>
+</li>
+<li>缩写表示法<ul>
+<li>16位域开头有0时可缩写</li>
+<li>域中至少保留一个数字</li>
+<li>示例：4BF5:0:0:0:BA5F:39A:A:2176</li>
+</ul>
+</li>
+<li>双冒号缩写<ul>
+<li>用于相继的0值域</li>
+<li>一个地址中仅能出现一次</li>
+<li>示例：4BF5::BA5F:39A:A:2176</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>地址分类<ul>
+<li>未指明地址<ul>
+<li>不能用作目的地址</li>
+<li>只能用于未配置IPv6地址的主机作为源地址</li>
+</ul>
+</li>
+<li>环回地址<ul>
+<li>作用与IPv4环回地址相同</li>
+<li>IPv6仅此一个</li>
+</ul>
+</li>
+<li>多播地址<ul>
+<li>作用与IPv4相同</li>
+<li>占IPv6地址空间的1&#x2F;256</li>
+</ul>
+</li>
+<li>本地链路单播地址<ul>
+<li>类似于IPv4的私有IP地址</li>
+</ul>
+</li>
+<li>全球单播地址<ul>
+<li>三级结构<ul>
+<li>全球路由选择前缀（48位）<ul>
+<li>相当于IPv4的网络号</li>
+</ul>
+</li>
+<li>子网标识符（16位）<ul>
+<li>用于机构构建子网</li>
+</ul>
+</li>
+<li>接口标识符（64位）<ul>
+<li>相当于IPv4的主机号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>接口标识符特点<ul>
+<li>64位长度</li>
+<li>可直接编码硬件地址</li>
+<li>无需使用ARP进行地址解析</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-4-从IPv4-向IPv6过渡"><a href="#4-3-4-从IPv4-向IPv6过渡" class="headerlink" title="4.3.4   从IPv4 向IPv6过渡"></a>4.3.4   从IPv4 向IPv6过渡</h3><ul>
+<li>过渡特点<ul>
+<li>逐步演进</li>
+<li>新安装的IPv6系统必须向后兼容</li>
+<li>IPv6系统要求<ul>
+<li>能接收和转发IPv4分组</li>
+<li>能为IPv4分组选择路由</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>过渡策略(2023)<ul>
+<li>双协议栈<ul>
+<li>定义<ul>
+<li>一台设备同时装有IPv4和IPv6协议栈</li>
+<li>分别配置IPv4和IPv6地址</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>能与IPv4网络通信</li>
+<li>能与IPv6网络通信</li>
+</ul>
+</li>
+<li>通信机制<ul>
+<li>与IPv6主机通信：使用IPv6地址</li>
+<li>与IPv4主机通信：使用IPv4地址</li>
+</ul>
+</li>
+<li>DNS解析过程<ul>
+<li>返回IPv4地址：使用IPv4地址</li>
+<li>返回IPv6地址：使用IPv6地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>隧道技术<ul>
+<li>实现方式<ul>
+<li>IPv6数据报进入IPv4网络时<ul>
+<li>将整个IPv6数据报封装成IPv4数据报的数据部分</li>
+</ul>
+</li>
+<li>IPv4数据报离开IPv4网络时<ul>
+<li>将数据部分交给主机的IPv6协议</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>效果<ul>
+<li>IPv6数据报在IPv4网络中传输</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-4-路由算法与路由协议"><a href="#4-4-路由算法与路由协议" class="headerlink" title="4.4   路由算法与路由协议"></a>4.4   路由算法与路由协议</h2><h3 id="4-4-1-路由算法"><a href="#4-4-1-路由算法" class="headerlink" title="4.4.1    路由算法"></a>4.4.1    路由算法</h3><ul>
+<li>定义<ul>
+<li>路由选择协议的核心是路由算法</li>
+<li>目的是找到从源路由器到目的路由器的”最佳”路径</li>
+<li>“最佳”通常指具有最低费用的路径</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>静态路由与动态路由<ul>
+<li>静态路由算法<ul>
+<li>由网络管理员手工配置</li>
+<li>特点：简单、开销小</li>
+<li>缺点：不能及时适应网络状态变化</li>
+<li>适用场景：小型简单网络</li>
+</ul>
+</li>
+<li>动态路由算法<ul>
+<li>根据网络流量和拓扑变化动态调整</li>
+<li>特点：实现复杂、开销大</li>
+<li>优点：能适应网络状态变化</li>
+<li>适用场景：复杂大型网络</li>
+<li>子分类<ul>
+<li>距离-向量路由算法</li>
+<li>链路状态路由算法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>距离-向量路由算法<ul>
+<li>基础：Bellman-Ford算法</li>
+<li>基本思想<ul>
+<li>每个节点维护：<ul>
+<li>到直接邻居的链路费用</li>
+<li>自身距离向量（到其他节点的费用）</li>
+<li>邻居的距离向量</li>
+</ul>
+</li>
+<li>定期交换距离向量</li>
+<li>使用公式更新：d(y)&#x3D;min{c(x,v)+d(v)}</li>
+</ul>
+</li>
+<li>实现过程<ul>
+<li>初始化阶段</li>
+<li>第一次交换更新</li>
+<li>后续交换直至收敛</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>更新报文大小与网络节点数量成正比</li>
+<li>典型实现：RIP协议（使用跳数作为度量）</li>
+</ul>
+</li>
+<li>示例<ul>
+<li>三节点网络示例</li>
+<li>初始状态</li>
+<li>第一次更新后</li>
+<li>第二次更新后收敛</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>链路状态路由算法<ul>
+<li>定义<ul>
+<li>每个节点知道全网拓扑</li>
+<li>执行任务：<ul>
+<li>测试相邻节点状态</li>
+<li>定期传播链路状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>使用Dijkstra算法计算最短路径</li>
+<li>链路状态变化时重新计算</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>适用于大型网络</li>
+<li>链路状态报文大小与网络规模无关</li>
+<li>易于故障排查</li>
+<li>保证一步汇聚</li>
+</ul>
+</li>
+<li>典型实现：OSPF协议</li>
+</ul>
+</li>
+<li>两种算法比较<ul>
+<li>距离-向量算法<ul>
+<li>仅与直接邻居通信</li>
+<li>发送整个路由表</li>
+<li>报文大小与节点数量相关</li>
+</ul>
+</li>
+<li>链路状态算法<ul>
+<li>与所有节点通信（广播）</li>
+<li>仅发送直接链路信息</li>
+<li>报文大小固定</li>
+</ul>
+</li>
+<li>规模可伸展性：链路状态算法更优</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-2-分层次的路由选择协议"><a href="#4-4-2-分层次的路由选择协议" class="headerlink" title="4.4.2   分层次的路由选择协议"></a>4.4.2   分层次的路由选择协议</h3><ul>
+<li>互联网采用自适应的、分布式路由选择协议</li>
+<li>划分为许多较小的自治系统 (Autonomous System, AS)<ul>
+<li>定义：在单一技术管理下的一组路由器</li>
+<li>特点：<ul>
+<li>使用一种AS内部的路由选择协议</li>
+<li>共同的度量</li>
+<li>对外表现单一和一致的路由选择策略</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由选择协议分类：<ul>
+<li>①. 内部网关协议 (IGP)<ul>
+<li>定义：在一个自治系统内部使用的路由选择协议</li>
+<li>特点：<ul>
+<li>与其他自治系统选用的协议无关</li>
+<li>常用协议：<ul>
+<li>RIP</li>
+<li>OSPF</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 外部网关协议 (EGP)<ul>
+<li>定义：在不同自治系统间传递路由选择信息的协议</li>
+<li>应用场景：<ul>
+<li>源主机和目的主机处在不同自治系统</li>
+<li>数据报传到自治系统边界时使用</li>
+</ul>
+</li>
+<li>常用协议：<ul>
+<li>BGP-4</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由选择类型：<ul>
+<li>域间路由选择：自治系统之间的路由选择</li>
+<li>域内路由选择：自治系统内部的路由选择</li>
+</ul>
+</li>
+<li>两个自治系统互连示意图<ul>
+<li>自治系统A<ul>
+<li>路由器R1<ul>
+<li>运行：<ul>
+<li>内部网关协议 (如RIP)</li>
+<li>外部网关协议 (如BGP-4)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>自治系统B<ul>
+<li>路由器R2<ul>
+<li>运行：<ul>
+<li>内部网关协议 (如OSPF)</li>
+<li>外部网关协议 (如BGP-4)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-3-路由信息协议-RIP"><a href="#4-4-3-路由信息协议-RIP" class="headerlink" title="4.4.3    路由信息协议(RIP)"></a>4.4.3    路由信息协议(RIP)</h3><ul>
+<li><p>RIP的规定</p>
+<ul>
+<li>每个路由器维护距离向量</li>
+<li>使用跳数衡量距离<ul>
+<li>直接连接网络距离&#x3D;1</li>
+<li>每经过一个路由器距离+1</li>
+</ul>
+</li>
+<li>好的路由&#x3D;跳数少</li>
+<li>最大跳数&#x3D;15（16表示不可达）<ul>
+<li>防止环路</li>
+</ul>
+</li>
+<li>路由表项格式<ul>
+<li>&lt;目的网络N, 距离d, 下一跳路由器地址X&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RIP的特点</p>
+<ul>
+<li>交换信息对象<ul>
+<li>仅与直接相邻路由器交换</li>
+</ul>
+</li>
+<li>交换内容<ul>
+<li>整个路由表</li>
+</ul>
+</li>
+<li>交换时机<ul>
+<li>固定时间间隔（30秒）</li>
+<li>拓扑变化时及时通告</li>
+</ul>
+</li>
+<li>收敛过程<ul>
+<li>初始仅知直接连接网络</li>
+<li>通过周期性交换最终收敛</li>
+</ul>
+</li>
+<li>RIP协议特性<ul>
+<li>应用层协议</li>
+<li>使用UDP传输（端口520）</li>
+<li>选择最少跳数路径</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RIP的距离向量算法</p>
+<ul>
+<li>处理相邻路由器RIP报文步骤<ul>
+<li>修改报文<ul>
+<li>下一跳地址改为X</li>
+<li>所有距离字段+1</li>
+</ul>
+</li>
+<li>更新路由表<ul>
+<li>新目的网络：添加</li>
+<li>已有目的网络且下一跳相同：更新</li>
+<li>已有目的网络但下一跳不同：比较距离</li>
+<li>其他情况：不处理</li>
+</ul>
+</li>
+<li>超时处理<ul>
+<li>180秒未收到更新则标记为不可达（距离&#x3D;16）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由表更新示例<ul>
+<li>R6和R4互为相邻路由器</li>
+<li>R6收到R4路由表后的更新过程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RIP的优缺点</p>
+<ul>
+<li>优点<ul>
+<li>实现简单</li>
+<li>开销小</li>
+<li>收敛较快</li>
+<li>好消息传播快</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>网络规模受限（最大15跳）</li>
+<li>交换完整路由表导致开销大</li>
+<li>坏消息传播慢（慢收敛）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-4-开放最短路径优先-OSPF-协议"><a href="#4-4-4-开放最短路径优先-OSPF-协议" class="headerlink" title="4.4.4   开放最短路径优先(OSPF )协议"></a>4.4.4   开放最短路径优先(OSPF )协议</h3><ul>
+<li>基本特点<ul>
+<li>OSPF和RIP的比较(2024)<ul>
+<li>OSPF使用洪泛法向本自治系统中所有路由器发送信息</li>
+<li>RIP仅向自己相邻的几个路由器发送信息</li>
+<li>OSPF发送的信息是与本路由器相邻的所有路由器的链路状态</li>
+<li>RIP发送的信息是本路由器所知道的全部信息</li>
+<li>OSPF只有当链路状态发生变化时才发送信息</li>
+<li>RIP不管网络拓扑是否变化都要定期交换信息</li>
+</ul>
+</li>
+<li>OSPF是网络层协议，直接用IP数据报传送(协议字段为89)</li>
+<li>RIP是应用层协议，使用UDP传输</li>
+<li>其他特点<ul>
+<li>允许对每条路由设置不同代价</li>
+<li>支持多路径负载均衡</li>
+<li>分组具有鉴别功能</li>
+<li>支持可变长度子网划分和CIDR</li>
+<li>链路状态带32位序号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基本工作原理<ul>
+<li>建立链路状态数据库(全网拓扑结构图)</li>
+<li>使用Dijkstra算法计算最优路径</li>
+<li>划分区域<ul>
+<li>减少洪泛法交换范围</li>
+<li>区域边界路由器</li>
+<li>主干区域</li>
+<li>自治系统边界路由器</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组类型<ul>
+<li>问候分组(发现和维持邻站可达性)</li>
+<li>数据库描述分组(链路状态项目摘要)</li>
+<li>链路状态请求分组(请求详细信息)</li>
+<li>链路状态更新分组(全网更新链路状态)</li>
+<li>链路状态确认分组(确认更新)</li>
+</ul>
+</li>
+<li>操作流程<ul>
+<li>每10秒交换问候分组</li>
+<li>40秒未收到则认为不可达</li>
+<li>初始工作流程<ul>
+<li>通过问候分组发现相邻路由器</li>
+<li>交换数据库描述分组</li>
+<li>请求缺少的链路状态信息</li>
+<li>建立同步链路数据库</li>
+</ul>
+</li>
+<li>链路状态变化时<ul>
+<li>使用洪泛法更新</li>
+<li>其他路由器发送确认</li>
+</ul>
+</li>
+<li>定期刷新(如30分钟)</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-5-边界网关协议-BGP"><a href="#4-4-5-边界网关协议-BGP" class="headerlink" title="4.4.5   边界网关协议(BGP)"></a>4.4.5   边界网关协议(BGP)</h3><ul>
+<li><p>BGP的基本特点</p>
+<ul>
+<li>边界网关协议(Border Gateway Protocol, BGP)<ul>
+<li>不同自治系统(AS)的路由器之间交换路由信息的协议</li>
+<li>属于外部网关协议</li>
+<li>常用于互联网网关之间</li>
+</ul>
+</li>
+<li>与其他协议对比<ul>
+<li>RIP和OSPF只能在AS内工作</li>
+<li>没有BGP时，全球AS会成为孤岛</li>
+</ul>
+</li>
+<li>使用环境特点<ul>
+<li>互联网规模太大导致AS间路由选择困难</li>
+<li>AS间路由需考虑政治、安全、经济等因素</li>
+</ul>
+</li>
+<li>协议特性<ul>
+<li>力求找到可达且不兜圈子的路由(非最佳路由)</li>
+<li>采用路径向量路由选择协议</li>
+<li>是应用层协议，基于TCP</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BGP会话</p>
+<ul>
+<li>两种BGP会话定义<ul>
+<li>外部BGP(eBGP)会话<ul>
+<li>跨越两个AS的BGP会话</li>
+</ul>
+</li>
+<li>内部BGP(iBGP)会话<ul>
+<li>同一AS内两个路由器之间的BGP会话</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>连接方式<ul>
+<li>通过端口号179的半永久TCP连接</li>
+<li>交换信息后仍保持连接状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BGP路由</p>
+<ul>
+<li>路由格式<ul>
+<li>&lt;CIDR前缀, BGP属性&gt;</li>
+</ul>
+</li>
+<li>重要BGP属性<ul>
+<li>AS-PATH(自治系统路径)<ul>
+<li>记录路由经过的自治系统</li>
+<li>使用ASN(自治系统号)标识</li>
+</ul>
+</li>
+<li>NEXT-HOP(下一跳)<ul>
+<li>通告的BGP路由起点</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由处理过程<ul>
+<li>路由器收到BGP路由后需转换起点</li>
+<li>利用内部网关协议找到最佳路由中的下一跳</li>
+<li>在转发表中增加相应表项</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BGP路由选择</p>
+<ul>
+<li>选择原则(按优先级顺序)<br>①. 本地偏好值最高的路由<br>②. AS跳数最少(AS-PATH最短)的路由<br>③. 热土豆路由选择算法<ul>
+<li>选择最靠近NEXT-HOP路由器的路由</li>
+<li>让分组最快离开本AS<br>④. BGP标识符数值最小的路由</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BGP的四种报文</p>
+<ul>
+<li>Open(打开)报文<ul>
+<li>建立BGP对等方关系</li>
+<li>初始化通信</li>
+</ul>
+</li>
+<li>Update(更新)报文<ul>
+<li>通知路由信息</li>
+<li>列出要撤销的路由</li>
+<li>每次只能增加一条新路由</li>
+</ul>
+</li>
+<li>Keepalive(保活)报文<ul>
+<li>周期性确认邻站连通性</li>
+<li>19字节大小</li>
+</ul>
+</li>
+<li>Notification(通知)报文<ul>
+<li>发送检测到的差错</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>三种路由协议比较</p>
+<ul>
+<li>RIP<ul>
+<li>类型: 内部</li>
+<li>路由算法: 距离向量</li>
+<li>传递协议: UDP</li>
+<li>路径选择: 跳数最少</li>
+<li>交换节点: 相邻路由器</li>
+<li>交换内容: 整个路由表</li>
+</ul>
+</li>
+<li>OSPF<ul>
+<li>类型: 内部</li>
+<li>路由算法: 链路状态</li>
+<li>传递协议: IP</li>
+<li>路径选择: 代价最低</li>
+<li>交换节点: 网络中所有路由器</li>
+<li>交换内容: 相邻路由器链路状态</li>
+</ul>
+</li>
+<li>BGP<ul>
+<li>类型: 外部</li>
+<li>路由算法: 路径向量</li>
+<li>传递协议: TCP</li>
+<li>路径选择: 较好(非最佳)</li>
+<li>交换节点: 相邻路由器</li>
+<li>交换内容: <ul>
+<li>首次: 整个路由表</li>
+<li>非首次: 有变化的部分</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-5-IP多播"><a href="#4-5-IP多播" class="headerlink" title="4.5   IP多播"></a>4.5   IP多播</h2><h3 id="4-5-1-多播的概念"><a href="#4-5-1-多播的概念" class="headerlink" title="4.5.1   多播的概念"></a>4.5.1   多播的概念</h3><ul>
+<li>定义<ul>
+<li>让源主机一次发送的单个分组可以抵达用一个组地址标识的若干目的主机</li>
+<li>一对多的通信</li>
+<li>在互联网上进行的多播称为IP多播</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>与单播相比<ul>
+<li>大大节约网络资源</li>
+<li>示例：视频服务器向90台主机传送同样的视频节目<ul>
+<li>单播：需要发送90次</li>
+<li>多播：仅发送一份数据，只需发送一次</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>技术特点<ul>
+<li>传送路径出现分岔时才将分组复制后继续转发</li>
+<li>大大减轻发送者负担和网络负载</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现要求<ul>
+<li>需要路由器支持</li>
+<li>能够运行多播协议的路由器称为多播路由器</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-5-2-IP多播地址"><a href="#4-5-2-IP多播地址" class="headerlink" title="4.5.2   IP多播地址"></a>4.5.2   IP多播地址</h3><ul>
+<li><p>多播数据报特点</p>
+<ul>
+<li>源地址：源主机的IP地址</li>
+<li>目的地址：IP多播地址（D类地址）</li>
+</ul>
+</li>
+<li><p>D类地址范围</p>
+<ul>
+<li>前四位：1110</li>
+<li>范围：224.0.0.0~239.255.255.255</li>
+</ul>
+</li>
+<li><p>多播组</p>
+<ul>
+<li>每个D类IP地址标志一个多播组</li>
+<li>主机可随时加入或离开多播组</li>
+</ul>
+</li>
+<li><p>多播数据报与普通IP数据报的区别</p>
+<ul>
+<li>目的地址：使用D类IP地址</li>
+<li>协议字段值：2（表示使用IGMP）</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-5-3-在局域网上进行硬件多播"><a href="#4-5-3-在局域网上进行硬件多播" class="headerlink" title="4.5.3    在局域网上进行硬件多播"></a>4.5.3    在局域网上进行硬件多播</h3><ul>
+<li>局域网支持硬件多播<ul>
+<li>实现方式：将IP多播地址映射成多播MAC地址<ul>
+<li>将IP多播数据报封装在MAC帧中</li>
+<li>MAC帧目的地址设置为映射后的多播MAC地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IANA分配的以太网多播地址范围<ul>
+<li>01-00-5E-00-00-00 到 01-00-5E-7F-FF-FF</li>
+<li>可用位数<ul>
+<li>总长度：48位</li>
+<li>可用部分：后23位</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>D类IP地址与以太网地址映射关系<ul>
+<li>D类IP地址可用位数：28位</li>
+<li>映射特点<ul>
+<li>前5位无法映射到以太网地址</li>
+<li>结果：多对一映射关系</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>接收端处理<ul>
+<li>需要IP层软件过滤<ul>
+<li>原因：多对一映射导致地址冲突</li>
+<li>处理方式：丢弃非目标主机的数据报</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-5-4-IGMP-与多播路由协议"><a href="#4-5-4-IGMP-与多播路由协议" class="headerlink" title="4.5.4   IGMP 与多播路由协议"></a>4.5.4   IGMP 与多播路由协议</h3><ul>
+<li>IGMP协议<ul>
+<li>作用: 让多播路由器获知局域网内主机加入&#x2F;退出多播组</li>
+<li>特点<ul>
+<li>不管理互联网范围内的多播组成员</li>
+<li>不知道组成员数量和分布</li>
+</ul>
+</li>
+<li>报文封装: 封装在IP数据报中传送</li>
+<li>工作阶段<ul>
+<li>第一阶段: 主机加入时发送IGMP报文</li>
+<li>第二阶段: 周期性探询组成员状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多播路由协议<ul>
+<li>目的: 最小代价传送多播数据报给所有组成员</li>
+<li>多播转发树<ul>
+<li>以源主机为根节点</li>
+<li>每个分组在每条链路上只传送一次</li>
+<li>不同多播组对应不同转发树</li>
+<li>同一多播组对不同源点有不同转发树</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-6-移动IP"><a href="#4-6-移动IP" class="headerlink" title="4.6   移动IP"></a>4.6   移动IP</h2><h3 id="4-6-1-移动IP-的概念"><a href="#4-6-1-移动IP-的概念" class="headerlink" title="4.6.1   移动IP 的概念"></a>4.6.1   移动IP 的概念</h3><ul>
+<li>移动IP技术<ul>
+<li>定义<ul>
+<li>移动站以固定的IP地址实现跨越不同网络的漫游功能</li>
+</ul>
+</li>
+<li>目标<ul>
+<li>把分组自动地投递给移动站</li>
+</ul>
+</li>
+<li>移动站定义<ul>
+<li>把其连接点从一个网络或子网改变到另一个网络或子网的主机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>功能实体<ul>
+<li>移动节点<ul>
+<li>具有永久IP地址的移动主机</li>
+</ul>
+</li>
+<li>本地代理<ul>
+<li>通常就是连接在归属网络上的路由器</li>
+</ul>
+</li>
+<li>外地代理<ul>
+<li>通常就是连接在被访网络上的路由器</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>注意事项<ul>
+<li>通过DHCP自动获取新IP地址不是移动IP</li>
+<li>移动IP需要保持TCP连接不中断</li>
+<li>移动IP要求IP地址在移动中保持不变</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-6-2-移-动IP-通信过程"><a href="#4-6-2-移-动IP-通信过程" class="headerlink" title="4.6.2   移 动IP 通信过程"></a>4.6.2   移 动IP 通信过程</h3><ul>
+<li>移动IP原理类比<ul>
+<li>本科毕业通信例子<ul>
+<li>留下家庭地址(永久地址)</li>
+<li>家长转交信件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基本概念<ul>
+<li>移动站永久地址(归属地址)</li>
+<li>归属网络<ul>
+<li>例:移动站A永久地址131.8.6.7&#x2F;16</li>
+<li>归属网络131.8.0.0&#x2F;16</li>
+</ul>
+</li>
+<li>归属代理<ul>
+<li>连接归属网络的路由器</li>
+<li>应用层功能</li>
+</ul>
+</li>
+<li>被访网络<ul>
+<li>例:15.0.0.0&#x2F;8</li>
+</ul>
+</li>
+<li>外地代理<ul>
+<li>连接被访网络的路由器</li>
+<li>功能<ul>
+<li>创建转交地址<ul>
+<li>例:15.5.6.7&#x2F;8</li>
+</ul>
+</li>
+<li>通知归属代理转交地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通信流程<ul>
+<li>1)移动站在归属网络<ul>
+<li>传统TCP&#x2F;IP通信</li>
+</ul>
+</li>
+<li>2)漫游到被访网络<ul>
+<li>外地代理登记获取转交地址</li>
+<li>外地代理向归属代理登记</li>
+</ul>
+</li>
+<li>3)归属代理操作<ul>
+<li>构建通向转交地址隧道</li>
+<li>封装并转发IP分组</li>
+</ul>
+</li>
+<li>4)外地代理操作<ul>
+<li>拆封恢复原始IP分组</li>
+<li>发送给移动站</li>
+</ul>
+</li>
+<li>5)移动站发送IP分组<ul>
+<li>使用永久地址作为源地址</li>
+<li>直接通过外地代理</li>
+</ul>
+</li>
+<li>6)移动到新被访网络<ul>
+<li>新外地代理登记</li>
+<li>更新归属代理转交地址</li>
+</ul>
+</li>
+<li>7)返回归属网络<ul>
+<li>注销转交地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>支持移动性的新功能<ul>
+<li>移动站到外地代理登记协议</li>
+<li>外地代理到归属代理登记协议</li>
+<li>归属代理数据报封装协议</li>
+<li>外地代理拆封协议</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-7-网络层设备"><a href="#4-7-网络层设备" class="headerlink" title="4.7   网络层设备"></a>4.7   网络层设备</h2><h3 id="4-7-1-冲突域和广播域"><a href="#4-7-1-冲突域和广播域" class="headerlink" title="4.7.1   冲突域和广播域"></a>4.7.1   冲突域和广播域</h3><ul>
+<li>①. 冲突域<ul>
+<li>定义<ul>
+<li>连接到同一物理介质上的所有节点的集合</li>
+<li>这些节点之间存在介质争用的现象</li>
+</ul>
+</li>
+<li>OSI层次<ul>
+<li>第1层概念</li>
+</ul>
+</li>
+<li>设备影响<ul>
+<li>不能划分冲突域的设备<ul>
+<li>集线器</li>
+<li>中继器等第1层设备</li>
+</ul>
+</li>
+<li>可以划分冲突域的设备<ul>
+<li>第2层设备<ul>
+<li>网桥</li>
+<li>交换机</li>
+</ul>
+</li>
+<li>第3层设备<ul>
+<li>路由器</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 广播域<ul>
+<li>定义<ul>
+<li>接收同样广播消息的节点集合</li>
+</ul>
+</li>
+<li>OSI层次<ul>
+<li>第2层概念</li>
+</ul>
+</li>
+<li>设备影响<ul>
+<li>属于同一广播域的设备<ul>
+<li>第1层设备<ul>
+<li>集线器等</li>
+</ul>
+</li>
+<li>第2层设备<ul>
+<li>交换机等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可以划分广播域的设备<ul>
+<li>路由器（第3层设备）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>局域网(LAN)定义<ul>
+<li>特指使用路由器分割的网络</li>
+<li>也就是广播域</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-7-2-路由器的组成和功能"><a href="#4-7-2-路由器的组成和功能" class="headerlink" title="4.7.2    路由器的组成和功能"></a>4.7.2    路由器的组成和功能</h3><ul>
+<li>路由器定义<ul>
+<li>具有多个输入&#x2F;输出端口的专用计算机</li>
+<li>任务：连接不同网络并完成分组转发</li>
+</ul>
+</li>
+<li>网络连接特性<ul>
+<li>连接异构网络</li>
+<li>多个逻辑网络互连时必须使用</li>
+<li>隔离广播域</li>
+</ul>
+</li>
+<li>数据转发原理<ul>
+<li>同网络通信：直接交付</li>
+<li>跨网络通信：间接交付（通过路由器）</li>
+<li>连接能力<ul>
+<li>不同LAN</li>
+<li>不同VLAN</li>
+<li>不同WAN</li>
+<li>LAN和WAN互连</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>结构组成<ul>
+<li>路由选择部分（控制部分）<ul>
+<li>核心构件：路由选择处理机</li>
+<li>功能<ul>
+<li>构造路由表</li>
+<li>更新维护路由表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组转发部分<ul>
+<li>交换结构（交换组织）<ul>
+<li>根据转发表处理分组</li>
+</ul>
+</li>
+<li>输入端口组</li>
+<li>输出端口组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>层次实现<ul>
+<li>实现网络模型下三层<ul>
+<li>物理层</li>
+<li>数据链路层</li>
+<li>网络层</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>端口处理机制<ul>
+<li>输入端口处理流程<ul>
+<li>物理层：接收比特流</li>
+<li>数据链路层：提取帧</li>
+<li>网络层：处理分组</li>
+</ul>
+</li>
+<li>输出端口处理流程（反向操作）</li>
+<li>缓冲队列<ul>
+<li>暂存分组</li>
+<li>进行差错检测</li>
+<li>可能发生缓冲区溢出</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-7-3-路由表与分组转发"><a href="#4-7-3-路由表与分组转发" class="headerlink" title="4.7.3   路由表与分组转发"></a>4.7.3   路由表与分组转发</h3><ul>
+<li>路由表<ul>
+<li>根据路由选择算法得出</li>
+<li>主要用途是路由选择</li>
+<li>标准路由表项目<ul>
+<li>目的网络IP地址</li>
+<li>子网掩码</li>
+<li>下一跳IP地址</li>
+<li>接口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>转发表<ul>
+<li>从路由表得出</li>
+<li>表项与路由表项对应关系<ul>
+<li>图4.27 转发表的示例</li>
+</ul>
+</li>
+<li>格式与路由表不同<ul>
+<li>结构优化查找过程</li>
+</ul>
+</li>
+<li>内容<ul>
+<li>分组发往的目的网络</li>
+<li>分组的下一跳(MAC地址)</li>
+<li>可设置默认路由<ul>
+<li>匹配优先级最低</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现方式<ul>
+<li>软件实现</li>
+<li>特殊硬件实现</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>转发与路由选择的区别<ul>
+<li>转发<ul>
+<li>单个路由器行为</li>
+<li>根据转发表转发IP数据报</li>
+</ul>
+</li>
+<li>路由选择<ul>
+<li>多个路由器协同</li>
+<li>使用复杂路由算法</li>
+<li>根据网络拓扑变化动态调整</li>
+<li>构造整个路由表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>关键区别<ul>
+<li>路由表≠转发表</li>
+<li>分组实际转发<ul>
+<li>直接查找转发表</li>
+<li>不查找路由表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -6582,365 +8741,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/" class="post-title-link" itemprop="url">Linux中的解压</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-04 12:00:00" itemprop="dateCreated datePublished" datetime="2024-12-04T12:00:00+08:00">2024-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-13 16:52:33" itemprop="dateModified" datetime="2025-12-13T16:52:33+08:00">2025-12-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2024/12/04/Linux%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%8E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux中的解压" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="一、前置：工具安装（缺失时执行）"><a href="#一、前置：工具安装（缺失时执行）" class="headerlink" title="一、前置：工具安装（缺失时执行）"></a>一、前置：工具安装（缺失时执行）</h3><table>
-<thead>
-<tr>
-<th>压缩格式</th>
-<th>所需工具（压缩+解压）</th>
-<th>Kali安装命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RAR（.rar）</td>
-<td><code>rar</code>（压缩）、<code>unrar</code>（解压）</td>
-<td><code>sudo apt install -y rar unrar</code></td>
-</tr>
-<tr>
-<td>ZIP（.zip）</td>
-<td><code>zip</code>（压缩）、<code>unzip</code>（解压）</td>
-<td><code>sudo apt install -y zip unzip</code></td>
-</tr>
-<tr>
-<td>7Z（.7z）</td>
-<td><code>p7zip-full</code>（全能工具）</td>
-<td><code>sudo apt install -y p7zip-full</code></td>
-</tr>
-<tr>
-<td>TAR系列（.tar&#x2F;.tar.gz等）</td>
-<td><code>tar</code>（系统内置）</td>
-<td>无需安装，默认自带</td>
-</tr>
-</tbody></table>
-<h3 id="二、分格式完整操作指南（核心）"><a href="#二、分格式完整操作指南（核心）" class="headerlink" title="二、分格式完整操作指南（核心）"></a>二、分格式完整操作指南（核心）</h3><h4 id="1-ZIP格式（-zip）"><a href="#1-ZIP格式（-zip）" class="headerlink" title="1. ZIP格式（.zip）"></a>1. ZIP格式（.zip）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>zip 目标包.zip 源文件1 源文件2 目录/</code></td>
-<td>目录需加 <code>-r</code> 递归压缩：<code>zip -r 目标包.zip 目录/</code></td>
-</tr>
-<tr>
-<td>压缩并加密（内容加密）</td>
-<td><code>zip -e 目标包.zip 源文件</code></td>
-<td>回车后手动输入密码（安全，密码不显示）</td>
-</tr>
-<tr>
-<td>压缩并加密（密码明文）</td>
-<td><code>zip -P 密码 目标包.zip 源文件</code></td>
-<td>密码直接跟在 <code>-P</code> 后（无空格），如 <code>zip -P123 test.zip file.txt</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>unzip 压缩包.zip</code></td>
-<td>默认保留文件夹结构，文件散落在当前目录</td>
-</tr>
-<tr>
-<td>解压到指定目录（核心）</td>
-<td><code>unzip 压缩包.zip -d 目标目录</code></td>
-<td>例：<code>unzip test.zip -d ./5.8attachment</code>（目录自动创建，无需手动建）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>unzip -P 密码 压缩包.zip</code></td>
-<td>例：<code>unzip -Pfcmit.cc 5.8attachment.zip</code></td>
-</tr>
-<tr>
-<td>强制覆盖现有文件</td>
-<td><code>unzip -o 压缩包.zip</code></td>
-<td>跳过“是否覆盖”提示，直接替换</td>
-</tr>
-<tr>
-<td>仅查看压缩包内容（不解压）</td>
-<td><code>unzip -l 压缩包.zip</code></td>
-<td>查看文件&#x2F;目录结构，确认后再解压</td>
-</tr>
-</tbody></table>
-<h4 id="2-7Z格式（-7z）"><a href="#2-7Z格式（-7z）" class="headerlink" title="2. 7Z格式（.7z）"></a>2. 7Z格式（.7z）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>7z a 目标包.7z 源文件/目录</code></td>
-<td>自动递归压缩目录，无需额外参数</td>
-</tr>
-<tr>
-<td>压缩并加密（内容+文件名）</td>
-<td><code>7z a -p密码 目标包.7z 源文件</code></td>
-<td>密码直接跟 <code>-p</code>（无空格），如 <code>7z a -p123 test.7z dir/</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>7z x 压缩包.7z</code></td>
-<td><code>x</code> 是保留结构的核心参数（用 <code>e</code> 会扁平化解压，不推荐）</td>
-</tr>
-<tr>
-<td>解压到指定目录（核心）</td>
-<td><code>7z x 压缩包.7z -o目标目录</code></td>
-<td>例：<code>7z x test.7z -o./5.8attachment</code>（<code>-o</code> 后无空格，直接接目录）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>7z x 压缩包.7z -p密码</code></td>
-<td>例：<code>7z x 5.8attachment.7z -pfcmit.cc</code></td>
-</tr>
-<tr>
-<td>仅查看压缩包内容</td>
-<td><code>7z l 压缩包.7z</code></td>
-<td>列出所有文件&#x2F;目录，不解压</td>
-</tr>
-</tbody></table>
-<h4 id="3-RAR格式（-rar）"><a href="#3-RAR格式（-rar）" class="headerlink" title="3. RAR格式（.rar）"></a>3. RAR格式（.rar）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>rar a 目标包.rar 源文件/目录</code></td>
-<td>自动递归压缩目录，无需 <code>-r</code> 参数</td>
-</tr>
-<tr>
-<td>压缩并加密（内容加密）</td>
-<td><code>rar a -p 目标包.rar 源文件</code></td>
-<td>回车后输入密码（安全）；<code>-hp</code> 参数可加密文件名+内容</td>
-</tr>
-<tr>
-<td>压缩并加密（密码明文）</td>
-<td><code>rar a -p密码 目标包.rar 源文件</code></td>
-<td>例：<code>rar a -p123 test.rar file.txt</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>unrar x 压缩包.rar</code></td>
-<td><code>x</code> 保留结构，<code>e</code> 扁平化解压（不推荐）</td>
-</tr>
-<tr>
-<td>解压到指定目录</td>
-<td><code>unrar x 压缩包.rar 目标目录</code></td>
-<td>例：<code>unrar x test.rar ./5.8attachment</code>（目录需提前创建：<code>mkdir -p 目录</code>）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>unrar x -p密码 压缩包.rar</code></td>
-<td>例：<code>unrar x -p123 test.rar</code></td>
-</tr>
-<tr>
-<td>仅查看压缩包内容</td>
-<td><code>unrar l 压缩包.rar</code></td>
-<td>列出文件&#x2F;目录结构</td>
-</tr>
-</tbody></table>
-<h4 id="4-TAR系列格式（打包-压缩）"><a href="#4-TAR系列格式（打包-压缩）" class="headerlink" title="4. TAR系列格式（打包+压缩）"></a>4. TAR系列格式（打包+压缩）</h4><p>tar 本身是“打包工具”，结合 <code>gzip/bzip2/xz</code> 算法形成复合格式，核心参数：<code>c</code>（压缩）、<code>x</code>（解压）、<code>f</code>（指定文件）、<code>v</code>（显示过程）、<code>z</code>（gzip）、<code>J</code>（xz）、<code>j</code>（bzip2）。</p>
-<table>
-<thead>
-<tr>
-<th>格式类型</th>
-<th>压缩命令（打包+压缩）</th>
-<th>解压命令（保留结构）</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>.tar（仅打包）</td>
-<td><code>tar -cvf 目标包.tar 源文件/目录</code></td>
-<td><code>tar -xvf 包.tar</code></td>
-<td>不压缩，仅合并文件&#x2F;目录</td>
-</tr>
-<tr>
-<td>.tar.gz（常用）</td>
-<td><code>tar -czvf 目标包.tar.gz 源文件/目录</code></td>
-<td><code>tar -xzvf 包.tar.gz</code></td>
-<td>gzip算法，压缩率中等</td>
-</tr>
-<tr>
-<td>.tar.xz（高压缩）</td>
-<td><code>tar -cJvf 目标包.tar.xz 源文件/目录</code></td>
-<td><code>tar -xJvf 包.tar.xz</code></td>
-<td>xz算法，压缩率最高（耗时久）</td>
-</tr>
-<tr>
-<td>.tar.bz2</td>
-<td><code>tar -cjvf 目标包.tar.bz2 源文件/目录</code></td>
-<td><code>tar -xjvf 包.tar.bz2</code></td>
-<td>bzip2算法，兼容旧系统</td>
-</tr>
-<tr>
-<td>解压到指定目录</td>
-<td>-</td>
-<td><code>tar -xzvf 包.tar.gz -C 目标目录</code></td>
-<td><code>-C</code> 后接目录，例：<code>-C ./5.8attachment</code></td>
-</tr>
-<tr>
-<td>仅查看内容</td>
-<td>-</td>
-<td><code>tar -tvf 包.tar.gz</code></td>
-<td>列出文件&#x2F;目录结构，不解压</td>
-</tr>
-</tbody></table>
-<h3 id="三、通用核心技巧（必看）"><a href="#三、通用核心技巧（必看）" class="headerlink" title="三、通用核心技巧（必看）"></a>三、通用核心技巧（必看）</h3><ol>
-<li><strong>保留文件夹结构</strong>：所有格式的解压命令，用 <code>x</code> 参数（zip&#x2F;7z&#x2F;rar）或 tar 默认命令，即可保留原目录结构；避免用 <code>e</code> 参数（会扁平化所有文件到同一目录）。</li>
-<li><strong>指定解压目录</strong>：<ul>
-<li>zip&#x2F;rar：<code>-d 目录</code>（zip需目录提前存在，rar可自动创建）；</li>
-<li>7z：<code>-o目录</code>（<code>-o</code> 后无空格）；</li>
-<li>tar：<code>-C 目录</code>（大写C）。</li>
-</ul>
-</li>
-<li><strong>强制覆盖</strong>：zip 加 <code>-o</code>，7z 加 <code>-aoa</code>，rar 加 <code>-o+</code>，tar 加 <code>--overwrite</code>。</li>
-<li><strong>批量操作</strong>：压缩时可指定多个源文件（空格分隔），例：<code>zip all.zip 1.txt 2.jpg dir/</code>。</li>
-<li><strong>中文乱码</strong>：解压含中文文件名的压缩包，加 <code>-O UTF-8</code>（zip）或 <code>-scsUTF-8</code>（7z），例：<code>unzip -O UTF-8 中文包.zip</code>。</li>
-</ol>
-<h3 id="四、快速查找命令（按需求检索）"><a href="#四、快速查找命令（按需求检索）" class="headerlink" title="四、快速查找命令（按需求检索）"></a>四、快速查找命令（按需求检索）</h3><table>
-<thead>
-<tr>
-<th>需求场景</th>
-<th>对应命令（以zip为例，替换格式即可）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>解压到名为“5.8attachment”的文件夹</td>
-<td><code>unzip 5.8attachment.zip -d ./5.8attachment</code></td>
-</tr>
-<tr>
-<td>加密压缩文件</td>
-<td><code>zip -e 加密包.zip 源文件</code></td>
-</tr>
-<tr>
-<td>解压加密文件（已知密码）</td>
-<td><code>unzip -P 密码 加密包.zip</code></td>
-</tr>
-<tr>
-<td>查看压缩包内是否有文件夹</td>
-<td><code>unzip -l 压缩包.zip</code></td>
-</tr>
-<tr>
-<td>快速打包目录并压缩</td>
-<td><code>tar -czvf 目录.tar.gz 目标目录/</code></td>
-</tr>
-</tbody></table>
-<p>所有命令均经过实操验证，可直接复制使用，若遇权限问题，在命令前加 <code>sudo</code> 即可。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -6965,14 +8765,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">115k</span>
+    <span title="站点总字数">116k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:25</span>
+    <span title="站点阅读时长">6:27</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

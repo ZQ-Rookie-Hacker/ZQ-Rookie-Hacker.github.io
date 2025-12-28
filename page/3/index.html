@@ -171,18 +171,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">35</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,304 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2024/12/10/git_note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/12/10/git_note/" class="post-title-link" itemprop="url">Git-Note</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-10 12:00:00" itemprop="dateCreated datePublished" datetime="2024-12-10T12:00:00+08:00">2024-12-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-11 10:30:00" itemprop="dateModified" datetime="2025-05-11T10:30:00+08:00">2025-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/" itemprop="url" rel="index"><span itemprop="name">知识杂碎</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2024/12/10/git_note/" class="post-meta-item leancloud_visitors" data-flag-title="Git-Note" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Git-操作指南（终极整合版）"><a href="#Git-操作指南（终极整合版）" class="headerlink" title="Git 操作指南（终极整合版）"></a>Git 操作指南（终极整合版）</h1><h2 id="一、基础命令"><a href="#一、基础命令" class="headerlink" title="一、基础命令"></a>一、基础命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>git init</code></td>
+<td>初始化一个新的 Git 仓库</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>查看提交历史</td>
+</tr>
+<tr>
+<td><code>git add [文件名]</code></td>
+<td>将文件添加到暂存区（<code>git add .</code> 添加所有修改）</td>
+</tr>
+<tr>
+<td><code>git commit -m &quot;提交信息&quot;</code></td>
+<td>提交暂存区的更改到本地仓库</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>查看当前仓库状态（修改、暂存、提交情况）</td>
+</tr>
+</tbody></table>
+<h2 id="二、远程仓库管理"><a href="#二、远程仓库管理" class="headerlink" title="二、远程仓库管理"></a>二、远程仓库管理</h2><h3 id="添加-管理远程仓库"><a href="#添加-管理远程仓库" class="headerlink" title="添加&#x2F;管理远程仓库"></a>添加&#x2F;管理远程仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin [仓库地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git remote add origin https://github.com/用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git remote add origin git@github.com:用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程仓库地址</span></span><br><span class="line">git remote set-url origin [新地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已配置的远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/你的GitHub用户名/仓库名.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:你的GitHub用户名/仓库名.git</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、多设备同步工作流"><a href="#三、多设备同步工作流" class="headerlink" title="三、多设备同步工作流"></a>三、多设备同步工作流</h2><h3 id="核心逻辑"><a href="#核心逻辑" class="headerlink" title="核心逻辑"></a>核心逻辑</h3><ul>
+<li>多台电脑共享同一个 GitHub 远程仓库作为”中央存储”</li>
+<li>任意电脑修改后通过 <code>git push</code> 推送到 GitHub</li>
+<li>其他电脑通过 <code>git pull</code> 拉取最新修改</li>
+</ul>
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="1-在新设备上拉取仓库"><a href="#1-在新设备上拉取仓库" class="headerlink" title="1. 在新设备上拉取仓库"></a>1. 在新设备上拉取仓库</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:用户名/仓库.git  <span class="comment"># SSH方式</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/用户名/仓库.git  <span class="comment"># HTTPS方式</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-修改并推送代码"><a href="#2-修改并推送代码" class="headerlink" title="2. 修改并推送代码"></a>2. 修改并推送代码</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .          <span class="comment"># 添加修改</span></span><br><span class="line">git commit -m <span class="string">&quot;描述&quot;</span> <span class="comment"># 提交更改</span></span><br><span class="line">git push origin main  <span class="comment"># 推送到远程</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-同步最新代码"><a href="#3-同步最新代码" class="headerlink" title="3. 同步最新代码"></a>3. 同步最新代码</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin main  <span class="comment"># 拉取并合并远程更改</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、SSH-配置与问题解决"><a href="#四、SSH-配置与问题解决" class="headerlink" title="四、SSH 配置与问题解决"></a>四、SSH 配置与问题解决</h2><h3 id="核心步骤"><a href="#核心步骤" class="headerlink" title="核心步骤"></a>核心步骤</h3><p>确认密钥添加正确 → 配置 SSH 识别密钥 → 修复文件权限</p>
+<h4 id="1-确认公钥添加到-GitHub"><a href="#1-确认公钥添加到-GitHub" class="headerlink" title="1. 确认公钥添加到 GitHub"></a>1. 确认公钥添加到 GitHub</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看公钥内容</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub    <span class="comment"># 默认密钥</span></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/自定义密钥名.pub  <span class="comment"># 自定义密钥</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制完整文本（从 <code>ssh-rsa</code> 开头到邮箱结尾）</li>
+<li>GitHub → Settings → SSH and GPG keys → 添加新 Key</li>
+</ul>
+<h4 id="2-配置-SSH-识别密钥"><a href="#2-配置-SSH-识别密钥" class="headerlink" title="2. 配置 SSH 识别密钥"></a>2. 配置 SSH 识别密钥</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad ~/.ssh/config</span><br></pre></td></tr></table></figure>
+<p>粘贴配置（根据实际情况修改）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile C:/Users/你的用户名/.ssh/密钥文件名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>路径使用 <code>/</code> 或 <code>\\</code>，例如：<code>C:/Users/张三/.ssh/id_rsa</code></p>
+</blockquote>
+<h4 id="3-修复密钥文件权限"><a href="#3-修复密钥文件权限" class="headerlink" title="3. 修复密钥文件权限"></a>3. 修复密钥文件权限</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 600 密钥文件名      <span class="comment"># 私钥权限</span></span><br><span class="line"><span class="built_in">chmod</span> 644 密钥文件名.pub  <span class="comment"># 公钥权限</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-测试连接"><a href="#4-测试连接" class="headerlink" title="4. 测试连接"></a>4. 测试连接</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment"># 成功显示：Hi 用户名! You&#x27;ve successfully authenticated...</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、提交历史管理"><a href="#五、提交历史管理" class="headerlink" title="五、提交历史管理"></a>五、提交历史管理</h2><h3 id="1-撤销错误提交"><a href="#1-撤销错误提交" class="headerlink" title="1. 撤销错误提交"></a>1. 撤销错误提交</h3><h4 id="方法一：直接回退历史（个人仓库适用）"><a href="#方法一：直接回退历史（个人仓库适用）" class="headerlink" title="方法一：直接回退历史（个人仓库适用）"></a>方法一：直接回退历史（个人仓库适用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 回退到正确提交（92d433f 为正确提交ID）</span></span><br><span class="line">git reset --hard 92d433f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制推送到远程</span></span><br><span class="line">git push origin main --force</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：创建撤销提交（多人协作适用）"><a href="#方法二：创建撤销提交（多人协作适用）" class="headerlink" title="方法二：创建撤销提交（多人协作适用）"></a>方法二：创建撤销提交（多人协作适用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 生成撤销提交（0dec4f6 为错误提交ID）</span></span><br><span class="line">git revert 0dec4f6</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 推送撤销提交</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+<h4 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;正确的提交信息&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-修复本地分支与远程分支偏离问题"><a href="#2-修复本地分支与远程分支偏离问题" class="headerlink" title="2. 修复本地分支与远程分支偏离问题"></a>2. 修复本地分支与远程分支偏离问题</h3><h4 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h4><p>本地分支历史与远程分支历史不一致（本地包含远程已移除的提交）</p>
+<h4 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 保存未提交的修改（如有）</span></span><br><span class="line">git stash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 强制同步本地分支与远程分支</span></span><br><span class="line">git reset --hard origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 确认同步完成</span></span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+
+<h4 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h4><p>通过 <code>git reset --hard origin/main</code> 将本地分支完全重置为与远程分支一致的状态，覆盖本地与远程不一致的历史。</p>
+<h2 id="六、高级分支同步技巧"><a href="#六、高级分支同步技巧" class="headerlink" title="六、高级分支同步技巧"></a>六、高级分支同步技巧</h2><h3 id="1-同步特定远程分支"><a href="#1-同步特定远程分支" class="headerlink" title="1. 同步特定远程分支"></a>1. 同步特定远程分支</h3><p>当需要同步特定远程分支时，可以使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先获取所有远程分支</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建本地分支跟踪远程分支</span></span><br><span class="line">git checkout -b 本地分支名 origin/远程分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或直接重置当前分支到远程分支</span></span><br><span class="line">git reset --hard origin/远程分支名</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-同步多个特定分支"><a href="#2-同步多个特定分支" class="headerlink" title="2. 同步多个特定分支"></a>2. 同步多个特定分支</h3><p>Git 本身不支持一次性同步多个分支，但可以通过脚本批量操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 同步多个分支</span></span><br><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br><span class="line">git checkout dev</span><br><span class="line">git reset --hard origin/dev</span><br><span class="line">git checkout feature-branch</span><br><span class="line">git reset --hard origin/feature-branch</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-同步远程仓库的所有分支"><a href="#3-同步远程仓库的所有分支" class="headerlink" title="3. 同步远程仓库的所有分支"></a>3. 同步远程仓库的所有分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取所有远程分支</span></span><br><span class="line">git fetch --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为每个远程分支创建本地分支</span></span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或删除所有本地分支后重新创建</span></span><br><span class="line">git branch | grep -v <span class="string">&quot;main&quot;</span> | xargs git branch -D</span><br><span class="line">git fetch --all</span><br><span class="line">git branch -r | grep -v <span class="string">&#x27;\-&gt;&#x27;</span> | <span class="keyword">while</span> <span class="built_in">read</span> remote; <span class="keyword">do</span> git branch --track <span class="string">&quot;<span class="variable">$&#123;remote#origin/&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$remote</span>&quot;</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-重置远程分支到特定提交"><a href="#4-重置远程分支到特定提交" class="headerlink" title="4. 重置远程分支到特定提交"></a>4. 重置远程分支到特定提交</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 需要有权限</span></span><br><span class="line">git push origin --force 0dec4f6:main</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-查看分支差异"><a href="#5-查看分支差异" class="headerlink" title="5. 查看分支差异"></a>5. 查看分支差异</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看本地比远程多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> origin/main..main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程比本地多出的提交</span></span><br><span class="line">git <span class="built_in">log</span> main..origin/main</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、其他实用技巧"><a href="#七、其他实用技巧" class="headerlink" title="七、其他实用技巧"></a>七、其他实用技巧</h2><h3 id="1-分支管理"><a href="#1-分支管理" class="headerlink" title="1. 分支管理"></a>1. 分支管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -a  <span class="comment"># 查看所有分支（本地和远程）</span></span><br><span class="line">git branch -d 分支名  <span class="comment"># 安全删除（已合并）</span></span><br><span class="line">git branch -D 分支名  <span class="comment"># 强制删除（未合并）</span></span><br><span class="line">git branch -m 旧分支名 新分支名  <span class="comment"># 重命名当前分支</span></span><br><span class="line">git branch --set-upstream-to=origin/分支名 本地分支名  <span class="comment"># 重置远程跟踪分支</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-暂存与恢复"><a href="#2-暂存与恢复" class="headerlink" title="2. 暂存与恢复"></a>2. 暂存与恢复</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git stash  <span class="comment"># 暂存未提交修改</span></span><br><span class="line">git stash list  <span class="comment"># 查看所有暂存</span></span><br><span class="line">git stash pop  <span class="comment"># 恢复最新暂存</span></span><br><span class="line">git stash pop stash@&#123;n&#125;  <span class="comment"># 恢复指定暂存</span></span><br><span class="line">git stash drop stash@&#123;n&#125;  <span class="comment"># 删除指定暂存</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-撤销修改"><a href="#3-撤销修改" class="headerlink" title="3. 撤销修改"></a>3. 撤销修改</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- 文件名  <span class="comment"># 撤销工作区修改</span></span><br><span class="line">git checkout .  <span class="comment"># 撤销所有工作区修改</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-提交历史查看"><a href="#4-提交历史查看" class="headerlink" title="4. 提交历史查看"></a>4. 提交历史查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p  <span class="comment"># 显示每次提交的详细变化</span></span><br><span class="line">git <span class="built_in">log</span> --<span class="built_in">stat</span>  <span class="comment"># 显示每次提交的统计信息</span></span><br><span class="line">git <span class="built_in">log</span> --graph --oneline --all  <span class="comment"># 图形化显示分支历史</span></span><br><span class="line">git show 提交ID  <span class="comment"># 查看某次提交的详细内容</span></span><br><span class="line">git add -p  <span class="comment"># 交互式选择要添加的修改</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-拉取特定文件"><a href="#5-拉取特定文件" class="headerlink" title="5. 拉取特定文件"></a>5. 拉取特定文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout origin/分支名 -- 文件路径  <span class="comment"># 从远程分支拉取特定文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="八、多仓库协作"><a href="#八、多仓库协作" class="headerlink" title="八、多仓库协作"></a>八、多仓库协作</h2><h3 id="1-添加多个远程仓库"><a href="#1-添加多个远程仓库" class="headerlink" title="1. 添加多个远程仓库"></a>1. 添加多个远程仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加上游仓库（原始项目）</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加自己的fork</span></span><br><span class="line">git remote add fork https://github.com/你的用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-从上游仓库拉取更新"><a href="#2-从上游仓库拉取更新" class="headerlink" title="2. 从上游仓库拉取更新"></a>2. 从上游仓库拉取更新</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取上游仓库更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并到当前分支</span></span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或使用rebase保持提交历史线性</span></span><br><span class="line">git rebase upstream/main</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-同步fork与上游仓库"><a href="#3-同步fork与上游仓库" class="headerlink" title="3. 同步fork与上游仓库"></a>3. 同步fork与上游仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 添加上游仓库</span></span><br><span class="line">git remote add upstream https://github.com/原作者/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 获取上游更新</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 合并到本地main分支</span></span><br><span class="line">git checkout main</span><br><span class="line">git merge upstream/main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 推送到自己的fork</span></span><br><span class="line">git push fork main</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、GitHub高级功能"><a href="#九、GitHub高级功能" class="headerlink" title="九、GitHub高级功能"></a>九、GitHub高级功能</h2><h3 id="1-GitHub-Copilot"><a href="#1-GitHub-Copilot" class="headerlink" title="1. GitHub Copilot"></a>1. GitHub Copilot</h3><ul>
+<li>AI辅助编程，从简单模板到复杂功能</li>
+<li>支持多种编程语言</li>
+<li>集成在VS Code、JetBrains等IDE中</li>
+</ul>
+<h3 id="2-GitHub-Actions"><a href="#2-GitHub-Actions" class="headerlink" title="2. GitHub Actions"></a>2. GitHub Actions</h3><ul>
+<li>自动化工作流</li>
+<li>CI&#x2F;CD流水线</li>
+<li>自动测试和部署</li>
+<li>示例配置：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        npm install</span></span><br><span class="line"><span class="string">        npm test</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-GitHub-Security"><a href="#3-GitHub-Security" class="headerlink" title="3. GitHub Security"></a>3. GitHub Security</h3><ul>
+<li><strong>Code Scanning</strong>：自动扫描代码漏洞</li>
+<li><strong>Dependabot</strong>：自动更新依赖项</li>
+<li><strong>Secret Scanning</strong>：检测泄露的密钥</li>
+<li><strong>Security Alerts</strong>：安全漏洞通知</li>
+</ul>
+<h3 id="4-GitHub-Projects"><a href="#4-GitHub-Projects" class="headerlink" title="4. GitHub Projects"></a>4. GitHub Projects</h3><ul>
+<li>项目管理工具</li>
+<li>Kanban看板</li>
+<li>任务跟踪</li>
+<li>与Issues集成</li>
+</ul>
+<h3 id="5-GitHub-Codespaces"><a href="#5-GitHub-Codespaces" class="headerlink" title="5. GitHub Codespaces"></a>5. GitHub Codespaces</h3><ul>
+<li>云端开发环境</li>
+<li>集成VS Code</li>
+<li>按需启动</li>
+<li>无缝协作</li>
+</ul>
+<h2 id="十、最佳实践"><a href="#十、最佳实践" class="headerlink" title="十、最佳实践"></a>十、最佳实践</h2><h3 id="1-分支策略"><a href="#1-分支策略" class="headerlink" title="1. 分支策略"></a>1. 分支策略</h3><ul>
+<li><strong>主分支</strong>：main&#x2F;master - 用于生产环境</li>
+<li><strong>开发分支</strong>：dev - 用于集成测试</li>
+<li><strong>功能分支</strong>：feature&#x2F;xxx - 用于开发新功能</li>
+<li><strong>修复分支</strong>：hotfix&#x2F;xxx - 用于紧急修复</li>
+</ul>
+<h3 id="2-提交规范"><a href="#2-提交规范" class="headerlink" title="2. 提交规范"></a>2. 提交规范</h3><ul>
+<li>提交信息应清晰描述修改内容</li>
+<li>使用”feat:”, “fix:”, “docs:”, “style:”, “refactor:”, “test:”, “chore:”等前缀</li>
+<li>示例：<code>feat: 添加用户登录功能</code></li>
+</ul>
+<h3 id="3-代码审查"><a href="#3-代码审查" class="headerlink" title="3. 代码审查"></a>3. 代码审查</h3><ul>
+<li>一次审查不超过200行代码</li>
+<li>专注于逻辑问题而非风格问题</li>
+<li>提供具体建议而非泛泛而谈</li>
+<li>使用GitHub的Review功能</li>
+</ul>
+<h3 id="4-定期同步"><a href="#4-定期同步" class="headerlink" title="4. 定期同步"></a>4. 定期同步</h3><ul>
+<li>每天至少pull一次最新代码</li>
+<li>在开始新功能前先同步远程代码</li>
+</ul>
+<h3 id="5-小步提交"><a href="#5-小步提交" class="headerlink" title="5. 小步提交"></a>5. 小步提交</h3><ul>
+<li>每次提交只包含一个逻辑变更</li>
+<li>不要将多个不相关的修改放在一个提交中</li>
+</ul>
+<h2 id="十一、常见问题解决方案"><a href="#十一、常见问题解决方案" class="headerlink" title="十一、常见问题解决方案"></a>十一、常见问题解决方案</h2><h3 id="1-“Permission-denied-publickey-”-错误"><a href="#1-“Permission-denied-publickey-”-错误" class="headerlink" title="1. “Permission denied (publickey)” 错误"></a>1. “Permission denied (publickey)” 错误</h3><ul>
+<li>确认SSH密钥已添加到GitHub</li>
+<li>检查密钥权限是否正确</li>
+<li>测试SSH连接：<code>ssh -T git@github.com</code></li>
+</ul>
+<h3 id="2-“fatal-not-a-git-repository”-错误"><a href="#2-“fatal-not-a-git-repository”-错误" class="headerlink" title="2. “fatal: not a git repository” 错误"></a>2. “fatal: not a git repository” 错误</h3><ul>
+<li>确保在Git仓库目录内操作</li>
+<li>使用<code>git init</code>初始化仓库</li>
+</ul>
+<h3 id="3-“remote-origin-already-exists”-错误"><a href="#3-“remote-origin-already-exists”-错误" class="headerlink" title="3. “remote origin already exists” 错误"></a>3. “remote origin already exists” 错误</h3><ul>
+<li>使用<code>git remote set-url origin [新地址]</code>修改地址</li>
+<li>或先删除远程：<code>git remote remove origin</code></li>
+</ul>
+<h3 id="4-“unable-to-update-local-ref”-错误"><a href="#4-“unable-to-update-local-ref”-错误" class="headerlink" title="4. “unable to update local ref” 错误"></a>4. “unable to update local ref” 错误</h3><ul>
+<li>清理本地引用：<code>git remote prune origin</code></li>
+<li>重置本地分支：<code>git reset --hard origin/main</code></li>
+</ul>
+<h3 id="5-“detached-HEAD”-状态"><a href="#5-“detached-HEAD”-状态" class="headerlink" title="5. “detached HEAD” 状态"></a>5. “detached HEAD” 状态</h3><ul>
+<li>创建新分支：<code>git checkout -b 新分支名</code></li>
+<li>或回到已有分支：<code>git checkout main</code></li>
+</ul>
+<h3 id="6-“refusing-to-merge-unrelated-histories”-错误"><a href="#6-“refusing-to-merge-unrelated-histories”-错误" class="headerlink" title="6. “refusing to merge unrelated histories” 错误"></a>6. “refusing to merge unrelated histories” 错误</h3><ul>
+<li>使用<code>git pull origin main --allow-unrelated-histories</code></li>
+</ul>
+<h3 id="7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误"><a href="#7-“Your-branch-is-ahead-of-‘origin-main’-by-X-commits”-错误" class="headerlink" title="7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误"></a>7. “Your branch is ahead of ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
+<li>确认是否需要强制推送：<code>git push --force</code></li>
+<li>或拉取远程更改：<code>git pull origin main</code></li>
+</ul>
+<h3 id="8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误"><a href="#8-“Your-branch-is-behind-‘origin-main’-by-X-commits”-错误" class="headerlink" title="8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误"></a>8. “Your branch is behind ‘origin&#x2F;main’ by X commits” 错误</h3><ul>
+<li>拉取远程更改：<code>git pull origin main</code></li>
+</ul>
+<h3 id="9-“conflict”-错误"><a href="#9-“conflict”-错误" class="headerlink" title="9. “conflict” 错误"></a>9. “conflict” 错误</h3><ul>
+<li>手动解决冲突文件</li>
+<li>使用<code>git add</code>标记冲突已解决</li>
+<li>完成合并：<code>git commit</code></li>
+</ul>
+<h3 id="10-“untracked-files”-问题"><a href="#10-“untracked-files”-问题" class="headerlink" title="10. “untracked files” 问题"></a>10. “untracked files” 问题</h3><ul>
+<li>添加未跟踪文件：<code>git add .</code></li>
+<li>或忽略文件：在.gitignore中添加文件模式</li>
+</ul>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1127,9 +1425,9 @@
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#105;&#x74;&#x68;&#117;&#98;&#x2e;&#99;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>
@@ -1187,14 +1485,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">116k</span>
+    <span title="站点总字数">120k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:27</span>
+    <span title="站点阅读时长">6:39</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

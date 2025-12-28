@@ -243,7 +243,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-28 20:15:52 / 修改时间：20:15:40" itemprop="dateCreated datePublished" datetime="2025-12-28T20:15:52+08:00">2025-12-28</time>
+      <time title="创建时间：2025-12-28 20:15:52 / 修改时间：20:50:16" itemprop="dateCreated datePublished" datetime="2025-12-28T20:15:52+08:00">2025-12-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -295,35 +295,148 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="一、核心搜索操作符全集"><a href="#一、核心搜索操作符全集" class="headerlink" title="一、核心搜索操作符全集"></a>一、核心搜索操作符全集</h2><h3 id="1-基础操作符"><a href="#1-基础操作符" class="headerlink" title="1. 基础操作符"></a>1. 基础操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符（替代任意字符）</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
+          <h2 id="一、通用浏览器搜索指令"><a href="#一、通用浏览器搜索指令" class="headerlink" title="一、通用浏览器搜索指令"></a>一、通用浏览器搜索指令</h2><h3 id="1-基础操作符"><a href="#1-基础操作符" class="headerlink" title="1. 基础操作符"></a>1. 基础操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符（替代任意字符）</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-位置限定操作符"><a href="#2-位置限定操作符" class="headerlink" title="2. 位置限定操作符"></a>2. 位置限定操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">intitle:    # 标题中包含关键词</span><br><span class="line">allintitle: # 所有关键词都在标题中</span><br><span class="line">inurl:      # URL中包含关键词</span><br><span class="line">allinurl:   # 所有关键词都在URL中</span><br><span class="line">intext:     # 正文中包含关键词</span><br><span class="line">allintext:  # 所有关键词都在正文中</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-站点与文件操作符"><a href="#3-站点与文件操作符" class="headerlink" title="3. 站点与文件操作符"></a>3. 站点与文件操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站</span><br><span class="line">link:       # 查找链接到指定页面的链接</span><br><span class="line">cache:      # 查看Google缓存版本</span><br><span class="line">info:       # 获取页面基本信息</span><br></pre></td></tr></table></figure>
+<h3 id="3-站点与文件操作符"><a href="#3-站点与文件操作符" class="headerlink" title="3. 站点与文件操作符"></a>3. 站点与文件操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站（Google特有）</span><br><span class="line">link:       # 查找链接到指定页面的链接（Google特有）</span><br><span class="line">cache:      # 查看Google缓存版本（Google特有）</span><br><span class="line">info:       # 获取页面基本信息（Google特有）</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-特殊符号操作符"><a href="#4-特殊符号操作符" class="headerlink" title="4. 特殊符号操作符"></a>4. 特殊符号操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
+<h3 id="4-特殊符号操作符"><a href="#4-特殊符号操作符" class="headerlink" title="4. 特殊符号操作符"></a>4. 特殊符号操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义（Google特有）</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
 
-<h2 id="二、高级组合语法全解"><a href="#二、高级组合语法全解" class="headerlink" title="二、高级组合语法全解"></a>二、高级组合语法全解</h2><h3 id="1-逻辑组合语法"><a href="#1-逻辑组合语法" class="headerlink" title="1. 逻辑组合语法"></a>1. 逻辑组合语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 基础逻辑组合</span><br><span class="line">(A AND B) OR (C AND D)</span><br><span class="line">&quot;(精确短语1)&quot; OR &quot;(精确短语2)&quot;</span><br><span class="line">A -B -C  # 包含A，排除B和C</span><br><span class="line"></span><br><span class="line"># 复杂逻辑嵌套</span><br><span class="line">((A OR B) AND (C OR D)) -E -F</span><br><span class="line">(intitle:X OR inurl:Y) AND (filetype:pdf OR filetype:doc)</span><br></pre></td></tr></table></figure>
+<h2 id="二、搜索引擎特有指令"><a href="#二、搜索引擎特有指令" class="headerlink" title="二、搜索引擎特有指令"></a>二、搜索引擎特有指令</h2><h3 id="1-Google特有指令"><a href="#1-Google特有指令" class="headerlink" title="1. Google特有指令"></a>1. Google特有指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 缓存与信息</span><br><span class="line">cache:URL                 # 查看Google缓存的页面</span><br><span class="line">info:URL                  # 获取Google对URL的特定信息</span><br><span class="line"></span><br><span class="line"># 高级内容限定</span><br><span class="line">allinanchor:&quot;文本&quot;        # 所有关键词必须出现在链接锚文本</span><br><span class="line">allinpostauthor:&quot;作者&quot;    # 搜索特定博客作者的帖子</span><br><span class="line">allintext:&quot;关键词&quot;        # 所有关键词必须出现在正文中</span><br><span class="line"></span><br><span class="line"># 精确时间控制</span><br><span class="line">after:2024-01-01 before:2024-12-31  # 精确日期范围</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Bing特有指令"><a href="#2-Bing特有指令" class="headerlink" title="2. Bing特有指令"></a>2. Bing特有指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 位置服务</span><br><span class="line">ip:IP地址                 # 按服务器IP地址搜索</span><br><span class="line">feed:URL                  # 搜索特定RSS/Atom源</span><br><span class="line">hasfeed:域名              # 搜索有RSS源的网站</span><br><span class="line">near:&quot;地标&quot;               # 附近地点搜索</span><br><span class="line"></span><br><span class="line"># 媒体搜索</span><br><span class="line">filetype: 类型            # 但支持更多媒体类型参数</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-百度搜索特点"><a href="#3-百度搜索特点" class="headerlink" title="3. 百度搜索特点"></a>3. 百度搜索特点</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 百度支持的标准指令</span><br><span class="line">site:域名                 # 站内搜索</span><br><span class="line">filetype:类型             # 文件类型搜索</span><br><span class="line">intitle:关键词            # 标题搜索</span><br><span class="line">inurl:关键词              # URL搜索</span><br><span class="line">intext:关键词             # 正文包含</span><br><span class="line">-关键词                   # 排除关键词</span><br><span class="line">&quot;精确匹配&quot;                # 精确短语搜索</span><br><span class="line"></span><br><span class="line"># 百度不支持的Google特有指令</span><br><span class="line">❌ 不支持 related:</span><br><span class="line">❌ 不支持 link: (完整功能)</span><br><span class="line">❌ 不支持 allin* 系列指令</span><br><span class="line">❌ 不支持 after:/before: 精确日期语法</span><br><span class="line">❌ 不支持 define:</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-各搜索引擎支持情况"><a href="#4-各搜索引擎支持情况" class="headerlink" title="4. 各搜索引擎支持情况"></a>4. 各搜索引擎支持情况</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>Google</th>
+<th>Bing</th>
+<th>百度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>site:</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>三大引擎都支持</td>
+</tr>
+<tr>
+<td><code>filetype:</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>都支持，格式支持有差异</td>
+</tr>
+<tr>
+<td><code>intitle:</code></td>
+<td>✓</td>
+<td>✓*</td>
+<td>✓</td>
+<td>*Bing用<code>title:</code>语法</td>
+</tr>
+<tr>
+<td><code>inurl:</code></td>
+<td>✓</td>
+<td>✓*</td>
+<td>✓</td>
+<td>*Bing用<code>url:</code>语法</td>
+</tr>
+<tr>
+<td><code>intext:</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>Bing不支持此语法</td>
+</tr>
+<tr>
+<td><code>-</code>排除</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>基础功能都支持</td>
+</tr>
+<tr>
+<td><code>&quot;&quot;</code>精确匹配</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>基础功能都支持</td>
+</tr>
+<tr>
+<td><code>OR</code>&#x2F;&#96;</td>
+<td>&#96;</td>
+<td>✓</td>
+<td>✓</td>
+<td>|</td>
+</tr>
+<tr>
+<td><code>*</code>通配符</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>支持程度有差异</td>
+</tr>
+<tr>
+<td><code>cache:</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+<td>Google特有</td>
+</tr>
+<tr>
+<td><code>related:</code></td>
+<td>✓</td>
+<td>有限</td>
+<td>✗</td>
+<td>Google特有</td>
+</tr>
+<tr>
+<td><code>link:</code></td>
+<td>✓</td>
+<td>有限</td>
+<td>有限</td>
+<td>Google支持最完整</td>
+</tr>
+</tbody></table>
+<h2 id="三、进阶搜索组合技巧"><a href="#三、进阶搜索组合技巧" class="headerlink" title="三、进阶搜索组合技巧"></a>三、进阶搜索组合技巧</h2><h3 id="1-逻辑组合语法"><a href="#1-逻辑组合语法" class="headerlink" title="1. 逻辑组合语法"></a>1. 逻辑组合语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 基础逻辑组合</span><br><span class="line">(A AND B) OR (C AND D)</span><br><span class="line">&quot;(精确短语1)&quot; OR &quot;(精确短语2)&quot;</span><br><span class="line">A -B -C  # 包含A，排除B和C</span><br><span class="line"></span><br><span class="line"># 复杂逻辑嵌套</span><br><span class="line">((A OR B) AND (C OR D)) -E -F</span><br><span class="line">(intitle:X OR inurl:Y) AND (filetype:pdf OR filetype:doc)</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-多条件位置限定"><a href="#2-多条件位置限定" class="headerlink" title="2. 多条件位置限定"></a>2. 多条件位置限定</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 标题+URL+内容三重限定</span><br><span class="line">allintitle:&quot;年度报告&quot; inurl:2024 intext:&quot;财务数据&quot; -intext:广告</span><br><span class="line"></span><br><span class="line"># 多位置条件组合</span><br><span class="line">(intitle:A OR intitle:B) AND (inurl:C OR inurl:D) AND (intext:E OR intext:F)</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-站点与文件类型组合"><a href="#3-站点与文件类型组合" class="headerlink" title="3. 站点与文件类型组合"></a>3. 站点与文件类型组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 多站点+多文件类型</span><br><span class="line">(A OR B) (site:X.com OR site:Y.org) (filetype:pdf OR filetype:docx)</span><br><span class="line"></span><br><span class="line"># 站点层级+文件类型</span><br><span class="line">site:.edu.cn OR site:.ac.cn &quot;学术论文&quot; filetype:pdf OR filetype:caj</span><br></pre></td></tr></table></figure>
+<h3 id="3-站点与文件类型组合"><a href="#3-站点与文件类型组合" class="headerlink" title="3. 站点与文件类型组合"></a>3. 站点与文件类型组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 多站点+多文件类型</span><br><span class="line">(A OR B) (site:X.com OR site:Y.org) (filetype:pdf OR filetype:docx)</span><br><span class="line"></span><br><span class="line"># 站点层级+文件类型</span><br><span class="line">site:.edu.cn OR site:.ac.cn &quot;学术论文&quot; filetype:pdf</span><br></pre></td></tr></table></figure>
 
-<h2 id="三、搜索引擎特有指令"><a href="#三、搜索引擎特有指令" class="headerlink" title="三、搜索引擎特有指令"></a>三、搜索引擎特有指令</h2><h3 id="1-Google特有指令"><a href="#1-Google特有指令" class="headerlink" title="1. Google特有指令"></a>1. Google特有指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 时间限定</span><br><span class="line">after:2024-01-01 before:2024-12-31</span><br><span class="line">.. 年份范围：2020..2024</span><br><span class="line"></span><br><span class="line"># 高级内容限定</span><br><span class="line">author:&quot;姓名&quot;  # 作者限定</span><br><span class="line">source:&quot;期刊名&quot; # 来源限定</span><br><span class="line">allinanchor:   # 锚文本限定</span><br><span class="line">allinpostauthor:# 博客作者限定</span><br><span class="line"></span><br><span class="line"># 多媒体限定</span><br><span class="line">duration:&gt;10minutes  # 视频时长</span><br><span class="line">size:100..500KB      # 文件大小</span><br></pre></td></tr></table></figure>
+<h3 id="4-时间与质量优化"><a href="#4-时间与质量优化" class="headerlink" title="4. 时间与质量优化"></a>4. 时间与质量优化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 时效性控制</span><br><span class="line">关键词 after:2024-01-01 OR (2024..2024)</span><br><span class="line"></span><br><span class="line"># 质量提升</span><br><span class="line">关键词 (site:gov.cn OR site:edu.cn) -advertisement -spam</span><br><span class="line"></span><br><span class="line"># 多维度验证</span><br><span class="line">搜索组1: (核心词) site:权威源1</span><br><span class="line">搜索组2: (核心词) site:权威源2</span><br><span class="line">搜索组3: (核心词) site:权威源3</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-Bing特有指令"><a href="#2-Bing特有指令" class="headerlink" title="2. Bing特有指令"></a>2. Bing特有指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 位置限定增强</span><br><span class="line">location:城市名</span><br><span class="line">country:国家代码</span><br><span class="line"></span><br><span class="line"># 社交媒体集成</span><br><span class="line">twitter:用户名</span><br><span class="line">facebook:用户名</span><br><span class="line"></span><br><span class="line"># 图片搜索</span><br><span class="line">imagesize:800x600</span><br><span class="line">color:红色</span><br><span class="line">type:照片</span><br></pre></td></tr></table></figure>
+<h2 id="四、通用搜索场景实战"><a href="#四、通用搜索场景实战" class="headerlink" title="四、通用搜索场景实战"></a>四、通用搜索场景实战</h2><h3 id="1-学术研究场景"><a href="#1-学术研究场景" class="headerlink" title="1. 学术研究场景"></a>1. 学术研究场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 论文精准搜索</span><br><span class="line">allintitle:(&quot;deep learning&quot; OR &quot;neural network&quot;) (&quot;medical diagnosis&quot; OR &quot;disease detection&quot;) site:scholar.google.com OR site:arxiv.org filetype:pdf 2020..2024 -survey -review</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-百度特有指令"><a href="#3-百度特有指令" class="headerlink" title="3. 百度特有指令"></a>3. 百度特有指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 中文优化</span><br><span class="line">intitle:关键词  # 标题搜索</span><br><span class="line">inurl:关键词    # URL搜索</span><br><span class="line">filetype:类型   # 文件类型</span><br><span class="line"></span><br><span class="line"># 特色功能</span><br><span class="line">site:域名       # 站内搜索</span><br><span class="line">-关键词         # 排除关键词</span><br><span class="line">&quot;精确匹配&quot;      # 精确搜索</span><br><span class="line"></span><br><span class="line"># 百度高级</span><br><span class="line">intext:关键词   # 正文包含</span><br><span class="line">link:URL        # 反向链接</span><br><span class="line">related:URL     # 相关页面</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 文献综述收集</span><br><span class="line">(&quot;literature review&quot; OR &quot;systematic review&quot;) (&quot;climate change&quot; OR &quot;global warming&quot;) (site:nature.com OR site:science.org) filetype:pdf after:2022-01-01</span><br></pre></td></tr></table></figure>
 
-<h2 id="四、实战场景组合示例（通用场景）"><a href="#四、实战场景组合示例（通用场景）" class="headerlink" title="四、实战场景组合示例（通用场景）"></a>四、实战场景组合示例（通用场景）</h2><h3 id="1-学术研究场景"><a href="#1-学术研究场景" class="headerlink" title="1. 学术研究场景"></a>1. 学术研究场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 论文精准搜索</span><br><span class="line">allintitle:(&quot;deep learning&quot; OR &quot;neural network&quot;) (&quot;medical diagnosis&quot; OR &quot;disease detection&quot;) site:scholar.google.com OR site:arxiv.org filetype:pdf 2020..2024 -survey -review</span><br><span class="line"></span><br><span class="line"># 文献综述收集</span><br><span class="line">(&quot;literature review&quot; OR &quot;systematic review&quot;) (&quot;climate change&quot; OR &quot;global warming&quot;) (site:nature.com OR site:science.org) filetype:pdf after:2022-01-01</span><br><span class="line"></span><br><span class="line"># 作者追踪</span><br><span class="line">author:&quot;Yann LeCun&quot; OR author:&quot;Andrew Ng&quot; (&quot;deep learning&quot; OR &quot;AI&quot;) site:arxiv.org filetype:pdf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 作者追踪</span><br><span class="line">author:&quot;Yann LeCun&quot; OR author:&quot;Andrew Ng&quot; (&quot;deep learning&quot; OR &quot;AI&quot;) site:arxiv.org filetype:pdf</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-技术开发场景"><a href="#2-技术开发场景" class="headerlink" title="2. 技术开发场景"></a>2. 技术开发场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 开源项目搜索</span><br><span class="line">(&quot;machine learning&quot; OR &quot;AI&quot;) (&quot;open source&quot; OR &quot;GitHub&quot;) stars:&gt;1000 forks:&gt;100 language:Python OR language:JavaScript site:github.com -tutorial -example</span><br><span class="line"></span><br><span class="line"># API文档定位</span><br><span class="line">(&quot;REST API&quot; OR &quot;GraphQL API&quot;) (&quot;authentication&quot; OR &quot;authorization&quot;) (&quot;Python&quot; OR &quot;Node.js&quot;) site:swagger.io OR site:postman.com OR site:rapidapi.com -blog -news</span><br><span class="line"></span><br><span class="line"># 错误解决方案</span><br><span class="line">(&quot;TypeError&quot; OR &quot;RuntimeError&quot;) (&quot;Python 3.8&quot; OR &quot;Python 3.9&quot;) (&quot;fix&quot; OR &quot;solution&quot; OR &quot;解决&quot;) site:stackoverflow.com OR site:github.com/issues -ask -question</span><br></pre></td></tr></table></figure>
+<h3 id="2-技术开发场景"><a href="#2-技术开发场景" class="headerlink" title="2. 技术开发场景"></a>2. 技术开发场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 开源项目搜索</span><br><span class="line">(&quot;machine learning&quot; OR &quot;AI&quot;) (&quot;open source&quot; OR &quot;GitHub&quot;) stars:&gt;1000 forks:&gt;100 language:Python OR language:JavaScript site:github.com -tutorial -example</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-商业分析场景"><a href="#3-商业分析场景" class="headerlink" title="3. 商业分析场景"></a>3. 商业分析场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 竞品分析</span><br><span class="line">(&quot;iPhone 15&quot; OR &quot;Samsung S24&quot; OR &quot;Huawei P60&quot;) (&quot;review&quot; OR &quot;comparison&quot; OR &quot;评测&quot; OR &quot;对比&quot;) (site:cnet.com OR site:theverge.com OR site:zealer.com) after:2023-09-01 -buy -purchase -shop</span><br><span class="line"></span><br><span class="line"># 市场趋势</span><br><span class="line">(&quot;AI startup&quot; OR &quot;artificial intelligence company&quot;) (&quot;funding&quot; OR &quot;investment&quot; OR &quot;融资&quot; OR &quot;投资&quot;) (China OR Chinese OR 中国) site:crunchbase.com OR site:36kr.com OR site:itjuzi.com 2023..2024</span><br><span class="line"></span><br><span class="line"># 用户反馈</span><br><span class="line">(&quot;product feedback&quot; OR &quot;user review&quot; OR &quot;产品反馈&quot; OR &quot;用户体验&quot;) (&quot;mobile app&quot; OR &quot;web application&quot; OR &quot;移动应用&quot; OR &quot;网页应用&quot;) site:appstore.com OR site:coolapk.com OR site:meituan.com -spam -junk</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># API文档定位</span><br><span class="line">(&quot;REST API&quot; OR &quot;GraphQL API&quot;) (&quot;authentication&quot; OR &quot;authorization&quot;) (&quot;Python&quot; OR &quot;Node.js&quot;) site:swagger.io OR site:postman.com OR site:rapidapi.com -blog -news</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-新闻与舆情监控"><a href="#4-新闻与舆情监控" class="headerlink" title="4. 新闻与舆情监控"></a>4. 新闻与舆情监控</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 重大事件追踪</span><br><span class="line">(&quot;earthquake&quot; OR &quot;earthquake&quot;) (&quot;casualties&quot; OR &quot;damage&quot; OR &quot;伤亡&quot; OR &quot;损失&quot;) (site:reuters.com OR site:apnews.com OR site:xinhuanet.com) after:2024-12-27 -site:twitter.com -site:weibo.com</span><br><span class="line"></span><br><span class="line"># 品牌声誉监控</span><br><span class="line">(&quot;腾讯&quot; OR &quot;Tencent&quot;) (site:weibo.com OR site:zhihu.com OR site:tieba.baidu.com) (-intext:官方 -intext:官网) (intext:投诉 OR intext:问题 OR intext:差评) after:2024-01-01</span><br><span class="line"></span><br><span class="line"># 政策影响分析</span><br><span class="line">(&quot;data privacy&quot; OR &quot;privacy law&quot;) (&quot;China&quot; OR &quot;中国&quot;) (&quot;impact&quot; OR &quot;影响&quot;) (site:gov.cn OR site:people.com.cn) after:2023-01-01 filetype:pdf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 错误解决方案</span><br><span class="line">(&quot;TypeError&quot; OR &quot;RuntimeError&quot;) (&quot;Python 3.8&quot; OR &quot;Python 3.9&quot;) (&quot;fix&quot; OR &quot;solution&quot; OR &quot;解决&quot;) site:stackoverflow.com OR site:github.com/issues -ask -question</span><br></pre></td></tr></table></figure>
 
-<h2 id="五、网络安全核心搜索操作符"><a href="#五、网络安全核心搜索操作符" class="headerlink" title="五、网络安全核心搜索操作符"></a>五、网络安全核心搜索操作符</h2><h3 id="1-漏洞与CVE搜索"><a href="#1-漏洞与CVE搜索" class="headerlink" title="1. 漏洞与CVE搜索"></a>1. 漏洞与CVE搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;CVE-2024-1234&quot; (site:nvd.nist.gov OR site:exploit-db.com OR site:github.com) filetype:pdf OR filetype:md</span><br></pre></td></tr></table></figure>
+<h3 id="3-商业分析场景"><a href="#3-商业分析场景" class="headerlink" title="3. 商业分析场景"></a>3. 商业分析场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 竞品分析</span><br><span class="line">(&quot;iPhone 15&quot; OR &quot;Samsung S24&quot; OR &quot;Huawei P60&quot;) (&quot;review&quot; OR &quot;comparison&quot; OR &quot;评测&quot; OR &quot;对比&quot;) (site:cnet.com OR site:theverge.com OR site:zealer.com) after:2023-09-01 -buy -purchase -shop</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 市场趋势</span><br><span class="line">(&quot;AI startup&quot; OR &quot;artificial intelligence company&quot;) (&quot;funding&quot; OR &quot;investment&quot; OR &quot;融资&quot; OR &quot;投资&quot;) (China OR Chinese OR 中国) site:crunchbase.com OR site:36kr.com OR site:itjuzi.com 2023..2024</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 用户反馈</span><br><span class="line">(&quot;product feedback&quot; OR &quot;user review&quot; OR &quot;产品反馈&quot; OR &quot;用户体验&quot;) (&quot;mobile app&quot; OR &quot;web application&quot; OR &quot;移动应用&quot; OR &quot;网页应用&quot;) site:appstore.com OR site:coolapk.com OR site:meituan.com -spam -junk</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-新闻与舆情监控"><a href="#4-新闻与舆情监控" class="headerlink" title="4. 新闻与舆情监控"></a>4. 新闻与舆情监控</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 重大事件追踪</span><br><span class="line">(&quot;earthquake&quot; OR &quot;earthquake&quot;) (&quot;casualties&quot; OR &quot;damage&quot; OR &quot;伤亡&quot; OR &quot;损失&quot;) (site:reuters.com OR site:apnews.com OR site:xinhuanet.com) after:2024-12-27 -site:twitter.com -site:weibo.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 品牌声誉监控</span><br><span class="line">(&quot;腾讯&quot; OR &quot;Tencent&quot;) (site:weibo.com OR site:zhihu.com OR site:tieba.baidu.com) (-intext:官方 -intext:官网) (intext:投诉 OR intext:问题 OR intext:差评) after:2024-01-01</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 政策影响分析</span><br><span class="line">(&quot;data privacy&quot; OR &quot;privacy law&quot;) (&quot;China&quot; OR &quot;中国&quot;) (&quot;impact&quot; OR &quot;影响&quot;) (site:gov.cn OR site:people.com.cn) after:2023-01-01 filetype:pdf</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、网络安全专业搜索指令"><a href="#五、网络安全专业搜索指令" class="headerlink" title="五、网络安全专业搜索指令"></a>五、网络安全专业搜索指令</h2><h3 id="1-漏洞与CVE搜索"><a href="#1-漏洞与CVE搜索" class="headerlink" title="1. 漏洞与CVE搜索"></a>1. 漏洞与CVE搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;CVE-2024-1234&quot; (site:nvd.nist.gov OR site:exploit-db.com OR site:github.com) filetype:pdf OR filetype:md</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;buffer overflow&quot; OR &quot;stack overflow&quot;) (&quot;exploit&quot; OR &quot;poc&quot;) site:github.com stars:&gt;100 language:python OR language:c</span><br></pre></td></tr></table></figure>
 
@@ -341,103 +454,184 @@
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;nmap&quot; OR &quot;masscan&quot; OR &quot;zmap&quot;) (&quot;script&quot; OR &quot;NSE&quot;) (&quot;vulnerability scanning&quot; OR &quot;service detection&quot;) site:github.com stars:&gt;100</span><br></pre></td></tr></table></figure>
 
-<h2 id="六、高级网络安全搜索组合"><a href="#六、高级网络安全搜索组合" class="headerlink" title="六、高级网络安全搜索组合"></a>六、高级网络安全搜索组合</h2><h3 id="1-漏洞研究与验证"><a href="#1-漏洞研究与验证" class="headerlink" title="1. 漏洞研究与验证"></a>1. 漏洞研究与验证</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;zero-day&quot; OR &quot;0day&quot;) (&quot;proof of concept&quot; OR &quot;PoC&quot;) (&quot;Windows 11&quot; OR &quot;Linux kernel&quot;) site:github.com OR site:packetstormsecurity.com after:2024-01-01 -tutorial -educational</span><br></pre></td></tr></table></figure>
+<h3 id="4-高级威胁研究"><a href="#4-高级威胁研究" class="headerlink" title="4. 高级威胁研究"></a>4. 高级威胁研究</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;zero-day&quot; OR &quot;0day&quot;) (&quot;proof of concept&quot; OR &quot;PoC&quot;) (&quot;Windows 11&quot; OR &quot;Linux kernel&quot;) site:github.com OR site:packetstormsecurity.com after:2024-01-01 -tutorial -educational</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Log4j&quot; OR &quot;SpringShell&quot;) (&quot;patch analysis&quot; OR &quot;mitigation&quot;) (site:microsoft.com OR site:apache.org OR site:spring.io) filetype:pdf OR filetype:html</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;network forensics&quot; OR &quot;PCAP analysis&quot;) (&quot;Zeek&quot; OR &quot;Bro&quot;) (&quot;malware traffic&quot; OR &quot;C2 communication&quot;) site:github.com (language:python OR language:zeek) stars:&gt;200</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-威胁情报专业搜索"><a href="#5-威胁情报专业搜索" class="headerlink" title="5. 威胁情报专业搜索"></a>5. 威胁情报专业搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;APT41&quot; OR &quot;Winnti&quot;) (&quot;campaign&quot; OR &quot;operation&quot;) (&quot;infrastructure&quot; OR &quot;TTPs&quot;) (site:mandiant.com OR site:proofpoint.com) filetype:pdf after:2023-06-01</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;file hash&quot; OR &quot;MD5&quot; OR &quot;SHA256&quot;) (&quot;malicious&quot; OR &quot;known bad&quot;) (&quot;IoC&quot;) site:virustotal.com OR site:hybrid-analysis.com OR site:malwarebazaar.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;IP blacklist&quot; OR &quot;malicious IP&quot;) (&quot;botnet C2&quot;) (&quot;ASN&quot;) site:blocklist.de OR site:abuseipdb.com OR site:spamhaus.org</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-云安全与容器安全"><a href="#6-云安全与容器安全" class="headerlink" title="6. 云安全与容器安全"></a>6. 云安全与容器安全</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;AWS&quot; OR &quot;Azure&quot; OR &quot;GCP&quot;) (&quot;misconfiguration&quot; OR &quot;security best practices&quot;) (&quot;S3 bucket&quot; OR &quot;IAM role&quot;) (site:aws.amazon.com OR site:docs.microsoft.com) filetype:json OR filetype:yaml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Docker&quot; OR &quot;Kubernetes&quot;) (&quot;security hardening&quot; OR &quot;CIS benchmark&quot;) site:github.com (language:go OR language:python) stars:&gt;500</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Kubernetes security monitoring&quot; OR &quot;K8s audit logs&quot;) (&quot;Falco&quot; OR &quot;kube-bench&quot;) (&quot;container escape&quot; OR &quot;privilege escalation&quot;) site:github.com/falcosecurity</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-企业安全防御"><a href="#7-企业安全防御" class="headerlink" title="7. 企业安全防御"></a>7. 企业安全防御</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Sigma rule&quot; OR &quot;log detection&quot;) (&quot;Windows Event Log&quot; OR &quot;Sysmon&quot;) (&quot;Mimikatz&quot; OR &quot;PsExec&quot;) site:github.com/sigma-hq/sigma</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;EDR bypass&quot; OR &quot;AV evasion&quot;) (&quot;Cobalt Strike&quot;) (&quot;process injection&quot; OR &quot;direct syscalls&quot;) (site:github.com OR site:specterops.io) -commercial -paid</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Active Directory attack&quot; OR &quot;AD exploitation&quot;) (&quot;BloodHound&quot; OR &quot;SharpHound&quot;) (&quot;ACL abuse&quot; OR &quot;delegation&quot;) site:github.com/BloodHoundAD</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、网络安全实战组合示例"><a href="#六、网络安全实战组合示例" class="headerlink" title="六、网络安全实战组合示例"></a>六、网络安全实战组合示例</h2><h3 id="1-漏洞研究与验证"><a href="#1-漏洞研究与验证" class="headerlink" title="1. 漏洞研究与验证"></a>1. 漏洞研究与验证</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;zero-day&quot; OR &quot;0day&quot;) (&quot;proof of concept&quot; OR &quot;PoC&quot;) (&quot;Windows 11&quot; OR &quot;Linux kernel&quot;) site:github.com OR site:packetstormsecurity.com after:2024-01-01 -tutorial -educational</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Log4j&quot; OR &quot;SpringShell&quot; OR &quot;ProxyLogon&quot;) (&quot;patch analysis&quot; OR &quot;mitigation&quot;) (site:microsoft.com OR site:apache.org OR site:spring.io) filetype:pdf OR filetype:html</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;CVE-2023-1234&quot; OR &quot;CVE-2024-5678&quot;) (&quot;exploit code&quot; OR &quot;exploit development&quot;) (&quot;x86_64&quot; OR &quot;ARM64&quot;) site:exploit-db.com OR site:github.com/gists</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-网络流量与协议分析"><a href="#2-网络流量与协议分析" class="headerlink" title="2. 网络流量与协议分析"></a>2. 网络流量与协议分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;PCAP analysis&quot; OR &quot;network forensics&quot;) (&quot;Zeek&quot; OR &quot;Bro&quot;) (&quot;malware traffic&quot; OR &quot;C2 communication&quot;) site:github.com (language:python OR language:zeek) stars:&gt;200</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;TLS 1.3&quot; OR &quot;QUIC&quot;) (&quot;decryption&quot; OR &quot;inspection&quot;) (&quot;Wireshark&quot; OR &quot;tshark&quot;) (site:wireshark.org OR site:github.com) filetype:pcap OR filetype:lua</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;DNS tunneling&quot; OR &quot;DNS exfiltration&quot;) (&quot;detection&quot; OR &quot;signature&quot;) (&quot;Suricata&quot; OR &quot;Snort&quot;) rule site:github.com OR site:emergingthreats.net</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-云安全与容器安全"><a href="#3-云安全与容器安全" class="headerlink" title="3. 云安全与容器安全"></a>3. 云安全与容器安全</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;AWS&quot; OR &quot;Azure&quot; OR &quot;GCP&quot;) (&quot;misconfiguration&quot; OR &quot;security best practices&quot;) (&quot;S3 bucket&quot; OR &quot;IAM role&quot;) (site:aws.amazon.com OR site:docs.microsoft.com OR site:cloud.google.com) filetype:json OR filetype:yaml</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Docker&quot; OR &quot;Kubernetes&quot;) (&quot;security hardening&quot; OR &quot;CSPM&quot;) (&quot;CIS benchmark&quot; OR &quot;kube-bench&quot;) site:github.com (language:go OR language:python) stars:&gt;500</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;serverless security&quot; OR &quot;Lambda security&quot;) (&quot;attack surface&quot; OR &quot;injection&quot;) (&quot;AWS Lambda&quot; OR &quot;Azure Functions&quot;) site:github.com OR site:owasp.org</span><br></pre></td></tr></table></figure>
-
-<h2 id="七、威胁情报专业搜索"><a href="#七、威胁情报专业搜索" class="headerlink" title="七、威胁情报专业搜索"></a>七、威胁情报专业搜索</h2><h3 id="1-APT组织与攻击活动"><a href="#1-APT组织与攻击活动" class="headerlink" title="1. APT组织与攻击活动"></a>1. APT组织与攻击活动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;APT41&quot; OR &quot;Winnti&quot; OR &quot;Blackfly&quot;) (&quot;campaign&quot; OR &quot;operation&quot;) (&quot;infrastructure&quot; OR &quot;TTPs&quot;) (site:mandiant.com OR site:proofpoint.com OR site:secureworks.com) filetype:pdf after:2023-06-01</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;ransomware&quot; OR &quot;double extortion&quot;) (&quot;LockBit&quot; OR &quot;Conti&quot; OR &quot;REvil&quot;) (&quot;decryptor&quot; OR &quot;recovery&quot;) site:noesecurity.org OR site:decryptor.top OR site:github.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;phishing kit&quot; OR &quot;credential harvesting&quot;) (&quot;brand impersonation&quot; OR &quot;financial institution&quot;) (site:urlscan.io OR site:phishtank.com) (&quot;Chase&quot; OR &quot;Bank of America&quot; OR &quot;PayPal&quot;)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-IOC与威胁指标搜索"><a href="#2-IOC与威胁指标搜索" class="headerlink" title="2. IOC与威胁指标搜索"></a>2. IOC与威胁指标搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;file hash&quot; OR &quot;MD5&quot; OR &quot;SHA256&quot;) (&quot;malicious&quot; OR &quot;known bad&quot;) (&quot;Emotet&quot; OR &quot;TrickBot&quot;) site:virustotal.com OR site:hybrid-analysis.com OR site:malwarebazaar.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;IP blacklist&quot; OR &quot;malicious IP&quot;) (&quot;botnet C2&quot; OR &quot;command and control&quot;) (&quot;ASN&quot; OR &quot;autonomous system&quot;) site:blocklist.de OR site:abuseipdb.com OR site:spamhaus.org</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;domain reputation&quot; OR &quot;malware domain&quot;) (&quot;DGA&quot; OR &quot;domain generation algorithm&quot;) (&quot;Zeus&quot; OR &quot;GameOver&quot;) site:urlhaus.abuse.ch OR site:cybercrime-tracker.net</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-暗网与地下论坛监控"><a href="#3-暗网与地下论坛监控" class="headerlink" title="3. 暗网与地下论坛监控"></a>3. 暗网与地下论坛监控</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;data breach&quot; OR &quot;stolen credentials&quot;) (&quot;combo list&quot; OR &quot;credential dump&quot;) (&quot;HaveIBeenPwned&quot; OR &quot;dehashed&quot;) site:github.com OR site:haveibeenpwned.com -actual -real</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;carding forum&quot; OR &quot;fraud marketplace&quot;) (&quot;credit card&quot; OR &quot;CC&quot;) (&quot;BIN checker&quot; OR &quot;Luhn algorithm&quot;) site:github.com OR site:owasp.org -tutorial -educational</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;ransomware negotiation&quot; OR &quot;ransom payment&quot;) (&quot;Bitcoin&quot; OR &quot;Monero&quot;) (&quot;decryptor tool&quot; OR &quot;recovery service&quot;) site:noesecurity.org OR site:ransomware.live</span><br></pre></td></tr></table></figure>
-
-<h2 id="八、安全工具与防御技术搜索"><a href="#八、安全工具与防御技术搜索" class="headerlink" title="八、安全工具与防御技术搜索"></a>八、安全工具与防御技术搜索</h2><h3 id="1-源代码安全分析"><a href="#1-源代码安全分析" class="headerlink" title="1. 源代码安全分析"></a>1. 源代码安全分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;static application security testing&quot; OR &quot;SAST&quot;) (&quot;OWASP Top 10&quot; OR &quot;CWE&quot;) (&quot;Python&quot; OR &quot;JavaScript&quot;) (site:github.com OR site:gitlab.com) (language:python OR language:javascript) stars:&gt;1000</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;buffer overflow&quot; OR &quot;use after free&quot;) (&quot;C&quot; OR &quot;C++&quot;) (&quot;fuzzing&quot; OR &quot;AFL&quot;) (&quot;test case&quot; OR &quot;corpus&quot;) site:github.com OR site:google.github.io/security-research</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;insecure deserialization&quot; OR &quot;deserialization vulnerability&quot;) (&quot;Java&quot; OR &quot;Python&quot;) (&quot;gadget chain&quot; OR &quot;exploit chain&quot;) site:github.com OR site:portswigger.net</span><br></pre></td></tr></table></figure>
-
 <h3 id="2-网络防御与检测"><a href="#2-网络防御与检测" class="headerlink" title="2. 网络防御与检测"></a>2. 网络防御与检测</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;IDS/IPS&quot; OR &quot;intrusion detection&quot;) (&quot;Suricata rule&quot; OR &quot;Snort rule&quot;) (&quot;exploit kit&quot; OR &quot;malware delivery&quot;) (site:emergingthreats.net OR site:snort.org) filetype:rules OR filetype:json</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;EDR bypass&quot; OR &quot;AV evasion&quot;) (&quot;Cobalt Strike&quot; OR &quot;Meterpreter&quot;) (&quot;process injection&quot; OR &quot;direct syscalls&quot;) (site:github.com OR site:specterops.io) -commercial -paid</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;memory forensics&quot; OR &quot;volatile memory&quot;) (&quot;Volatility&quot; OR &quot;Rekall&quot;) (&quot;malware detection&quot; OR &quot;rootkit analysis&quot;) site:github.com/volatilityfoundation OR site:github.com/google/rekall</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Sigma rule&quot; OR &quot;log detection&quot;) (&quot;Windows Event Log&quot; OR &quot;Sysmon&quot;) (&quot;Mimikatz&quot; OR &quot;PsExec&quot;) site:github.com/sigma-hq/sigma OR site:sigma-core.readthedocs.io</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-红队-蓝队专业搜索"><a href="#3-红队-蓝队专业搜索" class="headerlink" title="3. 红队&#x2F;蓝队专业搜索"></a>3. 红队&#x2F;蓝队专业搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Active Directory attack&quot; OR &quot;AD exploitation&quot;) (&quot;BloodHound&quot; OR &quot;SharpHound&quot;) (&quot;ACL abuse&quot; OR &quot;delegation&quot;) (site:github.com/BloodHoundAD OR site:specterops.io) -commercial</span><br></pre></td></tr></table></figure>
+<h3 id="3-红蓝对抗专业搜索"><a href="#3-红蓝对抗专业搜索" class="headerlink" title="3. 红蓝对抗专业搜索"></a>3. 红蓝对抗专业搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;Active Directory attack&quot; OR &quot;AD exploitation&quot;) (&quot;BloodHound&quot; OR &quot;SharpHound&quot;) (&quot;ACL abuse&quot; OR &quot;delegation&quot;) site:github.com/BloodHoundAD OR site:specterops.io -commercial</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;hunting hypothesis&quot; OR &quot;threat hunting&quot;) (&quot;MDE&quot; OR &quot;Microsoft Defender&quot;) (&quot;process tree&quot; OR &quot;child process&quot;) (&quot;Mimikatz&quot; OR &quot;Rubeus&quot;) site:github.com/microsoft/Microsoft-Defender-ATP-Hunting-Queries</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;hunting hypothesis&quot; OR &quot;threat hunting&quot;) (&quot;Microsoft Defender&quot;) (&quot;process tree&quot; OR &quot;child process&quot;) (&quot;Mimikatz&quot; OR &quot;Rubeus&quot;) site:github.com/microsoft</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;domain fronting&quot; OR &quot;CDN bypass&quot;) (&quot;Cloudflare&quot; OR &quot;AWS CloudFront&quot;) (&quot;C2 channel&quot; OR &quot;command and control&quot;) (site:github.com OR site:specterops.io) -tutorial -beginner</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;domain fronting&quot; OR &quot;CDN bypass&quot;) (&quot;Cloudflare&quot; OR &quot;AWS CloudFront&quot;) (&quot;C2 channel&quot;) (site:github.com OR site:specterops.io) -tutorial -beginner</span><br></pre></td></tr></table></figure>
 
-<h2 id="九、特殊领域深度应用"><a href="#九、特殊领域深度应用" class="headerlink" title="九、特殊领域深度应用"></a>九、特殊领域深度应用</h2><h3 id="1-IoT-OT安全"><a href="#1-IoT-OT安全" class="headerlink" title="1. IoT&#x2F;OT安全"></a>1. IoT&#x2F;OT安全</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;firmware analysis&quot; OR &quot;binwalk&quot;) (&quot;router&quot; OR &quot;camera&quot; OR &quot;IoT device&quot;) (&quot;backdoor&quot; OR &quot;hardcoded credential&quot;) site:github.com (language:python OR language:shell) stars:&gt;300</span><br></pre></td></tr></table></figure>
+<h3 id="4-IoT-OT与工业安全"><a href="#4-IoT-OT与工业安全" class="headerlink" title="4. IoT&#x2F;OT与工业安全"></a>4. IoT&#x2F;OT与工业安全</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;firmware analysis&quot; OR &quot;binwalk&quot;) (&quot;router&quot; OR &quot;camera&quot; OR &quot;IoT device&quot;) (&quot;backdoor&quot; OR &quot;hardcoded credential&quot;) site:github.com (language:python OR language:shell) stars:&gt;300</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;ICS security&quot; OR &quot;SCADA security&quot;) (&quot;Modbus&quot; OR &quot;DNP3&quot; OR &quot;IEC 60870-5-104&quot;) (&quot;protocol analysis&quot; OR &quot;fuzzing&quot;) (site:github.com OR site:ics-cert.us-cert.gov) filetype:pcap OR filetype:json</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;ICS security&quot; OR &quot;SCADA security&quot;) (&quot;Modbus&quot; OR &quot;DNP3&quot;) (&quot;protocol analysis&quot; OR &quot;fuzzing&quot;) (site:github.com OR site:ics-cert.us-cert.gov) filetype:pcap OR filetype:json</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;JTAG debugging&quot; OR &quot;UART interface&quot;) (&quot;firmware extraction&quot; OR &quot;chip-off&quot;) (&quot;ESP32&quot; OR &quot;ARM Cortex&quot;) (site:github.com OR site:hackaday.com) -commercial -paid</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-数字取证与合规"><a href="#2-数字取证与合规" class="headerlink" title="2. 数字取证与合规"></a>2. 数字取证与合规</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;digital forensics&quot; OR &quot;incident response&quot;) (&quot;timeline analysis&quot; OR &quot;artifact collection&quot;) (&quot;Windows&quot; OR &quot;Linux&quot;) (site:sleuthkit.org OR site:autopsy.com) filetype:pdf OR filetype:html</span><br></pre></td></tr></table></figure>
+<h3 id="5-合规与取证"><a href="#5-合规与取证" class="headerlink" title="5. 合规与取证"></a>5. 合规与取证</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;digital forensics&quot; OR &quot;incident response&quot;) (&quot;timeline analysis&quot; OR &quot;artifact collection&quot;) (&quot;Windows&quot; OR &quot;Linux&quot;) (site:sleuthkit.org OR site:autopsy.com) filetype:pdf OR filetype:html</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;memory forensics&quot; OR &quot;volatile memory&quot;) (&quot;Volatility&quot; OR &quot;Rekall&quot;) (&quot;malware detection&quot; OR &quot;rootkit analysis&quot;) (site:volatilityfoundation.org OR site:github.com) filetype:py OR filetype:ipynb</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;NIST SP 800-53&quot; OR &quot;NIST Cybersecurity Framework&quot;) (&quot;security controls&quot; OR &quot;compliance mapping&quot;) site:nist.gov OR site:github.com</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;NIST SP 800-53&quot; OR &quot;NIST Cybersecurity Framework&quot;) (&quot;security controls&quot; OR &quot;compliance mapping&quot;) (&quot;cloud environment&quot; OR &quot;hybrid infrastructure&quot;) site:nist.gov OR site:github.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;GDPR compliance&quot; OR &quot;CCPA compliance&quot;) (&quot;data breach notification&quot; OR &quot;incident reporting&quot;) (&quot;72 hours&quot;) (site:gdpr-info.eu OR site:ccpa-info.com) filetype:pdf</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-CTF与实战演练"><a href="#3-CTF与实战演练" class="headerlink" title="3. CTF与实战演练"></a>3. CTF与实战演练</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;CTF writeup&quot; OR &quot;capture the flag solution&quot;) (&quot;pwn&quot; OR &quot;reverse engineering&quot;) (&quot;buffer overflow&quot; OR &quot;format string&quot;) site:ctftime.org OR site:github.com -commercial -paid</span><br></pre></td></tr></table></figure>
+<h2 id="七、专业搜索策略与最佳实践"><a href="#七、专业搜索策略与最佳实践" class="headerlink" title="七、专业搜索策略与最佳实践"></a>七、专业搜索策略与最佳实践</h2><h3 id="1-搜索流程优化"><a href="#1-搜索流程优化" class="headerlink" title="1. 搜索流程优化"></a>1. 搜索流程优化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 三步优化法</span><br><span class="line">步骤1：宽泛搜索 → &quot;人工智能&quot;</span><br><span class="line">步骤2：增加限定 → &quot;人工智能&quot; site:edu.cn filetype:pdf</span><br><span class="line">步骤3：精确过滤 → allintitle:&quot;人工智能发展报告&quot; site:tsinghua.edu.cn filetype:pdf -advertisement</span><br><span class="line"></span><br><span class="line"># 网络安全专业应用</span><br><span class="line">初始搜索： &quot;Log4j vulnerability&quot;</span><br><span class="line">第一步优化： &quot;Log4j vulnerability&quot; site:apache.org OR site:github.com</span><br><span class="line">第二步优化： &quot;CVE-2021-44228&quot; (site:nvd.nist.gov OR site:exploit-db.com) filetype:pdf</span><br><span class="line">第三步优化： allintext:&quot;JNDI lookup&quot; (&quot;exploit code&quot; OR &quot;poc&quot;) site:github.com language:java stars:&gt;50 after:2021-12-01</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;vulnerable machine&quot; OR &quot;boot2root&quot;) (&quot;TryHackMe&quot; OR &quot;HackTheBox&quot;) (&quot;Active Directory&quot; OR &quot;Pivoting&quot;) (site:tryhackme.com OR site:hackthebox.com) -walkthrough -solution</span><br></pre></td></tr></table></figure>
+<h3 id="2-搜索结果质量提升"><a href="#2-搜索结果质量提升" class="headerlink" title="2. 搜索结果质量提升"></a>2. 搜索结果质量提升</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 排除低质量内容</span><br><span class="line">关键词 -advertisement -ad -推广 -广告 -buy -purchase -shop -free -download -tutorial -beginner</span><br><span class="line"></span><br><span class="line"># 提升权威性</span><br><span class="line">关键词 (site:gov.cn OR site:edu.cn OR site:org.cn) OR (site:.gov OR site:.edu OR site:.org)</span><br><span class="line"></span><br><span class="line"># 时效性控制</span><br><span class="line">关键词 after:2024-01-01 OR (2024..2024)</span><br><span class="line"></span><br><span class="line"># 网络安全特定优化</span><br><span class="line">(&quot;CVE-2024&quot;) -site:twitter.com -site:reddit.com site:nvd.nist.gov OR site:exploit-db.com</span><br><span class="line">(&quot;malware analysis&quot;) -site:youtube.com site:github.com OR site:virustotal.com</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;cryptography challenge&quot; OR &quot;crypto CTF&quot;) (&quot;RSA&quot; OR &quot;AES&quot; OR &quot;Diffie-Hellman&quot;) (&quot;weak key&quot; OR &quot;implementation flaw&quot;) site:github.com OR site:ctftime.org -theory -academic</span><br></pre></td></tr></table></figure>
+<h3 id="3-多维度验证策略"><a href="#3-多维度验证策略" class="headerlink" title="3. 多维度验证策略"></a>3. 多维度验证策略</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 信息交叉验证</span><br><span class="line">搜索1: (&quot;Log4j vulnerability&quot;) site:apache.org</span><br><span class="line">搜索2: (&quot;CVE-2021-44228&quot;) site:nvd.nist.gov</span><br><span class="line">搜索3: (&quot;Log4Shell&quot;) site:github.com/security-advisories</span><br><span class="line"></span><br><span class="line"># 威胁情报验证</span><br><span class="line">威胁源1: (&quot;APT29&quot;) site:fireeye.com OR site:mandiant.com</span><br><span class="line">威胁源2: (&quot;Cozy Bear&quot;) site:crowdstrike.com OR site:secureworks.com</span><br><span class="line">威胁源3: (&quot;Nobelium&quot;) site:microsoft.com/security/blog</span><br></pre></td></tr></table></figure>
 
-<h2 id="十、搜索优化高级策略"><a href="#十、搜索优化高级策略" class="headerlink" title="十、搜索优化高级策略"></a>十、搜索优化高级策略</h2><h3 id="1-搜索流程优化"><a href="#1-搜索流程优化" class="headerlink" title="1. 搜索流程优化"></a>1. 搜索流程优化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 三步优化法</span><br><span class="line">步骤1：宽泛搜索 → &quot;人工智能&quot;</span><br><span class="line">步骤2：增加限定 → &quot;人工智能&quot; site:edu.cn filetype:pdf</span><br><span class="line">步骤3：精确过滤 → allintitle:&quot;人工智能发展报告&quot; site:tsinghua.edu.cn filetype:pdf -advertisement</span><br><span class="line"></span><br><span class="line"># 迭代优化法</span><br><span class="line">初始搜索：机器学习</span><br><span class="line">发现问题：结果太多</span><br><span class="line">第一次优化：机器学习 site:zhihu.com</span><br><span class="line">发现问题：包含太多基础内容</span><br><span class="line">第二次优化：&quot;机器学习进阶&quot; site:zhuanlan.zhihu.com -入门 -基础</span><br></pre></td></tr></table></figure>
+<h2 id="八、错误处理与性能优化"><a href="#八、错误处理与性能优化" class="headerlink" title="八、错误处理与性能优化"></a>八、错误处理与性能优化</h2><h3 id="1-常见错误模式"><a href="#1-常见错误模式" class="headerlink" title="1. 常见错误模式"></a>1. 常见错误模式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">❌ 错误模式1：空格问题</span><br><span class="line">site: zhihu.com  # 错误：操作符后不应有空格</span><br><span class="line">✅ 正确：site:zhihu.com</span><br><span class="line"></span><br><span class="line">❌ 错误模式2：引号不匹配</span><br><span class="line">&quot;人工智能发展  # 错误：缺少结束引号</span><br><span class="line">✅ 正确：&quot;人工智能发展&quot;</span><br><span class="line"></span><br><span class="line">❌ 错误模式3：逻辑混乱</span><br><span class="line">A OR B AND C OR D  # 错误：逻辑优先级不明确</span><br><span class="line">✅ 正确：(A OR B) AND (C OR D)</span><br><span class="line"></span><br><span class="line">❌ 网络安全特定错误</span><br><span class="line">allintext:&quot;admin password&quot; site:target.com  # 可能涉及未授权访问</span><br><span class="line">✅ 合规做法：在授权范围内搜索漏洞信息</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-搜索结果质量提升"><a href="#2-搜索结果质量提升" class="headerlink" title="2. 搜索结果质量提升"></a>2. 搜索结果质量提升</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 排除低质量内容</span><br><span class="line">关键词 -advertisement -ad -推广 -广告 -buy -purchase -shop -free -download</span><br><span class="line"></span><br><span class="line"># 提升权威性</span><br><span class="line">关键词 (site:gov.cn OR site:edu.cn OR site:org.cn) OR (site:.gov OR site:.edu OR site:.org)</span><br><span class="line"></span><br><span class="line"># 时效性控制</span><br><span class="line">关键词 after:2024-01-01 OR (2024..2024)</span><br></pre></td></tr></table></figure>
+<h3 id="2-性能优化技巧"><a href="#2-性能优化技巧" class="headerlink" title="2. 性能优化技巧"></a>2. 性能优化技巧</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 避免过度复杂</span><br><span class="line">❌ 过度复杂：(A OR B OR C) AND (D OR E OR F) AND (G OR H OR I) site:X.com filetype:pdf after:2020-01-01 -J -K -L -M -N</span><br><span class="line">✅ 合理复杂：(A OR B) AND (C OR D) site:X.com filetype:pdf after:2020-01-01 -J -K</span><br><span class="line"></span><br><span class="line"># 优先级建议</span><br><span class="line">1. 先用site:限定范围</span><br><span class="line">2. 用filetype:限定类型  </span><br><span class="line">3. 用intitle:/inurl:精确定位</span><br><span class="line">4. 用-排除干扰</span><br><span class="line">5. 最后用时间限定</span><br><span class="line"></span><br><span class="line"># 网络安全搜索优先级</span><br><span class="line">1. 先用site:限定到权威源 (nvd.nist.gov, exploit-db.com)</span><br><span class="line">2. 用filetype:限定到技术文档 (pdf, md, json)</span><br><span class="line">3. 用时间限定确保信息最新</span><br><span class="line">4. 用-author:&quot;非权威作者&quot; 排除非专业内容</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-多维度验证策略"><a href="#3-多维度验证策略" class="headerlink" title="3. 多维度验证策略"></a>3. 多维度验证策略</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 信息交叉验证</span><br><span class="line">搜索1：(&quot;climate change&quot; OR &quot;global warming&quot;) site:nasa.gov</span><br><span class="line">搜索2：(&quot;climate change&quot; OR &quot;global warming&quot;) site:noaa.gov</span><br><span class="line">搜索3：(&quot;climate change&quot; OR &quot;global warming&quot;) site:ipcc.ch</span><br><span class="line"></span><br><span class="line"># 多视角分析</span><br><span class="line">技术视角：(&quot;AI technology&quot; OR &quot;人工智能技术&quot;) site:techcrunch.com OR site:36kr.com</span><br><span class="line">商业视角：(&quot;AI business&quot; OR &quot;人工智能商业&quot;) site:forbes.com OR site:caijing.com.cn</span><br><span class="line">政策视角：(&quot;AI policy&quot; OR &quot;人工智能政策&quot;) site:gov.cn OR site:whitehouse.gov</span><br></pre></td></tr></table></figure>
-
-<h2 id="十一、错误处理与最佳实践"><a href="#十一、错误处理与最佳实践" class="headerlink" title="十一、错误处理与最佳实践"></a>十一、错误处理与最佳实践</h2><h3 id="1-常见错误模式"><a href="#1-常见错误模式" class="headerlink" title="1. 常见错误模式"></a>1. 常见错误模式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">❌ 错误模式1：空格问题</span><br><span class="line">site: zhihu.com  # 错误：操作符后不应有空格</span><br><span class="line">✅ 正确：site:zhihu.com</span><br><span class="line"></span><br><span class="line">❌ 错误模式2：引号不匹配</span><br><span class="line">&quot;人工智能发展  # 错误：缺少结束引号</span><br><span class="line">✅ 正确：&quot;人工智能发展&quot;</span><br><span class="line"></span><br><span class="line">❌ 错误模式3：逻辑混乱</span><br><span class="line">A OR B AND C OR D  # 错误：逻辑优先级不明确</span><br><span class="line">✅ 正确：(A OR B) AND (C OR D)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-性能优化技巧"><a href="#2-性能优化技巧" class="headerlink" title="2. 性能优化技巧"></a>2. 性能优化技巧</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 避免过度复杂</span><br><span class="line">❌ 过度复杂：(A OR B OR C) AND (D OR E OR F) AND (G OR H OR I) site:X.com filetype:pdf after:2020-01-01 -J -K -L -M -N</span><br><span class="line">✅ 合理复杂：(A OR B) AND (C OR D) site:X.com filetype:pdf after:2020-01-01 -J -K</span><br><span class="line"></span><br><span class="line"># 优先级建议</span><br><span class="line">1. 先用site:限定范围</span><br><span class="line">2. 用filetype:限定类型  </span><br><span class="line">3. 用intitle:/inurl:精确定位</span><br><span class="line">4. 用-排除干扰</span><br><span class="line">5. 最后用时间限定</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-搜索引擎行为理解"><a href="#3-搜索引擎行为理解" class="headerlink" title="3. 搜索引擎行为理解"></a>3. 搜索引擎行为理解</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Google行为</span><br><span class="line">- 通常忽略常见停用词（the, and, of等）</span><br><span class="line">- 支持32个单词的搜索查询</span><br><span class="line">- 对括号()有良好支持</span><br><span class="line">- 对通配符*支持有限（仅在短语中）</span><br><span class="line"></span><br><span class="line"># Bing行为</span><br><span class="line">- 对中文支持较好</span><br><span class="line">- 对社交媒体整合更强</span><br><span class="line">- 支持自然语言搜索</span><br><span class="line">- 对特殊符号处理更宽容</span><br><span class="line"></span><br><span class="line"># 百度行为</span><br><span class="line">- 对中文分词优化</span><br><span class="line">- 对长尾关键词支持好</span><br><span class="line">- 对时效性内容优先</span><br><span class="line">- 对商业内容权重较高</span><br></pre></td></tr></table></figure>
-
-<h2 id="十二、跨平台搜索策略"><a href="#十二、跨平台搜索策略" class="headerlink" title="十二、跨平台搜索策略"></a>十二、跨平台搜索策略</h2><h3 id="1-桌面浏览器优化"><a href="#1-桌面浏览器优化" class="headerlink" title="1. 桌面浏览器优化"></a>1. 桌面浏览器优化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Chrome高级搜索</span><br><span class="line">1. 在地址栏输入：搜索引擎关键词 + 空格 + 搜索词</span><br><span class="line">2. 设置自定义搜索引擎：chrome://settings/searchEngines</span><br><span class="line">3. 使用快捷键：Ctrl+K 或 Ctrl+E 快速聚焦搜索框</span><br><span class="line"></span><br><span class="line"># Firefox高级搜索</span><br><span class="line">1. 使用about:config启用power mode</span><br><span class="line">2. 设置关键词搜索：右键搜索框→添加关键词</span><br><span class="line">3. 使用Ctrl+K快速搜索</span><br></pre></td></tr></table></figure>
+<h2 id="九、跨平台搜索策略"><a href="#九、跨平台搜索策略" class="headerlink" title="九、跨平台搜索策略"></a>九、跨平台搜索策略</h2><h3 id="1-桌面浏览器优化"><a href="#1-桌面浏览器优化" class="headerlink" title="1. 桌面浏览器优化"></a>1. 桌面浏览器优化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Chrome高级搜索</span><br><span class="line">1. 在地址栏输入：搜索引擎关键词 + 空格 + 搜索词</span><br><span class="line">2. 设置自定义搜索引擎：chrome://settings/searchEngines</span><br><span class="line">3. 使用快捷键：Ctrl+K 或 Ctrl+E 快速聚焦搜索框</span><br><span class="line"></span><br><span class="line"># Firefox高级搜索</span><br><span class="line">1. 使用about:config启用power mode</span><br><span class="line">2. 设置关键词搜索：右键搜索框→添加关键词</span><br><span class="line">3. 使用Ctrl+K快速搜索</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-移动端搜索技巧"><a href="#2-移动端搜索技巧" class="headerlink" title="2. 移动端搜索技巧"></a>2. 移动端搜索技巧</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 手机浏览器</span><br><span class="line">- 长按文本选择→搜索</span><br><span class="line">- 语音搜索优化：用自然语言</span><br><span class="line">- 图片搜索：拍照或上传图片</span><br><span class="line">- 二维码搜索：直接扫描搜索</span><br><span class="line"></span><br><span class="line"># 移动搜索优化</span><br><span class="line">- 简化查询：移动端屏幕小，用简短关键词</span><br><span class="line">- 语音友好：避免复杂符号，用口语化表达</span><br><span class="line">- 位置感知：添加位置关键词（附近、本地等）</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-专业工具整合"><a href="#3-专业工具整合" class="headerlink" title="3. 专业工具整合"></a>3. 专业工具整合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 搜索引擎API</span><br><span class="line">Google Custom Search JSON API</span><br><span class="line">Bing Web Search API</span><br><span class="line">百度搜索API</span><br><span class="line"></span><br><span class="line"># 浏览器扩展</span><br><span class="line">- 搜索增强插件</span><br><span class="line">- 多引擎同时搜索</span><br><span class="line">- 搜索历史管理</span><br><span class="line">- 搜索结果过滤</span><br><span class="line"></span><br><span class="line"># 自动化脚本</span><br><span class="line">Python + Selenium 自动化搜索</span><br><span class="line">Google Programmable Search Engine</span><br><span class="line">RSS订阅 + 搜索关键词监控</span><br></pre></td></tr></table></figure>
 
-<h2 id="十三、搜索能力进阶路径"><a href="#十三、搜索能力进阶路径" class="headerlink" title="十三、搜索能力进阶路径"></a>十三、搜索能力进阶路径</h2><h3 id="1-新手阶段"><a href="#1-新手阶段" class="headerlink" title="1. 新手阶段"></a>1. 新手阶段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">✅ 掌握基础：&quot;&quot; - site: filetype:</span><br><span class="line">✅ 熟练组合：(&quot;A&quot; OR &quot;B&quot;) site:X.com</span><br><span class="line">✅ 常用场景：学术搜索、技术文档查找</span><br><span class="line">✅ 工具使用：浏览器地址栏搜索、搜索引擎高级界面</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-进阶阶段"><a href="#2-进阶阶段" class="headerlink" title="2. 进阶阶段"></a>2. 进阶阶段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">✅ 掌握高级：intitle: inurl: allin* related:</span><br><span class="line">✅ 复杂逻辑：((A OR B) AND (C OR D)) -E</span><br><span class="line">✅ 多引擎策略：Google/Bing/百度差异化使用</span><br><span class="line">✅ 领域专精：1-2个专业领域的搜索模板</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-专家阶段"><a href="#3-专家阶段" class="headerlink" title="3. 专家阶段"></a>3. 专家阶段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">✅ 系统化：建立个人搜索知识库</span><br><span class="line">✅ 自动化：脚本/API集成搜索</span><br><span class="line">✅ 预测性：提前设置监控规则</span><br><span class="line">✅ 策略化：多维度信息交叉验证</span><br><span class="line">✅ 优化：持续A/B测试搜索策略</span><br></pre></td></tr></table></figure>
-
-<h2 id="附录：搜索指令速查表"><a href="#附录：搜索指令速查表" class="headerlink" title="附录：搜索指令速查表"></a>附录：搜索指令速查表</h2><table>
+<h2 id="附录：搜索指令速查表"><a href="#附录：搜索指令速查表" class="headerlink" title="附录：搜索指令速查表"></a>附录：搜索指令速查表</h2><h3 id="通用搜索速查表"><a href="#通用搜索速查表" class="headerlink" title="通用搜索速查表"></a>通用搜索速查表</h3><table>
+<thead>
+<tr>
+<th>指令类型</th>
+<th>语法</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确匹配</td>
+<td><code>&quot; &quot;</code></td>
+<td>保持短语完整</td>
+<td><code>&quot;machine learning&quot;</code></td>
+</tr>
+<tr>
+<td>排除关键词</td>
+<td><code>-</code></td>
+<td>排除特定关键词</td>
+<td><code>apple -fruit</code></td>
+</tr>
+<tr>
+<td>逻辑或</td>
+<td><code>OR</code></td>
+<td>包含任一关键词</td>
+<td><code>car OR automobile</code></td>
+</tr>
+<tr>
+<td>站内搜索</td>
+<td><code>site:</code></td>
+<td>限定特定网站</td>
+<td><code>AI site:github.com</code></td>
+</tr>
+<tr>
+<td>文件类型</td>
+<td><code>filetype:</code></td>
+<td>限定文件类型</td>
+<td><code>report filetype:pdf</code></td>
+</tr>
+<tr>
+<td>标题搜索</td>
+<td><code>intitle:</code></td>
+<td>标题包含关键词</td>
+<td><code>intitle:tutorial</code></td>
+</tr>
+<tr>
+<td>URL搜索</td>
+<td><code>inurl:</code></td>
+<td>URL包含关键词</td>
+<td><code>inurl:admin</code></td>
+</tr>
+<tr>
+<td>定义查询</td>
+<td><code>define:</code></td>
+<td>查找词语定义</td>
+<td><code>define:algorithm</code></td>
+</tr>
+</tbody></table>
+<h3 id="网络安全搜索速查表"><a href="#网络安全搜索速查表" class="headerlink" title="网络安全搜索速查表"></a>网络安全搜索速查表</h3><table>
+<thead>
+<tr>
+<th>搜索场景</th>
+<th>推荐指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE搜索</td>
+<td><code>&quot;CVE-2024-XXXX&quot; (site:nvd.nist.gov OR site:exploit-db.com)</code></td>
+<td>搜索特定CVE漏洞信息</td>
+</tr>
+<tr>
+<td>恶意软件分析</td>
+<td><code>(&quot;malware family&quot;) (&quot;YARA rule&quot; OR &quot;IOC&quot;) site:github.com</code></td>
+<td>搜索特定恶意软件家族的分析资源</td>
+</tr>
+<tr>
+<td>漏洞利用</td>
+<td><code>(&quot;vulnerability type&quot;) (&quot;exploit PoC&quot;) site:github.com -tutorial</code></td>
+<td>搜索漏洞利用概念验证代码</td>
+</tr>
+<tr>
+<td>安全工具</td>
+<td><code>(&quot;tool name&quot;) (&quot;detection&quot; OR &quot;evasion&quot;) site:github.com stars:&gt;100</code></td>
+<td>搜索安全工具及其检测&#x2F;规避方法</td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td><code>(&quot;APT group&quot;) (&quot;campaign report&quot;) (site:fireeye.com OR site:crowdstrike.com)</code></td>
+<td>搜索APT组织活动报告</td>
+</tr>
+<tr>
+<td>云安全</td>
+<td><code>(&quot;AWS&quot; OR &quot;Azure&quot;) (&quot;misconfiguration&quot;) (&quot;best practices&quot;) site:aws.amazon.com</code></td>
+<td>搜索云平台安全配置指南</td>
+</tr>
+<tr>
+<td>二进制分析</td>
+<td><code>(&quot;binary analysis&quot;) (&quot;reverse engineering&quot;) (&quot;IDA Pro&quot; OR &quot;Ghidra&quot;) site:github.com</code></td>
+<td>搜索二进制分析工具和脚本</td>
+</tr>
+<tr>
+<td>网络取证</td>
+<td><code>(&quot;network forensics&quot;) (&quot;PCAP analysis&quot;) (&quot;Zeek&quot; OR &quot;Suricata&quot;) filetype:pcap</code></td>
+<td>搜索网络取证样本和工具</td>
+</tr>
+</tbody></table>
+<h3 id="搜索引擎支持情况对比表"><a href="#搜索引擎支持情况对比表" class="headerlink" title="搜索引擎支持情况对比表"></a>搜索引擎支持情况对比表</h3><table>
 <thead>
 <tr>
 <th>指令类型</th>
@@ -449,122 +643,73 @@
 </thead>
 <tbody><tr>
 <td>精确匹配</td>
-<td>“”</td>
-<td>“”</td>
-<td>“”</td>
+<td><code>&quot; &quot;</code></td>
+<td><code>&quot; &quot;</code></td>
+<td><code>&quot; &quot;</code></td>
 <td>保持短语完整</td>
 </tr>
 <tr>
 <td>排除</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+<td><code>-</code></td>
+<td><code>-</code></td>
+<td><code>-</code></td>
 <td>排除特定关键词</td>
 </tr>
 <tr>
 <td>逻辑或</td>
-<td>OR</td>
-<td>OR</td>
-<td>|</td>
-<td>大写OR，百度用竖线</td>
+<td><code>OR</code></td>
+<td><code>OR</code></td>
+<td><code>|</code></td>
+<td>百度用竖线<code>|</code>代替OR</td>
 </tr>
 <tr>
 <td>站内搜索</td>
-<td>site:</td>
-<td>site:</td>
-<td>site:</td>
+<td><code>site:</code></td>
+<td><code>site:</code></td>
+<td><code>site:</code></td>
 <td>限定特定网站</td>
 </tr>
 <tr>
 <td>文件类型</td>
-<td>filetype:</td>
-<td>filetype:</td>
-<td>filetype:</td>
+<td><code>filetype:</code></td>
+<td><code>filetype:</code></td>
+<td><code>filetype:</code></td>
 <td>限定文件类型</td>
 </tr>
 <tr>
 <td>标题搜索</td>
-<td>intitle:</td>
-<td>title:</td>
-<td>intitle:</td>
+<td><code>intitle:</code></td>
+<td><code>title:</code></td>
+<td><code>intitle:</code></td>
 <td>标题包含关键词</td>
 </tr>
 <tr>
 <td>URL搜索</td>
-<td>inurl:</td>
-<td>url:</td>
-<td>inurl:</td>
+<td><code>inurl:</code></td>
+<td><code>url:</code></td>
+<td><code>inurl:</code></td>
 <td>URL包含关键词</td>
 </tr>
 <tr>
 <td>时间限定</td>
-<td>after:&#x2F;before:</td>
-<td>date:</td>
+<td><code>after:/before:</code></td>
+<td><code>date:</code></td>
 <td>无</td>
 <td>时间范围控制</td>
 </tr>
 <tr>
 <td>通配符</td>
-<td>*</td>
-<td>*</td>
-<td>*</td>
+<td><code>*</code></td>
+<td><code>*</code></td>
+<td><code>*</code></td>
 <td>替代未知字符</td>
 </tr>
 <tr>
 <td>定义</td>
-<td>define:</td>
-<td>define:</td>
+<td><code>define:</code></td>
+<td><code>define:</code></td>
 <td>无</td>
 <td>查找词语定义</td>
-</tr>
-</tbody></table>
-<h2 id="附录：网络安全搜索速查表"><a href="#附录：网络安全搜索速查表" class="headerlink" title="附录：网络安全搜索速查表"></a>附录：网络安全搜索速查表</h2><table>
-<thead>
-<tr>
-<th>搜索场景</th>
-<th>推荐指令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>CVE搜索</strong></td>
-<td><code>&quot;CVE-2024-XXXX&quot; (site:nvd.nist.gov OR site:exploit-db.com)</code></td>
-<td>搜索特定CVE漏洞信息</td>
-</tr>
-<tr>
-<td><strong>恶意软件分析</strong></td>
-<td><code>(&quot;malware family&quot;) (&quot;YARA rule&quot; OR &quot;IOC&quot;) site:github.com</code></td>
-<td>搜索特定恶意软件家族的分析资源</td>
-</tr>
-<tr>
-<td><strong>漏洞利用</strong></td>
-<td><code>(&quot;vulnerability type&quot;) (&quot;exploit PoC&quot;) site:github.com -tutorial</code></td>
-<td>搜索漏洞利用概念验证代码</td>
-</tr>
-<tr>
-<td><strong>安全工具</strong></td>
-<td><code>(&quot;tool name&quot;) (&quot;detection&quot; OR &quot;evasion&quot;) site:github.com stars:&gt;100</code></td>
-<td>搜索安全工具及其检测&#x2F;规避方法</td>
-</tr>
-<tr>
-<td><strong>威胁情报</strong></td>
-<td><code>(&quot;APT group&quot;) (&quot;campaign report&quot;) (site:fireeye.com OR site:crowdstrike.com)</code></td>
-<td>搜索APT组织活动报告</td>
-</tr>
-<tr>
-<td><strong>云安全</strong></td>
-<td><code>(&quot;cloud provider&quot;) (&quot;misconfiguration&quot;) (&quot;best practices&quot;) site:aws.amazon.com</code></td>
-<td>搜索云平台安全配置指南</td>
-</tr>
-<tr>
-<td><strong>二进制分析</strong></td>
-<td><code>(&quot;binary analysis&quot;) (&quot;reverse engineering&quot;) (&quot;IDA Pro&quot; OR &quot;Ghidra&quot;) site:github.com</code></td>
-<td>搜索二进制分析工具和脚本</td>
-</tr>
-<tr>
-<td><strong>网络取证</strong></td>
-<td><code>(&quot;network forensics&quot;) (&quot;PCAP analysis&quot;) (&quot;Zeek&quot; OR &quot;Suricata&quot;) filetype:pcap</code></td>
-<td>搜索网络取证样本和工具</td>
 </tr>
 </tbody></table>
 
@@ -5291,7 +5436,7 @@ StartupNotify=false
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#x61;&#x62;&#99;&#x40;&#99;&#115;&#107;&#x61;&#111;&#121;&#x61;&#x6e;&#46;&#99;&#x6f;&#x6d;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#97;&#98;&#x63;&#x40;&#x63;&#115;&#107;&#97;&#x6f;&#x79;&#97;&#x6e;&#x2e;&#99;&#x6f;&#109;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>

@@ -1388,7 +1388,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #292bff;
+  background: #b14985;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2830,5 +2830,189 @@ header.header {
   }
   .sidebar-active .footer-fixed {
     left: 320px;
+  }
+}
+/* 仅分类页面生效 */
+.category-all-page .category-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 auto;
+}
+
+.category-all-page .category-list-item {
+  --depth: 0;
+  --border-width: 4px;
+  padding-left: calc(20px + 24px * var(--depth));
+  margin: 18px 0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  border-left-width: var(--border-width);
+  border-left-style: solid;
+  
+  /* 动态颜色计算 */
+  --color-hue: calc(var(--depth) * 36);
+  --bg-lightness: calc(30 + var(--depth) * 5);
+  border-left-color: hsl(var(--color-hue), 80%, 60%);
+  background: hsl(0, 0%, var(--bg-lightness)%);
+}
+
+/* 深度变量设置（支持0-9级） */
+.category-all-page .category-list-item.depth-0 { --depth: 0; }
+.category-all-page .category-list-item.depth-1 { --depth: 1; }
+.category-all-page .category-list-item.depth-2 { --depth: 2; }
+.category-all-page .category-list-item.depth-3 { --depth: 3; }
+.category-all-page .category-list-item.depth-4 { --depth: 4; }
+.category-all-page .category-list-item.depth-5 { --depth: 5; }
+.category-all-page .category-list-item.depth-6 { --depth: 6; }
+.category-all-page .category-list-item.depth-7 { --depth: 7; }
+.category-all-page .category-list-item.depth-8 { --depth: 8; }
+.category-all-page .category-list-item.depth-9 { --depth: 9; }
+
+/* 箭头符号（自动支持10级） */
+.category-all-page .category-list-item.depth-0::before {
+  content: "•";
+  position: absolute;
+  left: 8px;
+  color: #795548;
+  font-size: 1.5em;
+}
+.category-all-page .category-list-item.depth-1::before {
+  content: "↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(36, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-2::before {
+  content: "↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(72, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-3::before {
+  content: "↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(108, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-4::before {
+  content: "↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(144, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-5::before {
+  content: "↳↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(180, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-6::before {
+  content: "↳↳↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(216, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-7::before {
+  content: "↳↳↳↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(252, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-8::before {
+  content: "↳↳↳↳↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(288, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.category-all-page .category-list-item.depth-9::before {
+  content: "↳↳↳↳↳↳↳↳↳";
+  position: absolute;
+  left: 8px;
+  color: hsl(324, 80%, 60%);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* 悬停效果 */
+.category-all-page .category-list-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --border-width: 6px;
+}
+
+/* 徽章样式 */
+.category-all-page .category-list-count {
+  background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-weight: bold;
+  margin-left: 8px;
+  min-width: 24px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+}
+
+/* 标题样式 */
+.category-all-page .category-all-title {
+  font-size: 2.4em;
+  margin-bottom: 35px;
+  background: linear-gradient(90deg, #ff5722 0%, #ff9800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .category-all-page .category-list-item {
+    --border-width: 3px;
+    padding: 10px 12px;
+    padding-left: calc(12px + 16px * var(--depth));
+    font-size: 0.95em;
+  }
+  .category-all-page .category-list-count {
+    padding: 2px 6px;
+    font-size: 0.85em;
+  }
+  .category-all-page .category-all-title {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-all-page .category-list-item {
+    --border-width: 2px;
+    padding: 8px 10px;
+    padding-left: calc(8px + 12px * var(--depth));
+    font-size: 0.85em;
+  }
+  .category-all-page .category-list-count {
+    padding: 1px 4px;
+    font-size: 0.75em;
+    min-width: 20px;
+  }
+  .category-all-page .category-all-title {
+    font-size: 1.8em;
+    margin-bottom: 25px;
   }
 }

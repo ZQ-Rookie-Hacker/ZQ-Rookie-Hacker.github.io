@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、环境搭建 资源下载  eve-ng 懒人版镜像文件在eve-ng懒人社区下载，记住要下载其客户端窗口vm或其他虚拟机软件部署   网络配置       二、网络设备以及配置知识网络设备知识12345华为：	1.路由器：AR系列（save）	2.交换机：CE系列（commit）	3.防火墙：   基础实验一0. 任务导向    知识要点：  路由器的ip配置 路由配置   1.设备静态ip配置思">
+<meta property="og:type" content="article">
+<meta property="og:title" content="任务导向计网学习">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="一、环境搭建 资源下载  eve-ng 懒人版镜像文件在eve-ng懒人社区下载，记住要下载其客户端窗口vm或其他虚拟机软件部署   网络配置       二、网络设备以及配置知识网络设备知识12345华为：	1.路由器：AR系列（save）	2.交换机：CE系列（commit）	3.防火墙：   基础实验一0. 任务导向    知识要点：  路由器的ip配置 路由配置   1.设备静态ip配置思">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_1.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_2.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_3.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_4.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_5.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_6.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_7.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_8.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_9.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_10.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_11.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_12.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_13.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_14.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_15.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_16.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_17.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_18.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_19.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_20.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_21.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_22.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_23.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_24.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_25.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_26.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_27.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_28.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_29.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_30.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_31.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_32.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_33.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_34.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_35.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_36.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_37.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_38.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_39.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_40.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_41.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_42.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_43.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_44.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_45.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_46.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_47.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_48.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_49.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_50.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_51.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_52.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_53.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_54.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_55.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_56.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_57.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_58.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_59.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_60.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_61.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_62.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_63.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_64.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_65.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_66.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_67.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_68.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_69.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_70.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_71.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_72.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_73.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_74.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_75.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_76.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_77.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_78.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_79.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_80.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_81.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_82.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_83.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_84.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_85.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_86.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_87.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_88.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_89.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_90.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_91.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_92.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_93.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_94.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_95.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_96.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_97.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_98.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_99.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_100.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_101.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_102.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_103.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_104.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_105.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_106.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_107.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_108.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_109.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_110.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_111.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_112.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_113.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_114.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_115.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_116.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_117.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_118.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_119.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_120.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_121.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_122.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_123.png">
+<meta property="og:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_124.png">
+<meta property="article:published_time" content="2025-12-29T03:20:25.674Z">
+<meta property="article:modified_time" content="2025-12-29T03:24:42.415Z">
+<meta property="article:author" content="ZQ-Rookie-Hacker">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_1.png">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/","path":"2025/12/29/任务导向计网学习/","title":"任务导向计网学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>任务导向计网学习 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","app_key":"bIFSRG6LeUO90VdfRBHUXNQs","interval":900,"minimum_time":10,"cache":true,"cache_expire":900,"betterPerformance":true,"id":"path"}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-text">一、环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-text">二、网络设备以及配置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-text">网络设备知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C%E4%B8%80"><span class="nav-text">基础实验一</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91"><span class="nav-text">0. 任务导向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%AE%BE%E5%A4%87%E9%9D%99%E6%80%81ip%E9%85%8D%E7%BD%AE"><span class="nav-text">1.设备静态ip配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="nav-text">2.静态路由配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C%E4%BA%8C"><span class="nav-text">基础实验二</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91-1"><span class="nav-text">0.任务导向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%99%AE%E9%80%9A%E8%B7%AF%E7%94%B1"><span class="nav-text">1.普通路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-NAT%E6%98%A0%E5%B0%84"><span class="nav-text">2.NAT映射</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C%E4%B8%89"><span class="nav-text">基础实验三</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91-2"><span class="nav-text">0.任务导向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%85%8D%E7%BD%AEvlan"><span class="nav-text">1.配置vlan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AEvlan%E6%8E%A5%E5%8F%A3"><span class="nav-text">2.配置vlan接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE%E8%B7%AF%E7%94%B1"><span class="nav-text">3.配置路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%90%AF%E5%8A%A8Proxy-ARP"><span class="nav-text">4.启动Proxy ARP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-text">5.linux网络配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="nav-text">6.服务器的端口映射</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C%E5%9B%9B"><span class="nav-text">基础实验四</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-windows%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-text">0.windows网络配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-dhcp%E6%8E%A5%E5%8F%A3%E9%85%8D%E7%BD%AE"><span class="nav-text">1.dhcp接口配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-dhcp%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE"><span class="nav-text">2.dhcp全局配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-dhcp%E4%B8%AD%E7%BB%A7%E9%85%8D%E7%BD%AE"><span class="nav-text">3.dhcp中继配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E5%8C%85%EF%BC%8C%E6%AE%B5%EF%BC%8C%E5%B8%A7%E7%AD%89%E5%88%86%E6%9E%90"><span class="nav-text">三、数据包，段，帧等分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E9%AA%8C"><span class="nav-text">四、实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BD%91%E7%BB%9C%E6%90%AD%E5%BB%BA"><span class="nav-text">1.网络搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E9%AA%8C%E5%BC%95%E5%85%A5"><span class="nav-text">2.实验引入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C1-wireshark%E5%9F%BA%E7%A1%80%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90"><span class="nav-text">实验1(wireshark基础抓包分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C2-%E4%BB%A5%E5%A4%AA%E7%BD%91MAC-%E5%B8%A7%E5%88%86%E6%9E%90"><span class="nav-text">实验2(以太网MAC 帧分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C3-IP%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="nav-text">实验3(IP数据包的解析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C4-%E7%BD%91%E9%99%85%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE-ICMP%E5%88%86%E6%9E%90"><span class="nav-text">实验4(网际控制报文协议 ICMP分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C5-TCP-%E6%95%B0%E6%8D%AE%E5%8C%85%E5%8F%8A%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-text">实验5(TCP 数据包及连接建立过程分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C6-%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEHTTP%E5%88%86%E6%9E%90"><span class="nav-text">实验6(超文本传送协议HTTP分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C7-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F-DNS-%E5%88%86%E6%9E%90"><span class="nav-text">实验7(域名系统 DNS 分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C8-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AE-DHCP-%E5%88%86%E6%9E%90"><span class="nav-text">实验8(动态主机配置协议 DHCP 分析)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C9-WEB-%E9%A1%B5%E9%9D%A2%E8%AF%B7%E6%B1%82%E5%85%A8%E5%8E%86%E7%A8%8B%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%8C%85%E8%A7%A3%E6%9E%90%EF%BC%88%E7%BB%BC%E5%90%88%E6%80%A7%E5%AE%9E%E9%AA%8C%EF%BC%89"><span class="nav-text">实验9(WEB 页面请求全历程协议及数据包解析（综合性实验）)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rookie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rookie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="任务导向计网学习 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          任务导向计网学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-29 11:20:25 / 修改时间：11:24:42" itemprop="dateCreated datePublished" datetime="2025-12-29T11:20:25+08:00">2025-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/" itemprop="url" rel="index"><span itemprop="name">408</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/" class="post-meta-item leancloud_visitors" data-flag-title="任务导向计网学习" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>35 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h2><ol>
+<li><p>资源下载</p>
+<blockquote>
+<p>eve-ng 懒人版镜像文件在eve-ng懒人社区下载，记住要下载其客户端窗口<br>vm或其他虚拟机软件部署</p>
+</blockquote>
+</li>
+<li><p>网络配置</p>
+</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_1.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<h2 id="二、网络设备以及配置知识"><a href="#二、网络设备以及配置知识" class="headerlink" title="二、网络设备以及配置知识"></a>二、网络设备以及配置知识</h2><h3 id="网络设备知识"><a href="#网络设备知识" class="headerlink" title="网络设备知识"></a>网络设备知识</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">华为：</span><br><span class="line">	1.路由器：AR系列（save）</span><br><span class="line">	2.交换机：CE系列（commit）</span><br><span class="line">	3.防火墙： </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="基础实验一"><a href="#基础实验一" class="headerlink" title="基础实验一"></a>基础实验一</h3><h4 id="0-任务导向"><a href="#0-任务导向" class="headerlink" title="0. 任务导向"></a>0. 任务导向</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_2.png" class="" title="在这里插入图片描述">
+
+
+
+<p>知识要点：</p>
+<ol>
+<li>路由器的ip配置</li>
+<li>路由配置</li>
+</ol>
+<hr>
+<h4 id="1-设备静态ip配置"><a href="#1-设备静态ip配置" class="headerlink" title="1.设备静态ip配置"></a>1.设备静态ip配置</h4><p>思科设备：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_3.png" class="" title="在这里插入图片描述">
+
+<p>补充ip接口查看：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_4.png" class="" title="在这里插入图片描述">
+<p>注意：</p>
+<ol>
+<li>255.255.255.0 可以使用 24 代替</li>
+<li>show ip interface GigabitEthernet0&#x2F;0 查看结果包括子网掩码</li>
+</ol>
+<hr>
+<p>华山设备：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_5.png" class="" title="在这里插入图片描述">
+
+<hr>
+<p>华为设备：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_6.png" class="" title="在这里插入图片描述">
+
+
+
+<p>删除ip接口信息：</p>
+<ol>
+<li>进入要删除的ip接口-&gt; undo ip address -&gt; 这个接口的所有ip信息被删除</li>
+<li>进入要删除的ip接口-&gt; undo ip address [ip] [mask] -&gt; 接口的指定ip信息被删除</li>
+</ol>
+<hr>
+<h4 id="2-静态路由配置"><a href="#2-静态路由配置" class="headerlink" title="2.静态路由配置"></a>2.静态路由配置</h4><p>目的：实现vIOS-&gt;HUSG600V</p>
+<p><strong>正向路由：</strong></p>
+<p>对vIOS</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_7.png" class="" title="在这里插入图片描述">
+<p><em>对vIOS2 的静态路由配置一样</em>，只是传递的路由ip不同</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_8.png" class="" title="在这里插入图片描述">
+
+<p><strong>值得注意</strong>的是H3CvSR是不需要配置路由的，因为其与目标设备是直连的。</p>
+<p><strong>回程路由：</strong></p>
+<p>对H3CvSR:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_9.png" class="" title="在这里插入图片描述">
+
+<p>对于HUSG600V</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_10.png" class="" title="在这里插入图片描述">
+
+<hr>
+<p>理论上此时vIOS 可以 ping HUSG600V ， 都是忽略了防火墙是🈲ping的。</p>
+<p>解决：需要配置防火墙的信任域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 华为防火墙默认策略：</span><br><span class="line">同区域流量默认允许（如 trust → trust）</span><br><span class="line">跨区域流量默认拒绝（如 untrust → trust）</span><br><span class="line">所有流量默认拒绝（除非明确配置策略）</span><br></pre></td></tr></table></figure>
+<p>g1&#x2F;0&#x2F;0设置在信任任区：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_11.png" class="" title="在这里插入图片描述">
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HUSG600V指令：</span><br><span class="line">进入防火墙信任域：</span><br><span class="line">	firewall zone trust  # 查看信任域的详细配置（含绑定接口、优先级）</span><br><span class="line">	display zone # 查看所有安全区域的简要信息（对比其他区域）</span><br><span class="line">查看信任域： display zone trust</span><br></pre></td></tr></table></figure>
+
+<p>指令总结：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">删除指令 ： undo 原有指令</span><br><span class="line">实用查看指令：display this  </span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="基础实验二"><a href="#基础实验二" class="headerlink" title="基础实验二"></a>基础实验二</h3><h4 id="0-任务导向-1"><a href="#0-任务导向-1" class="headerlink" title="0.任务导向"></a>0.任务导向</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_12.png" class="" title="在这里插入图片描述">
+<p><strong>账号：AR1000vN（N：数字）</strong><br><strong>密码 qwer1234KK. 或 qwer1234KK 或 12345678KK</strong><br><strong>华为回退：ctrl+h</strong></p>
+<p><strong>知识要点：</strong></p>
+<ol>
+<li>NAT映射</li>
+<li>路由直连</li>
+</ol>
+<hr>
+<p><strong>问题：</strong></p>
+<ol>
+<li>vpc1怎么将数据包给AR1000v4？</li>
+<li>AR1000v4怎么将数据包给vpc2或vpc3？</li>
+<li>vpc2或vpc3怎么回复vpc1?</li>
+</ol>
+<hr>
+<h4 id="1-普通路由"><a href="#1-普通路由" class="headerlink" title="1.普通路由"></a>1.普通路由</h4><p><strong>对链路vpc1&lt;—&gt;vpc2：</strong> </p>
+<p><strong>（1）正向：</strong></p>
+<p><strong>vpc</strong>的静态ip配置格式：<strong>ip &lt;IP地址&gt; &lt;子网掩码&gt; [&lt;默认网关&gt;]</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_13.png" class="" title="在这里插入图片描述">
+<p>这里的0.0.0.0并不代表有效的网关，实际效果等同于 “未配置可用网关”。此时 VPC 只能与同一子网内的设备通信（如192.168.1.x网段），无法访问其他子网</p>
+<p>设置网关：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_14.png" class="" title="在这里插入图片描述">
+
+<p>vpc1将包发给AR1000v4,需设置ARC1000v4到vpc2,vpc3的<strong>路由</strong><br>静态路由格式：<strong>ip route-static &lt;目的网段&gt; &lt;前缀长度&gt; &lt;下一跳IP地址&gt;</strong></p>
+<p>对AR1000v:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_15.png" class="" title="在这里插入图片描述">
+
+<p>对AR1000v6:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_16.png" class="" title="在这里插入图片描述">
+<p>发现AR1000v6是有192.168.2.2的路由的（因为是直连）</p>
+<p><strong>（2）反向：</strong></p>
+<p>对AR1000v6:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_17.png" class="" title="在这里插入图片描述">
+
+<p>同理：AR1000v4不需要配置vpc1的静态路由</p>
+<p>vpc1:成功ping通</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_18.png" class="" title="在这里插入图片描述">
+
+<p><strong>抓取vpc1-eth0：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_19.png" class="" title="在这里插入图片描述">
+
+<p><strong>抓取AR1000v4-g0&#x2F;0&#x2F;0：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_20.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>抓取AR1000v4-g0&#x2F;0&#x2F;1：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_21.png" class="" title="在这里插入图片描述">
+
+
+
+
+
+<hr>
+<h4 id="2-NAT映射"><a href="#2-NAT映射" class="headerlink" title="2.NAT映射"></a>2.NAT映射</h4><p><strong>对链路vpc1&lt;—&gt;vpc2 :</strong></p>
+<p><strong>假设：有AR1000v4的权限，没有AR1000v5的权限，即无法配置其静态路由。由直连路由知识可知，AR1000v4与AR1000v5 AR1000V5与vpc2 由静态路由 。<br>所以，只要将vpc1的静态ip映射为AR1000v4与AR1000v5连接的接口的静态ip（10.2.2.1）,就可以实现数据传输</strong></p>
+<p>只需操作AR1000v4:</p>
+<ol>
+<li>什么样的数据包需要做网络地址转换？(192.168.1.1&#x2F;24)</li>
+</ol>
+<p>配置AR1000v4到vpc2的路由：</p>
+<blockquote>
+<p>[Huawei]ip route-static 192.168.3.0 24 10.2.2.2</p>
+</blockquote>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_22.png" class="" title="在这里插入图片描述">
+
+<p><strong>此时，不需要对AR1000v5配置vpc1的路由，这是最重要的区别</strong></p>
+<p>实现NAT映射：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_23.png" class="" title="在这里插入图片描述">
+
+<p><strong>抓取vpc1-eth0：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_24.png" class="" title="在这里插入图片描述">
+
+<p><strong>抓取AR1000v4-g0&#x2F;0&#x2F;0：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_25.png" class="" title="在这里插入图片描述">
+
+
+
+<p><strong>抓取AR1000v4-g0&#x2F;0&#x2F;1：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_26.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<h3 id="基础实验三"><a href="#基础实验三" class="headerlink" title="基础实验三"></a>基础实验三</h3><h4 id="0-任务导向-2"><a href="#0-任务导向-2" class="headerlink" title="0.任务导向"></a>0.任务导向</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_27.png" class="" title="在这里插入图片描述">
+
+
+<p>知识要点：</p>
+<ol>
+<li>交换机配置（多vlan局域网配置，安全策略，跨网段路由配置）</li>
+<li>vlan间的可控互通（vlanif:vlan网关）</li>
+<li>acl：访问控制限制</li>
+<li>NAT的映射形式与端口映射</li>
+</ol>
+<p><strong>账号：AR1000vN（N：数字）</strong><br><strong>密码：qwer1234KK. 或 qwer1234KK 或 12345678KK</strong><br><strong>华为回退：ctrl+h</strong></p>
+<hr>
+<h4 id="1-配置vlan"><a href="#1-配置vlan" class="headerlink" title="1.配置vlan"></a>1.配置vlan</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vlan：虚拟局域网，隔离广播，隔离故障</span><br><span class="line">vlan接口类型：</span><br><span class="line">	1.Access 接口主要用于连接终端设备，如计算机、打印机等。它属于某个特定的 VLAN，并且只能属于一个 VLAN </span><br><span class="line">	2.Trunk 接口主要用于交换机之间、交换机与路由器或三层交换机之间的互联链路。它可以允许多个 VLAN 的数据通过，从而实现不同交换机上相同 VLAN 之间的通信</span><br><span class="line">	3.Hybrid 接口是一种比较灵活的接口类型，既可以连接终端设备，也可以用于交换机之间的互联 。它可以允许多个 VLAN 的数据通过，并且可以灵活地设置哪些 VLAN 的数据在转发时携带标签，哪些不携带标签</span><br><span class="line">	</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+
+<p>配置vlan:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_28.png" class="" title="在这里插入图片描述">
+
+
+<p>查看vlan方式1：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_29.png" class="" title="在这里插入图片描述">
+
+<p>查看vlan方式2:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_30.png" class="" title="在这里插入图片描述">
+
+<p><strong>特别注意</strong>：在用户视图中使用save保存配置</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_31.png" class="" title="在这里插入图片描述">
+
+<hr>
+<h4 id="2-配置vlan接口"><a href="#2-配置vlan接口" class="headerlink" title="2.配置vlan接口"></a>2.配置vlan接口</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_32.png" class="" title="在这里插入图片描述">
+
+<p><strong>对三台vpc配置静态ip与网关后测试联通：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_33.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>但是</strong>，配置CE6800-CE1的外接口的静态ip时出现问题：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_34.png" class="" title="在这里插入图片描述">
+
+<blockquote>
+<p><strong>原因：交换机的接口默认是交换模式，不可以直接配置静态ip，需要创建vlan，在vlan上配置静态ip</strong></p>
+</blockquote>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_35.png" class="" title="在这里插入图片描述">
+
+<p><strong>这里的 port link-type trunk 有个坑,下面会讲</strong></p>
+<p><strong>小知识：</strong> 删除vlan前必须删除其关联的接口</p>
+<hr>
+<h4 id="3-配置路由"><a href="#3-配置路由" class="headerlink" title="3.配置路由"></a>3.配置路由</h4><ol>
+<li>CE6800-CE1路由</li>
+</ol>
+<p>目标：让不同 VLAN 和外网互通</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_36.png" class="" title="在这里插入图片描述">
+
+<blockquote>
+<p>由于CE6800-CE1是三级交换机，整个大的局域网的数据包经过它在转发给路由器，整个局域网中的网络设备访问的公网地址很多，不可能都一一配置路由</p>
+</blockquote>
+<hr>
+<ol start="2">
+<li>AR1000v5路由</li>
+</ol>
+<p>目标：让不同 VLAN 和外网互通</p>
+<ul>
+<li>配置默认路由</li>
+</ul>
+<p><strong>正向：</strong> 指向AR1000v6 （三大运营商公司）</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_37.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>回程：</strong> 指向交换机CE6800-CE1</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_38.png" class="" title="在这里插入图片描述">
+
+
+
+
+<ul>
+<li>NAT映射</li>
+</ul>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_39.png" class="" title="在这里插入图片描述">
+
+<p><strong>误区：</strong> AR1000v4使用NAT映射不代表AR1000v4就不需要设置回程路由</p>
+<hr>
+<h4 id="4-启动Proxy-ARP"><a href="#4-启动Proxy-ARP" class="headerlink" title="4.启动Proxy ARP"></a>4.启动Proxy ARP</h4><ol>
+<li>什么是ARP？<blockquote>
+<p>ARP（Address Resolution Protocol，地址解析协议）的作用：将IP地址解析为MAC地址</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">主机A (IP: 192.168.1.10) 想要与 主机B (IP: 192.168.1.20) 通信</span><br><span class="line"></span><br><span class="line">1. 主机A查看自己的ARP缓存表</span><br><span class="line">2. 如果没有主机B的MAC地址，主机A广播发送ARP请求：</span><br><span class="line">   &quot;谁是192.168.1.20？请告诉你的MAC地址&quot;</span><br><span class="line"></span><br><span class="line">3. 局域网内所有主机都收到这个广播</span><br><span class="line">4. 主机B识别到自己的IP，单播回复：</span><br><span class="line">   &quot;我是192.168.1.20，我的MAC是xx:xx:xx:xx:xx:xx&quot;</span><br><span class="line"></span><br><span class="line">5. 主机A将这条映射记录存入ARP缓存表</span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="2">
+<li>什么是Proxy ARP<blockquote>
+<p>Proxy ARP（代理ARP） 是一种网络技术，允许一台设备（通常是路由器或防火墙）代表另一台设备响应ARP请求。<br>它不是“标准ARP”，而是在特殊场景下“代答ARP”的机制。</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">设备A（192.168.10.2）想ping 192.168.10.3					设备A直接在本地广播ARP请求，设备B（192.168.10.3）回应自己的MAC地址		❌ 不需要Proxy ARP</span><br><span class="line">设备A（192.168.10.2）想ping 192.168.20.3（不同网段）			设备A将包发给默认网关（CE6800-CE1），CE6800-CE1再转发				❌ 不需要Proxy ARP</span><br><span class="line">设备A（192.168.10.2）想ping 10.1.1.1（AR1000v5的接口IP）	CE6800-CE1需要知道AR1000v5的MAC地址，但AR1000v5默认不响应ARP请求		✅需要Proxy ARP！</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="3">
+<li>启动华为设备ARP代理（AR1000v5）</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_40.png" class="" title="在这里插入图片描述">
+<blockquote>
+<p>ARP 表中没有 10.1.1.2 ✅正常现象 这正是VPC8 无法 ping 通 10.1.1.1 的根本原因！</p>
+</blockquote>
+<p>启动：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_41.png" class="" title="在这里插入图片描述">
+
+<blockquote>
+<p>没有变化，难道是没有生效？<br>Proxy ARP 是实时响应 ARP 请求，不会在 ARP 表中添加新条目</p>
+</blockquote>
+<p><strong>此时vpc8还是无法ping通10.1.1.1，这是为什么？</strong></p>
+<blockquote>
+<p>根本原因：AR1000v5 和 CE6800-CE1 之间的接口 VLAN 配置不一致，导致二层通信失败。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>接口</th>
+<th>当前 VLAN 配置</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CE6800-CE1</td>
+<td>GigabitEthernet1&#x2F;0&#x2F;3</td>
+<td>port link-type trunk + port trunk allow-pass vlan 40</td>
+<td>发送带 VLAN 40 Tag 的帧</td>
+</tr>
+<tr>
+<td>AR1000v5</td>
+<td>GigabitEthernet0&#x2F;0&#x2F;0</td>
+<td>port link-type access + port default vlan 1（默认）</td>
+<td>丢弃带 VLAN 40 Tag 的帧</td>
+</tr>
+</tbody></table>
+<p>重新设置CE6800-CE1的g1&#x2F;0&#x2F;3接口类型</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_42.png" class="" title="在这里插入图片描述">
+
+<p>成功ping通(别忘记,此时的AR1000v5的g0&#x2F;0&#x2F;0接口启动ARP代理)</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_43.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<ol start="4">
+<li>AR1000v6路由</li>
+</ol>
+<ul>
+<li>处理回包</li>
+</ul>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_44.png" class="" title="在这里插入图片描述">
+
+<ul>
+<li>联通linux服务1</li>
+</ul>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_45.png" class="" title="在这里插入图片描述">
+
+<blockquote>
+<p>在真实网络中，你不能把 8.8.8.8 当下一跳！<br>但在 EVE-NG 模拟环境 中，你可以这样配置，因为系统会自动处理回包。<br>✅ 这是模拟互联网的“作弊技巧” —— 没有它，ping 8.8.8.8 无法通！ </p>
+</blockquote>
+<hr>
+<h4 id="5-linux网络配置"><a href="#5-linux网络配置" class="headerlink" title="5.linux网络配置"></a>5.linux网络配置</h4><ol>
+<li>网卡信息分析</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"></span><br><span class="line">解释：</span><br><span class="line">	1： -&gt; 接口序号（内核分配）</span><br><span class="line">	lo：-&gt; 接口名称</span><br><span class="line">	&lt;LOOPBACK,UP,LOWER_UP&gt; -&gt; 接口标志</span><br><span class="line">		LOOPBACK：回环接口</span><br><span class="line">		up：接口已启用</span><br><span class="line">		LOWER_UP：物理层正常（虽然回环没有物理层，但系统认为它“UP”）</span><br><span class="line">	mtu 65536 -&gt; 最大传输单元（MTU），回环接口默认很大</span><br><span class="line">	qdisc noqueue -&gt; 队列调度器类型（回环接口不需要排队）</span><br><span class="line">	state UNKNOWN → 接口状态（回环接口通常显示为 UNKNOWN）</span><br><span class="line">	group default → 接口组（默认组）</span><br><span class="line">	link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">		link/loopback → 链路类型（回环）</span><br><span class="line">		00:00:00:00:00:00 → MAC 地址（回环接口没有真实 MAC，所以是全 0）</span><br><span class="line">		brd 00:00:00:00:00:00 → 广播地址（回环没有广播）</span><br><span class="line">	inet 127.0.0.1/8 scope host lo</span><br><span class="line">		inet → IPv4 地址</span><br><span class="line">		127.0.0.1/8 → IP 地址 + 子网掩码（/8 表示 255.0.0.0）</span><br><span class="line">		scope host → 地址范围（只在本机有效）</span><br><span class="line">		lo → 所属接口名</span><br><span class="line">	valid_lft forever preferred_lft forever</span><br><span class="line">		valid_lft → 地址有效期（forever = 永久）</span><br><span class="line">		preferred_lft → 首选有效期（forever = 永久）</span><br><span class="line">	inet6 ::1/128 scope host</span><br><span class="line">		inet6 → IPv6 地址</span><br><span class="line">		::1/128 → IPv6 回环地址</span><br><span class="line">		scope host → 范围（本机）</span><br><span class="line">	valid_lft forever preferred_lft forever （同上）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2: ens3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link/ether 00:50:00:00:0b:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet6 fe80::250:ff:fe00:b00/64 scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"></span><br><span class="line">解释：</span><br><span class="line">	ens3: → 接口名称（这是你的实际网卡！）</span><br><span class="line">	&lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt;</span><br><span class="line">		BROADCAST = 支持广播</span><br><span class="line">		MULTICAST = 支持组播</span><br><span class="line">	qdisc pfifo_fast → 队列调度器（先进先出）</span><br><span class="line"></span><br><span class="line">	等等......</span><br><span class="line"></span><br><span class="line">重要：ens3网卡已经启用，但是没有inet ,即没有ipv4地址</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_46.png" class="" title="在这里插入图片描述">
+<p>永久配置：</p>
+<blockquote>
+<p>nano &#x2F;etc&#x2F;network&#x2F;interfaces    （vim等）<br>重启网卡服务：systemctl restart systemd-networkd</p>
+</blockquote>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_47.png" class="" title="在这里插入图片描述">
+<p>ctrl+o 保存 -&gt; 回车确认 -&gt; ctrl+x 退出</p>
+<hr>
+<p>由于实验中的linux服务器是Slax轻量版，不会存储文件，为了方便实验的进行，使用vpc代替，如图：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_48.png" class="" title="在这里插入图片描述">
+
+<p>测试NAT普通映射情况</p>
+<ol>
+<li>vpc8&lt;–&gt;vpc9</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_49.png" class="" title="在这里插入图片描述">
+
+<ol start="2">
+<li>vpc8&lt;–&gt;AR1000v5-g0&#x2F;0&#x2F;0</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_50.png" class="" title="在这里插入图片描述">
+
+
+
+
+<hr>
+<h4 id="6-服务器的端口映射"><a href="#6-服务器的端口映射" class="headerlink" title="6.服务器的端口映射"></a>6.服务器的端口映射</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_51.png" class="" title="在这里插入图片描述">
+
+
+<ol>
+<li>一一对应的NAT映射</li>
+</ol>
+<blockquote>
+<p>nat server  global 64.1.1.2 inside 192.168.30.3  （华为设备的指令）</p>
+</blockquote>
+<p>nat server：这是命令关键字，用于启动配置 NAT Server 功能，用来建立公网地址和私网地址之间的映射关系，使外部网络能访问内部网络的特定服务器</p>
+<p>global：是一个关键字，表明后续跟的是公网侧的相关信息。</p>
+<p>inside：也是一个关键字，用于标识后面跟随的是内网侧的相关信息。</p>
+<p>剩下的为公网ip 与 私网ip</p>
+<hr>
+<ol start="2">
+<li>端口映射</li>
+</ol>
+<blockquote>
+<p>nat server protocol { tcp | udp } global { 公网IP 公网端口 } inside { 内网IP 内网端口 }<br>nat server protocol { tcp | udp } global { current 公网端口 } inside { 内网IP 内网端口 }</p>
+</blockquote>
+<p>对AR1000v5:</p>
+<blockquote>
+<p>nat server protocol tcp global current 8080 inside 192.168.30.3 80</p>
+</blockquote>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_52.png" class="" title="在这里插入图片描述">
+
+
+<p>比如公司购买了一个公网ip，且公司有很多服务器设备，不可能每个服务器设备都购买一个公网ip，这样成本很高。接口绑定一个公网ip,而一个接口有多个端口，通过端口映射，实现一个公网ip就可以使外网设备访问内网的对应主机</p>
+<p>8.8.8.8外网主机测试连接：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_53.png" class="" title="在这里插入图片描述">
+
+<p>抓包验证：</p>
+<ol>
+<li>对AR1000v5-g0&#x2F;0&#x2F;1接口抓包</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_54.png" class="" title="在这里插入图片描述">
+
+<ol start="2">
+<li>对192.168.30.3抓包</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_55.png" class="" title="在这里插入图片描述">
+
+<p>流量是从NAT server转发，验证成功</p>
+<hr>
+<h3 id="基础实验四"><a href="#基础实验四" class="headerlink" title="基础实验四"></a>基础实验四</h3><h4 id="0-windows网络配置"><a href="#0-windows网络配置" class="headerlink" title="0.windows网络配置"></a>0.windows网络配置</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">1.查看所有网络适配器详细信息：ipconfig /all</span><br><span class="line">2.查看路由表：route print</span><br><span class="line">3.查看网络连接状态：netstat -ano  # 显示所有 TCP/UDP 连接及进程 ID</span><br><span class="line"></span><br><span class="line">4.静态 IP 配置：</span><br><span class="line">	# 1. 查看网卡名称（需替换为实际名称，如“以太网”“WLAN”）</span><br><span class="line">	netsh interface show interface  </span><br><span class="line">	</span><br><span class="line">	# 2. 设置静态 IP + 子网掩码 + 网关</span><br><span class="line">	netsh interface ipv4 set address name=&quot;以太网&quot; source=static addr=192.168.1.100 mask=255.255.255.0 gateway=192.168.1.1 gwmetric=1  </span><br><span class="line">	</span><br><span class="line">	# 3. 切换为 DHCP 自动获取 IP</span><br><span class="line">	netsh interface ipv4 set address name=&quot;以太网&quot; source=dhcp  </span><br><span class="line"></span><br><span class="line">5.多 IP 地址绑定（同一网卡添加额外 IP）：</span><br><span class="line">	netsh interface ipv4 add address name=&quot;以太网&quot; addr=10.0.0.2 mask=255.255.255.0  </span><br><span class="line"></span><br><span class="line">6.静态 DNS 服务器设置：</span><br><span class="line">	# 首选 DNS</span><br><span class="line">	netsh interface ipv4 set dnsservers &quot;以太网&quot; static 114.114.114.114 primary  </span><br><span class="line">	</span><br><span class="line">	# 备用 DNS</span><br><span class="line">	netsh interface ipv4 add dnsservers &quot;以太网&quot; 8.8.8.8 index=2  </span><br><span class="line"></span><br><span class="line">7.切换为 DHCP 自动获取 DNS：</span><br><span class="line">	netsh interface ipv4 set dnsservers &quot;以太网&quot; source=dhcp  </span><br><span class="line"></span><br><span class="line">8.刷新 DNS 缓存：ipconfig /flushdns  </span><br><span class="line">9.查看本地 DNS 缓存：ipconfig /displaydns  </span><br><span class="line"></span><br><span class="line">10.添加静态路由（临时 / 永久）：</span><br><span class="line">	# 临时路由：访问 172.16.0.0/24 网段，通过网关 192.168.1.1</span><br><span class="line">	route add 172.16.0.0 mask 255.255.255.0 192.168.1.1 metric 5  </span><br><span class="line">	</span><br><span class="line">	# 永久路由：重启后保留（加 -p 参数）</span><br><span class="line">	route /p add 192.168.5.0 mask 255.255.255.0 10.0.0.1  </span><br><span class="line"></span><br><span class="line">11.删除路由：</span><br><span class="line">	route delete 172.16.0.0 mask 255.255.255.0  </span><br><span class="line"></span><br><span class="line">12.清除所有非核心路由：</span><br><span class="line">	route /f  </span><br><span class="line"></span><br><span class="line">13.开放指定端口（以 TCP 80 为例）：</span><br><span class="line">	netsh advfirewall firewall add rule name=&quot;允许 TCP 80 端口&quot; dir=in action=allow protocol=TCP localport=80  </span><br><span class="line"></span><br><span class="line">14.开放端口范围（如 1000-2000）：</span><br><span class="line">	netsh advfirewall firewall add rule name=&quot;允许 TCP 1000-2000&quot; dir=in action=allow protocol=TCP localport=1000-2000  </span><br><span class="line"></span><br><span class="line">15.允许程序通过防火墙（以 “notepad.exe” 为例）：</span><br><span class="line">	netsh advfirewall firewall add rule name=&quot;允许记事本联网&quot; dir=in action=allow program=&quot;C:\Windows\System32\notepad.exe&quot;  </span><br><span class="line"></span><br><span class="line">16.启用 / 禁用防火墙：</span><br><span class="line">	netsh advfirewall set allprofiles state on   # 启用</span><br><span class="line">	netsh advfirewall set allprofiles state off  # 禁用</span><br><span class="line"></span><br><span class="line">17.查看无线网卡驱动支持：</span><br><span class="line">	netsh wlan show drivers  </span><br><span class="line"></span><br><span class="line">18.创建并启动 Wi-Fi 热点：</span><br><span class="line">	# 1. 启用热点（SSID: MyHotspot，密码: 12345678）</span><br><span class="line">	netsh wlan set hostednetwork mode=allow ssid=MyHotspot key=12345678  </span><br><span class="line">	</span><br><span class="line">	# 2. 启动热点</span><br><span class="line">	netsh wlan start hostednetwork  </span><br><span class="line">	</span><br><span class="line">	# 3. 查看热点状态</span><br><span class="line">	netsh wlan show hostednetwork  </span><br><span class="line">	</span><br><span class="line">	# 4. 关闭热点</span><br><span class="line">	netsh wlan stop hostednetwork  </span><br><span class="line"></span><br><span class="line">19. 释放并续订 DHCP 地址：</span><br><span class="line">	ipconfig /release   # 释放IP</span><br><span class="line">	ipconfig /renew     # 重新获取IP	</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h4 id="1-dhcp接口配置"><a href="#1-dhcp接口配置" class="headerlink" title="1.dhcp接口配置"></a>1.dhcp接口配置</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_56.png" class="" title="在这里插入图片描述">
+
+
+
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_57.png" class="" title="在这里插入图片描述">
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_58.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<h4 id="2-dhcp全局配置"><a href="#2-dhcp全局配置" class="headerlink" title="2.dhcp全局配置"></a>2.dhcp全局配置</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_59.png" class="" title="在这里插入图片描述">
+
+<p>AR1000v 的配置指令与之前相同，只是中间加了一个交换机</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_60.png" class="" title="在这里插入图片描述">
+
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_61.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<h4 id="3-dhcp中继配置"><a href="#3-dhcp中继配置" class="headerlink" title="3.dhcp中继配置"></a>3.dhcp中继配置</h4><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_62.png" class="" title="在这里插入图片描述">
+
+
+
+<blockquote>
+<p>DHCP 依赖广播找服务器，但广播过不了路由器。<br>如果客户端和 DHCP 服务器在不同网段，客户端的“求 IP”广播会被路由器拦下，服务器永远收不到。<br>DHCP 中继就是路由器上的一个“信使”，它能收到客户端的广播，然后转发成单播给远端的 DHCP 服务器，让跨网段的客户端也能自动获取 IP。</p>
+</blockquote>
+<hr>
+<h2 id="三、数据包，段，帧等分析"><a href="#三、数据包，段，帧等分析" class="headerlink" title="三、数据包，段，帧等分析"></a>三、数据包，段，帧等分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[ Frame ] ———— 最外层：快递箱</span><br><span class="line">    |</span><br><span class="line">    └── [ Ethernet II ] ———— 外包装：收件人 MAC 地址、发件人 MAC 地址</span><br><span class="line">            |</span><br><span class="line">            └── [ Internet Protocol Version 4 ] ———— 中间层：IP 地址（192.168.1.10 → 8.8.8.8）</span><br><span class="line">                    |</span><br><span class="line">                    └── [ Transmission Control Protocol ] ———— 内包装：端口号（54321 → 80）</span><br><span class="line">                            |</span><br><span class="line">                            └── [ HTTP ] ———— 货物：你请求的网页内容</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>随便抓取一个tcp包进行分析:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_63.png" class="" title="在这里插入图片描述">
+
+<p>物理层：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_64.png" class="" title="在这里插入图片描述">
+
+<p>链路层：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_65.png" class="" title="在这里插入图片描述">
+<blockquote>
+<p>[Stream index: 0]<br>这是抓包工具（如 Wireshark）的内部标识，表示该帧属于 “流索引为 0” 的数据包流（用于工具内部对相关数据包进行分组管理，方便分析同一 “流” 的通信）。</p>
+</blockquote>
+<p>网络层：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_66.png" class="" title="在这里插入图片描述">
+<p>传输层：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_67.png" class="" title="在这里插入图片描述">
+<p>补充：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_68.png" class="" title="在这里插入图片描述">
+
+
+
+
+<hr>
+<h2 id="四、实验"><a href="#四、实验" class="headerlink" title="四、实验"></a>四、实验</h2><h3 id="1-网络搭建"><a href="#1-网络搭建" class="headerlink" title="1.网络搭建"></a>1.网络搭建</h3><img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_69.png" class="" title="在这里插入图片描述">
+
+<hr>
+<ol>
+<li>左子网：</li>
+</ol>
+<p>对AR1000v</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_70.png" class="" title="在这里插入图片描述">
+
+<p><strong>win只需配置dhcp即可</strong></p>
+<hr>
+<ol start="2">
+<li>右子网：</li>
+</ol>
+<p>对于AR1000v</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_71.png" class="" title="在这里插入图片描述">
+
+
+<p>对winserver</p>
+<p>配置静态ip:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_72.png" class="" title="在这里插入图片描述">
+
+<p>安装DNS与IIS：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_73.png" class="" title="在这里插入图片描述">
+
+<p>对DNS进行配置：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_74.png" class="" title="在这里插入图片描述">
+
+<hr>
+<h3 id="2-实验引入"><a href="#2-实验引入" class="headerlink" title="2.实验引入"></a>2.实验引入</h3><p>没有进行任何操作对win进行抓包：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_75.png" class="" title="在这里插入图片描述">
+
+<p><strong>win主机向发送大量数据包，这是为什么？</strong></p>
+<blockquote>
+<p>Win (1) 节点是一个完整的 Windows 操作系统。当它启动并联网后，操作系统内部的许多服务和进程会自动开始工作，它们会发送各种网络请求，即使没有手动打开浏览器或执行命令。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">这些“后台”活动包括：</span><br><span class="line"></span><br><span class="line">1.网络发现服务：Windows 会尝试发现局域网内的其他计算机和共享资源。</span><br><span class="line">2.NetBIOS 名称服务 (NBNS)：这是旧版 Windows 用于在局域网内解析计算机名称的服务。您看到的 NBNS 和 Name query NB ISATAP&lt;00&gt; 就是这类查询。</span><br><span class="line">3.链路本地多播名称解析 (LLMNR)：这是现代 Windows 系统用来在局域网内解析主机名的一种替代方案。您看到的 LLMNR 数据包就是它发出的。</span><br><span class="line">4.IPv6 邻居发现协议 (NDP)：用于 IPv6 地址的自动配置和邻居发现。您看到的 fe80::... 开头的地址就是 IPv6 的链路本地地址。</span><br><span class="line">多播地址通信：224.0.0.252 是一个用于 LLMNR 的多播地址。Windows 会向这个地址发送查询，询问“谁叫这个名字？”。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>解决方案：</strong></p>
+<p>1.wireshark 过滤信息<br>2.在抓包前清空缓存 （ipconfig &#x2F;release； arp -d； ipconfig &#x2F;flushdns）</p>
+<hr>
+<h3 id="实验1-wireshark基础抓包分析"><a href="#实验1-wireshark基础抓包分析" class="headerlink" title="实验1(wireshark基础抓包分析)"></a>实验1(wireshark基础抓包分析)</h3><p>略过</p>
+<p>指令：</p>
+<ul>
+<li>win:</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 彻底清除ARP缓存</span><br><span class="line">arp -d *</span><br><span class="line"></span><br><span class="line"># 释放并更新IP（强制DHCP过程）</span><br><span class="line">ipconfig /release</span><br><span class="line">ipconfig /renew</span><br><span class="line"></span><br><span class="line"># 清除DNS缓存</span><br><span class="line">ipconfig /flushdns</span><br><span class="line"></span><br><span class="line"># 重启网络服务（可选）</span><br><span class="line">netsh int ip reset</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>AR1000v:</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 清除路由器ARP缓存</span><br><span class="line">clear arp-cache</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>winserver:</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 清除服务器ARP缓存</span><br><span class="line">arp -d *</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="实验2-以太网MAC-帧分析"><a href="#实验2-以太网MAC-帧分析" class="headerlink" title="实验2(以太网MAC 帧分析)"></a>实验2(以太网MAC 帧分析)</h3><p>实验思路：刷新win的网卡信息，随后ping dns服务器，抓取win-e0数据包进行分析</p>
+<p>win的网卡信息:</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_76.png" class="" title="在这里插入图片描述">
+
+<p>winserver网卡信息：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_77.png" class="" title="在这里插入图片描述">
+
+
+<p>网关接口的mac地址：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_78.png" class="" title="在这里插入图片描述">
+
+<p>arp广播包分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_79.png" class="" title="在这里插入图片描述">
+
+
+
+<p>arp应答</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_80.png" class="" title="在这里插入图片描述">
+
+<hr>
+<h3 id="实验3-IP数据包的解析"><a href="#实验3-IP数据包的解析" class="headerlink" title="实验3(IP数据包的解析)"></a>实验3(IP数据包的解析)</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ipconfig/release</span><br><span class="line">arp -d</span><br><span class="line">ipconfig/flushdns</span><br><span class="line">pause</span><br><span class="line">ipconfig/renew</span><br><span class="line">ping -l 2000 -f 192.168.2.20  (向DNS服务器发送2000字节数据包，不拆分)</span><br><span class="line">ping -l 2000 192.168.2.20     (向DNS服务器发送2000字节数据包，允许拆分)</span><br><span class="line">tracert 192.168.2.20          (跟踪到DNS服务器的路由)</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">重新得到的 Win主机ip地址是 192.168.1.188</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>实验数据分析：</strong></p>
+<p>网络层结构分析（下面图片的数据不是本环境所抓取）</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_81.png" class="" title="在这里插入图片描述">
+
+<p>重点分析一下指令产生的数据包：</p>
+<ul>
+<li>ping -l 2000 -f 192.168.2.20  (向DNS服务器发送2000字节数据包，不拆分)</li>
+<li>ping -l 2000 192.168.2.20     (向DNS服务器发送2000字节数据包，允许拆分)</li>
+<li>tracert 192.168.2.20          (跟踪到DNS服务器的路由)</li>
+</ul>
+<ol>
+<li>   数据包过滤：icmp &amp;&amp; ip.dst &#x3D;&#x3D; 192.168.2.20   （所有Win主机向DNS服务器发送的icmp报文）</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_82.png" class="" title="在这里插入图片描述">
+
+
+<ol start="2">
+<li>查看所有分片的数据包：ip.frag_offset !&#x3D; 0</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_83.png" class="" title="在这里插入图片描述">
+
+<ol start="3">
+<li>查看所有不分片的icmp包：ip.dst &#x3D;&#x3D; 192.168.2.20 &amp;&amp; icmp &amp;&amp; ip.flags.df &#x3D;&#x3D; 1</li>
+</ol>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_84.png" class="" title="在这里插入图片描述">
+
+<p><strong>实验3总结：</strong></p>
+<blockquote>
+<p>IP数据包解析实验验证了网络层协议的核心特性：通过分析头部字段（如版本、首部长度、TTL、协议类型及源&#x2F;目的IP地址），成功实现了对数据包传输路径、存活时间及上层协议类型的准确识别</p>
+</blockquote>
+<hr>
+<h3 id="实验4-网际控制报文协议-ICMP分析"><a href="#实验4-网际控制报文协议-ICMP分析" class="headerlink" title="实验4(网际控制报文协议 ICMP分析)"></a>实验4(网际控制报文协议 ICMP分析)</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ipconfig/release</span><br><span class="line">arp -d</span><br><span class="line">ipconfig/flushdns</span><br><span class="line"></span><br><span class="line"># 使用wireshark抓取对应网卡</span><br><span class="line">ipconfig/renew</span><br><span class="line">ping www.sina.com</span><br><span class="line">tracert www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p><strong>ping <a target="_blank" rel="noopener" href="http://www.sina.com/">www.sina.com</a></strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_85.png" class="" title="在这里插入图片描述">
+<p>过滤数据包：icmp &amp;&amp; ip.dst &#x3D;&#x3D; 163.142.155.14</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_86.png" class="" title="在这里插入图片描述">
+
+<p>ICMP数据包分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_87.png" class="" title="在这里插入图片描述">
+<p>补充ICMP分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_88.png" class="">
+
+<p><strong>指令：tracert <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.Baidu.com</a></strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_89.png" class="" title="在这里插入图片描述">
+
+<p><strong>过滤指令：icmp &amp;&amp; ip.dst &#x3D;&#x3D; 157.148.69.151</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_90.png" class="" title="在这里插入图片描述">
+
+
+<p>第32个网络帧TTL情况（no response）：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_91.png" class="" title="在这里插入图片描述">
+
+<p>第55个网络帧TTL情况（no response）：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_92.png" class="" title="在这里插入图片描述">
+
+<p>第112个网络帧TTL情况（reply）：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_93.png" class="">
+
+
+<p>数据包的整体情况：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_94.png" class="">
+
+<p>TTL的值不断增加，其机制是：<br><strong>tracert 是通过逐步增加 TTL（生存时间）值，结合 ICMP 协议来追踪路由的：</strong></p>
+<ol>
+<li>向目标发送第 1 组数据包时，设置TTL&#x3D;1；</li>
+<li>   数据包到达第 1 跳路由器（比如本地网关），路由器将 TTL 减 1→变为 0，按照 IP 协议规则，路由器会返回一个 ICMP “时间超过” 消息，tracert 因此获取第 1 跳的地址；</li>
+<li>   接着发送第 2 组数据包，设置TTL&#x3D;2，数据包到达第 2 跳路由器，TTL 减到 0，路由器返回 ICMP 超时消息→获取第 2 跳地址；</li>
+<li>   以此类推，直到数据包的 TTL 足够到达目标，目标会返回ICMP 回显响应（而非超时消息），tracert 结束跟踪。</li>
+</ol>
+<hr>
+<h3 id="实验5-TCP-数据包及连接建立过程分析"><a href="#实验5-TCP-数据包及连接建立过程分析" class="headerlink" title="实验5(TCP 数据包及连接建立过程分析)"></a>实验5(TCP 数据包及连接建立过程分析)</h3><p><strong>TCP三次握手与四次挥手机制：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_95.png" class="" title="在这里插入图片描述">
+
+<p><strong>三次握手阶段（连接建立）</strong></p>
+<ol>
+<li><p><strong>第1个包：客户端 → 服务器</strong></p>
+<ul>
+<li>报文：<code>SYN=1 Seq=x</code></li>
+<li>含义：<ul>
+<li><code>SYN=1</code>：“同步”标志位，代表<strong>客户端向服务器发起连接请求</strong>；</li>
+<li><code>Seq=x</code>：客户端告诉服务器“我接下来发数据的初始序号是x”；</li>
+</ul>
+</li>
+<li>状态变化：客户端从<code>Closed</code>→<code>SYN_SEND</code>，服务器保持<code>Listen</code>（监听状态）。</li>
+</ul>
+</li>
+<li><p><strong>第2个包：服务器 → 客户端</strong></p>
+<ul>
+<li>报文：<code>SYN=1 ACK=1 Seq=y Ack=x+1</code></li>
+<li>含义：<ul>
+<li><code>SYN=1</code>：服务器同时向客户端<strong>发起自己的连接请求</strong>；</li>
+<li><code>ACK=1</code>：“确认”标志位，代表服务器<strong>已收到客户端的连接请求</strong>；</li>
+<li><code>Seq=y</code>：服务器告诉客户端“我接下来发数据的初始序号是y”；</li>
+<li><code>Ack=x+1</code>：“确认号”，表示“我期望收到你下一个包的序号是x+1”（因为已收到你序号为x的包）；</li>
+</ul>
+</li>
+<li>状态变化：服务器从<code>Listen</code>→<code>SYN_RCVD</code>，客户端仍在<code>SYN_SEND</code>。</li>
+</ul>
+</li>
+<li><p><strong>第3个包：客户端 → 服务器</strong></p>
+<ul>
+<li>报文：<code>ACK=1 Seq=x+1 Ack=y+1</code></li>
+<li>含义：<ul>
+<li><code>ACK=1</code>：客户端<strong>已收到服务器的连接请求</strong>；</li>
+<li><code>Seq=x+1</code>：客户端按序号规则，下一个包的序号是x+1；</li>
+<li><code>Ack=y+1</code>：期望收到服务器下一个包的序号是y+1；</li>
+</ul>
+</li>
+<li>状态变化：客户端→<code>Established</code>，服务器→<code>Established</code>（双方进入“已连接”状态，可开始传数据）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>数据传输阶段</strong></p>
+<ul>
+<li>报文：图中“数据传输”对应的是<strong>双方在<code>Established</code>状态下的数据包</strong></li>
+<li>含义：<ul>
+<li>标志位默认带<code>ACK=1</code>（确认对方之前的包）；</li>
+<li>包中会包含<code>Application Data</code>（实际要传输的内容，比如网页数据、文件内容）；</li>
+<li><code>Seq</code>和<code>Ack</code>会根据“已传输的字节数”递增（比如客户端发了100字节数据，下一个<code>Seq</code>就是x+1+100）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>四次挥手阶段（连接释放）</strong></p>
+<ol>
+<li><p><strong>第1个包：客户端 → 服务器</strong></p>
+<ul>
+<li>报文：<code>FIN=1 Seq=u</code></li>
+<li>含义：<ul>
+<li><code>FIN=1</code>：“结束”标志位，代表<strong>客户端请求关闭自己的发送通道</strong>；</li>
+<li><code>Seq=u</code>：客户端当前的序号是u；</li>
+</ul>
+</li>
+<li>状态变化：客户端从<code>Established</code>→<code>FIN_WAIT_1</code>。</li>
+</ul>
+</li>
+<li><p><strong>第2个包：服务器 → 客户端</strong></p>
+<ul>
+<li>报文：<code>ACK=1 Seq=v Ack=u+1</code></li>
+<li>含义：<ul>
+<li><code>ACK=1</code>：服务器<strong>已收到客户端的关闭请求</strong>；</li>
+<li><code>Ack=u+1</code>：期望收到客户端下一个包的序号是u+1；</li>
+</ul>
+</li>
+<li>状态变化：服务器从<code>Established</code>→<code>CLOSE_WAIT</code>，客户端从<code>FIN_WAIT_1</code>→<code>FIN_WAIT_2</code>。</li>
+</ul>
+</li>
+<li><p><strong>第3个包：服务器 → 客户端</strong></p>
+<ul>
+<li>报文：<code>FIN=1 ACK=1 Seq=w Ack=u+1</code></li>
+<li>含义：<ul>
+<li><code>FIN=1</code>：服务器<strong>请求关闭自己的发送通道</strong>；</li>
+<li><code>ACK=1</code>：附带确认客户端之前的包；</li>
+<li><code>Seq=w</code>：服务器当前的序号是w；</li>
+</ul>
+</li>
+<li>状态变化：服务器从<code>CLOSE_WAIT</code>→<code>LAST_ACK</code>，客户端仍在<code>FIN_WAIT_2</code>。</li>
+</ul>
+</li>
+<li><p><strong>第4个包：客户端 → 服务器</strong></p>
+<ul>
+<li>报文：<code>ACK=1 Seq=u+1 Ack=w+1</code></li>
+<li>含义：<ul>
+<li><code>ACK=1</code>：客户端<strong>已收到服务器的关闭请求</strong>；</li>
+<li><code>Ack=w+1</code>：期望收到服务器下一个包的序号是w+1；</li>
+</ul>
+</li>
+<li>状态变化：客户端从<code>FIN_WAIT_2</code>→<code>TIME_WAIT</code>（等待2MSL后回到<code>Closed</code>），服务器收到包后从<code>LAST_ACK</code>→<code>Closed</code>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>抓取虚拟机网卡，浏览器访问<a target="_blank" rel="noopener" href="http://www.bilibili.com/">www.bilibili.com</a> (http协议建立在tcp之上)</strong></p>
+<blockquote>
+<p>补充知识：<br>由于tcp数据包数量巨大，可以使用wireshark自带的 追踪流 功能（选中数据包，右键菜单窗口就会有 追踪流选项），追踪流也分多种，具体协议具体分析，缺陷：只能对明文信息进行追踪</p>
+</blockquote>
+<p><strong>TCP三次挥手分析：</strong></p>
+<p><strong>获取 ‘bilibili’最近服务器的ip地址:157.148.134.11 port:443</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_96.png" class="" title="在这里插入图片描述">
+
+<p><strong>指令：tcp.flags.syn &#x3D;&#x3D; 1（只显示 SYN 标志为 1 的包）</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_97.png" class="" title="在这里插入图片描述">
+<p><strong>可知 53号网络帧是第一次握手，57号网络帧是第二次握手；x&#x3D;0 y&#x3D;0</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_98.png" class="" title="在这里插入图片描述">
+<p><strong>分析第三次握手的数据：<br>Seq&#x3D;x+1 即 Seq&#x3D;0+1&#x3D;1; ACK&#x3D;y+1 即 ACK&#x3D;0+1&#x3D;1</strong></p>
+<p><strong>TCP四次挥手分析：</strong></p>
+<p>上面的抓包数据没有抓到完整的TCP的四次完整挥手包，需要重新抓取</p>
+<p>Bilibili最近服务器的ip地址:157.148.134.11 port:443 与之前一样</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_99.png" class="" title="在这里插入图片描述">
+
+<p>指令：ip.addr &#x3D;&#x3D; 192.168.79.134 &amp;&amp; ip.addr &#x3D;&#x3D; 157.148.134.11 &amp;&amp; tcp.flags.fin &#x3D;&#x3D; 1 （更加精准的过滤指令，抓取第一次，第三挥手的数据包）</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_100.png" class="" title="在这里插入图片描述">
+
+<ul>
+<li>为什么第一次挥手与第三次挥手的网络帧编号‘差距’有点大呢？（相对于三次握手）<blockquote>
+<p>首先要知道第三次挥手的意义：服务端告诉客户端‘正在’传输的数据传输完毕,也就是说，第一次挥手与第三次挥手之间的 时延 是为了将最后一次数据传输完毕</p>
+</blockquote>
+</li>
+</ul>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_101.png" class="" title="在这里插入图片描述">
+<p>观察3361 3395 的ACK： 相同<br>1.	丢包了<br>2.	两次挥手之间就没有数据传输</p>
+<p><strong>显然是后者，所以 w&#x3D;v 是合理的</strong></p>
+<p>实验总结</p>
+<blockquote>
+<p>本次实验聚焦 TCP 协议的核心机制，通过 Wireshark 抓包验证了三次握手（连接建立）与四次挥手（连接释放）的流程。实验中，我们捕获目标网络连接的 TCP 数据包，利用过滤条件隔离有效报文，追踪 TCP 流分析 SYN、ACK、FIN 等标志位及序列号（Seq）、确认号（Ack）的变化规律。结果表明，抓包数据与理论机制完全吻合，Seq 与 Ack 严格遵循 “确认号 &#x3D; 对方上一序列号 + 1” 的规则，成功验证了 TCP 协议 “面向连接、可靠传输” 的特性。通过实验，快速掌握了 Wireshark 抓包分析的核心技巧，深化了对 TCP 连接建立与释放逻辑的理解。</p>
+</blockquote>
+<hr>
+<h3 id="实验6-超文本传送协议HTTP分析"><a href="#实验6-超文本传送协议HTTP分析" class="headerlink" title="实验6(超文本传送协议HTTP分析)"></a>实验6(超文本传送协议HTTP分析)</h3><p>由于之前的实验已经对应用层一下的网络层次结构作为分析，本次实验就不再分析了</p>
+<p><strong>分析http请求包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_102.png" class="" title="在这里插入图片描述">
+
+<p><strong>分析http回应包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_103.png" class="" title="在这里插入图片描述">
+
+
+
+<p>实际上，http的内容字段各不相同，取决与服务器的资源格式<br>补充： http状态码<br>1.	信息性状态码：1xx（服务器已接收请求，正在处理，很少直接看到）<br>2.	成功状态码：2xx<br>3.	重定向 &#x2F; 缓存状态码：3xx<br>4.	客户端错误状态码：4xx<br>5.	服务器错误状态码：5xx</p>
+<p>实验总结：</p>
+<blockquote>
+<p>本次实验通过 Wireshark 抓包分析 HTTP 协议，成功捕获访问国内网站的请求与响应数据包，验证了 HTTP 与 TCP 协议的协同工作逻辑。核心发现 HTTP 304 状态码实现缓存优化，抓包数据与理论机制一致。实验掌握了 Wireshark 抓包过滤技巧，深化了对应用层协议的理解</p>
+</blockquote>
+<hr>
+<h3 id="实验7-域名系统-DNS-分析"><a href="#实验7-域名系统-DNS-分析" class="headerlink" title="实验7(域名系统 DNS 分析)"></a>实验7(域名系统 DNS 分析)</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ipconfig/release</span><br><span class="line">arp -d</span><br><span class="line">ipconfig/flushdns</span><br><span class="line"></span><br><span class="line">ping www.bilibili.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_104.png" class="" title="在这里插入图片描述">
+
+
+
+<p><strong>DNS请求包分析：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_105.png" class="" title="在这里插入图片描述">
+
+
+<p><strong>DNS响应包分析：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_106.png" class="" title="在这里插入图片描述">
+
+
+
+<p><strong>IP 地址 (class ,是一个16 位值，标记协议族或某一个协议实例，使用 IN 代表 internet 系统，CH代表 Chaos 系统; classIN 是一个 32 位 IP 地址 )</strong></p>
+<p>通过实验验证了 DNS 的核心作用：将人类易记的域名（如<a target="_blank" rel="noopener" href="http://www.bilibili.com)转换为机器可识别的/">www.bilibili.com）转换为机器可识别的</a> IP 地址，同时观察到：<br>1.	大型网站常用 “CNAME 别名 + 多 A 记录” 的组合，兼顾域名灵活性与访问稳定性；<br>2.	DNS 基于 UDP 53 端口通信（响应包较小），解析过程通过 “事务 ID” 确保请求与响应的精准匹配；<br>3.	本地 DNS 服务器（如 192.168.79.2）承担递归查询角色，替主机完成从根服务器→顶级域服务器→权威服务器的迭代查询，最终返回解析结果。</p>
+<hr>
+<h3 id="实验8-动态主机配置协议-DHCP-分析"><a href="#实验8-动态主机配置协议-DHCP-分析" class="headerlink" title="实验8(动态主机配置协议 DHCP 分析)"></a>实验8(动态主机配置协议 DHCP 分析)</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">动态主机配置协议 DHCP 提供了即插即用连网(plug-and-play networking)的机制。</span><br><span class="line">这种机制允许一台计算机加入新的网络和获取 IP 地址而不用手工参与。</span><br><span class="line"> 需 要 IP 地 址 的 主 机 在 启 动 时 就 向 DHCP 服 务 器 广 播 发 送 发 现 报 文 （ DHCP</span><br><span class="line">DISCOVER），这时该主机就成为 DHCP 客户。</span><br><span class="line"> 本地网络上所有主机都能收到此广播报文，但只有 DHCP 服务器才回答此广播报文。</span><br><span class="line"> DHCP 服务器先在其数据库中查找该计算机的配置信息。若找到，则返回找到的信</span><br><span class="line">息。若找不到，则从服务器的 IP 地址池(address pool)中取一个地址分配给该计算机。</span><br><span class="line">DHCP 服务器的回答报文叫做提供报文（DHCP OFFER）</span><br><span class="line"> 并不是每个网络上都有 DHCP 服务器，这样会使 DHCP 服务器的数量太多。现在</span><br><span class="line">是每一个网络至少有一个 DHCP 中继代理，它配置了 DHCP 服务器的 IP 地址信</span><br><span class="line">息。</span><br><span class="line"> 当 DHCP 中继代理收到主机发送的发现报文后，就以单播方式向 DHCP 服务器转</span><br><span class="line">发此报文，并等待其回答。收到 DHCP 服务器回答的提供报文后，DHCP 中继代</span><br><span class="line">理再将此提供报文发回给主机。（DHCP OFFER）</span><br><span class="line"> DHCP 客户从几个 DHCP 服务器中选择其中的一个，并向所选择的 DHCP 服务</span><br><span class="line">器发送 DHCP 请求报文。（DHCP REQUEST）</span><br><span class="line"> 被选择的 DHCP 服务器发送确认报文 DHCPACK，进入已绑定状态。（DHCP ACK）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_107.png" class="" title="在这里插入图片描述">
+
+<p>发现报文分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_108.png" class="" title="在这里插入图片描述">
+<p>DHCP Discover 报文是 IP 地址分配流程的初始发起：客户端通过该报文以广播形式寻找网络中的 DHCP 服务器，传递自身硬件标识（MAC 地址）与会话标识（事务 ID），发起 IP 地址及网络配置的请求，标志 DHCP 全流程（Discover→Offer→Request→Ack）正式启动。</p>
+<p>提供报文分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_109.png" class="" title="在这里插入图片描述">
+<p>DHCP Request 报文是 IP 地址分配流程的方案锁定：客户端通过该报文明确选定目标 DHCP 服务器的 IP 分配方案，告知其他服务器释放预留资源，请求下发完整网络配置，标志 DHCP 全流程（Discover→Offer→Request→Ack）进入最终确认阶段</p>
+<p>请求报文分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_110.png" class="" title="在这里插入图片描述">
+<p>那DHCP请求报文存在的意义是什么？<br> DHCP Request 报文的核心作用是客户端向目标 DHCP 服务器确认租用其提供的 IP 地址，明确了客户端的地址需求与服务端标识，是 DHCP 地址分配流程中 “确认租用意向” 的关键环节，后续服务器会通过 DHCP Ack 报文完成最终的地址分配与配置下发</p>
+<p>确认报文分析：</p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_111.png" class="" title="在这里插入图片描述">
+<p>DHCP Ack 报文是IP 地址分配流程的最终确认：服务器通过该报文完成 IP 地址的正式分配，并下发子网掩码、网关、DNS 等完整网络配置，客户端接收后即可基于分配的 IP 地址建立网络连接，标志 DHCP 全流程（Discover→Offer→Request→Ack）完成</p>
+<p><strong>DHCP分配IP地址过程图：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_112.png" class="" title="在这里插入图片描述">
+
+
+<hr>
+<h3 id="实验9-WEB-页面请求全历程协议及数据包解析（综合性实验）"><a href="#实验9-WEB-页面请求全历程协议及数据包解析（综合性实验）" class="headerlink" title="实验9(WEB 页面请求全历程协议及数据包解析（综合性实验）)"></a>实验9(WEB 页面请求全历程协议及数据包解析（综合性实验）)</h3><p>访问我自己的博客网站，获取数据：<a href="http://zq-rookie-hacker.github.io/">http://zq-rookie-hacker.github.io</a></p>
+<p><strong>1. 为什么不直接使用https呢？</strong><br>可以观察到HTTP到HTTPS的重定向过程</p>
+<p><strong>2. 访问这个网站可以获取实验所需的数据吗？</strong><br>真实网络环境：GitHub Pages是真实的Web服务，完全符合实验要求的”访问目标WEB网站”条件可能包含重定向：GitHub Pages通常会将HTTP请求重定向到HTTPS，这正好可以帮助您分析实验要求中的”如果发生重定向，新的web页面的地址是什么”问题<br>DNS解析复杂性：GitHub Pages使用CNAME记录和全球CDN，会使DNS解析过程更丰富，有助于分析DNS解析内容<br>网络协议完整性：仍然会经历完整的DNS解析→TCP连接建立→HTTP请求→数据传输过程</p>
+<p><strong>清除网站cookie：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_113.png" class="" title="在这里插入图片描述">
+
+<p><strong>刷新网络信息：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_114.png" class="" title="在这里插入图片描述">
+
+<p><strong>DNS响应包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_115.png" class="" title="在这里插入图片描述">
+
+<p><strong>查询IP地址:</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_116.png" class="" title="在这里插入图片描述">
+<ol>
+<li>   P地址归属：185.199.109.153 是 GitHub 的IP地址之一<ul>
+<li>这是GitHub Pages服务使用的服务器IP地址</li>
+<li>GitHub Pages是用来托管博客的平台</li>
+</ul>
+</li>
+<li>   “泛播”的含义：<ul>
+<li>“泛播”(Anycast)是一种网络技术，多个服务器使用相同的IP地址</li>
+<li>当您访问这个IP时，网络会自动将您的请求路由到最近的服务器</li>
+<li>这种技术提高了服务的可靠性和访问速度</li>
+</ul>
+</li>
+</ol>
+<p><strong>TCP协议分析：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_117.png" class="" title="在这里插入图片描述">
+
+<p><strong>TCP三次握手：（之前的实验分析过TCP三次握手的数据包了）</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_118.png" class="" title="在这里插入图片描述">
+
+<p><strong>TCP四次挥手：（之前的实验分析过TCP四次挥手的数据包了）</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_119.png" class="" title="在这里插入图片描述">
+<blockquote>
+<p>结合抓包数据与 TCP 状态图，u、v、w的取值是 “三次握手后数据传输驱动序列号递增” 及 “TCP 报文序列号规则” 共同作用的结果：u&#x3D;489对应客户端发起 FIN 报文（包 366）的序列号，v&#x3D;670对应服务器回复 ACK 报文（包 367）的序列号，二者的数值是三次握手后数据传输让初始序列号持续递增的结果；而w&#x3D;670则因 TCP 纯 ACK 报文不占用序列号，服务器发起 FIN 时延续了回复 ACK 的序列号，同时服务器回 ACK 的确认号（490）也符合状态图 “ACK&#x3D;u+1” 的规则。</p>
+</blockquote>
+<p><strong>TCP超时重传：tcp.analysis.retransmission</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_120.png" class="" title="在这里插入图片描述">
+<p>都是在重传同一个包</p>
+<p><strong>过滤：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_121.png" class="" title="在这里插入图片描述">
+<p>第一：使用的是 ip.src &#x3D;&#x3D; 4.145.79.80 的过滤指令，那就说明了 服务器一直重传失败<br>第二：不继续重传，说明触发发tcp重传的终止机制</p>
+<p>一、核心机制 1：超时重传（Timeout Retransmission）<br>这是最基础的重传方式，靠 “超时等待” 触发：<br>1.	触发条件：发送方发送一个 TCP 报文后，会启动一个 “超时计时器（RTO，Retransmission Timeout）”；如果计时器到期前，没收到接收方的 ACK 确认包，就会重传这个报文。<br>2.	超时时间（RTO）怎么定？<br>	- 初始 RTO 是系统默认值（比如 1 秒）；<br>	-	后续会根据 “往返时间（RTT，报文发出去到收到 ACK 的时间）” 动态调整（比如 RTT 变长，RTO 也会跟着调大），避免误判超时。<br>3.	指数退避规则：每次重传失败后，RTO 会翻倍增长（比如第一次 RTO&#x3D;1 秒，第二次 &#x3D; 2 秒，第三次 &#x3D; 4 秒…），避免短时间内重复发包导致网络拥塞。<br>4.	终止条件：重传次数达到系统设定的 “最大重传次数”（比如 Linux 默认 15 次）后，发送方会认为 “连接彻底不可用”，停止重传并断开 TCP 连接。<br>二、核心机制 2：快速重传（ Fast Retransmission）<br>这是更高效的重传方式，靠 “重复 ACK” 主动触发：<br>1.	触发条件：接收方收到 “乱序的 TCP 报文” 时（比如应该收 Seq&#x3D;2，但先收到了 Seq&#x3D;3），会重复发送 “对已收到报文的 ACK”（比如一直发 Ack&#x3D;2）；当发送方收到3 个相同的重复 ACK，就会判定 “中间的报文（比如 Seq&#x3D;2）丢失了”，直接重传这个丢失的报文。<br>2.	优势：不用等超时计时器到期，靠 “重复 ACK” 主动发现丢包，重传速度更快，能提升传输效率。</p>
+<p><strong>分析具体重传数据包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_122.png" class="" title="在这里插入图片描述">
+
+<p><strong>http重定向分析：</strong><br><strong>http请求包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_123.png" class="" title="在这里插入图片描述">
+
+<p><strong>http响应包：</strong></p>
+<img src="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_124.png" class="" title="在这里插入图片描述">
+<p>Frame 269是 GitHub Pages 服务器的 “指令包”：它通过301状态码 +Location字段，强制将你原本访问的HTTP地址，重定向到更安全的HTTPS地址 —— 这是 GitHub Pages 的默认安全规则，也是当前网站普遍采用的 “HTTP→HTTPS 强制跳转” 实现方式</p>
+<p><strong>实验总结：</strong></p>
+<blockquote>
+<ol>
+<li>   WEB 页面请求是多协议协同的完整流程：DNS 解析（域名→IP）→TCP 连接（可靠传输基础）→HTTP 请求与响应（应用层数据交互）→重定向（协议 &#x2F; 地址切换），各层协议各司其职、无缝衔接，确保请求合法、数据可靠传输。</li>
+<li>   关键技术与协议特性验证：GitHub Pages 采用 “CNAME 记录 + CDN + 泛播” 架构，通过多 IP 分发提升服务可用性；DNS 解析依赖事务 ID 与 UDP 端口保障通信精准性；TCP 三次握手是可靠连接的核心；HTTP 301 重定向是实现协议升级（HTTP→HTTPS）的标准方式，体现了应用层协议的灵活性与安全性设计。</li>
+<li>   抓包分析的核心技巧：清除缓存与历史会话是获取纯净数据包的前提；通过协议过滤（如dns tcp http）可快速定位关键流程；聚焦核心字段（DNS 的事务 ID、TCP 的标志位、HTTP 的状态码与 Location 头）能高效拆解协议交互逻辑</li>
+</ol>
+</blockquote>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/28/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%90%9C%E7%B4%A2%E6%8C%87%E4%BB%A4%E5%A4%A7%E5%85%A8/" rel="prev" title="浏览器搜索指令大全">
+                  <i class="fa fa-angle-left"></i> 浏览器搜索指令大全
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rookie-Hacker</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">130k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:14</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"ZQ-Rookie-Hacker/ZQ-Rookie-Hacker.github.io","issue_term":"pathname","theme":"preferred-color-scheme","label":"comment"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

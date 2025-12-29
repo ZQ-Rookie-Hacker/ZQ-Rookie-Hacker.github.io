@@ -1388,7 +1388,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #b14985;
+  background: #867933;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2843,10 +2843,10 @@ header.header {
   --depth: 0;
   --border-width: 4px;
   padding-left: calc(20px + 24px * var(--depth));
-  margin: 18px 0;
-  padding: 12px 16px;
-  border-radius: 6px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin: 12px 0; /* 减小垂直间距 */
+  padding: 8px 12px; /* 减小内边距 */
+  border-radius: 4px; /* 减小圆角 */
+  transition: all 0.3s ease;
   position: relative;
   border-left-width: var(--border-width);
   border-left-style: solid;
@@ -2856,6 +2856,7 @@ header.header {
   --bg-lightness: calc(30 + var(--depth) * 5);
   border-left-color: hsl(var(--color-hue), 80%, 60%);
   background: hsl(0, 0%, var(--bg-lightness)%);
+  font-size: 0.95em; /* 减小字体大小 */
 }
 
 /* 深度变量设置（支持0-9级） */
@@ -2876,7 +2877,7 @@ header.header {
   position: absolute;
   left: 8px;
   color: #795548;
-  font-size: 1.5em;
+  font-size: 1.2em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-1::before {
   content: "↳";
@@ -2884,7 +2885,7 @@ header.header {
   left: 8px;
   color: hsl(36, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-2::before {
   content: "↳↳";
@@ -2892,7 +2893,7 @@ header.header {
   left: 8px;
   color: hsl(72, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-3::before {
   content: "↳↳↳";
@@ -2900,7 +2901,7 @@ header.header {
   left: 8px;
   color: hsl(108, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-4::before {
   content: "↳↳↳↳";
@@ -2908,7 +2909,7 @@ header.header {
   left: 8px;
   color: hsl(144, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-5::before {
   content: "↳↳↳↳↳";
@@ -2916,7 +2917,7 @@ header.header {
   left: 8px;
   color: hsl(180, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-6::before {
   content: "↳↳↳↳↳↳";
@@ -2924,7 +2925,7 @@ header.header {
   left: 8px;
   color: hsl(216, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-7::before {
   content: "↳↳↳↳↳↳↳";
@@ -2932,7 +2933,7 @@ header.header {
   left: 8px;
   color: hsl(252, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-8::before {
   content: "↳↳↳↳↳↳↳↳";
@@ -2940,7 +2941,7 @@ header.header {
   left: 8px;
   color: hsl(288, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 .category-all-page .category-list-item.depth-9::before {
   content: "↳↳↳↳↳↳↳↳↳";
@@ -2948,71 +2949,72 @@ header.header {
   left: 8px;
   color: hsl(324, 80%, 60%);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em; /* 减小箭头大小 */
 }
 
 /* 悬停效果 */
 .category-all-page .category-list-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  --border-width: 6px;
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  --border-width: 5px;
 }
 
-/* 徽章样式 */
+/* 徽章样式（减小尺寸） */
 .category-all-page .category-list-count {
   background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%);
   color: white;
-  border-radius: 20px;
-  padding: 3px 10px;
+  border-radius: 16px;
+  padding: 2px 8px; /* 减小内边距 */
   font-weight: bold;
-  margin-left: 8px;
-  min-width: 24px;
+  margin-left: 6px;
+  min-width: 20px;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: all 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+  font-size: 0.85em; /* 减小字体 */
 }
 
-/* 标题样式 */
+/* 标题样式（减小字体） */
 .category-all-page .category-all-title {
-  font-size: 2.4em;
-  margin-bottom: 35px;
+  font-size: 1.8em; /* 减小标题大小 */
+  margin-bottom: 25px;
   background: linear-gradient(90deg, #ff5722 0%, #ff9800 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 /* 响应式适配 */
 @media (max-width: 768px) {
   .category-all-page .category-list-item {
     --border-width: 3px;
-    padding: 10px 12px;
+    padding: 8px 10px;
     padding-left: calc(12px + 16px * var(--depth));
-    font-size: 0.95em;
+    font-size: 0.9em;
   }
   .category-all-page .category-list-count {
-    padding: 2px 6px;
-    font-size: 0.85em;
+    padding: 1px 6px;
+    font-size: 0.8em;
   }
   .category-all-page .category-all-title {
-    font-size: 2em;
+    font-size: 1.6em;
   }
 }
 
 @media (max-width: 480px) {
   .category-all-page .category-list-item {
     --border-width: 2px;
-    padding: 8px 10px;
+    padding: 6px 8px;
     padding-left: calc(8px + 12px * var(--depth));
     font-size: 0.85em;
   }
   .category-all-page .category-list-count {
     padding: 1px 4px;
     font-size: 0.75em;
-    min-width: 20px;
+    min-width: 18px;
   }
   .category-all-page .category-all-title {
-    font-size: 1.8em;
-    margin-bottom: 25px;
+    font-size: 1.4em;
+    margin-bottom: 20px;
   }
 }

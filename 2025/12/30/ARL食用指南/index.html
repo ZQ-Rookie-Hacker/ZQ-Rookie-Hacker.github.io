@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、部署前环境准备1. 核心依赖：Docker + Docker Compose（插件版）Kali 2025 默认预装 Docker，但需确认 Docker Compose 插件版 可用（避免独立包冲突）： 1234# 验证 Docker 是否运行sudo systemctl status docker# 验证 Docker Compose 插件版（无横杠，官方推荐）docker compose">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARL食用指南">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2025/12/30/ARL%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="一、部署前环境准备1. 核心依赖：Docker + Docker Compose（插件版）Kali 2025 默认预装 Docker，但需确认 Docker Compose 插件版 可用（避免独立包冲突）： 1234# 验证 Docker 是否运行sudo systemctl status docker# 验证 Docker Compose 插件版（无横杠，官方推荐）docker compose">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-30T08:16:32.072Z">
+<meta property="article:modified_time" content="2025-12-30T08:17:04.855Z">
+<meta property="article:author" content="ZQ-Rookie-Hacker">
+<meta property="article:tag" content="ARL">
+<meta property="article:tag" content="资产收集">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2025/12/30/ARL%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2025/12/30/ARL%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/","path":"2025/12/30/ARL食用指南/","title":"ARL食用指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ARL食用指南 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","app_key":"bIFSRG6LeUO90VdfRBHUXNQs","interval":900,"minimum_time":10,"cache":true,"cache_expire":900,"betterPerformance":true,"id":"path"}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%83%A8%E7%BD%B2%E5%89%8D%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-text">一、部署前环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E4%BE%9D%E8%B5%96%EF%BC%9ADocker-Docker-Compose%EF%BC%88%E6%8F%92%E4%BB%B6%E7%89%88%EF%BC%89"><span class="nav-text">1. 核心依赖：Docker + Docker Compose（插件版）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%981%EF%BC%9ADocker-Compose-%E5%AE%89%E8%A3%85%E5%86%B2%E7%AA%81%EF%BC%88%E7%8B%AC%E7%AB%8B%E5%8C%85-vs-%E6%8F%92%E4%BB%B6%E7%89%88%EF%BC%89"><span class="nav-text">问题1：Docker Compose 安装冲突（独立包 vs 插件版）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE-Docker-%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E5%99%A8%EF%BC%88%E8%A7%A3%E5%86%B3%E9%95%9C%E5%83%8F%E6%8B%89%E5%8F%96%E6%85%A2-%E4%B8%AD%E6%96%AD%EF%BC%89"><span class="nav-text">二、配置 Docker 国内加速器（解决镜像拉取慢&#x2F;中断）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E8%BE%91-Docker-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">1. 编辑 Docker 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%86%99%E5%85%A5%E6%AD%A3%E7%A1%AE%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%8A%A0%E9%80%9F%E6%BA%90%EF%BC%88%E9%81%BF%E5%85%8D%E9%80%97%E5%8F%B7%E7%BC%BA%E5%A4%B1%EF%BC%89"><span class="nav-text">2. 写入正确格式的加速源（避免逗号缺失）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E5%8A%A0%E9%80%9F%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88"><span class="nav-text">3. 使加速配置生效</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%85%8B%E9%9A%86-ARL-%E4%BB%A3%E7%A0%81"><span class="nav-text">三、克隆 ARL 代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%8B%89%E5%8F%96-ARL-%E4%BE%9D%E8%B5%96%E9%95%9C%E5%83%8F%EF%BC%88%E8%A7%A3%E5%86%B3%E6%8B%89%E5%8F%96%E4%B8%AD%E6%96%AD%E9%97%AE%E9%A2%98%EF%BC%89"><span class="nav-text">四、拉取 ARL 依赖镜像（解决拉取中断问题）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BC%98%E5%85%88%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%8D%B7%EF%BC%88%E6%8C%81%E4%B9%85%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%EF%BC%89"><span class="nav-text">1. 优先创建数据卷（持久化数据库数据）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F%EF%BC%88%E9%81%BF%E5%85%8D%E6%89%B9%E9%87%8F%E6%8B%89%E5%8F%96%E4%B8%AD%E6%96%AD%EF%BC%8C%E5%8F%AF%E9%80%90%E4%B8%AA%E6%8B%89%E5%8F%96%EF%BC%89"><span class="nav-text">2. 拉取镜像（避免批量拉取中断，可逐个拉取）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%951%EF%BC%9A%E6%89%B9%E9%87%8F%E6%8B%89%E5%8F%96%EF%BC%88%E5%8A%A0%E9%80%9F%E6%BA%90%E7%A8%B3%E5%AE%9A%E6%97%B6%E7%94%A8%EF%BC%89"><span class="nav-text">方法1：批量拉取（加速源稳定时用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%952%EF%BC%9A%E9%80%90%E4%B8%AA%E6%8B%89%E5%8F%96%EF%BC%88%E8%A7%A3%E5%86%B3%E6%89%B9%E9%87%8F%E6%8B%89%E5%8F%96%E5%8F%8D%E5%A4%8D%E4%B8%AD%E6%96%AD%EF%BC%89"><span class="nav-text">方法2：逐个拉取（解决批量拉取反复中断）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%983%EF%BC%9A%E9%95%9C%E5%83%8F%E6%8B%89%E5%8F%96%E5%8F%8D%E5%A4%8D%E4%B8%AD%E6%96%AD"><span class="nav-text">问题3：镜像拉取反复中断</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%AA%8C%E8%AF%81%E9%95%9C%E5%83%8F%E6%98%AF%E5%90%A6%E6%8B%89%E5%8F%96%E5%AE%8C%E6%88%90"><span class="nav-text">3. 验证镜像是否拉取完成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81ARL-%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C%EF%BC%9A%E5%90%AF%E5%8A%A8-%E5%85%B3%E9%97%AD-%E9%87%8D%E5%90%AF"><span class="nav-text">五、ARL 核心操作：启动&#x2F;关闭&#x2F;重启</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%AF%E5%8A%A8-ARL%EF%BC%88%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C%EF%BC%89"><span class="nav-text">1. 启动 ARL（后台运行）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%B3%E9%97%AD-ARL%EF%BC%88%E5%81%9C%E6%AD%A2%E6%89%80%E6%9C%89%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="nav-text">2. 关闭 ARL（停止所有服务）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%87%8D%E5%90%AF-ARL%EF%BC%88%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E5%90%8E%E7%94%A8%EF%BC%89"><span class="nav-text">3. 重启 ARL（修改配置后用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%9F%A5%E7%9C%8B-ARL-%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81"><span class="nav-text">4. 查看 ARL 运行状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%9F%A5%E7%9C%8B-ARL-%E6%97%A5%E5%BF%97"><span class="nav-text">5. 查看 ARL 日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%AE%BF%E9%97%AE-ARL-%E7%B3%BB%E7%BB%9F"><span class="nav-text">六、访问 ARL 系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%AD%A3%E7%A1%AE%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="nav-text">1. 正确访问地址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%984%EF%BC%9A%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80%E9%94%99%E8%AF%AF"><span class="nav-text">问题4：访问地址错误</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%84%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E2%80%9C%E4%B8%8D%E5%AE%89%E5%85%A8%E6%8F%90%E7%A4%BA%E2%80%9D"><span class="nav-text">2. 处理浏览器“不安全提示”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95-ARL"><span class="nav-text">3. 登录 ARL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81ARL-%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"><span class="nav-text">七、ARL 日常使用教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E7%95%8C%E9%9D%A2%E4%BB%8B%E7%BB%8D"><span class="nav-text">1. 核心功能界面介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%B5%84%E4%BA%A7%E4%BE%A6%E5%AF%9F%E4%BB%BB%E5%8A%A1"><span class="nav-text">2. 创建第一个资产侦察任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A41%EF%BC%9A%E8%BF%9B%E5%85%A5%E3%80%8C%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E3%80%8D%E2%86%92-%E7%82%B9%E5%87%BB%E3%80%8C%E6%96%B0%E5%BB%BA%E4%BB%BB%E5%8A%A1%E3%80%8D"><span class="nav-text">步骤1：进入「任务管理」→ 点击「新建任务」</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A42%EF%BC%9A%E5%A1%AB%E5%86%99%E4%BB%BB%E5%8A%A1%E4%BF%A1%E6%81%AF%EF%BC%88%E9%87%8D%E7%82%B9%E9%85%8D%E7%BD%AE%EF%BC%89"><span class="nav-text">步骤2：填写任务信息（重点配置）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A43%EF%BC%9A%E5%90%AF%E5%8A%A8%E4%BB%BB%E5%8A%A1"><span class="nav-text">步骤3：启动任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A44%EF%BC%9A%E6%9F%A5%E7%9C%8B%E6%89%AB%E6%8F%8F%E7%BB%93%E6%9E%9C"><span class="nav-text">步骤4：查看扫描结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%EF%BC%9A%E8%B5%84%E4%BA%A7%E6%90%9C%E7%B4%A2%E4%B8%8E%E7%AD%9B%E9%80%89"><span class="nav-text">3. 常用操作：资产搜索与筛选</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E7%89%B9%E5%AE%9A%E8%B5%84%E4%BA%A7"><span class="nav-text">场景：快速查找特定资产</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">4. 安全注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB"><span class="nav-text">八、常见问题汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%90%8E%E7%BB%AD%E4%BC%98%E5%8C%96"><span class="nav-text">九、后续优化</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rookie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rookie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/30/ARL%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ARL食用指南 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ARL食用指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-30 16:16:32 / 修改时间：16:17:04" itemprop="dateCreated datePublished" datetime="2025-12-30T16:16:32+08:00">2025-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/" itemprop="url" rel="index"><span itemprop="name">渗透</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" itemprop="url" rel="index"><span itemprop="name">信息收集</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2025/12/30/ARL%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-meta-item leancloud_visitors" data-flag-title="ARL食用指南" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、部署前环境准备"><a href="#一、部署前环境准备" class="headerlink" title="一、部署前环境准备"></a>一、部署前环境准备</h2><h3 id="1-核心依赖：Docker-Docker-Compose（插件版）"><a href="#1-核心依赖：Docker-Docker-Compose（插件版）" class="headerlink" title="1. 核心依赖：Docker + Docker Compose（插件版）"></a>1. 核心依赖：Docker + Docker Compose（插件版）</h3><p>Kali 2025 默认预装 Docker，但需确认 <strong>Docker Compose 插件版</strong> 可用（避免独立包冲突）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
+
+<h4 id="问题1：Docker-Compose-安装冲突（独立包-vs-插件版）"><a href="#问题1：Docker-Compose-安装冲突（独立包-vs-插件版）" class="headerlink" title="问题1：Docker Compose 安装冲突（独立包 vs 插件版）"></a>问题1：Docker Compose 安装冲突（独立包 vs 插件版）</h4><ul>
+<li>现象：执行 <code>sudo apt install docker-compose</code> 时提示“trying to overwrite…”</li>
+<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="二、配置-Docker-国内加速器（解决镜像拉取慢-中断）"><a href="#二、配置-Docker-国内加速器（解决镜像拉取慢-中断）" class="headerlink" title="二、配置 Docker 国内加速器（解决镜像拉取慢&#x2F;中断）"></a>二、配置 Docker 国内加速器（解决镜像拉取慢&#x2F;中断）</h2><p>Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。</p>
+<h3 id="1-编辑-Docker-配置文件"><a href="#1-编辑-Docker-配置文件" class="headerlink" title="1. 编辑 Docker 配置文件"></a>1. 编辑 Docker 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-写入正确格式的加速源（避免逗号缺失）"><a href="#2-写入正确格式的加速源（避免逗号缺失）" class="headerlink" title="2. 写入正确格式的加速源（避免逗号缺失）"></a>2. 写入正确格式的加速源（避免逗号缺失）</h3><p><strong>正确配置（含国内稳定源）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  <span class="comment">// 阿里云公共源（最稳定）</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-使加速配置生效"><a href="#3-使加速配置生效" class="headerlink" title="3. 使加速配置生效"></a>3. 使加速配置生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生效标志：输出中显示配置的所有加速源。</li>
+</ul>
+<h2 id="三、克隆-ARL-代码"><a href="#三、克隆-ARL-代码" class="headerlink" title="三、克隆 ARL 代码"></a>三、克隆 ARL 代码</h2><p>使用加速链接克隆 ARL 代码（你之前用的 <code>gh.llkk.cc</code> 加速）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入工具目录（自定义路径，示例为 ~/Web/web-tools）</span></span><br><span class="line"><span class="built_in">cd</span> ~/Web/web-tools</span><br><span class="line"><span class="comment"># 克隆代码（加速链接）</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:ki9mu/ARL-plus-docker ARL</span><br><span class="line"><span class="comment"># 进入 ARL 目录（后续所有命令需在此执行）</span></span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="四、拉取-ARL-依赖镜像（解决拉取中断问题）"><a href="#四、拉取-ARL-依赖镜像（解决拉取中断问题）" class="headerlink" title="四、拉取 ARL 依赖镜像（解决拉取中断问题）"></a>四、拉取 ARL 依赖镜像（解决拉取中断问题）</h2><p>ARL 依赖 3 个核心镜像：<code>mongo:4.0.27</code>、<code>ki9mu/shadow-rabbitmq:latest</code>、<code>ki9mu/arl-ki9mu:v3.0.1</code>。</p>
+<h3 id="1-优先创建数据卷（持久化数据库数据）"><a href="#1-优先创建数据卷（持久化数据库数据）" class="headerlink" title="1. 优先创建数据卷（持久化数据库数据）"></a>1. 优先创建数据卷（持久化数据库数据）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create arl_db</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-拉取镜像（避免批量拉取中断，可逐个拉取）"><a href="#2-拉取镜像（避免批量拉取中断，可逐个拉取）" class="headerlink" title="2. 拉取镜像（避免批量拉取中断，可逐个拉取）"></a>2. 拉取镜像（避免批量拉取中断，可逐个拉取）</h3><h4 id="方法1：批量拉取（加速源稳定时用）"><a href="#方法1：批量拉取（加速源稳定时用）" class="headerlink" title="方法1：批量拉取（加速源稳定时用）"></a>方法1：批量拉取（加速源稳定时用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose pull</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法2：逐个拉取（解决批量拉取反复中断）"><a href="#方法2：逐个拉取（解决批量拉取反复中断）" class="headerlink" title="方法2：逐个拉取（解决批量拉取反复中断）"></a>方法2：逐个拉取（解决批量拉取反复中断）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取 MongoDB 镜像</span></span><br><span class="line">docker pull mongo:4.0.27</span><br><span class="line"><span class="comment"># 拉取 RabbitMQ 镜像</span></span><br><span class="line">docker pull ki9mu/shadow-rabbitmq:latest</span><br><span class="line"><span class="comment"># 拉取 ARL 核心镜像</span></span><br><span class="line">docker pull ki9mu/arl-ki9mu:v3.0.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="问题3：镜像拉取反复中断"><a href="#问题3：镜像拉取反复中断" class="headerlink" title="问题3：镜像拉取反复中断"></a>问题3：镜像拉取反复中断</h4><ul>
+<li>现象：拉取过程中自动退出，进度无法完成</li>
+<li>解决：<ol>
+<li>补充阿里云加速源（见第二步）；</li>
+<li>重启 Docker 后<strong>逐个拉取镜像</strong>；</li>
+<li>若仍中断，切换网络（如手机热点）后重试。</li>
+</ol>
+</li>
+</ul>
+<h3 id="3-验证镜像是否拉取完成"><a href="#3-验证镜像是否拉取完成" class="headerlink" title="3. 验证镜像是否拉取完成"></a>3. 验证镜像是否拉取完成</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images | grep -E <span class="string">&quot;mongo:4.0.27|ki9mu/shadow-rabbitmq|ki9mu/arl-ki9mu&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>成功标志：输出包含 3 个镜像的信息。</li>
+</ul>
+<h2 id="五、ARL-核心操作：启动-关闭-重启"><a href="#五、ARL-核心操作：启动-关闭-重启" class="headerlink" title="五、ARL 核心操作：启动&#x2F;关闭&#x2F;重启"></a>五、ARL 核心操作：启动&#x2F;关闭&#x2F;重启</h2><p>所有命令需在 <strong>ARL 目录（~&#x2F;Web&#x2F;web-tools&#x2F;ARL）</strong> 执行，确保能读取 <code>docker-compose.yml</code> 文件。</p>
+<h3 id="1-启动-ARL（后台运行）"><a href="#1-启动-ARL（后台运行）" class="headerlink" title="1. 启动 ARL（后台运行）"></a>1. 启动 ARL（后台运行）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+<ul>
+<li>作用：启动所有依赖容器（MongoDB、RabbitMQ、ARL 核心服务），后台运行不占用终端。</li>
+<li>验证启动成功：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
+成功标志：所有容器 <code>STATE</code> 为 <code>Up</code>。</li>
+</ul>
+<h3 id="2-关闭-ARL（停止所有服务）"><a href="#2-关闭-ARL（停止所有服务）" class="headerlink" title="2. 关闭 ARL（停止所有服务）"></a>2. 关闭 ARL（停止所有服务）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose down</span><br></pre></td></tr></table></figure>
+<ul>
+<li>作用：停止并销毁所有容器（数据不会丢失，因为数据存在 <code>arl_db</code> 数据卷中）。</li>
+<li>场景：长时间不使用时关闭，节省系统资源。</li>
+</ul>
+<h3 id="3-重启-ARL（修改配置后用）"><a href="#3-重启-ARL（修改配置后用）" class="headerlink" title="3. 重启 ARL（修改配置后用）"></a>3. 重启 ARL（修改配置后用）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>作用：重启所有容器，适用于修改 ARL 配置后生效。</li>
+</ul>
+<h3 id="4-查看-ARL-运行状态"><a href="#4-查看-ARL-运行状态" class="headerlink" title="4. 查看 ARL 运行状态"></a>4. 查看 ARL 运行状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
+<ul>
+<li>输出说明：<ul>
+<li><code>NAME</code>：容器名称（如 <code>arl_web</code> 是 Web 界面容器）；</li>
+<li><code>STATE</code>：<code>Up</code> 表示运行中，<code>Exited</code> 表示已停止；</li>
+<li><code>PORTS</code>：端口映射（如 <code>0.0.0.0:5003-&gt;443/tcp</code> 表示 5003 端口映射到 HTTPS 服务）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-查看-ARL-日志"><a href="#5-查看-ARL-日志" class="headerlink" title="5. 查看 ARL 日志"></a>5. 查看 ARL 日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有容器日志（实时输出）</span></span><br><span class="line">docker compose logs -f</span><br><span class="line"><span class="comment"># 查看单个容器日志（如 Web 容器，排查访问问题）</span></span><br><span class="line">docker compose logs -f web</span><br><span class="line"><span class="comment"># 查看 MongoDB 容器日志（排查数据库问题）</span></span><br><span class="line">docker compose logs -f mongodb</span><br></pre></td></tr></table></figure>
+<ul>
+<li>场景：容器启动失败（<code>STATE</code> 为 <code>Exited</code>）时，通过日志定位报错原因。</li>
+</ul>
+<h2 id="六、访问-ARL-系统"><a href="#六、访问-ARL-系统" class="headerlink" title="六、访问 ARL 系统"></a>六、访问 ARL 系统</h2><h3 id="1-正确访问地址"><a href="#1-正确访问地址" class="headerlink" title="1. 正确访问地址"></a>1. 正确访问地址</h3><p>从容器端口映射可知：<code>arl_web</code> 将主机 <code>5003</code> 端口映射到容器 <code>443</code> 端口（HTTPS），因此必须用 <strong><code>https</code> 开头</strong>的地址：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://127.0.0.1:5003</span><br></pre></td></tr></table></figure>
+
+<h4 id="问题4：访问地址错误"><a href="#问题4：访问地址错误" class="headerlink" title="问题4：访问地址错误"></a>问题4：访问地址错误</h4><ul>
+<li>现象：输入 <code>http://127.0.0.1:5003</code> 无法访问</li>
+<li>解决：改用 <code>https</code> 开头的地址（因容器映射的是 HTTPS 端口）。</li>
+</ul>
+<h3 id="2-处理浏览器“不安全提示”"><a href="#2-处理浏览器“不安全提示”" class="headerlink" title="2. 处理浏览器“不安全提示”"></a>2. 处理浏览器“不安全提示”</h3><p>ARL 使用自签 SSL 证书，浏览器会提示“连接不安全”：</p>
+<ul>
+<li>操作：选择“高级”→“继续访问 127.0.0.1（不安全）”（仅本地访问，无风险）。</li>
+</ul>
+<h3 id="3-登录-ARL"><a href="#3-登录-ARL" class="headerlink" title="3. 登录 ARL"></a>3. 登录 ARL</h3><p>使用默认账号密码：</p>
+<ul>
+<li>账号：<code>admin</code></li>
+<li>密码：<code>arlpass</code></li>
+</ul>
+<h2 id="七、ARL-日常使用教程"><a href="#七、ARL-日常使用教程" class="headerlink" title="七、ARL 日常使用教程"></a>七、ARL 日常使用教程</h2><p>ARL 是资产侦察系统，核心用途是 <strong>发现目标资产、识别指纹、扫描漏洞</strong>，以下是新手必备的基础操作：</p>
+<h3 id="1-核心功能界面介绍"><a href="#1-核心功能界面介绍" class="headerlink" title="1. 核心功能界面介绍"></a>1. 核心功能界面介绍</h3><p>登录后首页分为 5 个核心模块：</p>
+<ul>
+<li>「任务管理」：创建&#x2F;启动&#x2F;停止扫描任务；</li>
+<li>「资产搜索」：查询已发现的资产（域名、IP、端口、服务等）；</li>
+<li>「指纹管理」：查看已识别的应用指纹（如 Nginx、Tomcat、MySQL 等）；</li>
+<li>「PoC 管理」：查看可利用的漏洞 PoC（无需手动上传，默认内置常用 PoC）；</li>
+<li>「系统设置」：配置扫描线程、超时时间、邮件通知等。</li>
+</ul>
+<h3 id="2-创建第一个资产侦察任务"><a href="#2-创建第一个资产侦察任务" class="headerlink" title="2. 创建第一个资产侦察任务"></a>2. 创建第一个资产侦察任务</h3><h4 id="步骤1：进入「任务管理」→-点击「新建任务」"><a href="#步骤1：进入「任务管理」→-点击「新建任务」" class="headerlink" title="步骤1：进入「任务管理」→ 点击「新建任务」"></a>步骤1：进入「任务管理」→ 点击「新建任务」</h4><h4 id="步骤2：填写任务信息（重点配置）"><a href="#步骤2：填写任务信息（重点配置）" class="headerlink" title="步骤2：填写任务信息（重点配置）"></a>步骤2：填写任务信息（重点配置）</h4><table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>填写说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务名称</td>
+<td>自定义（如“测试目标资产侦察”）</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>输入要扫描的目标（支持多个，用换行&#x2F;逗号分隔）：<br>- 单个 IP：<code>192.168.1.100</code>；<br>- 网段：<code>192.168.1.0/24</code>；<br>- 域名：<code>example.com</code>；<br>- 子域名爆破：<code>*.example.com</code>（自动爆破子域名）</td>
+</tr>
+<tr>
+<td>端口扫描</td>
+<td>选择扫描类型：<br>- 常用端口：适合快速扫描；<br>- 全端口：扫描所有 65535 端口（耗时久）；<br>- 自定义端口：输入需要扫描的端口（如 <code>80,443,3389,22</code>）</td>
+</tr>
+<tr>
+<td>扫描线程</td>
+<td>新手建议默认（50 线程），线程越多扫描越快，但容易触发目标防护规则</td>
+</tr>
+<tr>
+<td>其他选项</td>
+<td>勾选“子域名爆破”“端口扫描”“指纹识别”“PoC 扫描”（按需选择）</td>
+</tr>
+</tbody></table>
+<h4 id="步骤3：启动任务"><a href="#步骤3：启动任务" class="headerlink" title="步骤3：启动任务"></a>步骤3：启动任务</h4><p>点击「确认创建」→ 任务列表中找到刚创建的任务 → 点击「启动」。</p>
+<h4 id="步骤4：查看扫描结果"><a href="#步骤4：查看扫描结果" class="headerlink" title="步骤4：查看扫描结果"></a>步骤4：查看扫描结果</h4><ul>
+<li>任务状态变为「运行中」，等待扫描完成（时间取决于目标数量和端口范围，10 分钟~数小时不等）；</li>
+<li>扫描完成后，点击任务名称 → 查看详细结果：<ul>
+<li>「资产列表」：已发现的 IP、域名、端口、服务（如 <code>80/tcp http Nginx 1.21.0</code>）；</li>
+<li>「指纹识别」：目标使用的应用程序、框架（如 Tomcat、WordPress、MySQL）；</li>
+<li>「PoC 结果」：已识别的漏洞（如弱密码、未授权访问、CVE 漏洞）；</li>
+<li>「导出报告」：支持导出 HTML&#x2F;PDF 格式报告（用于整理扫描结果）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-常用操作：资产搜索与筛选"><a href="#3-常用操作：资产搜索与筛选" class="headerlink" title="3. 常用操作：资产搜索与筛选"></a>3. 常用操作：资产搜索与筛选</h3><h4 id="场景：快速查找特定资产"><a href="#场景：快速查找特定资产" class="headerlink" title="场景：快速查找特定资产"></a>场景：快速查找特定资产</h4><ol>
+<li>进入「资产搜索」模块；</li>
+<li>输入筛选条件：<ul>
+<li>按端口筛选：<code>port:80</code>（查找所有 80 端口开放的资产）；</li>
+<li>按服务筛选：<code>service:http</code>（查找所有 HTTP 服务）；</li>
+<li>按指纹筛选：<code>fingerprint:Nginx</code>（查找所有 Nginx 服务器）；</li>
+<li>按漏洞筛选：<code>vuln:弱密码</code>（查找存在弱密码漏洞的资产）；</li>
+</ul>
+</li>
+<li>点击「搜索」即可查看匹配结果。</li>
+</ol>
+<h3 id="4-安全注意事项"><a href="#4-安全注意事项" class="headerlink" title="4. 安全注意事项"></a>4. 安全注意事项</h3><ul>
+<li>仅扫描 <strong>自己拥有权限的目标</strong>（如本地测试环境、授权测试目标），禁止扫描未授权的公网资产或他人服务器（违法违规）；</li>
+<li>扫描公网目标时，降低扫描线程（如 20 线程），避免触发目标的 DDoS 防护规则；</li>
+<li>定期备份 ARL 数据（数据存储在 <code>arl_db</code> 数据卷中，可通过 Docker 备份数据卷）。</li>
+</ul>
+<h2 id="八、常见问题汇总"><a href="#八、常见问题汇总" class="headerlink" title="八、常见问题汇总"></a>八、常见问题汇总</h2><table>
+<thead>
+<tr>
+<th>问题现象</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker Compose 安装提示“overwrite”冲突</td>
+<td>卸载独立包 <code>docker-compose</code>，使用系统预装的插件版 <code>docker compose</code>（无横杠）</td>
+</tr>
+<tr>
+<td>Docker 加速配置不生效</td>
+<td>检查 <code>daemon.json</code> 格式（逗号是否正确），重启 Docker 后用 <code>docker info</code> 验证</td>
+</tr>
+<tr>
+<td>镜像拉取反复中断</td>
+<td>补充阿里云加速源，重启 Docker 后<strong>逐个拉取镜像</strong></td>
+</tr>
+<tr>
+<td>访问 <code>http://127.0.0.1:5003</code> 无法打开</td>
+<td>改用 <code>https://127.0.0.1:5003</code>（容器映射的是 HTTPS 端口）</td>
+</tr>
+<tr>
+<td>容器启动后状态为 <code>Exited</code></td>
+<td>查看日志：<code>docker compose logs 容器名</code>（如 <code>docker compose logs web</code>），重新拉取对应镜像后启动</td>
+</tr>
+<tr>
+<td>扫描任务无法启动</td>
+<td>检查 RabbitMQ 容器是否正常运行（<code>arl_rabbitmq</code> 状态为 <code>Up</code>），重启 ARL 后重试</td>
+</tr>
+<tr>
+<td>扫描结果为空</td>
+<td>目标可能未开放端口，或扫描规则过严，尝试选择“全端口扫描”+“子域名爆破”后重新扫描</td>
+</tr>
+</tbody></table>
+<h2 id="九、后续优化"><a href="#九、后续优化" class="headerlink" title="九、后续优化"></a>九、后续优化</h2><ol>
+<li><strong>修改默认密码</strong>：登录后进入「个人中心」→「密码修改」，输入旧密码 <code>arlpass</code> 和新密码；</li>
+<li><strong>备份 ARL 数据</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份数据卷 arl_db 到本地目录（如 ~/arl_backup）</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -v arl_db:/source -v ~/arl_backup:/dest alpine <span class="built_in">cp</span> -r /source/* /dest/</span><br></pre></td></tr></table></figure></li>
+<li><strong>更新 ARL 镜像</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取最新镜像</span></span><br><span class="line">docker compose pull</span><br><span class="line"><span class="comment"># 重启容器</span></span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ARL/" rel="tag"># ARL</a>
+              <a href="/tags/%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/" rel="tag"># 资产收集</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/29/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/" rel="prev" title="任务导向计网学习">
+                  <i class="fa fa-angle-left"></i> 任务导向计网学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rookie-Hacker</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">133k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:22</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"ZQ-Rookie-Hacker/ZQ-Rookie-Hacker.github.io","issue_term":"pathname","theme":"preferred-color-scheme","label":"comment"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

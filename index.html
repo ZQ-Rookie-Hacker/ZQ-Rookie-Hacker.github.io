@@ -5304,7 +5304,7 @@ StartupNotify=false
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-29 15:59:51" itemprop="dateModified" datetime="2026-01-29T15:59:51+08:00">2026-01-29</time>
+      <time title="修改时间：2026-02-02 11:40:53" itemprop="dateModified" datetime="2026-02-02T11:40:53+08:00">2026-02-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -5334,14 +5334,14 @@ StartupNotify=false
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.4k</span>
+      <span>3.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>10 分钟</span>
     </span>
 </div>
 
@@ -5494,18 +5494,50 @@ StartupNotify=false
 <li><code>curl</code> - 传输数据的命令行工具</li>
 <li><code>wget</code> - 从网络下载文件</li>
 </ul>
-<h2 id="7-服务管理"><a href="#7-服务管理" class="headerlink" title="7. 服务管理"></a>7. 服务管理</h2><h3 id="服务控制"><a href="#服务控制" class="headerlink" title="服务控制"></a>服务控制</h3><ul>
-<li><code>/etc/init.d/apache2 start</code> - 启动Apache2服务</li>
-<li><code>/etc/init.d/apache2 restart</code> - 重启Apache2服务</li>
-<li><code>/etc/init.d/apache2 stop</code> - 停止Apache2服务</li>
-<li><code>/etc/init.d/network start</code> - 启动网络服务</li>
-<li><code>service networking restart</code> - 重启网络服务</li>
-<li><code>systemctl restart networking</code> - 使用systemctl重启网络服务</li>
+<h2 id="7-服务管理"><a href="#7-服务管理" class="headerlink" title="7. 服务管理"></a>7. 服务管理</h2><p><code>systemctl</code> 是 <strong>systemd 系统</strong>（Kali Linux、Debian、Ubuntu、CentOS 7+ 等主流Linux均采用）的核心服务管理工具，替代了旧版的 <code>service</code>、<code>chkconfig</code>、<code>/etc/init.d/</code> 等命令，是服务管理的首选方式。</p>
+<h3 id="核心前提"><a href="#核心前提" class="headerlink" title="核心前提"></a>核心前提</h3><ol>
+<li>操作系统服务操作（启动&#x2F;停止&#x2F;设置自启）<strong>需要管理员权限</strong>，所有指令前需加 <code>sudo</code>；</li>
+<li>所有指令的核心参数是「服务名」（如 <code>clamav-daemon</code>、<code>ssh</code>），需准确输入；</li>
+<li>旧版 <code>/etc/init.d/</code> 命令仍可兼容，但优先使用 <code>systemctl</code>。</li>
+</ol>
+<h3 id="7-1-查看服务状态"><a href="#7-1-查看服务状态" class="headerlink" title="7.1 查看服务状态"></a>7.1 查看服务状态</h3><h4 id="7-1-1-查看单个服务详细状态（推荐）"><a href="#7-1-1-查看单个服务详细状态（推荐）" class="headerlink" title="7.1.1 查看单个服务详细状态（推荐）"></a>7.1.1 查看单个服务详细状态（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status 服务名</span><br><span class="line"><span class="comment"># 示例：查看ClamAV守护进程状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status clamav-daemon</span><br></pre></td></tr></table></figure>
+<p><strong>状态解读</strong>（终端第一行输出）：</p>
+<ul>
+<li><code>active (running)</code>：服务正常运行；</li>
+<li><code>inactive (dead)</code>：服务未启动&#x2F;已停止；</li>
+<li><code>failed</code>：服务启动失败（需查看日志排查）；</li>
+<li><code>enabled</code>：开机自启已开启；<code>disabled</code>：开机自启已关闭。</li>
 </ul>
-<h3 id="服务配置"><a href="#服务配置" class="headerlink" title="服务配置"></a>服务配置</h3><ul>
-<li><code>/etc/rc.d/rc.local</code> - 开机自启动脚本配置文件</li>
-<li><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code> - 开启路由转发</li>
-</ul>
+<h4 id="7-1-2-快速判断服务是否运行"><a href="#7-1-2-快速判断服务是否运行" class="headerlink" title="7.1.2 快速判断服务是否运行"></a>7.1.2 快速判断服务是否运行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active 服务名</span><br><span class="line"><span class="comment"># 示例：判断ssh服务是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active ssh</span><br><span class="line"><span class="comment"># 输出：running/inactive/failed</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7-1-3-查看所有已启动的服务"><a href="#7-1-3-查看所有已启动的服务" class="headerlink" title="7.1.3 查看所有已启动的服务"></a>7.1.3 查看所有已启动的服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-units --<span class="built_in">type</span>=service --state=running</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-1-4-查看所有服务（含自启状态）"><a href="#7-1-4-查看所有服务（含自启状态）" class="headerlink" title="7.1.4 查看所有服务（含自启状态）"></a>7.1.4 查看所有服务（含自启状态）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-unit-files --<span class="built_in">type</span>=service</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-服务启动-停止-重启-重载"><a href="#7-2-服务启动-停止-重启-重载" class="headerlink" title="7.2 服务启动&#x2F;停止&#x2F;重启&#x2F;重载"></a>7.2 服务启动&#x2F;停止&#x2F;重启&#x2F;重载</h3><h4 id="7-2-1-启动服务（仅本次生效）"><a href="#7-2-1-启动服务（仅本次生效）" class="headerlink" title="7.2.1 启动服务（仅本次生效）"></a>7.2.1 启动服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start 服务名</span><br><span class="line"><span class="comment"># 示例：启动apache2服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start apache2</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-2-2-停止服务（仅本次生效）"><a href="#7-2-2-停止服务（仅本次生效）" class="headerlink" title="7.2.2 停止服务（仅本次生效）"></a>7.2.2 停止服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop 服务名</span><br><span class="line"><span class="comment"># 示例：停止networking服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop networking</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-2-3-重启服务（修改配置后必用）"><a href="#7-2-3-重启服务（修改配置后必用）" class="headerlink" title="7.2.3 重启服务（修改配置后必用）"></a>7.2.3 重启服务（修改配置后必用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart 服务名</span><br><span class="line"><span class="comment"># 示例：重启Docker服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-2-4-重载配置（无需重启服务，轻量生效）"><a href="#7-2-4-重载配置（无需重启服务，轻量生效）" class="headerlink" title="7.2.4 重载配置（无需重启服务，轻量生效）"></a>7.2.4 重载配置（无需重启服务，轻量生效）</h4><p>适用于仅修改配置文件的场景（如sshd_config、clamd.conf）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload 服务名</span><br><span class="line"><span class="comment"># 示例：重载SSH配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload ssh</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-设置开机自启-关闭自启（永久生效）"><a href="#7-3-设置开机自启-关闭自启（永久生效）" class="headerlink" title="7.3 设置开机自启&#x2F;关闭自启（永久生效）"></a>7.3 设置开机自启&#x2F;关闭自启（永久生效）</h3><h4 id="7-3-1-启用开机自启"><a href="#7-3-1-启用开机自启" class="headerlink" title="7.3.1 启用开机自启"></a>7.3.1 启用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：设置MySQL开机自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> mysql</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-2-禁用开机自启"><a href="#7-3-2-禁用开机自启" class="headerlink" title="7.3.2 禁用开机自启"></a>7.3.2 禁用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：关闭UFW防火墙自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> ufw</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-3-快速判断自启状态"><a href="#7-3-3-快速判断自启状态" class="headerlink" title="7.3.3 快速判断自启状态"></a>7.3.3 快速判断自启状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled 服务名</span><br><span class="line"><span class="comment"># 示例：检查apache2是否自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled apache2</span><br><span class="line"><span class="comment"># 输出：enabled/disabled</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-4-旧版兼容命令（备用）"><a href="#7-4-旧版兼容命令（备用）" class="headerlink" title="7.4 旧版兼容命令（备用）"></a>7.4 旧版兼容命令（备用）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动/重启/停止服务（旧版方式）</span></span><br><span class="line">/etc/init.d/apache2 start</span><br><span class="line">/etc/init.d/apache2 restart</span><br><span class="line">/etc/init.d/apache2 stop</span><br><span class="line">service networking restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-5-实用技巧：快速查找准确服务名"><a href="#7-5-实用技巧：快速查找准确服务名" class="headerlink" title="7.5 实用技巧：快速查找准确服务名"></a>7.5 实用技巧：快速查找准确服务名</h3><h4 id="方法1：模糊搜索（推荐）"><a href="#方法1：模糊搜索（推荐）" class="headerlink" title="方法1：模糊搜索（推荐）"></a>方法1：模糊搜索（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法：systemctl | grep 关键词</span></span><br><span class="line">systemctl | grep ssh    <span class="comment"># 搜索SSH相关服务</span></span><br><span class="line">systemctl | grep clamav <span class="comment"># 搜索ClamAV相关服务</span></span><br><span class="line">systemctl | grep network <span class="comment"># 搜索网络相关服务</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方法2：查看服务文件"><a href="#方法2：查看服务文件" class="headerlink" title="方法2：查看服务文件"></a>方法2：查看服务文件</h4><p>服务配置文件位于 <code>/lib/systemd/system/</code> 或 <code>/etc/systemd/system/</code>，文件名以<code>.service</code>结尾，去掉后缀即为服务名：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有.service文件</span></span><br><span class="line"><span class="built_in">ls</span> /lib/systemd/system/*.service</span><br><span class="line"><span class="comment"># 模糊查找某类服务</span></span><br><span class="line"><span class="built_in">ls</span> /lib/systemd/system/*docker*.service</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="8-包管理"><a href="#8-包管理" class="headerlink" title="8. 包管理"></a>8. 包管理</h2><h3 id="Debian-Ubuntu包管理"><a href="#Debian-Ubuntu包管理" class="headerlink" title="Debian&#x2F;Ubuntu包管理"></a>Debian&#x2F;Ubuntu包管理</h3><ul>
 <li><code>apt-get update</code> - 更新软件包列表</li>
 <li><code>apt-get upgrade</code> - 升级已安装的软件包</li>
@@ -5578,26 +5610,27 @@ StartupNotify=false
 <li><code>service iptables stop</code> - 停止iptables防火墙</li>
 <li><code>ufw disable</code> - 禁用UFW防火墙</li>
 <li><code>ufw enable</code> - 启用UFW防火墙</li>
+<li><code>ufw status</code> - 查看UFW防火墙状态</li>
 </ul>
-<h3 id="网络共享"><a href="#网络共享" class="headerlink" title="网络共享"></a>网络共享</h3><ul>
-<li><code>mount -t smbfs -o username=user,password=pass //WinClient/share /mnt/share</code> - 挂载Windows网络共享</li>
+<h3 id="开机自启配置"><a href="#开机自启配置" class="headerlink" title="开机自启配置"></a>开机自启配置</h3><ul>
+<li><code>/etc/rc.d/rc.local</code> - 开机自启动脚本配置文件</li>
+<li><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code> - 临时开启路由转发</li>
+<li><code>systemctl enable 服务名</code> - 永久设置服务开机自启（推荐）</li>
 </ul>
-<h3 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h3><ul>
+<h3 id="网卡与DNS配置"><a href="#网卡与DNS配置" class="headerlink" title="网卡与DNS配置"></a>网卡与DNS配置</h3><ul>
 <li><code>/etc/network/interfaces</code> - 网卡配置文件路径</li>
 <li><code>ifconfig eth0 192.168.0.33</code> - 设置临时IP地址</li>
-</ul>
-<h3 id="DNS配置"><a href="#DNS配置" class="headerlink" title="DNS配置"></a>DNS配置</h3><ul>
 <li><code>/etc/resolv.conf</code> - DNS配置文件路径</li>
-<li><code>nameserver 114.114.114.114</code> - 设置DNS服务器</li>
+<li><code>nameserver 114.114.114.114</code> - 设置DNS服务器（临时生效）</li>
 </ul>
 <h3 id="系统工具"><a href="#系统工具" class="headerlink" title="系统工具"></a>系统工具</h3><ul>
 <li><code>wmic product &gt; ins.txt</code> - 查看安装软件信息（Windows命令）</li>
 <li><code>systeminfo</code> - 查看系统信息（Windows命令）</li>
-<li><code>whoami</code> - 查看当前用户及权限（Windows命令）</li>
+<li><code>whoami</code> - 查看当前用户及权限（Linux&#x2F;Windows通用）</li>
 <li><code>whoami /all</code> - 查看当前用户详细权限信息（Windows命令）</li>
 </ul>
 <hr>
-<p><em>注：本笔记中包含部分Windows命令，已特别标注。Kali Linux主要使用Linux命令，部分命令可能需要root权限才能执行。</em></p>
+<p><em>注：本笔记中包含部分Windows命令，已特别标注。Kali Linux主要使用Linux命令，部分命令需要root权限（加sudo）才能执行；服务管理优先使用systemctl，兼容旧版service&#x2F;init.d命令。</em></p>
 
       
     </div>
@@ -5836,14 +5869,14 @@ StartupNotify=false
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">151k</span>
+    <span title="站点总字数">152k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">8:23</span>
+    <span title="站点阅读时长">8:26</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

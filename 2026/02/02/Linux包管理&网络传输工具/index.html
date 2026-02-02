@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zhuzhuxia-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zhuzhuxia-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zq-rookie-hacker.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":"18px","offset":0},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"placeholder":"搜索文章...","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、核心框架升级   核心阵营 核心定位 代表工具 核心解决的问题 安全场景优先级    包管理工具 软件全生命周期管理（安装&#x2F;更新&#x2F;卸载&#x2F;依赖） dpkg、apt、gdebi-core、rpm、yum、dnf、flatpak、snap 系统工具部署、CTF环境搭建、漏洞复现依赖处理 🌟🌟🌟🌟🌟（核心必备）   通用网络文件传输工具 网络文件&#x2F;数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux包管理&amp;网络传输工具">
+<meta property="og:url" content="https://zq-rookie-hacker.github.io/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/">
+<meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog">
+<meta property="og:description" content="一、核心框架升级   核心阵营 核心定位 代表工具 核心解决的问题 安全场景优先级    包管理工具 软件全生命周期管理（安装&#x2F;更新&#x2F;卸载&#x2F;依赖） dpkg、apt、gdebi-core、rpm、yum、dnf、flatpak、snap 系统工具部署、CTF环境搭建、漏洞复现依赖处理 🌟🌟🌟🌟🌟（核心必备）   通用网络文件传输工具 网络文件&#x2F;数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-02T15:30:28.380Z">
+<meta property="article:modified_time" content="2026-02-02T15:36:58.700Z">
+<meta property="article:author" content="ZQ-Rookie-Hacker">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="包管理工具">
+<meta property="article:tag" content="网络传输工具">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zq-rookie-hacker.github.io/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zq-rookie-hacker.github.io/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/","path":"2026/02/02/Linux包管理&网络传输工具/","title":"Linux包管理&网络传输工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux包管理&网络传输工具 | ZQ-Rookie-Hacker's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"script_tag":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","app_key":"bIFSRG6LeUO90VdfRBHUXNQs","interval":900,"minimum_time":10,"cache":true,"cache_expire":900,"betterPerformance":true,"id":"path"}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ZQ-Rookie-Hacker's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%A1%86%E6%9E%B6%E5%8D%87%E7%BA%A7"><span class="nav-text">一、核心框架升级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%AC%AC%E4%B8%80%E9%98%B5%E8%90%A5%EF%BC%9A%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="nav-text">二、第一阵营：包管理工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89Debian%E7%B3%BB"><span class="nav-text">（一）Debian系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BA%95%E5%B1%82%E5%B7%A5%E5%85%B7%EF%BC%9Adpkg"><span class="nav-text">1. 底层工具：dpkg</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%8E%B0%E4%BB%A3%E9%AB%98%E5%B1%82%E5%B7%A5%E5%85%B7%EF%BC%9Aapt"><span class="nav-text">2. 现代高层工具：apt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%B8%93%E7%94%A8%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7%EF%BC%9Agdebi-core"><span class="nav-text">3. 专用辅助工具：gdebi-core</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89RPM%E7%B3%BB%EF%BC%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="nav-text">（二）RPM系（服务器渗透常用）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BA%95%E5%B1%82%E5%B7%A5%E5%85%B7%EF%BC%9Arpm"><span class="nav-text">1. 底层工具：rpm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%8E%B0%E4%BB%A3%E9%AB%98%E5%B1%82%E5%B7%A5%E5%85%B7%EF%BC%9Adnf"><span class="nav-text">2. 现代高层工具：dnf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-RPM%E7%B3%BB%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7%EF%BC%9Ayum-utils"><span class="nav-text">3. RPM系辅助工具：yum-utils</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E4%B8%89%EF%BC%89%E8%B7%A8%E5%8F%91%E8%A1%8C%E7%89%88%E9%80%9A%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="nav-text">（三）跨发行版通用包管理工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-flatpak-snap"><span class="nav-text">1. flatpak&#x2F;snap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E5%9B%9B%EF%BC%89Debian%E7%B3%BB-RPM%E7%B3%BB-%E5%AE%89%E5%85%A8%E5%9C%BA%E6%99%AF%E6%98%A0%E5%B0%84%E8%A1%A8"><span class="nav-text">（四）Debian系&#x2F;RPM系 安全场景映射表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AC%AC%E4%BA%8C%E9%98%B5%E8%90%A5%EF%BC%9A%E9%80%9A%E7%94%A8%E7%BD%91%E7%BB%9C%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7"><span class="nav-text">三、第二阵营：通用网络文件传输工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-wget%EF%BC%88%E8%A1%A5%E5%85%85%E5%AE%89%E5%85%A8%E5%9C%BA%E6%99%AF%E4%B8%93%E5%B1%9E%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-text">1. wget（补充安全场景专属参数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-curl"><span class="nav-text">2. curl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wget-curl-%E5%AE%89%E5%85%A8%E5%9C%BA%E6%99%AF%E5%AF%B9%E6%AF%94%E8%A1%A8"><span class="nav-text">wget &amp; curl 安全场景对比表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%AC%AC%E4%B8%89%E9%98%B5%E8%90%A5%EF%BC%9A%E5%8C%85%E7%AE%A1%E7%90%86%E9%85%8D%E5%A5%97%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7"><span class="nav-text">四、第三阵营：包管理配套辅助工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-apt-mark"><span class="nav-text">1. apt-mark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-dpkg-reconfigure"><span class="nav-text">2. dpkg-reconfigure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-yum-utils"><span class="nav-text">3. yum-utils</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-synaptic"><span class="nav-text">4. synaptic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%B7%A8%E5%8F%91%E8%A1%8C%E7%89%88%E5%B7%A5%E5%85%B7%EF%BC%9Aflatpak-snap"><span class="nav-text">五、跨发行版工具：flatpak&#x2F;snap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B7%A5%E5%85%B7%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91"><span class="nav-text">六、工具底层逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%9F%A5%E8%AF%86%E8%84%89%E7%BB%9C"><span class="nav-text">七、知识脉络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%AE%B0%E5%BF%86%E7%82%B9"><span class="nav-text">核心记忆点</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZQ-Rookie-Hacker"
+      src="/images/zhuzhuxia.jpg">
+  <p class="site-author-name" itemprop="name">ZQ-Rookie-Hacker</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZQ-Rookie-Hacker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZQ-Rookie-Hacker" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux包管理&amp;网络传输工具 | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux包管理&网络传输工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-02 23:30:28 / 修改时间：23:36:58" itemprop="dateCreated datePublished" datetime="2026-02-02T23:30:28+08:00">2026-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/" class="post-meta-item leancloud_visitors" data-flag-title="Linux包管理&网络传输工具" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、核心框架升级"><a href="#一、核心框架升级" class="headerlink" title="一、核心框架升级"></a>一、核心框架升级</h2><table>
+<thead>
+<tr>
+<th>核心阵营</th>
+<th>核心定位</th>
+<th>代表工具</th>
+<th>核心解决的问题</th>
+<th>安全场景优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>包管理工具</td>
+<td>软件全生命周期管理（安装&#x2F;更新&#x2F;卸载&#x2F;依赖）</td>
+<td>dpkg、apt、gdebi-core、rpm、yum、dnf、flatpak、snap</td>
+<td>系统工具部署、CTF环境搭建、漏洞复现依赖处理</td>
+<td>🌟🌟🌟🌟🌟（核心必备）</td>
+</tr>
+<tr>
+<td>通用网络文件传输工具</td>
+<td>网络文件&#x2F;数据传输（拉取&#x2F;推送）</td>
+<td>wget、curl</td>
+<td>漏洞利用脚本下载、靶机文件上传、接口测试</td>
+<td>🌟🌟🌟🌟🌟（渗透核心）</td>
+</tr>
+<tr>
+<td>包管理配套辅助工具</td>
+<td>包管理优化（查询&#x2F;配置&#x2F;清理）</td>
+<td>aptitude、synaptic、dpkg-reconfigure、apt-mark、yum-utils</td>
+<td>工具版本锁定（CTF兼容）、依赖清理（避免暴露痕迹）</td>
+<td>🌟🌟🌟🌟（实战常用）</td>
+</tr>
+</tbody></table>
+<p><strong>安全核心原则</strong>：</p>
+<ol>
+<li>渗透测试中「优先使用本地包安装工具」（避免依赖仓库暴露网络痕迹）；</li>
+<li>服务器配置中「用apt-mark锁定工具版本」（防止自动升级导致漏洞复现失败）；</li>
+<li>网络传输优先用「wget&#x2F;curl的无痕迹参数」（如忽略SSL证书、禁用日志）。</li>
+</ol>
+<h2 id="二、第一阵营：包管理工具"><a href="#二、第一阵营：包管理工具" class="headerlink" title="二、第一阵营：包管理工具"></a>二、第一阵营：包管理工具</h2><h3 id="（一）Debian系"><a href="#（一）Debian系" class="headerlink" title="（一）Debian系"></a>（一）Debian系</h3><h4 id="1-底层工具：dpkg"><a href="#1-底层工具：dpkg" class="headerlink" title="1. 底层工具：dpkg"></a>1. 底层工具：dpkg</h4><ul>
+<li><strong>安全实战场景</strong>：渗透测试中，通过<code>dpkg -L 软件名</code>查询工具安装路径（如Hydra、Nmap），便于调用二进制文件或修改配置；</li>
+<li><strong>常见错误修复</strong>：<ul>
+<li>安装deb包时提示“权限不足”：<code>sudo dpkg -i 包名.deb</code>（加sudo避免权限问题）；</li>
+<li>安装失败后无法重新安装：<code>sudo dpkg --purge 软件名</code>（彻底清理残留，再重新安装）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-现代高层工具：apt"><a href="#2-现代高层工具：apt" class="headerlink" title="2. 现代高层工具：apt"></a>2. 现代高层工具：apt</h4><ul>
+<li><strong>安全专属命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt autoremove -y    <span class="comment"># 清理无用依赖（渗透后避免残留工具痕迹）</span></span><br><span class="line"><span class="built_in">sudo</span> apt clean            <span class="comment"># 清空apt缓存（防止缓存中留存敏感工具包）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark hold nmap   <span class="comment"># 锁定Nmap版本（CTF中避免自动升级导致脚本不兼容）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark unhold nmap <span class="comment"># 解锁版本（后续需要升级时使用）</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>渗透测试避坑点</strong>：<code>apt update</code>会联网获取仓库信息，可能暴露靶机IP，无网络场景下禁用，直接用本地包安装。</li>
+</ul>
+<h4 id="3-专用辅助工具：gdebi-core"><a href="#3-专用辅助工具：gdebi-core" class="headerlink" title="3. 专用辅助工具：gdebi-core"></a>3. 专用辅助工具：gdebi-core</h4><ul>
+<li><strong>安全场景核心优势</strong>：离线环境下，提前下载deb包和依赖，用<code>gdebi</code>一键安装（无需联网，避免暴露），比<code>dpkg+apt</code>更简洁，适合靶机无网络部署工具。</li>
+</ul>
+<h3 id="（二）RPM系（服务器渗透常用）"><a href="#（二）RPM系（服务器渗透常用）" class="headerlink" title="（二）RPM系（服务器渗透常用）"></a>（二）RPM系（服务器渗透常用）</h3><h4 id="1-底层工具：rpm"><a href="#1-底层工具：rpm" class="headerlink" title="1. 底层工具：rpm"></a>1. 底层工具：rpm</h4><ul>
+<li><strong>安全实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -qc 软件名            <span class="comment"># 查询软件的配置文件路径（如Apache、MySQL的配置文件，便于漏洞利用）</span></span><br><span class="line">rpm -qf /usr/bin/nmap     <span class="comment"># 反向查询文件属于哪个软件包（渗透中发现未知文件时使用）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-现代高层工具：dnf"><a href="#2-现代高层工具：dnf" class="headerlink" title="2. 现代高层工具：dnf"></a>2. 现代高层工具：dnf</h4><ul>
+<li><strong>安全场景命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install -y --nogpgcheck 软件名 <span class="comment"># 跳过GPG签名验证（渗透中遇到无签名的漏洞工具包时使用）</span></span><br><span class="line"><span class="built_in">sudo</span> dnf remove -y 软件名 &amp;&amp; dnf clean all <span class="comment"># 卸载工具并清理缓存（避免残留）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-RPM系辅助工具：yum-utils"><a href="#3-RPM系辅助工具：yum-utils" class="headerlink" title="3. RPM系辅助工具：yum-utils"></a>3. RPM系辅助工具：yum-utils</h4><ul>
+<li><strong>核心定位</strong>：RPM系必备辅助工具包，包含<code>yum-config-manager</code>（仓库配置）、<code>yum-remove-with-leaves</code>（清理无用依赖）；</li>
+<li><strong>安全实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-utils          <span class="comment"># 安装工具包</span></span><br><span class="line"><span class="built_in">sudo</span> yum-config-manager --<span class="built_in">disable</span> *    <span class="comment"># 禁用所有仓库（渗透测试中避免联网）</span></span><br><span class="line"><span class="built_in">sudo</span> yum remove-with-leaves 软件名     <span class="comment"># 卸载工具并清理关联依赖（无残留）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="（三）跨发行版通用包管理工具"><a href="#（三）跨发行版通用包管理工具" class="headerlink" title="（三）跨发行版通用包管理工具"></a>（三）跨发行版通用包管理工具</h3><h4 id="1-flatpak-snap"><a href="#1-flatpak-snap" class="headerlink" title="1. flatpak&#x2F;snap"></a>1. flatpak&#x2F;snap</h4><ul>
+<li><strong>安全优势</strong>：沙箱运行（工具与系统隔离，避免恶意工具篡改系统文件）；</li>
+<li><strong>安全局限</strong>：包体积大，渗透测试中占用靶机磁盘空间，适合长期服务器配置，不适合临时渗透环境；</li>
+<li><strong>实战命令补充</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">flatpak search nmap       <span class="comment"># 搜索工具（跨发行版通用）</span></span><br><span class="line">flatpak uninstall nmap    <span class="comment"># 卸载工具（自动清理沙箱残留）</span></span><br><span class="line">snap list                 <span class="comment"># 查看已安装的snap工具（避免遗漏暴露）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="（四）Debian系-RPM系-安全场景映射表"><a href="#（四）Debian系-RPM系-安全场景映射表" class="headerlink" title="（四）Debian系&#x2F;RPM系 安全场景映射表"></a>（四）Debian系&#x2F;RPM系 安全场景映射表</h3><table>
+<thead>
+<tr>
+<th>安全场景需求</th>
+<th>Debian系（Kali）</th>
+<th>RPM系（服务器）</th>
+<th>核心目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>锁定工具版本（CTF兼容）</td>
+<td><code>apt mark hold 软件名</code></td>
+<td><code>yum versionlock add 软件名</code></td>
+<td>防止自动升级导致漏洞复现失败</td>
+</tr>
+<tr>
+<td>清理工具残留（避免暴露）</td>
+<td><code>apt autoremove + apt clean</code></td>
+<td><code>yum remove-with-leaves + yum clean all</code></td>
+<td>渗透后清理痕迹</td>
+</tr>
+<tr>
+<td>离线安装工具</td>
+<td><code>gdebi 本地包.deb</code></td>
+<td><code>dnf localinstall 本地包.rpm</code></td>
+<td>无网络环境部署，不暴露IP</td>
+</tr>
+<tr>
+<td>查询工具配置文件</td>
+<td>&#96;dpkg -L 软件名</td>
+<td>grep conf&#96;</td>
+<td><code>rpm -qc 软件名</code></td>
+</tr>
+</tbody></table>
+<h2 id="三、第二阵营：通用网络文件传输工具"><a href="#三、第二阵营：通用网络文件传输工具" class="headerlink" title="三、第二阵营：通用网络文件传输工具"></a>三、第二阵营：通用网络文件传输工具</h2><h3 id="1-wget（补充安全场景专属参数）"><a href="#1-wget（补充安全场景专属参数）" class="headerlink" title="1. wget（补充安全场景专属参数）"></a>1. wget（补充安全场景专属参数）</h3><ul>
+<li><strong>安全核心参数</strong>（渗透测试必记）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget -q URL               <span class="comment"># 静默下载（不输出日志，避免暴露操作）</span></span><br><span class="line">wget --no-check-certificate URL <span class="comment"># 忽略SSL证书错误（靶机HTTPS证书无效时使用）</span></span><br><span class="line">wget -O /dev/null URL     <span class="comment"># 下载后丢弃文件（仅测试靶机网络连通性，不残留）</span></span><br><span class="line">wget -r -np -nH --cut-dirs=3 URL <span class="comment"># 递归下载靶机目录（渗透测试中下载靶机文件）</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>常见错误修复</strong>：<ul>
+<li>下载超时：<code>wget -c --timeout=30 URL</code>（断点续传+超时设置）；</li>
+<li>被靶机防火墙拦截：<code>wget --user-agent=&quot;Mozilla/5.0&quot; URL</code>（伪装浏览器UA，绕过拦截）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-curl"><a href="#2-curl" class="headerlink" title="2. curl"></a>2. curl</h3><ul>
+<li><strong>安全核心场景</strong>：<ul>
+<li>漏洞利用（文件上传）：<code>curl -X POST -F &quot;file=@./exploit.php&quot; http://靶机IP/upload.php</code>（上传漏洞利用脚本）；</li>
+<li>接口测试（SQL注入）：<code>curl &quot;http://靶机IP/index.php?id=1&#39; and 1=1--+&quot;</code>（测试注入点）；</li>
+<li>无痕迹访问：<code>curl -s -k -o /dev/null URL</code>（静默+忽略SSL+不保存文件）；</li>
+</ul>
+</li>
+<li><strong>安全专属参数</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-k/--insecure  <span class="comment"># 忽略SSL证书验证（靶机自签名证书常用）</span></span><br><span class="line">-s/--silent    <span class="comment"># 静默模式（不输出日志，避免暴露）</span></span><br><span class="line">-A/--user-agent <span class="comment"># 伪装用户代理（绕过WAF拦截）</span></span><br><span class="line">-H/--header    <span class="comment"># 自定义请求头（如添加Cookie、Referer）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="wget-curl-安全场景对比表"><a href="#wget-curl-安全场景对比表" class="headerlink" title="wget &amp; curl 安全场景对比表"></a>wget &amp; curl 安全场景对比表</h3><table>
+<thead>
+<tr>
+<th>安全场景</th>
+<th>首选工具</th>
+<th>核心命令示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>下载漏洞利用脚本（无痕迹）</td>
+<td>wget</td>
+<td><code>wget -q --no-check-certificate 脚本URL -O /tmp/exploit.sh</code></td>
+</tr>
+<tr>
+<td>靶机文件上传（POST请求）</td>
+<td>curl</td>
+<td><code>curl -s -k -F &quot;file=@./shell.php&quot; 靶机上传地址</code></td>
+</tr>
+<tr>
+<td>测试靶机接口（SQL注入&#x2F;SSRF）</td>
+<td>curl</td>
+<td><code>curl -s &quot;http://靶机IP/?url=http://内网IP&quot;</code>（SSRF测试）</td>
+</tr>
+<tr>
+<td>递归下载靶机目录文件</td>
+<td>wget</td>
+<td><code>wget -r -np -nH 靶机目录URL</code></td>
+</tr>
+</tbody></table>
+<h2 id="四、第三阵营：包管理配套辅助工具"><a href="#四、第三阵营：包管理配套辅助工具" class="headerlink" title="四、第三阵营：包管理配套辅助工具"></a>四、第三阵营：包管理配套辅助工具</h2><h3 id="1-apt-mark"><a href="#1-apt-mark" class="headerlink" title="1. apt-mark"></a>1. apt-mark</h3><ul>
+<li><strong>CTF实战场景</strong>：锁定Python 3.9版本（部分CTF脚本仅兼容该版本）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt mark hold python3.9</span><br></pre></td></tr></table></figure></li>
+<li><strong>解锁方法</strong>：<code>sudo apt mark unhold python3.9</code>（后续需要升级时使用）。</li>
+</ul>
+<h3 id="2-dpkg-reconfigure"><a href="#2-dpkg-reconfigure" class="headerlink" title="2. dpkg-reconfigure"></a>2. dpkg-reconfigure</h3><ul>
+<li><strong>实战场景</strong>：渗透测试中，重新配置MySQL的端口（默认3306，改为自定义端口避免被扫描）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dpkg-reconfigure mysql-server</span><br></pre></td></tr></table></figure></li>
+<li>操作逻辑：执行后进入图形化界面，修改端口、密码等配置，无需手动编辑配置文件。</li>
+</ul>
+<h3 id="3-yum-utils"><a href="#3-yum-utils" class="headerlink" title="3. yum-utils"></a>3. yum-utils</h3><ul>
+<li><strong>核心工具</strong>：<code>yum-versionlock</code>（版本锁定）、<code>yum-config-manager</code>（仓库管理）；</li>
+<li><strong>实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-versionlock  <span class="comment"># 安装版本锁定工具</span></span><br><span class="line"><span class="built_in">sudo</span> yum versionlock add nmap        <span class="comment"># 锁定Nmap版本（避免自动升级）</span></span><br><span class="line"><span class="built_in">sudo</span> yum versionlock list            <span class="comment"># 查看已锁定的工具</span></span><br><span class="line"><span class="built_in">sudo</span> yum-config-manager --add-repo 仓库URL <span class="comment"># 添加第三方安全工具仓库（如EPEL）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-synaptic"><a href="#4-synaptic" class="headerlink" title="4. synaptic"></a>4. synaptic</h3><ul>
+<li><strong>实战用途</strong>：CTF环境搭建时，通过图形化界面快速搜索、安装多个依赖工具（如Python库、漏洞复现工具），直观查看依赖关系，避免遗漏。</li>
+</ul>
+<h2 id="五、跨发行版工具：flatpak-snap"><a href="#五、跨发行版工具：flatpak-snap" class="headerlink" title="五、跨发行版工具：flatpak&#x2F;snap"></a>五、跨发行版工具：flatpak&#x2F;snap</h2><ul>
+<li><strong>安全场景局限</strong>：沙箱运行可能限制漏洞利用（如无法修改系统文件），不适合漏洞复现；</li>
+<li><strong>适用场景</strong>：服务器长期部署安全工具（如Metasploit、Burp Suite），沙箱隔离减少被攻击风险；</li>
+<li><strong>实战命令补充</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flatpak search metasploit         <span class="comment"># 搜索工具</span></span><br><span class="line">flatpak install flathub com.metasploit.Metasploit <span class="comment"># 安装Metasploit</span></span><br><span class="line">flatpak uninstall com.metasploit.Metasploit       <span class="comment"># 卸载工具（无残留）</span></span><br><span class="line">snap list --all                   <span class="comment"># 查看所有snap工具（避免遗漏暴露）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="六、工具底层逻辑"><a href="#六、工具底层逻辑" class="headerlink" title="六、工具底层逻辑"></a>六、工具底层逻辑</h2><ol>
+<li><strong>包管理工具的底层调用链</strong>：所有高层工具（apt、yum、gdebi）最终都调用底层工具（dpkg、rpm）执行安装&#x2F;卸载——理解这一点，就知道“安装失败时，用底层工具清理残留”是通用解决方案；</li>
+<li><strong>网络传输工具的核心差异</strong>：wget是“下载专用”，curl是“传输瑞士军刀”——渗透测试中，下载文件用wget（简单高效），上传&#x2F;接口测试用curl（功能全面）；</li>
+<li><strong>安全场景的核心诉求</strong>：无痕迹、版本兼容、离线可用——所有安全相关的命令和选型，都是围绕这三个诉求展开（如静默参数、版本锁定、本地包安装）。</li>
+</ol>
+<h2 id="七、知识脉络"><a href="#七、知识脉络" class="headerlink" title="七、知识脉络"></a>七、知识脉络</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Linux工具核心体系（安全专业版）</span><br><span class="line">├─ 包管理工具（管软件：安装/更新/卸载/依赖）</span><br><span class="line">│  ├─ 底层工具（本地包执行，无网络/依赖）：dpkg（Debian）、rpm（RPM）→ 安全场景：查询路径、清理残留</span><br><span class="line">│  ├─ 高层工具（网络+仓库+自动依赖）</span><br><span class="line">│  │  ├─ 传统版（脚本首选）：apt-get（Debian）、yum（RPM）→ 安全场景：脚本部署、稳定可靠</span><br><span class="line">│  │  └─ 现代版（日常首选）：apt（Debian）、dnf（RPM）→ 安全场景：版本锁定、依赖清理</span><br><span class="line">│  ├─ 专用辅助工具（本地包优化）：gdebi-core（Debian）、dnf localinstall（RPM）→ 安全场景：离线安装、无痕迹部署</span><br><span class="line">│  └─ 跨发行版通用：flatpak、snap → 安全场景：服务器长期部署（沙箱隔离）</span><br><span class="line">│</span><br><span class="line">├─ 网络传输工具（管文件：拉取/推送）</span><br><span class="line">│  ├─ wget：专注下载，轻量简单 → 安全场景：漏洞脚本下载、无痕迹递归下载</span><br><span class="line">│  └─ curl：多功能传输 → 安全场景：文件上传、接口测试（SQLi/SSRF）、伪装请求</span><br><span class="line">│</span><br><span class="line">└─ 配套辅助工具（包管理补充）</span><br><span class="line">   ├─ 查询类：apt-cache、rpm -qc → 安全场景：配置文件查询、反向文件归属查询</span><br><span class="line">   ├─ 配置类：dpkg-reconfigure、yum-config-manager → 安全场景：工具端口修改、仓库管理</span><br><span class="line">   ├─ 优化类：apt-mark（版本锁定）、yum-versionlock → 安全场景：CTF兼容、漏洞复现版本匹配</span><br><span class="line">   └─ 图形化：synaptic → 安全场景：CTF环境依赖批量安装</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心记忆点"><a href="#核心记忆点" class="headerlink" title="核心记忆点"></a>核心记忆点</h2><ol>
+<li><strong>包管理：本地优先、版本锁定、安装后清理</strong>——渗透测试避免暴露，CTF保证兼容；</li>
+<li><strong>传输工具：wget下载、curl上传，静默参数必加</strong>——减少操作痕迹，绕过WAF拦截；</li>
+<li><strong>辅助工具：查询用dpkg&#x2F;rpm，清理用apt autoremove</strong>——快速定位路径，避免残留风险。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/" rel="tag"># 包管理工具</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/" rel="tag"># 网络传输工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/29/crawlers%E5%9F%BA%E7%A1%80/" rel="prev" title="crawlers基础">
+                  <i class="fa fa-angle-left"></i> crawlers基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZQ-Rookie-Hacker</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">155k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">8:35</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"ZQ-Rookie-Hacker/ZQ-Rookie-Hacker.github.io","issue_term":"pathname","theme":"preferred-color-scheme","label":"comment"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

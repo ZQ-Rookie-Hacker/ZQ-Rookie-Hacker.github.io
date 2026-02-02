@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,290 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Linux包管理&网络传输工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-02 23:30:28 / 修改时间：23:36:58" itemprop="dateCreated datePublished" datetime="2026-02-02T23:30:28+08:00">2026-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2026/02/02/Linux%E5%8C%85%E7%AE%A1%E7%90%86&%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%B7%A5%E5%85%B7/" class="post-meta-item leancloud_visitors" data-flag-title="Linux包管理&网络传输工具" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="一、核心框架升级"><a href="#一、核心框架升级" class="headerlink" title="一、核心框架升级"></a>一、核心框架升级</h2><table>
+<thead>
+<tr>
+<th>核心阵营</th>
+<th>核心定位</th>
+<th>代表工具</th>
+<th>核心解决的问题</th>
+<th>安全场景优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>包管理工具</td>
+<td>软件全生命周期管理（安装&#x2F;更新&#x2F;卸载&#x2F;依赖）</td>
+<td>dpkg、apt、gdebi-core、rpm、yum、dnf、flatpak、snap</td>
+<td>系统工具部署、CTF环境搭建、漏洞复现依赖处理</td>
+<td>🌟🌟🌟🌟🌟（核心必备）</td>
+</tr>
+<tr>
+<td>通用网络文件传输工具</td>
+<td>网络文件&#x2F;数据传输（拉取&#x2F;推送）</td>
+<td>wget、curl</td>
+<td>漏洞利用脚本下载、靶机文件上传、接口测试</td>
+<td>🌟🌟🌟🌟🌟（渗透核心）</td>
+</tr>
+<tr>
+<td>包管理配套辅助工具</td>
+<td>包管理优化（查询&#x2F;配置&#x2F;清理）</td>
+<td>aptitude、synaptic、dpkg-reconfigure、apt-mark、yum-utils</td>
+<td>工具版本锁定（CTF兼容）、依赖清理（避免暴露痕迹）</td>
+<td>🌟🌟🌟🌟（实战常用）</td>
+</tr>
+</tbody></table>
+<p><strong>安全核心原则</strong>：</p>
+<ol>
+<li>渗透测试中「优先使用本地包安装工具」（避免依赖仓库暴露网络痕迹）；</li>
+<li>服务器配置中「用apt-mark锁定工具版本」（防止自动升级导致漏洞复现失败）；</li>
+<li>网络传输优先用「wget&#x2F;curl的无痕迹参数」（如忽略SSL证书、禁用日志）。</li>
+</ol>
+<h2 id="二、第一阵营：包管理工具"><a href="#二、第一阵营：包管理工具" class="headerlink" title="二、第一阵营：包管理工具"></a>二、第一阵营：包管理工具</h2><h3 id="（一）Debian系"><a href="#（一）Debian系" class="headerlink" title="（一）Debian系"></a>（一）Debian系</h3><h4 id="1-底层工具：dpkg"><a href="#1-底层工具：dpkg" class="headerlink" title="1. 底层工具：dpkg"></a>1. 底层工具：dpkg</h4><ul>
+<li><strong>安全实战场景</strong>：渗透测试中，通过<code>dpkg -L 软件名</code>查询工具安装路径（如Hydra、Nmap），便于调用二进制文件或修改配置；</li>
+<li><strong>常见错误修复</strong>：<ul>
+<li>安装deb包时提示“权限不足”：<code>sudo dpkg -i 包名.deb</code>（加sudo避免权限问题）；</li>
+<li>安装失败后无法重新安装：<code>sudo dpkg --purge 软件名</code>（彻底清理残留，再重新安装）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-现代高层工具：apt"><a href="#2-现代高层工具：apt" class="headerlink" title="2. 现代高层工具：apt"></a>2. 现代高层工具：apt</h4><ul>
+<li><strong>安全专属命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt autoremove -y    <span class="comment"># 清理无用依赖（渗透后避免残留工具痕迹）</span></span><br><span class="line"><span class="built_in">sudo</span> apt clean            <span class="comment"># 清空apt缓存（防止缓存中留存敏感工具包）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark hold nmap   <span class="comment"># 锁定Nmap版本（CTF中避免自动升级导致脚本不兼容）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark unhold nmap <span class="comment"># 解锁版本（后续需要升级时使用）</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>渗透测试避坑点</strong>：<code>apt update</code>会联网获取仓库信息，可能暴露靶机IP，无网络场景下禁用，直接用本地包安装。</li>
+</ul>
+<h4 id="3-专用辅助工具：gdebi-core"><a href="#3-专用辅助工具：gdebi-core" class="headerlink" title="3. 专用辅助工具：gdebi-core"></a>3. 专用辅助工具：gdebi-core</h4><ul>
+<li><strong>安全场景核心优势</strong>：离线环境下，提前下载deb包和依赖，用<code>gdebi</code>一键安装（无需联网，避免暴露），比<code>dpkg+apt</code>更简洁，适合靶机无网络部署工具。</li>
+</ul>
+<h3 id="（二）RPM系（服务器渗透常用）"><a href="#（二）RPM系（服务器渗透常用）" class="headerlink" title="（二）RPM系（服务器渗透常用）"></a>（二）RPM系（服务器渗透常用）</h3><h4 id="1-底层工具：rpm"><a href="#1-底层工具：rpm" class="headerlink" title="1. 底层工具：rpm"></a>1. 底层工具：rpm</h4><ul>
+<li><strong>安全实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -qc 软件名            <span class="comment"># 查询软件的配置文件路径（如Apache、MySQL的配置文件，便于漏洞利用）</span></span><br><span class="line">rpm -qf /usr/bin/nmap     <span class="comment"># 反向查询文件属于哪个软件包（渗透中发现未知文件时使用）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-现代高层工具：dnf"><a href="#2-现代高层工具：dnf" class="headerlink" title="2. 现代高层工具：dnf"></a>2. 现代高层工具：dnf</h4><ul>
+<li><strong>安全场景命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install -y --nogpgcheck 软件名 <span class="comment"># 跳过GPG签名验证（渗透中遇到无签名的漏洞工具包时使用）</span></span><br><span class="line"><span class="built_in">sudo</span> dnf remove -y 软件名 &amp;&amp; dnf clean all <span class="comment"># 卸载工具并清理缓存（避免残留）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-RPM系辅助工具：yum-utils"><a href="#3-RPM系辅助工具：yum-utils" class="headerlink" title="3. RPM系辅助工具：yum-utils"></a>3. RPM系辅助工具：yum-utils</h4><ul>
+<li><strong>核心定位</strong>：RPM系必备辅助工具包，包含<code>yum-config-manager</code>（仓库配置）、<code>yum-remove-with-leaves</code>（清理无用依赖）；</li>
+<li><strong>安全实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-utils          <span class="comment"># 安装工具包</span></span><br><span class="line"><span class="built_in">sudo</span> yum-config-manager --<span class="built_in">disable</span> *    <span class="comment"># 禁用所有仓库（渗透测试中避免联网）</span></span><br><span class="line"><span class="built_in">sudo</span> yum remove-with-leaves 软件名     <span class="comment"># 卸载工具并清理关联依赖（无残留）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="（三）跨发行版通用包管理工具"><a href="#（三）跨发行版通用包管理工具" class="headerlink" title="（三）跨发行版通用包管理工具"></a>（三）跨发行版通用包管理工具</h3><h4 id="1-flatpak-snap"><a href="#1-flatpak-snap" class="headerlink" title="1. flatpak&#x2F;snap"></a>1. flatpak&#x2F;snap</h4><ul>
+<li><strong>安全优势</strong>：沙箱运行（工具与系统隔离，避免恶意工具篡改系统文件）；</li>
+<li><strong>安全局限</strong>：包体积大，渗透测试中占用靶机磁盘空间，适合长期服务器配置，不适合临时渗透环境；</li>
+<li><strong>实战命令补充</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">flatpak search nmap       <span class="comment"># 搜索工具（跨发行版通用）</span></span><br><span class="line">flatpak uninstall nmap    <span class="comment"># 卸载工具（自动清理沙箱残留）</span></span><br><span class="line">snap list                 <span class="comment"># 查看已安装的snap工具（避免遗漏暴露）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="（四）Debian系-RPM系-安全场景映射表"><a href="#（四）Debian系-RPM系-安全场景映射表" class="headerlink" title="（四）Debian系&#x2F;RPM系 安全场景映射表"></a>（四）Debian系&#x2F;RPM系 安全场景映射表</h3><table>
+<thead>
+<tr>
+<th>安全场景需求</th>
+<th>Debian系（Kali）</th>
+<th>RPM系（服务器）</th>
+<th>核心目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>锁定工具版本（CTF兼容）</td>
+<td><code>apt mark hold 软件名</code></td>
+<td><code>yum versionlock add 软件名</code></td>
+<td>防止自动升级导致漏洞复现失败</td>
+</tr>
+<tr>
+<td>清理工具残留（避免暴露）</td>
+<td><code>apt autoremove + apt clean</code></td>
+<td><code>yum remove-with-leaves + yum clean all</code></td>
+<td>渗透后清理痕迹</td>
+</tr>
+<tr>
+<td>离线安装工具</td>
+<td><code>gdebi 本地包.deb</code></td>
+<td><code>dnf localinstall 本地包.rpm</code></td>
+<td>无网络环境部署，不暴露IP</td>
+</tr>
+<tr>
+<td>查询工具配置文件</td>
+<td>&#96;dpkg -L 软件名</td>
+<td>grep conf&#96;</td>
+<td><code>rpm -qc 软件名</code></td>
+</tr>
+</tbody></table>
+<h2 id="三、第二阵营：通用网络文件传输工具"><a href="#三、第二阵营：通用网络文件传输工具" class="headerlink" title="三、第二阵营：通用网络文件传输工具"></a>三、第二阵营：通用网络文件传输工具</h2><h3 id="1-wget（补充安全场景专属参数）"><a href="#1-wget（补充安全场景专属参数）" class="headerlink" title="1. wget（补充安全场景专属参数）"></a>1. wget（补充安全场景专属参数）</h3><ul>
+<li><strong>安全核心参数</strong>（渗透测试必记）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget -q URL               <span class="comment"># 静默下载（不输出日志，避免暴露操作）</span></span><br><span class="line">wget --no-check-certificate URL <span class="comment"># 忽略SSL证书错误（靶机HTTPS证书无效时使用）</span></span><br><span class="line">wget -O /dev/null URL     <span class="comment"># 下载后丢弃文件（仅测试靶机网络连通性，不残留）</span></span><br><span class="line">wget -r -np -nH --cut-dirs=3 URL <span class="comment"># 递归下载靶机目录（渗透测试中下载靶机文件）</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>常见错误修复</strong>：<ul>
+<li>下载超时：<code>wget -c --timeout=30 URL</code>（断点续传+超时设置）；</li>
+<li>被靶机防火墙拦截：<code>wget --user-agent=&quot;Mozilla/5.0&quot; URL</code>（伪装浏览器UA，绕过拦截）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-curl"><a href="#2-curl" class="headerlink" title="2. curl"></a>2. curl</h3><ul>
+<li><strong>安全核心场景</strong>：<ul>
+<li>漏洞利用（文件上传）：<code>curl -X POST -F &quot;file=@./exploit.php&quot; http://靶机IP/upload.php</code>（上传漏洞利用脚本）；</li>
+<li>接口测试（SQL注入）：<code>curl &quot;http://靶机IP/index.php?id=1&#39; and 1=1--+&quot;</code>（测试注入点）；</li>
+<li>无痕迹访问：<code>curl -s -k -o /dev/null URL</code>（静默+忽略SSL+不保存文件）；</li>
+</ul>
+</li>
+<li><strong>安全专属参数</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-k/--insecure  <span class="comment"># 忽略SSL证书验证（靶机自签名证书常用）</span></span><br><span class="line">-s/--silent    <span class="comment"># 静默模式（不输出日志，避免暴露）</span></span><br><span class="line">-A/--user-agent <span class="comment"># 伪装用户代理（绕过WAF拦截）</span></span><br><span class="line">-H/--header    <span class="comment"># 自定义请求头（如添加Cookie、Referer）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="wget-curl-安全场景对比表"><a href="#wget-curl-安全场景对比表" class="headerlink" title="wget &amp; curl 安全场景对比表"></a>wget &amp; curl 安全场景对比表</h3><table>
+<thead>
+<tr>
+<th>安全场景</th>
+<th>首选工具</th>
+<th>核心命令示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>下载漏洞利用脚本（无痕迹）</td>
+<td>wget</td>
+<td><code>wget -q --no-check-certificate 脚本URL -O /tmp/exploit.sh</code></td>
+</tr>
+<tr>
+<td>靶机文件上传（POST请求）</td>
+<td>curl</td>
+<td><code>curl -s -k -F &quot;file=@./shell.php&quot; 靶机上传地址</code></td>
+</tr>
+<tr>
+<td>测试靶机接口（SQL注入&#x2F;SSRF）</td>
+<td>curl</td>
+<td><code>curl -s &quot;http://靶机IP/?url=http://内网IP&quot;</code>（SSRF测试）</td>
+</tr>
+<tr>
+<td>递归下载靶机目录文件</td>
+<td>wget</td>
+<td><code>wget -r -np -nH 靶机目录URL</code></td>
+</tr>
+</tbody></table>
+<h2 id="四、第三阵营：包管理配套辅助工具"><a href="#四、第三阵营：包管理配套辅助工具" class="headerlink" title="四、第三阵营：包管理配套辅助工具"></a>四、第三阵营：包管理配套辅助工具</h2><h3 id="1-apt-mark"><a href="#1-apt-mark" class="headerlink" title="1. apt-mark"></a>1. apt-mark</h3><ul>
+<li><strong>CTF实战场景</strong>：锁定Python 3.9版本（部分CTF脚本仅兼容该版本）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt mark hold python3.9</span><br></pre></td></tr></table></figure></li>
+<li><strong>解锁方法</strong>：<code>sudo apt mark unhold python3.9</code>（后续需要升级时使用）。</li>
+</ul>
+<h3 id="2-dpkg-reconfigure"><a href="#2-dpkg-reconfigure" class="headerlink" title="2. dpkg-reconfigure"></a>2. dpkg-reconfigure</h3><ul>
+<li><strong>实战场景</strong>：渗透测试中，重新配置MySQL的端口（默认3306，改为自定义端口避免被扫描）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dpkg-reconfigure mysql-server</span><br></pre></td></tr></table></figure></li>
+<li>操作逻辑：执行后进入图形化界面，修改端口、密码等配置，无需手动编辑配置文件。</li>
+</ul>
+<h3 id="3-yum-utils"><a href="#3-yum-utils" class="headerlink" title="3. yum-utils"></a>3. yum-utils</h3><ul>
+<li><strong>核心工具</strong>：<code>yum-versionlock</code>（版本锁定）、<code>yum-config-manager</code>（仓库管理）；</li>
+<li><strong>实战命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-versionlock  <span class="comment"># 安装版本锁定工具</span></span><br><span class="line"><span class="built_in">sudo</span> yum versionlock add nmap        <span class="comment"># 锁定Nmap版本（避免自动升级）</span></span><br><span class="line"><span class="built_in">sudo</span> yum versionlock list            <span class="comment"># 查看已锁定的工具</span></span><br><span class="line"><span class="built_in">sudo</span> yum-config-manager --add-repo 仓库URL <span class="comment"># 添加第三方安全工具仓库（如EPEL）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-synaptic"><a href="#4-synaptic" class="headerlink" title="4. synaptic"></a>4. synaptic</h3><ul>
+<li><strong>实战用途</strong>：CTF环境搭建时，通过图形化界面快速搜索、安装多个依赖工具（如Python库、漏洞复现工具），直观查看依赖关系，避免遗漏。</li>
+</ul>
+<h2 id="五、跨发行版工具：flatpak-snap"><a href="#五、跨发行版工具：flatpak-snap" class="headerlink" title="五、跨发行版工具：flatpak&#x2F;snap"></a>五、跨发行版工具：flatpak&#x2F;snap</h2><ul>
+<li><strong>安全场景局限</strong>：沙箱运行可能限制漏洞利用（如无法修改系统文件），不适合漏洞复现；</li>
+<li><strong>适用场景</strong>：服务器长期部署安全工具（如Metasploit、Burp Suite），沙箱隔离减少被攻击风险；</li>
+<li><strong>实战命令补充</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flatpak search metasploit         <span class="comment"># 搜索工具</span></span><br><span class="line">flatpak install flathub com.metasploit.Metasploit <span class="comment"># 安装Metasploit</span></span><br><span class="line">flatpak uninstall com.metasploit.Metasploit       <span class="comment"># 卸载工具（无残留）</span></span><br><span class="line">snap list --all                   <span class="comment"># 查看所有snap工具（避免遗漏暴露）</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="六、工具底层逻辑"><a href="#六、工具底层逻辑" class="headerlink" title="六、工具底层逻辑"></a>六、工具底层逻辑</h2><ol>
+<li><strong>包管理工具的底层调用链</strong>：所有高层工具（apt、yum、gdebi）最终都调用底层工具（dpkg、rpm）执行安装&#x2F;卸载——理解这一点，就知道“安装失败时，用底层工具清理残留”是通用解决方案；</li>
+<li><strong>网络传输工具的核心差异</strong>：wget是“下载专用”，curl是“传输瑞士军刀”——渗透测试中，下载文件用wget（简单高效），上传&#x2F;接口测试用curl（功能全面）；</li>
+<li><strong>安全场景的核心诉求</strong>：无痕迹、版本兼容、离线可用——所有安全相关的命令和选型，都是围绕这三个诉求展开（如静默参数、版本锁定、本地包安装）。</li>
+</ol>
+<h2 id="七、知识脉络"><a href="#七、知识脉络" class="headerlink" title="七、知识脉络"></a>七、知识脉络</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Linux工具核心体系（安全专业版）</span><br><span class="line">├─ 包管理工具（管软件：安装/更新/卸载/依赖）</span><br><span class="line">│  ├─ 底层工具（本地包执行，无网络/依赖）：dpkg（Debian）、rpm（RPM）→ 安全场景：查询路径、清理残留</span><br><span class="line">│  ├─ 高层工具（网络+仓库+自动依赖）</span><br><span class="line">│  │  ├─ 传统版（脚本首选）：apt-get（Debian）、yum（RPM）→ 安全场景：脚本部署、稳定可靠</span><br><span class="line">│  │  └─ 现代版（日常首选）：apt（Debian）、dnf（RPM）→ 安全场景：版本锁定、依赖清理</span><br><span class="line">│  ├─ 专用辅助工具（本地包优化）：gdebi-core（Debian）、dnf localinstall（RPM）→ 安全场景：离线安装、无痕迹部署</span><br><span class="line">│  └─ 跨发行版通用：flatpak、snap → 安全场景：服务器长期部署（沙箱隔离）</span><br><span class="line">│</span><br><span class="line">├─ 网络传输工具（管文件：拉取/推送）</span><br><span class="line">│  ├─ wget：专注下载，轻量简单 → 安全场景：漏洞脚本下载、无痕迹递归下载</span><br><span class="line">│  └─ curl：多功能传输 → 安全场景：文件上传、接口测试（SQLi/SSRF）、伪装请求</span><br><span class="line">│</span><br><span class="line">└─ 配套辅助工具（包管理补充）</span><br><span class="line">   ├─ 查询类：apt-cache、rpm -qc → 安全场景：配置文件查询、反向文件归属查询</span><br><span class="line">   ├─ 配置类：dpkg-reconfigure、yum-config-manager → 安全场景：工具端口修改、仓库管理</span><br><span class="line">   ├─ 优化类：apt-mark（版本锁定）、yum-versionlock → 安全场景：CTF兼容、漏洞复现版本匹配</span><br><span class="line">   └─ 图形化：synaptic → 安全场景：CTF环境依赖批量安装</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心记忆点"><a href="#核心记忆点" class="headerlink" title="核心记忆点"></a>核心记忆点</h2><ol>
+<li><strong>包管理：本地优先、版本锁定、安装后清理</strong>——渗透测试避免暴露，CTF保证兼容；</li>
+<li><strong>传输工具：wget下载、curl上传，静默参数必加</strong>——减少操作痕迹，绕过WAF拦截；</li>
+<li><strong>辅助工具：查询用dpkg&#x2F;rpm，清理用apt autoremove</strong>——快速定位路径，避免残留风险。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -5304,7 +5588,7 @@ StartupNotify=false
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-02 11:40:53" itemprop="dateModified" datetime="2026-02-02T11:40:53+08:00">2026-02-02</time>
+      <time title="修改时间：2026-02-02 12:15:59" itemprop="dateModified" datetime="2026-02-02T12:15:59+08:00">2026-02-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -5334,14 +5618,14 @@ StartupNotify=false
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.1k</span>
+      <span>3.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>10 分钟</span>
+      <span>11 分钟</span>
     </span>
 </div>
 
@@ -5495,12 +5779,20 @@ StartupNotify=false
 <li><code>wget</code> - 从网络下载文件</li>
 </ul>
 <h2 id="7-服务管理"><a href="#7-服务管理" class="headerlink" title="7. 服务管理"></a>7. 服务管理</h2><p><code>systemctl</code> 是 <strong>systemd 系统</strong>（Kali Linux、Debian、Ubuntu、CentOS 7+ 等主流Linux均采用）的核心服务管理工具，替代了旧版的 <code>service</code>、<code>chkconfig</code>、<code>/etc/init.d/</code> 等命令，是服务管理的首选方式。</p>
-<h3 id="核心前提"><a href="#核心前提" class="headerlink" title="核心前提"></a>核心前提</h3><ol>
+<h3 id="7-0-systemd-核心单元类型说明"><a href="#7-0-systemd-核心单元类型说明" class="headerlink" title="7.0 systemd 核心单元类型说明"></a>7.0 systemd 核心单元类型说明</h3><p>systemd 以「单元（Unit）」为核心管理系统资源，常见单元类型（后缀）如下：</p>
+<ul>
+<li><code>service</code>：常规后台服务（如cron.service、clamav-daemon.service），长期运行的守护进程，处理持续的系统功能；</li>
+<li><code>socket</code>：套接字服务（如 Kali 的ssh.socket），轻量监听端口&#x2F;套接字，仅当有连接请求时才唤醒对应进程（大幅节省系统资源，Kali 中广泛用于低负载服务）；</li>
+<li><code>timer</code>：定时任务服务（替代旧版crontab的部分功能），精准控制任务执行时间，支持秒级调度、依赖触发等高级特性；</li>
+<li><code>mount</code>：挂载服务（系统自动挂载磁盘&#x2F;分区），管理文件系统挂载规则，可配置开机自动挂载、挂载权限等。</li>
+</ul>
+<p>单元文件后缀对应类型（如<code>ssh.service</code>、<code>ssh.socket</code>），<code>systemctl</code> 操作时可省略后缀（如<code>systemctl status ssh</code> 等效于 <code>systemctl status ssh.service</code>）。</p>
+<h3 id="7-1-核心前提"><a href="#7-1-核心前提" class="headerlink" title="7.1 核心前提"></a>7.1 核心前提</h3><ol>
 <li>操作系统服务操作（启动&#x2F;停止&#x2F;设置自启）<strong>需要管理员权限</strong>，所有指令前需加 <code>sudo</code>；</li>
 <li>所有指令的核心参数是「服务名」（如 <code>clamav-daemon</code>、<code>ssh</code>），需准确输入；</li>
 <li>旧版 <code>/etc/init.d/</code> 命令仍可兼容，但优先使用 <code>systemctl</code>。</li>
 </ol>
-<h3 id="7-1-查看服务状态"><a href="#7-1-查看服务状态" class="headerlink" title="7.1 查看服务状态"></a>7.1 查看服务状态</h3><h4 id="7-1-1-查看单个服务详细状态（推荐）"><a href="#7-1-1-查看单个服务详细状态（推荐）" class="headerlink" title="7.1.1 查看单个服务详细状态（推荐）"></a>7.1.1 查看单个服务详细状态（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status 服务名</span><br><span class="line"><span class="comment"># 示例：查看ClamAV守护进程状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status clamav-daemon</span><br></pre></td></tr></table></figure>
+<h3 id="7-2-查看服务状态"><a href="#7-2-查看服务状态" class="headerlink" title="7.2 查看服务状态"></a>7.2 查看服务状态</h3><h4 id="7-2-1-查看单个服务详细状态（推荐）"><a href="#7-2-1-查看单个服务详细状态（推荐）" class="headerlink" title="7.2.1 查看单个服务详细状态（推荐）"></a>7.2.1 查看单个服务详细状态（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status 服务名</span><br><span class="line"><span class="comment"># 示例：查看ClamAV守护进程状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status clamav-daemon</span><br></pre></td></tr></table></figure>
 <p><strong>状态解读</strong>（终端第一行输出）：</p>
 <ul>
 <li><code>active (running)</code>：服务正常运行；</li>
@@ -5508,35 +5800,33 @@ StartupNotify=false
 <li><code>failed</code>：服务启动失败（需查看日志排查）；</li>
 <li><code>enabled</code>：开机自启已开启；<code>disabled</code>：开机自启已关闭。</li>
 </ul>
-<h4 id="7-1-2-快速判断服务是否运行"><a href="#7-1-2-快速判断服务是否运行" class="headerlink" title="7.1.2 快速判断服务是否运行"></a>7.1.2 快速判断服务是否运行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active 服务名</span><br><span class="line"><span class="comment"># 示例：判断ssh服务是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active ssh</span><br><span class="line"><span class="comment"># 输出：running/inactive/failed</span></span><br></pre></td></tr></table></figure>
+<h4 id="7-2-2-快速判断服务是否运行"><a href="#7-2-2-快速判断服务是否运行" class="headerlink" title="7.2.2 快速判断服务是否运行"></a>7.2.2 快速判断服务是否运行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active 服务名</span><br><span class="line"><span class="comment"># 示例：判断ssh服务是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-active ssh</span><br><span class="line"><span class="comment"># 输出：running/inactive/failed</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="7-1-3-查看所有已启动的服务"><a href="#7-1-3-查看所有已启动的服务" class="headerlink" title="7.1.3 查看所有已启动的服务"></a>7.1.3 查看所有已启动的服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-units --<span class="built_in">type</span>=service --state=running</span><br></pre></td></tr></table></figure>
+<h4 id="7-2-3-查看所有已启动的服务"><a href="#7-2-3-查看所有已启动的服务" class="headerlink" title="7.2.3 查看所有已启动的服务"></a>7.2.3 查看所有已启动的服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-units --<span class="built_in">type</span>=service --state=running</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-1-4-查看所有服务（含自启状态）"><a href="#7-1-4-查看所有服务（含自启状态）" class="headerlink" title="7.1.4 查看所有服务（含自启状态）"></a>7.1.4 查看所有服务（含自启状态）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-unit-files --<span class="built_in">type</span>=service</span><br></pre></td></tr></table></figure>
+<h4 id="7-2-4-查看所有服务（含自启状态）"><a href="#7-2-4-查看所有服务（含自启状态）" class="headerlink" title="7.2.4 查看所有服务（含自启状态）"></a>7.2.4 查看所有服务（含自启状态）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl list-unit-files --<span class="built_in">type</span>=service</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-2-服务启动-停止-重启-重载"><a href="#7-2-服务启动-停止-重启-重载" class="headerlink" title="7.2 服务启动&#x2F;停止&#x2F;重启&#x2F;重载"></a>7.2 服务启动&#x2F;停止&#x2F;重启&#x2F;重载</h3><h4 id="7-2-1-启动服务（仅本次生效）"><a href="#7-2-1-启动服务（仅本次生效）" class="headerlink" title="7.2.1 启动服务（仅本次生效）"></a>7.2.1 启动服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start 服务名</span><br><span class="line"><span class="comment"># 示例：启动apache2服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start apache2</span><br></pre></td></tr></table></figure>
+<h3 id="7-3-服务启动-停止-重启-重载"><a href="#7-3-服务启动-停止-重启-重载" class="headerlink" title="7.3 服务启动&#x2F;停止&#x2F;重启&#x2F;重载"></a>7.3 服务启动&#x2F;停止&#x2F;重启&#x2F;重载</h3><h4 id="7-3-1-启动服务（仅本次生效）"><a href="#7-3-1-启动服务（仅本次生效）" class="headerlink" title="7.3.1 启动服务（仅本次生效）"></a>7.3.1 启动服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start 服务名</span><br><span class="line"><span class="comment"># 示例：启动apache2服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start apache2</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-2-2-停止服务（仅本次生效）"><a href="#7-2-2-停止服务（仅本次生效）" class="headerlink" title="7.2.2 停止服务（仅本次生效）"></a>7.2.2 停止服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop 服务名</span><br><span class="line"><span class="comment"># 示例：停止networking服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop networking</span><br></pre></td></tr></table></figure>
+<h4 id="7-3-2-停止服务（仅本次生效）"><a href="#7-3-2-停止服务（仅本次生效）" class="headerlink" title="7.3.2 停止服务（仅本次生效）"></a>7.3.2 停止服务（仅本次生效）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop 服务名</span><br><span class="line"><span class="comment"># 示例：停止networking服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl stop networking</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-2-3-重启服务（修改配置后必用）"><a href="#7-2-3-重启服务（修改配置后必用）" class="headerlink" title="7.2.3 重启服务（修改配置后必用）"></a>7.2.3 重启服务（修改配置后必用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart 服务名</span><br><span class="line"><span class="comment"># 示例：重启Docker服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h4 id="7-3-3-重启服务（修改配置后必用）"><a href="#7-3-3-重启服务（修改配置后必用）" class="headerlink" title="7.3.3 重启服务（修改配置后必用）"></a>7.3.3 重启服务（修改配置后必用）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart 服务名</span><br><span class="line"><span class="comment"># 示例：重启Docker服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-2-4-重载配置（无需重启服务，轻量生效）"><a href="#7-2-4-重载配置（无需重启服务，轻量生效）" class="headerlink" title="7.2.4 重载配置（无需重启服务，轻量生效）"></a>7.2.4 重载配置（无需重启服务，轻量生效）</h4><p>适用于仅修改配置文件的场景（如sshd_config、clamd.conf）：</p>
+<h4 id="7-3-4-重载配置（无需重启服务，轻量生效）"><a href="#7-3-4-重载配置（无需重启服务，轻量生效）" class="headerlink" title="7.3.4 重载配置（无需重启服务，轻量生效）"></a>7.3.4 重载配置（无需重启服务，轻量生效）</h4><p>适用于仅修改配置文件的场景（如sshd_config、clamd.conf）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload 服务名</span><br><span class="line"><span class="comment"># 示例：重载SSH配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload ssh</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-3-设置开机自启-关闭自启（永久生效）"><a href="#7-3-设置开机自启-关闭自启（永久生效）" class="headerlink" title="7.3 设置开机自启&#x2F;关闭自启（永久生效）"></a>7.3 设置开机自启&#x2F;关闭自启（永久生效）</h3><h4 id="7-3-1-启用开机自启"><a href="#7-3-1-启用开机自启" class="headerlink" title="7.3.1 启用开机自启"></a>7.3.1 启用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：设置MySQL开机自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> mysql</span><br></pre></td></tr></table></figure>
+<h3 id="7-4-设置开机自启-关闭自启（永久生效）"><a href="#7-4-设置开机自启-关闭自启（永久生效）" class="headerlink" title="7.4 设置开机自启&#x2F;关闭自启（永久生效）"></a>7.4 设置开机自启&#x2F;关闭自启（永久生效）</h3><h4 id="7-4-1-启用开机自启"><a href="#7-4-1-启用开机自启" class="headerlink" title="7.4.1 启用开机自启"></a>7.4.1 启用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：设置MySQL开机自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> mysql</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-3-2-禁用开机自启"><a href="#7-3-2-禁用开机自启" class="headerlink" title="7.3.2 禁用开机自启"></a>7.3.2 禁用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：关闭UFW防火墙自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> ufw</span><br></pre></td></tr></table></figure>
+<h4 id="7-4-2-禁用开机自启"><a href="#7-4-2-禁用开机自启" class="headerlink" title="7.4.2 禁用开机自启"></a>7.4.2 禁用开机自启</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> 服务名</span><br><span class="line"><span class="comment"># 示例：关闭UFW防火墙自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> ufw</span><br></pre></td></tr></table></figure>
 
-<h4 id="7-3-3-快速判断自启状态"><a href="#7-3-3-快速判断自启状态" class="headerlink" title="7.3.3 快速判断自启状态"></a>7.3.3 快速判断自启状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled 服务名</span><br><span class="line"><span class="comment"># 示例：检查apache2是否自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled apache2</span><br><span class="line"><span class="comment"># 输出：enabled/disabled</span></span><br></pre></td></tr></table></figure>
+<h4 id="7-4-3-快速判断自启状态"><a href="#7-4-3-快速判断自启状态" class="headerlink" title="7.4.3 快速判断自启状态"></a>7.4.3 快速判断自启状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled 服务名</span><br><span class="line"><span class="comment"># 示例：检查apache2是否自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl is-enabled apache2</span><br><span class="line"><span class="comment"># 输出：enabled/disabled</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="7-4-旧版兼容命令（备用）"><a href="#7-4-旧版兼容命令（备用）" class="headerlink" title="7.4 旧版兼容命令（备用）"></a>7.4 旧版兼容命令（备用）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动/重启/停止服务（旧版方式）</span></span><br><span class="line">/etc/init.d/apache2 start</span><br><span class="line">/etc/init.d/apache2 restart</span><br><span class="line">/etc/init.d/apache2 stop</span><br><span class="line">service networking restart</span><br></pre></td></tr></table></figure>
+<h3 id="7-5-旧版兼容命令（备用）"><a href="#7-5-旧版兼容命令（备用）" class="headerlink" title="7.5 旧版兼容命令（备用）"></a>7.5 旧版兼容命令（备用）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动/重启/停止服务（旧版方式）</span></span><br><span class="line">/etc/init.d/apache2 start</span><br><span class="line">/etc/init.d/apache2 restart</span><br><span class="line">/etc/init.d/apache2 stop</span><br><span class="line">service networking restart</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-5-实用技巧：快速查找准确服务名"><a href="#7-5-实用技巧：快速查找准确服务名" class="headerlink" title="7.5 实用技巧：快速查找准确服务名"></a>7.5 实用技巧：快速查找准确服务名</h3><h4 id="方法1：模糊搜索（推荐）"><a href="#方法1：模糊搜索（推荐）" class="headerlink" title="方法1：模糊搜索（推荐）"></a>方法1：模糊搜索（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法：systemctl | grep 关键词</span></span><br><span class="line">systemctl | grep ssh    <span class="comment"># 搜索SSH相关服务</span></span><br><span class="line">systemctl | grep clamav <span class="comment"># 搜索ClamAV相关服务</span></span><br><span class="line">systemctl | grep network <span class="comment"># 搜索网络相关服务</span></span><br></pre></td></tr></table></figure>
+<h3 id="7-6-实用技巧：快速查找准确服务名"><a href="#7-6-实用技巧：快速查找准确服务名" class="headerlink" title="7.6 实用技巧：快速查找准确服务名"></a>7.6 实用技巧：快速查找准确服务名</h3><h4 id="方法1：模糊搜索（推荐）"><a href="#方法1：模糊搜索（推荐）" class="headerlink" title="方法1：模糊搜索（推荐）"></a>方法1：模糊搜索（推荐）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法：systemctl | grep 关键词</span></span><br><span class="line">systemctl | grep ssh    <span class="comment"># 搜索SSH相关服务</span></span><br><span class="line">systemctl | grep clamav <span class="comment"># 搜索ClamAV相关服务</span></span><br><span class="line">systemctl | grep network <span class="comment"># 搜索网络相关服务</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="方法2：查看服务文件"><a href="#方法2：查看服务文件" class="headerlink" title="方法2：查看服务文件"></a>方法2：查看服务文件</h4><p>服务配置文件位于 <code>/lib/systemd/system/</code> 或 <code>/etc/systemd/system/</code>，文件名以<code>.service</code>结尾，去掉后缀即为服务名：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有.service文件</span></span><br><span class="line"><span class="built_in">ls</span> /lib/systemd/system/*.service</span><br><span class="line"><span class="comment"># 模糊查找某类服务</span></span><br><span class="line"><span class="built_in">ls</span> /lib/systemd/system/*docker*.service</span><br></pre></td></tr></table></figure>
-
-
 
 <h2 id="8-包管理"><a href="#8-包管理" class="headerlink" title="8. 包管理"></a>8. 包管理</h2><h3 id="Debian-Ubuntu包管理"><a href="#Debian-Ubuntu包管理" class="headerlink" title="Debian&#x2F;Ubuntu包管理"></a>Debian&#x2F;Ubuntu包管理</h3><ul>
 <li><code>apt-get update</code> - 更新软件包列表</li>
@@ -5649,202 +5939,6 @@ StartupNotify=false
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zq-rookie-hacker.github.io/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zhuzhuxia.jpg">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | ZQ-Rookie-Hacker's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">windows常用指令</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-13 16:53:36" itemprop="dateCreated datePublished" datetime="2025-12-13T16:53:36+08:00">2025-12-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-29 15:59:51" itemprop="dateModified" datetime="2026-01-29T15:59:51+08:00">2026-01-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">基础知识</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2025/12/13/windows%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" class="post-meta-item leancloud_visitors" data-flag-title="windows常用指令" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>930</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网络配置与信息"><a href="#网络配置与信息" class="headerlink" title="网络配置与信息"></a>网络配置与信息</h2><h3 id="基本网络信息"><a href="#基本网络信息" class="headerlink" title="基本网络信息"></a>基本网络信息</h3><ul>
-<li><code>ifconfig /all</code> - 获取域名、IP地址、DHCP服务器、网关、MAC地址、主机名</li>
-<li><code>net config workstation</code> - 查看域名、机器名等</li>
-<li><code>route print</code> - 显示IP路由，主要显示网络地址、子网掩码、网关地址和接口地址</li>
-<li><code>arp</code> - 查看和处理ARP缓存，ARP是名字解析的意思，负责把一个IP解析成一个物理性的MAC地址</li>
-<li><code>arp -a</code> - 查看ARP缓存信息</li>
-<li><code>nslookup</code> - IP地址侦测器</li>
-</ul>
-<h3 id="网络连接状态"><a href="#网络连接状态" class="headerlink" title="网络连接状态"></a>网络连接状态</h3><ul>
-<li><code>netstat -a</code> - 查看开启了哪些端口（常用<code>netstat -an</code>）</li>
-<li><code>netstat -n</code> - 查看端口的网络连接情况（常用<code>netstat -an</code>）</li>
-<li><code>netstat -o</code> - 查看所有网络连接的进程ID（PID）</li>
-<li><code>netstat -ano | findstr &quot;:80&quot;</code> - 查找包含”80”的连接（最常用）</li>
-<li><code>netstat -v</code> - 查看正在进行的工作</li>
-<li><code>netstat -p 协议名</code> - 查看某协议使用情况，如：<code>netstat -p tcp</code></li>
-<li><code>netstat -s</code> - 查看所有协议使用情况</li>
-</ul>
-<h3 id="域网络信息"><a href="#域网络信息" class="headerlink" title="域网络信息"></a>域网络信息</h3><ul>
-<li><code>net time /domain</code> - 查看域名、时间</li>
-<li><code>net view /domain</code> - 查看域内所有共享</li>
-<li><code>net view ip</code> - 查看对方局域网内开启了哪些共享</li>
-<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（需136-139端口开放，参数-A要大写）</li>
-</ul>
-<h2 id="用户与组管理"><a href="#用户与组管理" class="headerlink" title="用户与组管理"></a>用户与组管理</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
-<li><code>net user 用户名 密码 /add</code> - 创建新用户</li>
-<li><code>net user 用户名 /del</code> - 删除用户</li>
-<li><code>net user guest /active:yes</code> - 激活guest账户</li>
-<li><code>net user</code> - 查看所有账户</li>
-<li><code>net user 账户名</code> - 查看指定账户信息</li>
-<li><code>net user /domain</code> - 查看域内有哪些用户（Windows NT Workstation计算机上可用，可判断用户是否是域成员）</li>
-<li><code>net user 用户名 /domain</code> - 查看域内指定账户信息</li>
-<li><code>query user</code> - 查看当前在线的用户</li>
-<li><code>whoami</code> - 查看当前用户及权限</li>
-<li><code>whoami /all</code> - 查看当前用户的详细权限信息</li>
-</ul>
-<h3 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h3><ul>
-<li><code>net group /domain</code> - 查看域中的组</li>
-<li><code>net group &quot;domain admins&quot; /domain</code> - 查看当前域的管理员</li>
-<li><code>net localgroup</code> - 查看所有本地组</li>
-<li><code>net localgroup administrators</code> - 查看administrators组中的用户</li>
-<li><code>net localgroup administrators 用户名 /add</code> - 将用户添加到管理员组</li>
-</ul>
-<h2 id="服务与进程管理"><a href="#服务与进程管理" class="headerlink" title="服务与进程管理"></a>服务与进程管理</h2><h3 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h3><ul>
-<li><code>net start</code> - 查看已开启的服务</li>
-<li><code>net start 服务名</code> - 启动指定服务</li>
-<li><code>net stop 服务名</code> - 停止指定服务</li>
-</ul>
-<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
-<li><code>tasklist</code> - 查看当前进程</li>
-<li><code>tasklist /svc</code> - 查看当前计算机进程及对应服务</li>
-<li><code>taskkill /pid PID数</code> - 终止指定PID的进程</li>
-<li><code>netstat -ano</code> - 查看当前计算机进程情况</li>
-</ul>
-<h3 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h3><ul>
-<li><code>systeminfo</code> - 查看计算机信息（版本、位数、补丁情况）</li>
-<li><code>ver</code> - 查看操作系统版本</li>
-</ul>
-<h2 id="文件共享与远程访问"><a href="#文件共享与远程访问" class="headerlink" title="文件共享与远程访问"></a>文件共享与远程访问</h2><h3 id="共享管理"><a href="#共享管理" class="headerlink" title="共享管理"></a>共享管理</h3><ul>
-<li><code>net share</code> - 查看本地开启的共享</li>
-<li><code>net share ipc$</code> - 开启ipc$共享</li>
-<li><code>net share ipc$ /del</code> - 删除ipc$共享</li>
-<li><code>net share c$ /del</code> - 删除C:共享</li>
-<li><code>\\IP\c</code> - 访问默认共享c盘，如：<code>\\192.168.0.108\c</code></li>
-</ul>
-<h3 id="远程连接"><a href="#远程连接" class="headerlink" title="远程连接"></a>远程连接</h3><ul>
-<li><code>net use \\目标IP\ipc$ 密码 /u:用户名</code> - 连接目标机器</li>
-<li><code>at \\目标IP 21:31 c:\server.exe</code> - 在指定时间启动应用（适用于低版本Windows）</li>
-<li><code>wmic /node:&quot;目标IP&quot; /password:&quot;123456&quot; /user:&quot;admin&quot;</code> - 连接目标机器</li>
-<li><code>psexec.exe \\目标IP -u username -p password -s cmd</code> - 在目标机器上执行cmd</li>
-<li><code>finger username @host</code> - 查看最近登录的用户</li>
-</ul>
-<h2 id="域控制器相关"><a href="#域控制器相关" class="headerlink" title="域控制器相关"></a>域控制器相关</h2><ul>
-<li><code>dsquery server</code> - 查看所有域控制器</li>
-<li><code>dsquery subnet</code> - 查看域内子网</li>
-<li><code>dsquery group</code> - 查看域内工作组</li>
-<li><code>dsquery site</code> - 查看域内站点</li>
-</ul>
-<h2 id="注册表与系统备份"><a href="#注册表与系统备份" class="headerlink" title="注册表与系统备份"></a>注册表与系统备份</h2><ul>
-<li><code>reg save hklm\sam sam.hive</code> - 导出用户组信息、权限配置</li>
-<li><code>reg save hklm\system system.hive</code> - 导出SYSKEY</li>
-</ul>
-<h2 id="其他实用命令"><a href="#其他实用命令" class="headerlink" title="其他实用命令"></a>其他实用命令</h2><ul>
-<li><code>wmic product &gt; ins.txt</code> - 查看安装软件及版本路径等信息，输出到ins.txt文件（位于用户目录下）</li>
-</ul>
-<hr>
-<p><em>注：以上命令基于Windows系统，部分命令可能需要管理员权限才能执行。</em></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -5869,14 +5963,14 @@ StartupNotify=false
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">152k</span>
+    <span title="站点总字数">155k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">8:26</span>
+    <span title="站点阅读时长">8:35</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

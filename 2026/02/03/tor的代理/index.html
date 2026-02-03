@@ -28,7 +28,7 @@
 <meta property="og:description" content="一、结论 宿主机全局VPN（TUN&#x2F;全局模式）：Tor Browser零配置可用，系统Tor自动走全局，proxychains4仅需配置本地9050； 宿主机应用级代理（仅7897端口，非全局）：Tor Browser需在自身设置配7897，终端工具走Tor需在系统Tor的torrc配7897，proxychains4始终只对接本地9050； proxychains4：纯程序级流量分流工">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-02-03T07:34:22.689Z">
-<meta property="article:modified_time" content="2026-02-03T07:35:21.005Z">
+<meta property="article:modified_time" content="2026-02-03T09:41:51.693Z">
 <meta property="article:author" content="ZQ-Rookie-Hacker">
 <meta property="article:tag" content="tor">
 <meta name="twitter:card" content="summary">
@@ -162,7 +162,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BB%93%E8%AE%BA"><span class="nav-text">一、结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%80%90%E5%8F%A5%E9%AA%8C%E8%AF%81%E4%B8%8E%E4%BF%AE%E6%AD%A3%EF%BC%88%E6%A0%87%E2%9C%85-%E2%9D%8C%EF%BC%89"><span class="nav-text">二、逐句验证与修正（标✅&#x2F;❌）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E3%80%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%84vpn%E5%BC%80%E7%9A%84%E6%98%AF%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%EF%BC%8C%E5%8D%B3%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%89%80%E6%9C%89%E6%B5%81%E9%87%8F%E9%83%BD%E8%B5%B0%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%84%E5%85%A8%E5%B1%80vpn%EF%BC%8C%E5%90%8C%E6%97%B6%E7%94%B1%E4%BA%8Etor-browser%E4%B8%AD%E5%86%85%E7%BD%AEtor%E6%9C%8D%E5%8A%A1%EF%BC%8C%E4%BC%9A%E8%87%AA%E5%8A%A8%E6%9F%A5%E6%89%BEtor%E8%8A%82%E7%82%B9%EF%BC%8C%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E4%BB%BB%E4%BD%95%E9%85%8D%E7%BD%AE%E5%B0%B1%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E3%80%8D"><span class="nav-text">1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E3%80%8C%E5%A6%82%E6%9E%9C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%BC%80%E7%9A%84%E6%98%AF%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%90%86%EF%BC%8C%E6%AF%94%E5%A6%82%E5%85%B6%E4%BB%A3%E7%90%86%E7%AB%AF%E5%8F%A3%E6%98%AF-7897-%EF%BC%8C-%E4%B8%BA%E4%BA%86%E5%AE%9E%E7%8E%B0tor-browser%E7%9A%84%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%88%99%E9%9C%80%E8%A6%81%E5%AF%B9%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84tor%E6%9C%8D%E5%8A%A1%E7%9A%84%E4%BB%A3%E7%90%86%E7%BC%96%E8%BE%91%E4%B8%BA%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%847897-%E7%AB%AF%E5%8F%A3%EF%BC%8C%E6%AD%A4%E6%97%B6tor-browser%E7%90%86%E8%AE%BA%E4%B8%8A%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%E4%BA%86%E3%80%8D"><span class="nav-text">2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E9%80%BB%E8%BE%91%EF%BC%9A"><span class="nav-text">正确逻辑：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E3%80%8Cproxychains4%E6%98%AF%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%EF%BC%8C%E9%80%9A%E8%BF%87%E7%BC%96%E8%BE%91%E5%85%B6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%EF%BC%9A-1-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%9F%90%E7%A8%8B%E5%BA%8F-%E7%B3%BB%E7%BB%9Ftor%E6%9C%8D%E5%8A%A1-%E5%AE%BF%E4%B8%BB%E6%9C%BAvpn-%E5%A4%96%E7%BD%91-2-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%9F%90%E7%A8%8B%E5%BA%8F-%E5%AE%BF%E4%B8%BB%E6%9C%BAvpn-%E5%A4%96%E7%BD%91%E3%80%82%E9%81%BF%E5%85%8D%E6%89%80%E6%9C%89%E6%B5%81%E9%87%8F%E9%83%BD%E8%B5%B0%E4%B8%80%E4%B8%AA%E4%BB%A3%E7%90%86%E3%80%8D"><span class="nav-text">3. 「proxychains4是一个更加灵活的代理工具，通过编辑其配置文件可以实现： 1.虚拟机某程序-&gt;系统tor服务-&gt;宿主机vpn-&gt;外网   2. 虚拟机某程序-&gt;宿主机vpn-&gt;外网。避免所有流量都走一个代理」</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E8%B5%B0%E5%90%911%EF%BC%9A%E7%89%B9%E5%AE%9A%E7%A8%8B%E5%BA%8F-%E2%86%92-%E7%B3%BB%E7%BB%9FTor%E6%9C%8D%E5%8A%A1-%E2%86%92-%E5%AE%BF%E4%B8%BB%E6%9C%BAVPN-%E2%86%92-%E5%A4%96%E7%BD%91%EF%BC%88%E5%8C%BF%E5%90%8D-VPN%EF%BC%89"><span class="nav-text">流量走向1：特定程序 → 系统Tor服务 → 宿主机VPN → 外网（匿名+VPN）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E8%B5%B0%E5%90%912%EF%BC%9A%E7%89%B9%E5%AE%9A%E7%A8%8B%E5%BA%8F-%E2%86%92-%E5%AE%BF%E4%B8%BB%E6%9C%BAVPN%EF%BC%887897%EF%BC%89%E2%86%92-%E5%A4%96%E7%BD%91%EF%BC%88%E4%BB%85VPN%EF%BC%8C%E4%B8%8D%E8%B5%B0Tor%EF%BC%89"><span class="nav-text">流量走向2：特定程序 → 宿主机VPN（7897）→ 外网（仅VPN，不走Tor）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E9%94%AE%E8%A1%A5%E5%85%85%EF%BC%9A%E7%B3%BB%E7%BB%9FTor-vs-Tor-Browser%E5%86%85%E7%BD%AETor%EF%BC%88%E5%BF%85%E5%88%86%E6%B8%85%EF%BC%8C%E4%B8%80%E5%BC%A0%E8%A1%A8%E6%90%9E%E5%AE%9A%EF%BC%89"><span class="nav-text">三、关键补充：系统Tor vs Tor Browser内置Tor（必分清，一张表搞定）</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BB%93%E8%AE%BA"><span class="nav-text">一、结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%80%90%E5%8F%A5%E9%AA%8C%E8%AF%81%E4%B8%8E%E4%BF%AE%E6%AD%A3%EF%BC%88%E6%A0%87%E2%9C%85-%E2%9D%8C%EF%BC%89"><span class="nav-text">二、逐句验证与修正（标✅&#x2F;❌）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E3%80%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%84vpn%E5%BC%80%E7%9A%84%E6%98%AF%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%EF%BC%8C%E5%8D%B3%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%89%80%E6%9C%89%E6%B5%81%E9%87%8F%E9%83%BD%E8%B5%B0%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%84%E5%85%A8%E5%B1%80vpn%EF%BC%8C%E5%90%8C%E6%97%B6%E7%94%B1%E4%BA%8Etor-browser%E4%B8%AD%E5%86%85%E7%BD%AEtor%E6%9C%8D%E5%8A%A1%EF%BC%8C%E4%BC%9A%E8%87%AA%E5%8A%A8%E6%9F%A5%E6%89%BEtor%E8%8A%82%E7%82%B9%EF%BC%8C%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E4%BB%BB%E4%BD%95%E9%85%8D%E7%BD%AE%E5%B0%B1%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E3%80%8D"><span class="nav-text">1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E3%80%8C%E5%A6%82%E6%9E%9C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%BC%80%E7%9A%84%E6%98%AF%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%90%86%EF%BC%8C%E6%AF%94%E5%A6%82%E5%85%B6%E4%BB%A3%E7%90%86%E7%AB%AF%E5%8F%A3%E6%98%AF-7897-%EF%BC%8C-%E4%B8%BA%E4%BA%86%E5%AE%9E%E7%8E%B0tor-browser%E7%9A%84%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%88%99%E9%9C%80%E8%A6%81%E5%AF%B9%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84tor%E6%9C%8D%E5%8A%A1%E7%9A%84%E4%BB%A3%E7%90%86%E7%BC%96%E8%BE%91%E4%B8%BA%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%847897-%E7%AB%AF%E5%8F%A3%EF%BC%8C%E6%AD%A4%E6%97%B6tor-browser%E7%90%86%E8%AE%BA%E4%B8%8A%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%E4%BA%86%E3%80%8D"><span class="nav-text">2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E9%80%BB%E8%BE%91%EF%BC%9A"><span class="nav-text">正确逻辑：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E3%80%8Cproxychains4%E6%98%AF%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%EF%BC%8C%E9%80%9A%E8%BF%87%E7%BC%96%E8%BE%91%E5%85%B6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%EF%BC%9A-1-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%9F%90%E7%A8%8B%E5%BA%8F-%E7%B3%BB%E7%BB%9Ftor%E6%9C%8D%E5%8A%A1-%E5%AE%BF%E4%B8%BB%E6%9C%BAvpn-%E5%A4%96%E7%BD%91-2-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%9F%90%E7%A8%8B%E5%BA%8F-%E5%AE%BF%E4%B8%BB%E6%9C%BAvpn-%E5%A4%96%E7%BD%91%E3%80%82%E9%81%BF%E5%85%8D%E6%89%80%E6%9C%89%E6%B5%81%E9%87%8F%E9%83%BD%E8%B5%B0%E4%B8%80%E4%B8%AA%E4%BB%A3%E7%90%86%E3%80%8D"><span class="nav-text">3. 「proxychains4是一个更加灵活的代理工具，通过编辑其配置文件可以实现： 1.虚拟机某程序-&gt;系统tor服务-&gt;宿主机vpn-&gt;外网   2. 虚拟机某程序-&gt;宿主机vpn-&gt;外网。避免所有流量都走一个代理」</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E8%B5%B0%E5%90%911%EF%BC%9A%E7%89%B9%E5%AE%9A%E7%A8%8B%E5%BA%8F-%E2%86%92-%E7%B3%BB%E7%BB%9FTor%E6%9C%8D%E5%8A%A1-%E2%86%92-%E5%AE%BF%E4%B8%BB%E6%9C%BAVPN-%E2%86%92-%E5%A4%96%E7%BD%91%EF%BC%88%E5%8C%BF%E5%90%8D-VPN%EF%BC%89"><span class="nav-text">流量走向1：特定程序 → 系统Tor服务 → 宿主机VPN → 外网（匿名+VPN）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E8%B5%B0%E5%90%912%EF%BC%9A%E7%89%B9%E5%AE%9A%E7%A8%8B%E5%BA%8F-%E2%86%92-%E5%AE%BF%E4%B8%BB%E6%9C%BAVPN%EF%BC%887897%EF%BC%89%E2%86%92-%E5%A4%96%E7%BD%91%EF%BC%88%E4%BB%85VPN%EF%BC%8C%E4%B8%8D%E8%B5%B0Tor%EF%BC%89"><span class="nav-text">流量走向2：特定程序 → 宿主机VPN（7897）→ 外网（仅VPN，不走Tor）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A"><span class="nav-text">补充：</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -250,7 +250,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-02-03 15:34:22 / 修改时间：15:35:21" itemprop="dateCreated datePublished" datetime="2026-02-03T15:34:22+08:00">2026-02-03</time>
+      <time title="创建时间：2026-02-03 15:34:22 / 修改时间：17:41:51" itemprop="dateCreated datePublished" datetime="2026-02-03T15:34:22+08:00">2026-02-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,14 +280,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
+      <span>7 分钟</span>
     </span>
 </div>
 
@@ -313,6 +313,34 @@
 <li><strong>虚拟机系统Tor服务</strong>（&#x2F;usr&#x2F;bin&#x2F;tor，监听127.0.0.1:9050）：仅服务于终端、proxychains4等命令行工具，配置文件为<code>/etc/tor/torrc</code>；</li>
 <li><strong>Tor Browser内置Tor客户端</strong>：浏览器专属，独立进程、独立链路，配置仅在浏览器内生效，和系统Tor无任何关联。</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>归属</th>
+<th>监听端口</th>
+<th>配置文件&#x2F;位置</th>
+<th>作用对象</th>
+<th>是否与其他Tor实例共享配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>虚拟机系统Tor服务</td>
+<td>虚拟机系统</td>
+<td>127.0.0.1:9050</td>
+<td>&#x2F;etc&#x2F;tor&#x2F;torrc</td>
+<td>终端、proxychains4、命令行工具</td>
+<td>完全独立</td>
+</tr>
+<tr>
+<td>Tor Browser内置Tor</td>
+<td>Tor Browser自带</td>
+<td>随机端口（非9050）</td>
+<td>浏览器内Connection设置</td>
+<td>Tor Browser自身</td>
+<td>完全独立</td>
+</tr>
+</tbody></table>
 <h4 id="正确逻辑："><a href="#正确逻辑：" class="headerlink" title="正确逻辑："></a>正确逻辑：</h4><ul>
 <li>修改<code>/etc/tor/torrc</code>配置7897 → <strong>仅影响系统Tor服务</strong>，对Tor Browser毫无作用；</li>
 <li>想让Tor Browser通过宿主机7897连网 → 必须在<strong>Tor Browser自身设置</strong>配置上游代理：<ol>
@@ -348,35 +376,38 @@
 <p><strong>使用命令</strong>：同样程序前加<code>proxychains4</code>，例：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 curl ifconfig.me  <span class="comment"># 返回宿主机VPN出口IP，验证成功</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="三、关键补充：系统Tor-vs-Tor-Browser内置Tor（必分清，一张表搞定）"><a href="#三、关键补充：系统Tor-vs-Tor-Browser内置Tor（必分清，一张表搞定）" class="headerlink" title="三、关键补充：系统Tor vs Tor Browser内置Tor（必分清，一张表搞定）"></a>三、关键补充：系统Tor vs Tor Browser内置Tor（必分清，一张表搞定）</h2><table>
-<thead>
-<tr>
-<th>组件</th>
-<th>归属</th>
-<th>监听端口</th>
-<th>配置文件&#x2F;位置</th>
-<th>作用对象</th>
-<th>是否与其他Tor实例共享配置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>虚拟机系统Tor服务</td>
-<td>虚拟机系统</td>
-<td>127.0.0.1:9050</td>
-<td>&#x2F;etc&#x2F;tor&#x2F;torrc</td>
-<td>终端、proxychains4、命令行工具</td>
-<td>完全独立</td>
-</tr>
-<tr>
-<td>Tor Browser内置Tor</td>
-<td>Tor Browser自带</td>
-<td>随机端口（非9050）</td>
-<td>浏览器内Connection设置</td>
-<td>Tor Browser自身</td>
-<td>完全独立</td>
-</tr>
-</tbody></table>
+<h4 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h4><ul>
+<li>要实现系统tor服务走宿主机vpn,不一定需要 配置torrc文件</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当你编辑 torrc 文件加入 Socks5Proxy 或 HTTPSProxy 时，Tor 处于 “主动模式”。</span><br><span class="line"></span><br><span class="line">在这种模式下，Tor 的程序逻辑非常严谨（甚至有些死板）：</span><br><span class="line">  (1)预校验机制（Strict Validation）： </span><br><span class="line">    现代版本的 Tor（尤其是你用的 0.4.8+）在启动前会进行严格的自我检查。</span><br><span class="line">    如果它发现你填写的 192.168.x.x 是一个局域网 IP，它会试图去解析或预连接。</span><br><span class="line">    如果此时虚拟机的网络沙箱环境（Sandbox）限制了对局域网的访问，或者 Tor 认为这个地址“不可信”，它就会直接报错拒绝启动。</span><br><span class="line"></span><br><span class="line">  (2)代码路径复杂： </span><br><span class="line">    Tor 要自己负责处理 SOCKS5 握手、DNS 解析分流等。</span><br><span class="line">    只要这些环节中有一个不符合 Linux 内核的安全策略（比如缺少权限或网络环境不匹配），它就会抛出 failed to parse or resolve</span><br></pre></td></tr></table></figure>
 
+<ul>
+<li>配置proxchains4 &amp;&amp; sudo proxychains4 tor</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">使用 Proxychains 时，Tor 处于 “被动模式”（它甚至不知道自己在走代理）。</span><br><span class="line"></span><br><span class="line">欺骗技术（LD_PRELOAD）： </span><br><span class="line">  Proxychains 使用了一种叫 LD_PRELOAD 的技术。</span><br><span class="line">  在 Tor 启动瞬间，Proxychains 把自己的一段代码“注入”到了 Tor 进程中，接管了 Tor 所有的网络系统调用（connect, send, receive）。</span><br><span class="line"></span><br><span class="line">瞒天过海：</span><br><span class="line">  Tor 在内部想：“我要直接连接一个德国的节点 IP：1.2.3.4”。</span><br><span class="line">  这个请求刚发出，就被 Proxychains 拦截了。</span><br><span class="line">  Proxychains 对 Tor 说：“没问题，连上了！”。</span><br><span class="line"></span><br><span class="line">实际上，Proxychains 在后台偷偷把这个请求打包，发给了你的宿主机 192.168.1.155:7897。</span><br><span class="line"></span><br><span class="line">绕过校验： 因为你的 torrc 配置文件是干净的默认设置，Tor 的“预校验”逻辑发现没有配置代理，直接绿灯通过。它根本不知道它的流量在离开虚拟机之前，已经被 Proxychains 强制拐弯了。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建tor_bridge.conf</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 专用于拉起 Tor 进程的桥接配置</span><br><span class="line">dynamic_chain  # 关键修改：替换 strict_chain 为动态链，适配 Tor 动态连接中继</span><br><span class="line">proxy_dns</span><br><span class="line">remote_dns_subnet 224</span><br><span class="line">tcp_read_time_out 15000</span><br><span class="line">tcp_connect_time_out 8000</span><br><span class="line"></span><br><span class="line">[ProxyList]</span><br><span class="line"># clash-vpn 宿主机代理，给 Tor 提供外网通道</span><br><span class="line"># 严禁写 127.0.0.1 9050，否则 Tor 会无法启动（保留该注释，提醒自己）</span><br><span class="line">socks5  代理节点ip  代理端口</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建tor-proxy.conf</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dynamic_chain  # 关键修改：替换 strict_chain 为动态链</span><br><span class="line">proxy_dns</span><br><span class="line">remote_dns_subnet 224</span><br><span class="line"># 补全超时配置，和 tor_bridge.conf 统一，避免程序代理时超时</span><br><span class="line">tcp_read_time_out 15000</span><br><span class="line">tcp_connect_time_out 8000</span><br><span class="line"></span><br><span class="line">[ProxyList]</span><br><span class="line"># 对接本地 Tor 服务，给程序提供匿名代理</span><br><span class="line">socks5  127.0.0.1  9050</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建zsh快捷方式</li>
+</ul>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> tor-on=<span class="string">&quot;sudo proxychains4 -f ~/tor-custom/tor_bridge.conf tor&quot;</span></span><br><span class="line"><span class="built_in">alias</span> tor-off=<span class="string">&quot;sudo pkill tor &amp;&amp; sleep 2 &amp;&amp; sudo pkill -9 tor&quot;</span> <span class="comment"># 先软后硬，确保Tor进程完全退出</span></span><br><span class="line"><span class="built_in">alias</span> tor-proxy=<span class="string">&quot;sudo proxychains4 -f ~/tor-custom/tor-proxy.conf&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>使用</li>
+</ul>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 启动Tor</span></span><br><span class="line">tor-on</span><br><span class="line"></span><br><span class="line"><span class="comment"># 经tor到vpn代理</span></span><br><span class="line">tor-proxy firefox <span class="comment"># firefox-&gt;tor-&gt;vpn</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 经tor到vpn代理，验证出口IP是否为vpn出口IP</span></span><br><span class="line">tor-proxy curl ifconfig.me</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭Tor</span></span><br><span class="line">tor-off</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -436,7 +467,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">8:39</span>
+    <span title="站点阅读时长">8:42</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

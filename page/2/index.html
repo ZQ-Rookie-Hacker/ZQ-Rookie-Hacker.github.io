@@ -249,7 +249,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-02 12:15:59" itemprop="dateModified" datetime="2026-02-02T12:15:59+08:00">2026-02-02</time>
+      <time title="修改时间：2026-02-08 19:06:47" itemprop="dateModified" datetime="2026-02-08T19:06:47+08:00">2026-02-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -279,14 +279,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.3k</span>
+      <span>3.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
+      <span>12 分钟</span>
     </span>
 </div>
 
@@ -416,6 +416,20 @@
 <li><code>arp</code> - 查看和处理ARP缓存</li>
 <li><code>arp -a</code> - 显示所有ARP缓存信息</li>
 <li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（Windows命令）</li>
+<li><code>nmcli device show</code> - 显示所有网络设备信息</li>
+<li><code>nmcli device show eth0</code> - 显示eth0网络设备信息</li>
+<li><code>nmcli device status</code> - 显示所有网络设备状态</li>
+<li><code>nmcli connection show</code> - 显示所有网络连接信息</li>
+<li><code>nmcli connection show --active</code> - 显示当前活动的网络连接</li>
+<li><code>nmcli connection up 连接名</code> - 激活指定网络连接</li>
+<li><code>nmcli connection down 连接名</code> - 断开指定网络连接</li>
+<li><code>nmcli device wifi list</code> - 显示无线网络列表 </li>
+<li><code>nmcli device wifi connect 网络名 password 密码</code> - 连接无线网络</li>
+<li>DNS服务配置<ul>
+<li><code>nmcli connection modify &quot;连接名称&quot; ipv4.dns &quot;DNS1,DNS2,DNS3&quot;</code>- 设置指定网络连接的DNS服务器</li>
+<li><code>vim /etc/hosts</code>- 编辑hosts文件，添加或修改主机名和IP映射(优先级最高)</li>
+</ul>
+</li>
 </ul>
 <h3 id="网络诊断"><a href="#网络诊断" class="headerlink" title="网络诊断"></a>网络诊断</h3><ul>
 <li><code>ping www.baidu.com</code> - 测试网络连接</li>
@@ -3348,7 +3362,7 @@
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#97;&#x62;&#99;&#64;&#99;&#115;&#107;&#97;&#111;&#x79;&#x61;&#110;&#x2e;&#99;&#111;&#109;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#97;&#x62;&#x63;&#64;&#x63;&#x73;&#x6b;&#x61;&#111;&#x79;&#97;&#x6e;&#46;&#x63;&#x6f;&#x6d;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>
@@ -8831,7 +8845,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">8:42</span>
+    <span title="站点阅读时长">8:43</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

@@ -249,7 +249,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-08 19:06:47" itemprop="dateModified" datetime="2026-02-08T19:06:47+08:00">2026-02-08</time>
+      <time title="修改时间：2026-03-05 17:51:26" itemprop="dateModified" datetime="2026-03-05T17:51:26+08:00">2026-03-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -279,14 +279,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.5k</span>
+      <span>4.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>12 分钟</span>
+      <span>14 分钟</span>
     </span>
 </div>
 
@@ -409,27 +409,172 @@
 <li><code>kill -9 PID</code> - 强制杀死指定PID的进程</li>
 <li><code>taskkill /pid PID数</code> - 终止指定PID的进程（Windows命令，Kali中不适用）</li>
 </ul>
-<h2 id="6-网络相关命令"><a href="#6-网络相关命令" class="headerlink" title="6. 网络相关命令"></a>6. 网络相关命令</h2><h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><ul>
-<li><code>ifconfig</code> - 查看和配置网络接口信息</li>
-<li><code>iwconfig</code> - 配置或获取无线网络设备信息</li>
-<li><code>route print</code> - 显示IP路由表（Windows命令）</li>
-<li><code>arp</code> - 查看和处理ARP缓存</li>
-<li><code>arp -a</code> - 显示所有ARP缓存信息</li>
-<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（Windows命令）</li>
-<li><code>nmcli device show</code> - 显示所有网络设备信息</li>
-<li><code>nmcli device show eth0</code> - 显示eth0网络设备信息</li>
-<li><code>nmcli device status</code> - 显示所有网络设备状态</li>
-<li><code>nmcli connection show</code> - 显示所有网络连接信息</li>
-<li><code>nmcli connection show --active</code> - 显示当前活动的网络连接</li>
-<li><code>nmcli connection up 连接名</code> - 激活指定网络连接</li>
-<li><code>nmcli connection down 连接名</code> - 断开指定网络连接</li>
-<li><code>nmcli device wifi list</code> - 显示无线网络列表 </li>
-<li><code>nmcli device wifi connect 网络名 password 密码</code> - 连接无线网络</li>
-<li>DNS服务配置<ul>
+<h2 id="6-网络相关命令"><a href="#6-网络相关命令" class="headerlink" title="6. 网络相关命令"></a>6. 网络相关命令</h2><h3 id="网络相关文件"><a href="#网络相关文件" class="headerlink" title="网络相关文件"></a>网络相关文件</h3><p><strong>注意</strong></p>
+<ul>
+<li>现代kali的网卡主管理工具是<code>NetworkManager</code></li>
+<li>配置文件位置：<code>/etc/NetworkManager/system-connections/</code>（每个连接一个 .nmconnection 文件）</li>
+<li>传统方式是通过编辑<code>/etc/network/interfaces</code>文件来配置网络接口</li>
+</ul>
+<ul>
+<li><p><strong><code>/etc/network/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：传统的 Debian 网络配置目录（ifupdown 系统）。</li>
+<li><strong>关键文件</strong>：<code>interfaces</code>（定义静态 IP、DHCP 等）、<code>interfaces.d/</code>（子接口配置）。</li>
+<li><strong>现状</strong>：在 Kali 桌面版中，逐渐被 NetworkManager 取代，但在服务器版或某些特定配置中仍在使用。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/NetworkManager/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：NetworkManager 服务的配置目录。Kali 桌面版默认使用此服务管理网络。</li>
+<li><strong>关键文件</strong>：<code>NetworkManager.conf</code>、<code>system-connections/</code>（存储具体的 Wi-Fi 和有线连接配置文件，含密码）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/systemd/network/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：如果使用 <code>systemd-networkd</code> 管理网络，配置文件存放于此。</li>
+<li><strong>关键文件</strong>：<code>.network</code>, <code>.netdev</code>, <code>.link</code> 文件。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/netplan/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：主要用于 Ubuntu，但在某些 Kali 变体或特定云镜像中可能出现。用于生成 backend (NetworkManager 或 systemd-networkd) 配置。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/dhcp/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：DHCP 客户端配置文件。</li>
+<li><strong>关键文件</strong>：<code>dhclient.conf</code>（控制 DHCP 请求行为，如 DNS 覆盖等）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/wpa_supplicant/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：Wi-Fi 加密认证配置。</li>
+<li><strong>关键文件</strong>：<code>wpa_supplicant.conf</code>（命令行连接 Wi-Fi 时使用）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/resolv.conf</code></strong></p>
+<ul>
+<li><strong>用途</strong>：配置 DNS 服务器地址。</li>
+<li><strong>注意</strong>：在現代系统中，该文件通常由 NetworkManager 或 systemd-resolved 自动生成&#x2F;管理，手动修改可能会被覆盖。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/hosts</code></strong></p>
+<ul>
+<li><strong>用途</strong>：本地静态主机名解析（IP 到域名的映射），优先级通常高于 DNS。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/hostname</code></strong></p>
+<ul>
+<li><strong>用途</strong>：存储本机的主机名。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/nsswitch.conf</code></strong></p>
+<ul>
+<li><strong>用途</strong>：名称服务切换配置。决定系统查找主机名、用户、组等的顺序（例如：先查 <code>files</code> 即 hosts，再查 <code>dns</code>）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/ethers</code></strong></p>
+<ul>
+<li><strong>用途</strong>：将以太网 MAC 地址映射到 IP 地址（较少用，需配合 arp 守护进程）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/services</code></strong></p>
+<ul>
+<li><strong>用途</strong>：定义网络端口号与服务名称的对应关系（例如：80 对应 http，22 对应 ssh）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/protocols</code></strong></p>
+<ul>
+<li><strong>用途</strong>：定义 IP 协议号（如 TCP, UDP, ICMP 等）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/ssh/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：SSH 服务配置（网络远程访问核心）。</li>
+<li><strong>关键文件</strong>：<code>sshd_config</code>（服务端配置）、<code>ssh_config</code>（客户端配置）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/iptables/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：保存 iptables 防火墙规则的文件（如果使用 iptables-persistent）。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/nftables/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：保存 nftables 防火墙规则（现代 Linux 逐渐转向 nftables）。   <strong><code>/etc/ufw/</code></strong></li>
+<li><strong>用途</strong>：如果使用 UFW (Uncomplicated Firewall)，配置在此目录。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/networkd-dispatcher/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：当网络状态改变时触发脚本的目录。</li>
+</ul>
+</li>
+<li><p><strong><code>/etc/NetworkManager/dispatcher.d/</code></strong></p>
+<ul>
+<li><strong>用途</strong>：NetworkManager 在网络连接&#x2F;断开时执行脚本的目录。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><code>/etc/proxychains4.conf</code><ul>
+<li><strong>用途</strong>：配置代理服务器（如 SOCKS4&#x2F;5, HTTP 等）。</li>
+<li><strong>关键文件</strong>：<code>proxychains4.conf</code>（全局配置）、<code>proxychains.conf</code>（旧版配置）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><ul>
+<li><p><code>ifconfig</code> - 查看和配置网络接口信息</p>
+</li>
+<li><p><code>iwconfig</code> - 配置或获取无线网络设备信息</p>
+</li>
+<li><p><code>ip addr</code> - 显示所有网络接口信息</p>
+</li>
+<li><p><code>ip link show</code> - 显示所有网络接口信息</p>
+</li>
+<li><p><code>ip link set eth0 up</code> - 激活eth0网络接口</p>
+</li>
+<li><p><code>ip link set eth0 down</code> - 停用eth1网络接口</p>
+</li>
+<li><p><code>cat /etc/resolv.conf</code> - 查看DNS服务器配置</p>
+</li>
+<li><p><code>ip route show</code> - 显示IP路由表</p>
+</li>
+<li><p><code>route print</code> - 显示IP路由表（Windows命令）</p>
+</li>
+<li><p><code>arp</code> - 查看和处理ARP缓存</p>
+</li>
+<li><p><code>arp -a</code> - 显示所有ARP缓存信息</p>
+</li>
+<li><p><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（Windows命令）</p>
+</li>
+<li><p><code>nmcli device show</code> - 显示所有网络设备信息</p>
+</li>
+<li><p><code>nmcli device show eth0</code> - 显示eth0网络设备信息</p>
+</li>
+<li><p><code>nmcli device status</code> - 显示所有网络设备状态</p>
+</li>
+<li><p><code>nmcli connection show</code> - 显示所有网络连接信息</p>
+</li>
+<li><p><code>nmcli connection show --active</code> - 显示当前活动的网络连接</p>
+</li>
+<li><p><code>nmcli connection up 连接名</code> - 激活指定网络连接</p>
+</li>
+<li><p><code>nmcli connection down 连接名</code> - 断开指定网络连接</p>
+</li>
+<li><p><code>nmcli device wifi list</code> - 显示无线网络列表 </p>
+</li>
+<li><p><code>nmcli device wifi connect 网络名 password 密码</code> - 连接无线网络</p>
+</li>
+<li><p>DNS服务配置</p>
+<ul>
+<li><code>cat /etc/resolv.conf</code> - 查看DNS服务器配置</li>
 <li><code>nmcli connection modify &quot;连接名称&quot; ipv4.dns &quot;DNS1,DNS2,DNS3&quot;</code>- 设置指定网络连接的DNS服务器</li>
 <li><code>vim /etc/hosts</code>- 编辑hosts文件，添加或修改主机名和IP映射(优先级最高)</li>
 </ul>
 </li>
+<li><p>新网卡配置过程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新的有线连接（连接名：Wired connection 2 绑定网卡：eth1）</span></span><br><span class="line"><span class="built_in">sudo</span> nmcli connection add <span class="built_in">type</span> ethernet con-name <span class="string">&quot;Wired connection 2&quot;</span> ifname eth1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置静态ip（暂时不设置网关与dns）</span></span><br><span class="line"><span class="built_in">sudo</span> nmcli con mod <span class="string">&quot;Wired connection 2&quot;</span> ipv4.addresses 192.168.64.100/24</span><br><span class="line"><span class="built_in">sudo</span> nmcli con mod <span class="string">&quot;Wired connection 2&quot;</span> ipv4.gateway <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="built_in">sudo</span> nmcli con mod <span class="string">&quot;Wired connection 2&quot;</span> ipv4.method manual</span><br><span class="line"><span class="built_in">sudo</span> nmcli con mod <span class="string">&quot;Wired connection 2&quot;</span> ipv4.dns <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活新连接</span></span><br><span class="line"><span class="built_in">sudo</span> nmcli con up <span class="string">&quot;Wired connection 2&quot;</span></span><br><span class="line"></span><br><span class="line">只有的连接等问题使用nmcli</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="网络诊断"><a href="#网络诊断" class="headerlink" title="网络诊断"></a>网络诊断</h3><ul>
 <li><code>ping www.baidu.com</code> - 测试网络连接</li>
@@ -3362,7 +3507,7 @@
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#97;&#x62;&#x63;&#64;&#x63;&#x73;&#x6b;&#x61;&#111;&#x79;&#97;&#x6e;&#46;&#x63;&#x6f;&#x6d;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#97;&#98;&#99;&#64;&#x63;&#115;&#107;&#x61;&#x6f;&#121;&#97;&#x6e;&#x2e;&#x63;&#111;&#x6d;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>
@@ -8838,14 +8983,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">157k</span>
+    <span title="站点总字数">158k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">8:43</span>
+    <span title="站点阅读时长">8:46</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动

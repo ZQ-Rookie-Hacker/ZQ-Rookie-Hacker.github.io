@@ -803,7 +803,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-29 15:59:51" itemprop="dateModified" datetime="2026-01-29T15:59:51+08:00">2026-01-29</time>
+      <time title="修改时间：2026-03-10 10:57:28" itemprop="dateModified" datetime="2026-03-10T10:57:28+08:00">2026-03-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -833,7 +833,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>930</span>
+      <span>1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -916,7 +916,10 @@
 <li><code>\\IP\c</code> - 访问默认共享c盘，如：<code>\\192.168.0.108\c</code></li>
 </ul>
 <h3 id="远程连接"><a href="#远程连接" class="headerlink" title="远程连接"></a>远程连接</h3><ul>
-<li><code>net use \\目标IP\ipc$ 密码 /u:用户名</code> - 连接目标机器</li>
+<li><code>net use \\目标IP\ipc$ 密码 /u:用户名</code> - 连接目标机器<ul>
+<li>ipc$：Windows 系统自带的、无实体文件的虚拟共享，不是具体的文件夹 &#x2F; 文件（不像 C$ 是真实的 C 盘共享），也没有实际存储内容，唯一作用是作为本地机和远程机之间的「通信管道」，让各类远程操作（比如 PsExec 执行命令、at 定时任务）能通过这个管道传输数据、完成身份认证。</li>
+</ul>
+</li>
 <li><code>at \\目标IP 21:31 c:\server.exe</code> - 在指定时间启动应用（适用于低版本Windows）</li>
 <li><code>wmic /node:&quot;目标IP&quot; /password:&quot;123456&quot; /user:&quot;admin&quot;</code> - 连接目标机器</li>
 <li><code>psexec.exe \\目标IP -u username -p password -s cmd</code> - 在目标机器上执行cmd</li>
@@ -3507,7 +3510,7 @@
 <li>必需关键字：To<ul>
 <li>填入一个或多个收件人的电子邮件地址<ul>
 <li>格式：收件人邮箱名@邮箱所在主机的域名<ul>
-<li>如：<a href="mailto:&#97;&#98;&#99;&#64;&#x63;&#115;&#107;&#x61;&#x6f;&#121;&#97;&#x6e;&#x2e;&#x63;&#111;&#x6d;">abc@cskaoyan.com</a></li>
+<li>如：<a href="mailto:&#97;&#98;&#99;&#64;&#99;&#x73;&#x6b;&#x61;&#x6f;&#x79;&#97;&#110;&#x2e;&#x63;&#x6f;&#x6d;">abc@cskaoyan.com</a></li>
 </ul>
 </li>
 </ul>

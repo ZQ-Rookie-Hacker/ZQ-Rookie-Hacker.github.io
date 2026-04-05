@@ -1,0 +1,1755 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 3 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		wubba lubba dub dub.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/物理层/" >第 2 章 物理层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
+<li>①. 数据、信号与码元<ul>
+<li>通信目的：传输信息（文字、图像、视频等）</li>
+<li>数据：传送信息的实体</li>
+<li>信号：数据的电气或电磁表现</li>
+<li>分类：<ul>
+<li>模拟数据&#x2F;信号：取值连续</li>
+<li>数字数据&#x2F;信号：取值离散</li>
+</ul>
+</li>
+<li>码元：<ul>
+<li>定义：固定时长的信号波形表示k进制数</li>
+<li>码元宽度：信号周期</li>
+<li>信息量：1码元可携带若干比特</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 信源、信道与信宿<ul>
+<li>通信系统模型：<ul>
+<li>信源：产生和发送数据的源头</li>
+<li>信道：信号的传输介质<ul>
+<li>分类：<ul>
+<li>按信号形式：模拟信道、数字信道</li>
+<li>按传输介质：无线信道、有线信道</li>
+</ul>
+</li>
+<li>信号类型：<ul>
+<li>基带信号：未调制的原始电信号</li>
+<li>宽带信号：调制后的频分复用模拟信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信宿：接收数据的终点</li>
+</ul>
+</li>
+<li>数据传输方式：<ul>
+<li>串行传输：逐比特按序传输（长距离）</li>
+<li>并行传输：多比特同时传输（近距离）</li>
+</ul>
+</li>
+<li>通信交互方式：<ul>
+<li>单向通信：单方向（广播）</li>
+<li>半双工通信：双向但不能同时</li>
+<li>全双工通信：双向同时</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 速率、波特与带宽<ul>
+<li>速率：<ul>
+<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
+<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
+<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
+</ul>
+</li>
+<li>带宽：<ul>
+<li>模拟系统：频率范围（Hz）</li>
+<li>计算机网络：最高数据率（b&#x2F;s）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
+<li>信道失真影响<ul>
+<li>失真不影响通信质量的条件</li>
+<li>导致严重失真的因素<ul>
+<li>码元传输速率高</li>
+<li>信号传输距离远</li>
+<li>噪声干扰大</li>
+<li>传输介质质量差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>奈奎斯特定理(奈氏准则)<ul>
+<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>V: 码元离散电平数量</li>
+</ul>
+</li>
+<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
+<li>提高数据速率的方法: 多元制调制</li>
+</ul>
+</li>
+<li>香农定理<ul>
+<li>适用场景: 带宽受限且有高斯噪声的信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>S: 信号平均功率</li>
+<li>N: 高斯噪声功率</li>
+</ul>
+</li>
+<li>信噪比表示方法<ul>
+<li>无单位记法: S&#x2F;N</li>
+<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
+</ul>
+</li>
+<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
+</ul>
+</li>
+<li>奈氏准则 vs 香农定理<ul>
+<li>奈氏准则: 仅考虑带宽与码元速率</li>
+<li>香农定理: 同时考虑带宽和信噪比</li>
+<li>共同结论: 单个码元携带比特数有限</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
+<li>信号与数据转换<ul>
+<li>编码: 数据→数字信号</li>
+<li>调制: 数据→模拟信号</li>
+</ul>
+</li>
+<li>数字数据转换方式<ul>
+<li>数字发送器→数字信号</li>
+<li>调制器→模拟信号</li>
+</ul>
+</li>
+<li>模拟数据转换方式<ul>
+<li>PCM编码器→数字信号</li>
+<li>放大器调制器→模拟信号</li>
+</ul>
+</li>
+<li>四种编码与调制方式<ul>
+<li>数字数据编码为数字信号<ul>
+<li>常用编码方式<ul>
+<li>归零(RZ)编码<ul>
+<li>特点: 码元中间跳变到零电平</li>
+<li>优点: 提供自同步机制</li>
+<li>缺点: 占用带宽</li>
+</ul>
+</li>
+<li>非归零(NRZ)编码<ul>
+<li>特点: 不归零</li>
+<li>优点: 编码效率最高</li>
+<li>缺点: 需要时钟线同步</li>
+</ul>
+</li>
+<li>反向非归零(NRZI)编码<ul>
+<li>特点: 电平跳变表示0,不变表示1</li>
+<li>应用: USB 2.0</li>
+</ul>
+</li>
+<li>曼彻斯特编码<ul>
+<li>特点: 码元中间电平跳变</li>
+<li>应用: 标准以太网</li>
+</ul>
+</li>
+<li>差分曼彻斯特编码<ul>
+<li>特点: 码元开始处跳变表示0</li>
+<li>优点: 抗干扰能力强</li>
+<li>应用: 宽带高速网</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据编码为数字信号<ul>
+<li>步骤<ul>
+<li>采样<ul>
+<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
+</ul>
+</li>
+<li>量化<ul>
+<li>电平幅值→离散数字量</li>
+</ul>
+</li>
+<li>编码<ul>
+<li>离散整数→二进制编码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用: PCM编码</li>
+</ul>
+</li>
+<li>数字数据调制为模拟信号<ul>
+<li>调制方式<ul>
+<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
+<li>特点: 改变振幅表示1和0</li>
+<li>缺点: 抗干扰能力差</li>
+</ul>
+</li>
+<li>调频(FM)&#x2F;频移键控(FSK)<ul>
+<li>特点: 改变频率表示1和0</li>
+<li>优点: 抗干扰能力强</li>
+</ul>
+</li>
+<li>调相(PM)&#x2F;相移键控(PSK)<ul>
+<li>特点: 改变相位表示1和0</li>
+<li>变种: DPSK(差分相移键控)</li>
+</ul>
+</li>
+<li>正交幅度调制(QAM)<ul>
+<li>特点: AM与PM结合</li>
+<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据调制为模拟信号<ul>
+<li>应用<ul>
+<li>电话机和本地局交换机</li>
+</ul>
+</li>
+<li>技术: 频分复用(FDM)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
+<li>传输介质分类<ul>
+<li>导向传输介质<ul>
+<li>铜线或光纤</li>
+<li>电磁波沿固体介质传播</li>
+</ul>
+</li>
+<li>非导向传输介质<ul>
+<li>自由空间（空气、真空或海水）</li>
+<li>无线传输</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>①. 双绞线<ul>
+<li>特点<ul>
+<li>最常用传输介质</li>
+<li>两根绝缘铜导线绞合</li>
+<li>减少电磁干扰</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>屏蔽双绞线(STP)</li>
+<li>非屏蔽双绞线(UTP)</li>
+</ul>
+</li>
+<li>性能<ul>
+<li>价格便宜</li>
+<li>模拟&#x2F;数字传输</li>
+<li>通信距离：几千米到数十千米</li>
+<li>带宽取决于铜线粗细和传输距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 同轴电缆<ul>
+<li>结构<ul>
+<li>内导体</li>
+<li>绝缘层</li>
+<li>外导体屏蔽层</li>
+<li>绝缘保护套层</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>50Ω同轴电缆<ul>
+<li>传送基带数字信号</li>
+<li>早期局域网应用</li>
+</ul>
+</li>
+<li>75Ω同轴电缆<ul>
+<li>传送宽带信号</li>
+<li>有线电视系统应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>良好抗干扰特性</li>
+<li>传输较高速率数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 光纤<ul>
+<li>原理<ul>
+<li>利用光脉冲通信</li>
+<li>1：有光脉冲</li>
+<li>0：无光脉冲</li>
+</ul>
+</li>
+<li>结构<ul>
+<li>纤芯（8-100μm）</li>
+<li>包层（较低折射率）</li>
+</ul>
+</li>
+<li>传输原理<ul>
+<li>全反射现象</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>多模光纤<ul>
+<li>多条光线传输</li>
+<li>适合近距离</li>
+</ul>
+</li>
+<li>单模光纤<ul>
+<li>单波长传输</li>
+<li>适合远距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信容量大</li>
+<li>传输损耗小</li>
+<li>抗干扰性能好</li>
+<li>无串音干扰</li>
+<li>体积小重量轻</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>④. 无线传输介质<ul>
+<li>应用场景<ul>
+<li>蜂窝移动电话</li>
+<li>无线局域网(WLAN)</li>
+<li>特殊场合移动联网</li>
+</ul>
+</li>
+<li>(1) 无线电波<ul>
+<li>特点<ul>
+<li>穿透能力强</li>
+<li>传输距离长</li>
+<li>全向传播</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(2) 微波、红外线和激光<ul>
+<li>共同特点<ul>
+<li>需要视线通路</li>
+<li>指向性强</li>
+</ul>
+</li>
+<li>微波通信<ul>
+<li>频率：2-40GHz</li>
+<li>容量大</li>
+<li>直线传播</li>
+<li>需中继站</li>
+</ul>
+</li>
+<li>卫星通信<ul>
+<li>地球同步卫星中继</li>
+<li>优点<ul>
+<li>容量大</li>
+<li>距离远</li>
+<li>覆盖广</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>保密性差</li>
+<li>传播时延长</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2025/12/05/物理层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/网络层/" >第 4 章 网络层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="4-1-网络层的功能"><a href="#4-1-网络层的功能" class="headerlink" title="4.1   网络层的功能"></a>4.1   网络层的功能</h2><h3 id="4-1-1-异构网络互连"><a href="#4-1-1-异构网络互连" class="headerlink" title="4.1.1   异构网络互连"></a>4.1.1   异构网络互连</h3><ul>
+<li>定义<ul>
+<li>互联网由全球范围内数以百万计的异构网络互连</li>
+<li>网络层任务之一是实现异构网络互连</li>
+<li>网络互连：将两个以上计算机网络通过中继系统相互连接</li>
+</ul>
+</li>
+<li>中继系统分类（按层次）<ul>
+<li>物理层中继系统<ul>
+<li>转发器</li>
+<li>集线器</li>
+</ul>
+</li>
+<li>数据链路层中继系统<ul>
+<li>网桥</li>
+<li>交换机</li>
+</ul>
+</li>
+<li>网络层中继系统<ul>
+<li>路由器</li>
+</ul>
+</li>
+<li>网络层以上中继系统<ul>
+<li>网关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络互连特点<ul>
+<li>通常指用路由器进行连接和路由选择</li>
+<li>路由器是专用计算机</li>
+<li>历史原因：路由器有时被称为网关</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP网络互连方案<ul>
+<li>网络层采用标准化协议</li>
+<li>可连接异构网络</li>
+<li>IP网络概念<ul>
+<li>实际互连网络（通过路由器连接）</li>
+<li>虚拟IP网络（统一网络视图）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IP网络优势<ul>
+<li>主机通信时如同在单个网络上</li>
+<li>隐藏底层网络异构细节</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-2-路由与转发"><a href="#4-1-2-路由与转发" class="headerlink" title="4.1.2   路由与转发"></a>4.1.2   路由与转发</h3><ul>
+<li>路由器主要完成两个功能<ul>
+<li>路由选择(确定哪一条路径)<ul>
+<li>根据路由选择协议构造并维护路由表</li>
+<li>经常或定期与相邻路由器交换信息</li>
+<li>获取网络最新拓扑</li>
+<li>动态更新维护路由表</li>
+<li>决定分组到达目的地节点的最优路径</li>
+</ul>
+</li>
+<li>分组转发(分组到达时所采取的动作)<ul>
+<li>处理通过路由器的数据流</li>
+<li>关键操作<ul>
+<li>转发表查询</li>
+<li>转发</li>
+<li>队列管理</li>
+<li>任务调度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>路由表与转发表的关系<ul>
+<li>路由表根据路由选择算法得出</li>
+<li>转发表从路由表得出</li>
+<li>转发表结构优化查找过程</li>
+<li>路由表优化网络拓扑变化计算</li>
+</ul>
+</li>
+<li>注意<ul>
+<li>讨论路由选择原理时<ul>
+<li>不区分转发表和路由表</li>
+<li>笼统使用路由表一词</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-3-网络层提供的两种服务"><a href="#4-1-3-网络层提供的两种服务" class="headerlink" title="4.1.3    网络层提供的两种服务"></a>4.1.3    网络层提供的两种服务</h3><ul>
+<li><p>网络层提供两种通信服务方式</p>
+<ul>
+<li>面向连接的虚电路服务</li>
+<li>无连接的数据报服务</li>
+</ul>
+</li>
+<li><p>①. 虚电路（Virtual Circuit, VC）</p>
+<ul>
+<li>基本概念<ul>
+<li>计算机通信前先建立网络层连接</li>
+<li>连接是一条逻辑上的路径（非物理专用）</li>
+<li>分为三个阶段：建立、传输、释放</li>
+</ul>
+</li>
+<li>虚电路号（VCID）<ul>
+<li>每次建立时分配唯一编号</li>
+<li>区分不同虚电路</li>
+</ul>
+</li>
+<li>数据传输特点<ul>
+<li>首部仅携带VCID，不重复目的地址</li>
+<li>每个节点维护虚电路表<ul>
+<li>包含VCID、入链路、出链路、前后节点等信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>建立连接：发送“呼叫请求”分组 → 接收方确认“呼叫应答”</li>
+<li>数据传输：通过已建立路径传输数据分组</li>
+<li>释放连接：发送“释放请求”分组 → 逐段拆除连接</li>
+</ul>
+</li>
+<li>特点总结<ul>
+<li>建立&#x2F;拆除需要开销，适合长时间频繁通信</li>
+<li>路由选择在连接建立时确定</li>
+<li>提供可靠传输、有序到达、流量控制</li>
+<li>对网络故障适应性差<ul>
+<li>节点或链路失效 → 所有相关虚电路中断</li>
+</ul>
+</li>
+<li>分组首部开销小（只用VCID）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>②. 数据报（Datagram）</p>
+<ul>
+<li>基本概念<ul>
+<li>发送前不需要建立连接</li>
+<li>每个分组独立路由转发</li>
+<li>网络层不承诺服务质量</li>
+</ul>
+</li>
+<li>数据传输特点<ul>
+<li>每个分组包含完整源和目的地址</li>
+<li>中间节点缓存并查找转发表进行转发</li>
+<li>不保证顺序、可靠性、流量控制</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>主机A将分组发给相邻交换节点A</li>
+<li>节点A查找转发表决定下一跳</li>
+<li>其他节点类似转发，直到到达主机B</li>
+</ul>
+</li>
+<li>特点总结<ul>
+<li>无需连接建立，灵活高效</li>
+<li>尽最大努力交付，可能出错、丢失、乱序</li>
+<li>支持资源复用，利用率高</li>
+<li>对网络故障适应性强<ul>
+<li>可动态更新路由避开故障节点</li>
+</ul>
+</li>
+<li>分组需排队转发，可能造成延迟或丢包</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>③. 数据报服务与虚电路服务比较</p>
+<ul>
+<li>连接的建立<ul>
+<li>数据报服务：不需要</li>
+<li>虚电路服务：必须有</li>
+</ul>
+</li>
+<li>目的地址<ul>
+<li>数据报服务：每个分组都有完整的目的地址</li>
+<li>虚电路服务：连接阶段</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-4-SDN-的基本概念"><a href="#4-1-4-SDN-的基本概念" class="headerlink" title="4.1.4   SDN 的基本概念"></a>4.1.4   SDN 的基本概念</h3><ul>
+<li>网络层抽象划分<ul>
+<li>数据平面（转发层面）<ul>
+<li>功能：转发</li>
+</ul>
+</li>
+<li>控制平面<ul>
+<li>功能：路由选择</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN架构特点<ul>
+<li>集中式的控制平面</li>
+<li>分布式的数据平面</li>
+<li>控制平面与数据平面分离</li>
+<li>控制平面通过控制-数据接口集中控制路由器</li>
+</ul>
+</li>
+<li>传统路由器 vs SDN路由器<ul>
+<li>传统路由器<ul>
+<li>包含转发表和路由选择软件</li>
+<li>既有数据平面又有控制平面</li>
+</ul>
+</li>
+<li>SDN路由器<ul>
+<li>简化设计</li>
+<li>无需路由选择软件</li>
+<li>路由器间不交换路由信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN结构<ul>
+<li>远程控制器<ul>
+<li>逻辑上的控制中心</li>
+<li>掌握网络状态</li>
+<li>计算最佳路由</li>
+<li>通过Openflow协议下发流表</li>
+</ul>
+</li>
+<li>路由器工作流程<ul>
+<li>收到分组</li>
+<li>查找转发表</li>
+<li>转发分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN应用场景<ul>
+<li>大型数据中心之间的广域网</li>
+</ul>
+</li>
+<li>SDN接口<ul>
+<li>北向接口<ul>
+<li>面向应用开发者的编程接口</li>
+<li>提供丰富API</li>
+</ul>
+</li>
+<li>南向接口<ul>
+<li>控制器与转发设备间的双向会话接口</li>
+<li>协议示例：Openflow</li>
+</ul>
+</li>
+<li>东西向接口<ul>
+<li>控制器集群内部通信接口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SDN优点<ul>
+<li>全局集中式控制和分布式高速转发</li>
+<li>灵活可编程与性能的平衡</li>
+<li>降低成本</li>
+</ul>
+</li>
+<li>SDN问题<ul>
+<li>安全风险<ul>
+<li>集中管理易受攻击</li>
+</ul>
+</li>
+<li>瓶颈问题<ul>
+<li>控制器可能成为性能瓶颈</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-5-拥塞控制"><a href="#4-1-5-拥塞控制" class="headerlink" title="4.1.5    拥塞控制"></a>4.1.5    拥塞控制</h3>
+	
+	</div>
+  <a type="button" href="/2025/12/05/网络层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/计算机网络体系结构/" >第 1 章 计算机网络体系结构</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
+<li>计算机网络的概念<ul>
+<li>定义<ul>
+<li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
+<li>由功能完善的软件实现资源共享和信息传递的系统</li>
+</ul>
+</li>
+<li>组成<ul>
+<li>节点(Node)<ul>
+<li>计算机</li>
+<li>集线器</li>
+<li>交换机</li>
+<li>路由器</li>
+</ul>
+</li>
+<li>链路(Link)</li>
+</ul>
+</li>
+<li>互连网(internet)<ul>
+<li>网络之间通过路由器互连</li>
+<li>构成覆盖范围更广的计算机网络</li>
+</ul>
+</li>
+<li>名词区分<ul>
+<li>internet(互连网)<ul>
+<li>通用名词</li>
+<li>多个计算机网络互连而成</li>
+<li>可使用任意通信协议</li>
+</ul>
+</li>
+<li>Internet(互联网&#x2F;因特网)<ul>
+<li>专用名词</li>
+<li>全球最大、开放的特定计算机网络</li>
+<li>采用TCP&#x2F;IP族作为通信规则</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-2-计算机网络的组成"><a href="#1-1-2-计算机网络的组成" class="headerlink" title="1.1.2   计算机网络的组成"></a>1.1.2   计算机网络的组成</h3><ul>
+<li>从组成部分看<ul>
+<li>硬件<ul>
+<li>主机(端系统)</li>
+<li>通信链路<ul>
+<li>双绞线</li>
+<li>光纤</li>
+</ul>
+</li>
+<li>交换设备<ul>
+<li>路由器</li>
+<li>交换机</li>
+</ul>
+</li>
+<li>通信处理机<ul>
+<li>网卡</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>软件<ul>
+<li>资源共享软件</li>
+<li>工具软件<ul>
+<li>E-mail程序</li>
+<li>FTP程序</li>
+<li>聊天程序</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>协议<ul>
+<li>网络传输数据规范</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从工作方式看(Internet)<ul>
+<li>边缘部分<ul>
+<li>用户直接使用的主机</li>
+<li>功能<ul>
+<li>通信<ul>
+<li>数据传输</li>
+<li>音频&#x2F;视频</li>
+</ul>
+</li>
+<li>资源共享</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>核心部分<ul>
+<li>网络和路由器</li>
+<li>功能<ul>
+<li>提供连通性</li>
+<li>交换服务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从功能组成看<ul>
+<li>通信子网<ul>
+<li>组成<ul>
+<li>传输介质</li>
+<li>通信设备</li>
+<li>网络协议</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>数据传输</li>
+<li>交换</li>
+<li>控制</li>
+<li>存储</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源子网<ul>
+<li>组成<ul>
+<li>资源共享设备</li>
+<li>软件</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>提供硬件资源共享服务</li>
+<li>提供软件资源共享服务</li>
+<li>提供数据资源共享服务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-3-计算机网络的功能"><a href="#1-1-3-计算机网络的功能" class="headerlink" title="1.1.3    计算机网络的功能"></a>1.1.3    计算机网络的功能</h3><ul>
+<li>数据通信<ul>
+<li>最基本和最重要的功能</li>
+<li>实现联网计算机之间各种信息的传输</li>
+<li>应用示例<ul>
+<li>文件传输</li>
+<li>电子邮件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源共享<ul>
+<li>共享类型<ul>
+<li>软件共享</li>
+<li>数据共享</li>
+<li>硬件共享</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>互通有无、分工协作</li>
+<li>提高资源利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分布式处理<ul>
+<li>定义<ul>
+<li>将复杂任务分配给网络中空闲计算机</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>提高系统利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提高可靠性<ul>
+<li>定义<ul>
+<li>各台计算机互为替代机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>负载均衡<ul>
+<li>定义<ul>
+<li>均衡分配工作任务给各台计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他功能<ul>
+<li>电子化办公与服务</li>
+<li>远程教育</li>
+<li>娱乐功能</li>
+<li>社会效益<ul>
+<li>满足社会需求</li>
+<li>方便学习、工作和生活</li>
+<li>巨大经济效益</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-4-电路交换、报文交换与分组交换"><a href="#1-1-4-电路交换、报文交换与分组交换" class="headerlink" title="1.1.4    电路交换、报文交换与分组交换"></a>1.1.4    电路交换、报文交换与分组交换</h3><ul>
+<li>电路交换<ul>
+<li>特点<ul>
+<li>建立连接、传输数据、释放连接</li>
+<li>物理通信路径独占</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信时延小</li>
+<li>有序传输</li>
+<li>没有冲突</li>
+<li>实时性强</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建立连接时间长</li>
+<li>线路利用率低</li>
+<li>灵活性差</li>
+<li>难以实现差错控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>报文交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>报文为单位传输</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>无建立连接时延</li>
+<li>灵活分配线路</li>
+<li>线路利用率高</li>
+<li>支持差错控制</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>转发时延高</li>
+<li>缓存开销大</li>
+<li>错误处理低效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>将报文划分为分组</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>方便存储管理</li>
+<li>传输效率高</li>
+<li>减少出错概率和重传代价</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>存在存储转发时延</li>
+<li>需要传输额外信息量</li>
+<li>可能出现失序、丢失或重复分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三种交换方式比较<ul>
+<li>电路交换适合连续大量数据传输</li>
+<li>报文交换和分组交换信道利用率更高</li>
+<li>分组交换更适合突发式数据传送</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-5-计算机网络的分类"><a href="#1-1-5-计算机网络的分类" class="headerlink" title="1.1.5    计算机网络的分类"></a>1.1.5    计算机网络的分类</h3>
+	
+	</div>
+  <a type="button" href="/2025/12/05/计算机网络体系结构/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/11/13/VPN代理与流量流向分析/" >VPN代理与流量流向分析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-11-13  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、代理层级架构与优先级原理"><a href="#一、代理层级架构与优先级原理" class="headerlink" title="一、代理层级架构与优先级原理"></a>一、代理层级架构与优先级原理</h2><p><img src="/images/VPN%E4%BB%A3%E7%90%86%E4%B8%8E%E6%B5%81%E9%87%8F%E6%B5%81%E5%90%91%E5%88%86%E6%9E%90/image_1.png" alt="在这里插入图片描述"></p>
+<h3 id="1-网络层代理（VPN）-最底层"><a href="#1-网络层代理（VPN）-最底层" class="headerlink" title="1. 网络层代理（VPN）- 最底层"></a>1.<code> 网络层代理</code>（VPN）- 最底层</h3><ul>
+<li><strong>工作层级</strong>：操作系统内核层</li>
+<li><strong>技术代表</strong>：OpenVPN、WireGuard、IPsec</li>
+<li><strong>控制粒度</strong>：<strong>全局代理</strong> - 所有应用程序流量</li>
+<li><strong>技术比喻</strong>：给电脑<strong>虚拟搬迁</strong>到VPN服务器机房</li>
+<li><strong>特点</strong>：透明性高、安全性强，但灵活性差</li>
+</ul>
+<h3 id="2-系统层代理-中间层"><a href="#2-系统层代理-中间层" class="headerlink" title="2. 系统层代理 - 中间层"></a>2. <code>系统层代理 </code>- 中间层</h3><ul>
+<li><strong>工作层级</strong>：操作系统应用层协议</li>
+<li><strong>技术代表</strong>：Windows&#x2F;MacOS系统代理设置</li>
+<li><strong>控制粒度</strong>：<strong>系统级</strong> - 影响遵守系统设置的应用程序</li>
+<li><strong>技术比喻</strong>：设立<strong>总的收发室</strong>处理外寄信件</li>
+<li><strong>特点</strong>：配置方便，但容易被应用程序绕过</li>
+</ul>
+<h3 id="3-应用层代理-最高层"><a href="#3-应用层代理-最高层" class="headerlink" title="3. 应用层代理 - 最高层"></a>3. <code>应用层代理</code> - 最高层</h3><ul>
+<li><p><strong>浏览器插件</strong>（SwitchyOmega等）：</p>
+<ul>
+<li><strong>控制粒度</strong>：<strong>进程级</strong> - 仅控制浏览器流量</li>
+<li><strong>技术比喻</strong>：书房内的<strong>智能路由器</strong></li>
+<li><strong>存在意义</strong>：提供最精细的流量控制，实现国内外网站分流</li>
+</ul>
+</li>
+<li><p><strong>应用程序内置代理</strong>：</p>
+<ul>
+<li><strong>控制粒度</strong>：<strong>应用级</strong> - 仅影响单个应用程序</li>
+<li><strong>特点</strong>：配置独立，针对性强的网络通道</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、四大核心场景流量走向详解"><a href="#二、四大核心场景流量走向详解" class="headerlink" title="二、四大核心场景流量走向详解"></a>二、四大核心场景流量走向详解</h2>
+	
+	</div>
+  <a type="button" href="/2025/11/13/VPN代理与流量流向分析/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/11/08/软考(信息安全工程师)/" >软考(信息安全工程师)</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-11-08  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、信息安全基础概念"><a href="#一、信息安全基础概念" class="headerlink" title="一、信息安全基础概念"></a>一、信息安全基础概念</h2><h3 id="1-信息安全基本属性"><a href="#1-信息安全基本属性" class="headerlink" title="1. 信息安全基本属性"></a>1. 信息安全基本属性</h3><ul>
+<li><strong>机密性</strong>：确保信息不泄露给未授权的个体、进程或实体</li>
+<li><strong>完整性</strong>：保护数据和系统的准确性和完备性，防止未授权篡改</li>
+<li><strong>可用性</strong>：确保授权用户在需要时可以正常访问和使用资源</li>
+<li><strong>可控性</strong>：对信息传播及内容具有控制能力</li>
+<li><strong>抗抵赖性</strong>：确保行为发起者无法否认其行为（如发送消息、签署文件）</li>
+</ul>
+<h3 id="2-网络信息安全基本功能"><a href="#2-网络信息安全基本功能" class="headerlink" title="2. 网络信息安全基本功能"></a>2. 网络信息安全基本功能</h3><ul>
+<li><strong>防御</strong>：事前采取的安全措施（防火墙、加密、访问控制）</li>
+<li><strong>检测</strong>：事中或持续性的监控（IDS、态势感知）</li>
+<li><strong>应急</strong>：事件发生后的紧急响应措施</li>
+<li><strong>恢复</strong>：将受影响系统恢复到正常状态</li>
+</ul>
+<h3 id="3-信息安全管理流程"><a href="#3-信息安全管理流程" class="headerlink" title="3. 信息安全管理流程"></a>3. 信息安全管理流程</h3><ol>
+<li>确定管理对象</li>
+<li>评估对象价值</li>
+<li>识别对象威胁</li>
+<li>识别对象脆弱性</li>
+<li>确定对象风险级别</li>
+<li>制定防范措施</li>
+<li>实施和落实防范措施</li>
+<li>运行与维护网络信息安全管理设备</li>
+</ol>
+<h3 id="4-国家网络安全体系"><a href="#4-国家网络安全体系" class="headerlink" title="4. 国家网络安全体系"></a>4. 国家网络安全体系</h3><ul>
+<li><strong>中国网络安全审查技术与认证中心(CCRC)</strong>：负责网络安全设备审查</li>
+<li><strong>入网许可证</strong>：由工信部下属实验室（泰尔实验室、威尔实验室）认证</li>
+<li><strong>无线产品核准</strong>：由国家无线电管理委员会负责</li>
+<li><strong>网络安全等级保护制度</strong>：<ul>
+<li>工作流程：定级→备案→建设整改→等级测评→运营维护</li>
+<li>等级划分：1-5级（从用户自主保护级到访问验证保护级）</li>
+</ul>
+</li>
+<li><strong>国家计算机网络应急技术处理协调中心(CNCERT&#x2F;CC)</strong>：负责网络安全事件应急处理</li>
+<li><strong>四大顶级安全会议</strong>：S&amp;P、CCS、NDSS、USENIX Security</li>
+</ul>
+<h3 id="5-网络安全组织结构"><a href="#5-网络安全组织结构" class="headerlink" title="5. 网络安全组织结构"></a>5. 网络安全组织结构</h3>
+	
+	</div>
+  <a type="button" href="/2025/11/08/软考(信息安全工程师)/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/09/20/windows常用指令/" >windows常用指令</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-09-20  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="网络配置与信息"><a href="#网络配置与信息" class="headerlink" title="网络配置与信息"></a>网络配置与信息</h2><h3 id="基本网络信息"><a href="#基本网络信息" class="headerlink" title="基本网络信息"></a>基本网络信息</h3><ul>
+<li><code>ifconfig /all</code> - 获取域名、IP地址、DHCP服务器、网关、MAC地址、主机名</li>
+<li><code>net config workstation</code> - 查看域名、机器名等</li>
+<li><code>route print</code> - 显示IP路由，主要显示网络地址、子网掩码、网关地址和接口地址</li>
+<li><code>arp</code> - 查看和处理ARP缓存，ARP是名字解析的意思，负责把一个IP解析成一个物理性的MAC地址</li>
+<li><code>arp -a</code> - 查看ARP缓存信息</li>
+<li><code>nslookup</code> - IP地址侦测器</li>
+</ul>
+<h3 id="网络连接状态"><a href="#网络连接状态" class="headerlink" title="网络连接状态"></a>网络连接状态</h3><ul>
+<li><code>netstat -a</code> - 查看开启了哪些端口（常用<code>netstat -an</code>）</li>
+<li><code>netstat -n</code> - 查看端口的网络连接情况（常用<code>netstat -an</code>）</li>
+<li><code>netstat -o</code> - 查看所有网络连接的进程ID（PID）</li>
+<li><code>netstat -ano | findstr &quot;:80&quot;</code> - 查找包含”80”的连接（最常用）</li>
+<li><code>netstat -v</code> - 查看正在进行的工作</li>
+<li><code>netstat -p 协议名</code> - 查看某协议使用情况，如：<code>netstat -p tcp</code></li>
+<li><code>netstat -s</code> - 查看所有协议使用情况</li>
+</ul>
+<h3 id="域网络信息"><a href="#域网络信息" class="headerlink" title="域网络信息"></a>域网络信息</h3><ul>
+<li><code>net time /domain</code> - 查看域名、时间</li>
+<li><code>net view /domain</code> - 查看域内所有共享</li>
+<li><code>net view ip</code> - 查看对方局域网内开启了哪些共享</li>
+<li><code>nbtstat -A ip</code> - 查看对方最近登录的用户名（需136-139端口开放，参数-A要大写）</li>
+</ul>
+<h2 id="用户与组管理"><a href="#用户与组管理" class="headerlink" title="用户与组管理"></a>用户与组管理</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><code>net user 用户名 密码 /add</code> - 创建新用户</li>
+<li><code>net user 用户名 /del</code> - 删除用户</li>
+<li><code>net user guest /active:yes</code> - 激活guest账户</li>
+<li><code>net user</code> - 查看所有账户</li>
+<li><code>net user 账户名</code> - 查看指定账户信息</li>
+<li><code>net user /domain</code> - 查看域内有哪些用户（Windows NT Workstation计算机上可用，可判断用户是否是域成员）</li>
+<li><code>net user 用户名 /domain</code> - 查看域内指定账户信息</li>
+<li><code>query user</code> - 查看当前在线的用户</li>
+<li><code>whoami</code> - 查看当前用户及权限</li>
+<li><code>whoami /all</code> - 查看当前用户的详细权限信息</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2025/09/20/windows常用指令/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/09/10/Pwn专属Docker环境配置与操作/" >Pwn专属Docker环境配置与操作</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-09-10  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、环境前置准备"><a href="#一、环境前置准备" class="headerlink" title="一、环境前置准备"></a>一、环境前置准备</h2><h3 id="1-验证现有Ubuntu镜像"><a href="#1-验证现有Ubuntu镜像" class="headerlink" title="1. 验证现有Ubuntu镜像"></a>1. 验证现有Ubuntu镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<ul>
+<li>预期结果：需包含 <code>ubuntu:16.04</code>、<code>ubuntu:18.04</code>、<code>ubuntu:20.04</code> 三个镜像</li>
+</ul>
+<h3 id="2-拉取缺失镜像（若验证不通过）"><a href="#2-拉取缺失镜像（若验证不通过）" class="headerlink" title="2. 拉取缺失镜像（若验证不通过）"></a>2. 拉取缺失镜像（若验证不通过）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ubuntu 16.04（对应libc-2.23，端口9997）</span></span><br><span class="line">docker pull ubuntu:16.04</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ubuntu 18.04（对应libc-2.27，端口9998）</span></span><br><span class="line">docker pull ubuntu:18.04</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ubuntu 20.04（对应libc-2.31，端口9999）</span></span><br><span class="line">docker pull ubuntu:20.04</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、核心容器创建（3个Pwn专用环境）"><a href="#二、核心容器创建（3个Pwn专用环境）" class="headerlink" title="二、核心容器创建（3个Pwn专用环境）"></a>二、核心容器创建（3个Pwn专用环境）</h2><h3 id="容器1：Ubuntu-16-04-libc-2-23"><a href="#容器1：Ubuntu-16-04-libc-2-23" class="headerlink" title="容器1：Ubuntu 16.04 + libc-2.23"></a>容器1：Ubuntu 16.04 + libc-2.23</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged \</span><br><span class="line">  -v ~/Pwn/myPwn:/root/myPwn \  <span class="comment"># 本地仓库挂载到容器</span></span><br><span class="line">  -p 9997:9997 \                                  <span class="comment"># 端口映射（主机:容器）</span></span><br><span class="line">  --name pwn-2.23 \                               <span class="comment"># 容器名称</span></span><br><span class="line">  ubuntu:16.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>容器内首次启动需执行（安装调试工具）：</p>
+	
+	</div>
+  <a type="button" href="/2025/09/10/Pwn专属Docker环境配置与操作/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/02/19/tor的代理/" >Tor的代理</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-02-19  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、结论"><a href="#一、结论" class="headerlink" title="一、结论"></a>一、结论</h2><ul>
+<li><strong>宿主机全局VPN（TUN&#x2F;全局模式）</strong>：Tor Browser零配置可用，系统Tor自动走全局，proxychains4仅需配置本地9050；</li>
+<li><strong>宿主机应用级代理（仅7897端口，非全局）</strong>：Tor Browser需在<strong>自身设置</strong>配7897，终端工具走Tor需在<strong>系统Tor的torrc</strong>配7897，proxychains4始终只对接本地9050；</li>
+<li><strong>proxychains4</strong>：纯程序级流量分流工具，可实现「程序→Tor→VPN」或「程序→直接VPN」两种走向，按需配置即可。</li>
+</ul>
+<h2 id="二、逐句验证与修正（标✅-❌）"><a href="#二、逐句验证与修正（标✅-❌）" class="headerlink" title="二、逐句验证与修正（标✅&#x2F;❌）"></a>二、逐句验证与修正（标✅&#x2F;❌）</h2><h3 id="1-「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」"><a href="#1-「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」" class="headerlink" title="1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」"></a>1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」</h3><p>✅ <strong>完全正确</strong></p>
+<ul>
+<li>全局VPN是<strong>网络层接管</strong>，宿主机所有流量（含虚拟机穿透的流量）会被强制走VPN通道，虚拟机无需任何网络配置；</li>
+<li>Tor Browser内置的独立Tor客户端，会通过虚拟机的全局网络通道自动连接Tor节点，开箱即用，无需配置上游代理；</li>
+<li>此时虚拟机系统Tor服务（9050）也会自动走宿主机全局VPN，和Tor Browser内置Tor互不干扰。</li>
+</ul>
+<h3 id="2-「如果宿主机开的是系统代理，比如其代理端口是-7897-，-为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897-端口，此时tor-browser理论上就可以正常使用了」"><a href="#2-「如果宿主机开的是系统代理，比如其代理端口是-7897-，-为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897-端口，此时tor-browser理论上就可以正常使用了」" class="headerlink" title="2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」"></a>2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」</h3><p>❌ <strong>核心误区</strong><br>混淆了<strong>两套完全独立、无任何配置共享</strong>的Tor实例，这是最关键的易错点：</p>
+<ul>
+<li><strong>虚拟机系统Tor服务</strong>（&#x2F;usr&#x2F;bin&#x2F;tor，监听127.0.0.1:9050）：仅服务于终端、proxychains4等命令行工具，配置文件为<code>/etc/tor/torrc</code>；</li>
+<li><strong>Tor Browser内置Tor客户端</strong>：浏览器专属，独立进程、独立链路，配置仅在浏览器内生效，和系统Tor无任何关联。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>归属</th>
+<th>监听端口</th>
+<th>配置文件&#x2F;位置</th>
+<th>作用对象</th>
+<th>是否与其他Tor实例共享配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>虚拟机系统Tor服务</td>
+<td>虚拟机系统</td>
+<td>127.0.0.1:9050</td>
+<td>&#x2F;etc&#x2F;tor&#x2F;torrc</td>
+<td>终端、proxychains4、命令行工具</td>
+<td>完全独立</td>
+</tr>
+<tr>
+<td>Tor Browser内置Tor</td>
+<td>Tor Browser自带</td>
+<td>随机端口（非9050）</td>
+<td>浏览器内Connection设置</td>
+<td>Tor Browser自身</td>
+<td>完全独立</td>
+</tr>
+</tbody></table>
+	
+	</div>
+  <a type="button" href="/2025/02/19/tor的代理/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/01/18/XSS漏洞基础/" >XSS漏洞基础</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-01-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本人是个网安菜鸡，这是写的第一篇有关网安学习的博客，也是本人写的第一篇博客，请多多指教。2025.5.18</p>
+<p>1.由于csdn不可以在非代码区书写完整的html标签 用   [ ]  代替 &lt;  &gt;</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sript</span>&gt;</span>   --&gt;   [script]  </span><br></pre></td></tr></table></figure>
+<p>2.作者用的是chrome浏览器，不同的浏览器回显的网页代码颜色或是容错规则方面有差异</p>
+<hr>
+<h1 id="一、xss漏洞是什么？"><a href="#一、xss漏洞是什么？" class="headerlink" title="一、xss漏洞是什么？"></a>一、xss漏洞是什么？</h1><p>XSS（跨站脚本攻击，Cross-Site Scripting）是一种常见的Web安全漏洞，攻击者通过向网页中注入恶意脚本代码，当其他用户访问该页面时，这些脚本会在其浏览器中执行，从而导致数据泄露、会话劫持、钓鱼攻击等安全问题</p>
+<hr>
+<h1 id="二、xss漏洞的基本知识"><a href="#二、xss漏洞的基本知识" class="headerlink" title="二、xss漏洞的基本知识"></a>二、xss漏洞的基本知识</h1>
+	
+	</div>
+  <a type="button" href="/2025/01/18/XSS漏洞基础/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/10/Git/" >Git</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-10  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、基础命令"><a href="#一、基础命令" class="headerlink" title="一、基础命令"></a>一、基础命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>git init</code></td>
+<td>初始化一个新的 Git 仓库</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>查看提交历史</td>
+</tr>
+<tr>
+<td><code>git add [文件名]</code></td>
+<td>将文件添加到暂存区（<code>git add .</code> 添加所有修改）</td>
+</tr>
+<tr>
+<td><code>git commit -m &quot;提交信息&quot;</code></td>
+<td>提交暂存区的更改到本地仓库</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>查看当前仓库状态（修改、暂存、提交情况）</td>
+</tr>
+<tr>
+<td><code>git branch</code></td>
+<td>查看本地所有分支（<code>git branch -a</code> 查看本地+远程所有分支）</td>
+</tr>
+<tr>
+<td><code>git branch [分支名]</code></td>
+<td>创建本地新分支（基于当前分支）</td>
+</tr>
+<tr>
+<td><code>git checkout [分支名]</code></td>
+<td>切换到指定本地分支</td>
+</tr>
+<tr>
+<td><code>git checkout -b [分支名]</code></td>
+<td>创建并切换到新分支（等价于 <code>git branch + git checkout</code>）</td>
+</tr>
+<tr>
+<td><code>git checkout -b [本地分支名] origin/[远程分支名]</code></td>
+<td>基于远程分支创建并切换本地分支</td>
+</tr>
+<tr>
+<td><code>git branch -d [分支名]</code></td>
+<td>安全删除本地分支（已合并）</td>
+</tr>
+<tr>
+<td><code>git branch -D [分支名]</code></td>
+<td>强制删除本地分支（未合并）</td>
+</tr>
+</tbody></table>
+<h2 id="二、远程仓库管理"><a href="#二、远程仓库管理" class="headerlink" title="二、远程仓库管理"></a>二、远程仓库管理</h2><h3 id="1-添加-管理远程仓库"><a href="#1-添加-管理远程仓库" class="headerlink" title="1. 添加&#x2F;管理远程仓库"></a>1. 添加&#x2F;管理远程仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin [仓库地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git remote add origin https://github.com/用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git remote add origin git@github.com:用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程仓库地址</span></span><br><span class="line">git remote set-url origin [新地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已配置的远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-克隆仓库（含指定非主分支）"><a href="#2-克隆仓库（含指定非主分支）" class="headerlink" title="2. 克隆仓库（含指定非主分支）"></a>2. 克隆仓库（含指定非主分支）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆默认分支（通常是main/master）</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/你的GitHub用户名/仓库名.git  <span class="comment"># HTTPS</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:你的GitHub用户名/仓库名.git       <span class="comment"># SSH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定非主分支（方式1：先克隆仓库，再切换分支）</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:用户名/仓库.git</span><br><span class="line"><span class="built_in">cd</span> 仓库名</span><br><span class="line">git checkout -b 目标分支名 origin/目标分支名  <span class="comment"># 基于远程非主分支创建本地分支</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定非主分支（方式2：直接克隆指定分支）</span></span><br><span class="line">git <span class="built_in">clone</span> -b 目标分支名 --single-branch git@github.com:用户名/仓库.git</span><br><span class="line"><span class="comment"># -b：指定分支；--single-branch：仅克隆该分支（减少体积）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、分支核心操作（非主分支专属）"><a href="#三、分支核心操作（非主分支专属）" class="headerlink" title="三、分支核心操作（非主分支专属）"></a>三、分支核心操作（非主分支专属）</h2><h3 id="1-非主分支的本地-远程同步"><a href="#1-非主分支的本地-远程同步" class="headerlink" title="1. 非主分支的本地-远程同步"></a>1. 非主分支的本地-远程同步</h3><h4 id="（1）非主分支的提交与推送"><a href="#（1）非主分支的提交与推送" class="headerlink" title="（1）非主分支的提交与推送"></a>（1）非主分支的提交与推送</h4>
+	
+	</div>
+  <a type="button" href="/2024/12/10/Git/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/2/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/4/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">All Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/">Web</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/Top10/">Top10</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">14</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/">渗透</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: #ddd; /* Light gray background */
+  color: #000; /* Black text */
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: #fff;
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #fff;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/浏览器/">浏览器<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>46</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/06/认证/" ><i class="fa fa-file-o"></i>认证</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/01/业务逻辑漏洞/" ><i class="fa fa-file-o"></i>业务逻辑漏洞</a>
+      </li>
+    
+      <li>
+        <a href="/2026/03/23/BloodHound/" ><i class="fa fa-file-o"></i>BloodHound食用</a>
+      </li>
+    
+      <li>
+        <a href="/2026/02/03/crawlers基础/" ><i class="fa fa-file-o"></i>crawlers基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/02/02/Linux包管理&amp;网络传输工具/" ><i class="fa fa-file-o"></i>Linux包管理&amp;网络传输工具</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank">hexo-theme-bithack</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

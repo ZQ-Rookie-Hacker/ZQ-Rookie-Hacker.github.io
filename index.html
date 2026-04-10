@@ -123,6 +123,143 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2026/04/10/JWT/" >JWT</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-04-10  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x-00-JWT基础知识"><a href="#0x-00-JWT基础知识" class="headerlink" title="0x.00.JWT基础知识"></a>0x.00.JWT基础知识</h3><ol>
+<li><code>🧩 JWT 的核心结构</code></li>
+</ol>
+<p>一个 JWT 由三部分组成，用 <code>.</code> 分隔：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一段</td>
+<td><strong>Header（头部）</strong></td>
+<td>包含令牌类型（<code>typ: &quot;JWT&quot;</code>）和签名算法（如 <code>HS256</code>、<code>RS256</code>）。Base64Url 编码。</td>
+</tr>
+<tr>
+<td>第二段</td>
+<td><strong>Payload（载荷）</strong></td>
+<td>包含声明（claims），如主题声明（<code>sub</code>）、过期时间（<code>exp</code>）、签发时间（<code>iat</code>）等。Base64Url 编码。</td>
+</tr>
+<tr>
+<td>第三段</td>
+<td><strong>Signature（签名）</strong></td>
+<td>对前两部分进行签名，防止篡改。</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p><code>注册声明</code></p>
+<ul>
+<li>官方声明<ul>
+<li>iss (issuer)：签发方</li>
+<li>iat (issued at)：签发时间</li>
+<li>sub (subject)：主题（一般放用户唯一标识）</li>
+<li>aud (audience)：受众</li>
+<li>exp (expiration time)：过期时间</li>
+<li>nbf (not before)：在此时间之前不可用</li>
+<li>jti (JWT ID)：唯一编号，防重放</li>
+</ul>
+</li>
+<li>公共声明（<code>Public Claims</code>）:由 IANA 统一登记维护，行业通用、无冲突风险，不属于官方注册声明但广泛使用<ul>
+<li>auth_time：用户实际完成身份认证的时间</li>
+<li>nonce：随机值，多用于 OIDC 场景，防止重放攻击</li>
+<li>azp：授权参与方，通常存储客户端 ID</li>
+<li>scope：权限范围字段，定义令牌可访问的资源范围</li>
+<li>client_id：调用接口的客户端唯一标识</li>
+<li>sid：会话 ID，关联用户当前登录会话</li>
+<li>at_hash：访问令牌哈希值，OIDC 中用于校验令牌一致性</li>
+</ul>
+</li>
+<li>私有声明（<code>Private Claims</code>）:业务方自定义字段，无统一标准，JWT 渗透测试中最核心的篡改目标<ul>
+<li>role&#x2F;roles：用户角色，常见值 user&#x2F;admin&#x2F;root</li>
+<li>username：登录用户名</li>
+<li>userId&#x2F;uid&#x2F;id：用户唯一标识 ID</li>
+<li>admin：布尔型标识，true 代表管理员权限</li>
+<li>permissions：权限数组，存储具体操作权限</li>
+<li>email：用户邮箱</li>
+<li>group：用户所属分组</li>
+<li>is_admin：管理员权限标识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>✅ JWT 的典型使用流程</code></p>
+<ul>
+<li><strong>登录</strong>：客户端发送用户名&#x2F;密码 → 服务器验证成功 → 生成 JWT 并返回。</li>
+<li><strong>存储</strong>：客户端通常将 JWT 保存在 <code>localStorage</code>、<code>sessionStorage</code> 或 <code>HttpOnly Cookie</code> 中。</li>
+<li><strong>请求</strong>：客户端在后续请求的 <code>Authorization</code> 头或是<code>Cookie</code>中携带 JWT</li>
+<li><strong>验证</strong>：服务器收到 JWT 后，验证签名、有效期、issuer 等，从载荷中提取用户身份。</li>
+</ul>
+</li>
+<li><p><code>📦 JWT vs Session（传统会话）</code></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JWT</th>
+<th>Session</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务端存储</td>
+<td>无状态（不存储）</td>
+<td>有状态（存储会话数据）</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>易于水平扩展</td>
+<td>需要共享存储（如 Redis）</td>
+</tr>
+<tr>
+<td>吊销能力</td>
+<td>困难（需黑名单）</td>
+<td>简单（删除会话记录）</td>
+</tr>
+<tr>
+<td>载荷大小</td>
+<td>较大（包含用户信息）</td>
+<td>很小（仅 session ID）</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li><code>流程图</code></li>
+</ol>
+<p><img src="/images/JWT/image_1.png" alt="在这里插入图片描述"><br>实现身份认证依靠的是检查 令牌的<code>完整性</code>（未被篡改）和<code>真实性</code>（由服务器签发），就会设置JWT的比对机制</p>
+<p><strong><code>对称签名算法</code></strong>(HS256，即 HMAC+SHA256)：同一个密钥既用于生成签名，也用于验证签名。这个密钥必须绝对保密，不能让<code>客户端</code>或<code>任何第三方</code>知道。若服务器可以使用所存处的密钥成功对应客户端发来的jwt进行解密，则通过认证。</p>
+	
+	</div>
+  <a type="button" href="/2026/04/10/JWT/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2026/04/06/认证/" >认证</a>
 		</h3>
 		</div>
@@ -859,48 +996,6 @@ StartupNotify=false
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/18/DIV与CSS基础详解/" >DIV与CSS基础详解</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="1-DIV和CSS样式"><a href="#1-DIV和CSS样式" class="headerlink" title="1. DIV和CSS样式"></a>1. DIV和CSS样式</h2><p><strong>详细解释：</strong></p>
-<ul>
-<li><strong>DIV</strong> 是HTML中的一个块级元素，用于将文档分割为独立的区块。它本身没有特定的语义，主要作为容器使用，通过CSS来定义其外观和布局。</li>
-<li><strong>CSS</strong>（层叠样式表）是一种描述HTML或XML文档外观和格式的样式表语言。CSS的核心理念是将内容与表现分离，使网页结构更清晰、更易于维护。</li>
-</ul>
-<p><strong>为什么使用DIV+CSS：</strong></p>
-<ul>
-<li>与传统的表格布局相比，DIV+CSS布局更加灵活、代码更简洁</li>
-<li>提高网页加载速度（减少冗余HTML标签）</li>
-<li>更好的SEO优化（搜索引擎更容易抓取内容）</li>
-<li>便于后期维护和修改</li>
-</ul>
-<p><strong>示例：</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>DIV+CSS示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">80%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span> auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.header</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.content</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.sidebar</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">25%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f0f0f0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">15px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.main</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">75%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">15px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.footer</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">10px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-top</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;header&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>我的网站<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;sidebar&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h2</span>&gt;</span>导航栏<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>关于<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>服务<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;main&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h2</span>&gt;</span>主要内容区域<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span>&gt;</span>这里是网站的主要内容...<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;footer&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>© 2023 我的网站. 保留所有权利.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-样式表类型"><a href="#2-样式表类型" class="headerlink" title="2. 样式表类型"></a>2. 样式表类型</h2><h3 id="2-1-嵌入样式表"><a href="#2-1-嵌入样式表" class="headerlink" title="2.1 嵌入样式表"></a>2.1 嵌入样式表</h3><p><strong>详细解释：</strong></p>
-	
-	</div>
-  <a type="button" href="/2025/12/18/DIV与CSS基础详解/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -946,7 +1041,7 @@ StartupNotify=false
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">All Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">21</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/">Web</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/Top10/">Top10</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">14</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/">渗透</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">22</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/">Web</a><span class="hacker-category-list-count">4</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/Web/Top10/">Top10</a><span class="hacker-category-list-count">4</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">14</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/">渗透</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -997,48 +1092,48 @@ StartupNotify=false
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
+			<li><a href="/tags/浏览器/">浏览器<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/Pwn/">Pwn<span>1</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
-		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/tor/">tor<span>1</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+			<li><a href="/tags/认证/">认证<span>1</span></a></li>
 		
 			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
 		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/JavaScript/">JavaScript<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+		
 			<li><a href="/tags/域工具/">域工具<span>1</span></a></li>
 		
-			<li><a href="/tags/浏览器/">浏览器<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
 		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>46</span></a></li>
+		   <li><a href="/tags">...<span>47</span></a></li>
 		 
 		</ul>
 	</div>
@@ -1049,6 +1144,10 @@ StartupNotify=false
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
+      </li>
     
       <li>
         <a href="/2026/04/06/认证/" ><i class="fa fa-file-o"></i>认证</a>
@@ -1064,10 +1163,6 @@ StartupNotify=false
     
       <li>
         <a href="/2026/02/03/crawlers基础/" ><i class="fa fa-file-o"></i>crawlers基础</a>
-      </li>
-    
-      <li>
-        <a href="/2026/02/02/Linux包管理&amp;网络传输工具/" ><i class="fa fa-file-o"></i>Linux包管理&amp;网络传输工具</a>
       </li>
     
   </ul>

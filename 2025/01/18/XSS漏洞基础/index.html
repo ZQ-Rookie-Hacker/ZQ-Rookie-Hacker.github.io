@@ -9,7 +9,7 @@
   <title>XSS漏洞基础 | ZQ-Rookie-Hacker&#39;s Blog</title>
   <meta name="author" content="ZQ-Rookie-Hacker">
   
-  <meta name="description" content="前言本人是个网安菜鸡，这是写的第一篇有关网安学习的博客，也是本人写的第一篇博客，请多多指教。2025.5.18
+  <meta name="description" content="前言本人是个网安菜鸡，这是写的第一篇完成有关网安top10漏洞的学习博客，请多多指教。2025.5.18
 1.由于csdn不可以在非代码区书写完整的html标签 用   [ ]  代替 &amp;lt;  &amp;gt;
 1&amp;lt;sript&amp;gt;   --&amp;gt;   [script]  
 2.作者用的是chrome浏览器，不同的浏览器回显的网页代码颜色或是容错规则方面有差异
@@ -124,7 +124,7 @@
 	<div class="mypage">		
 	  		
 
-	  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本人是个网安菜鸡，这是写的第一篇有关网安学习的博客，也是本人写的第一篇博客，请多多指教。2025.5.18</p>
+	  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本人是个网安菜鸡，这是写的第一篇完成有关网安top10漏洞的学习博客，请多多指教。2025.5.18</p>
 <p>1.由于csdn不可以在非代码区书写完整的html标签 用   [ ]  代替 &lt;  &gt;</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sript</span>&gt;</span>   --&gt;   [script]  </span><br></pre></td></tr></table></figure>
 <p>2.作者用的是chrome浏览器，不同的浏览器回显的网页代码颜色或是容错规则方面有差异</p>
@@ -677,7 +677,7 @@
 </blockquote>
 <p>攻击原理：</p>
 <blockquote>
-<p>默认情况下的，ng-include 只能加载当前页面同源的（相同域名，协议，端口）的文件<br>ng - include加载level1.php时，将name&#x3D;<script>alert(/xss/)</script>作为参数传递给level1.php。<br>由于level1.php未对name参数做严格过滤，浏览器解析level1.php返回的 HTML 时，会执行恶意脚本alert(&#x2F;xss&#x2F;)，从而触发 XSS 攻击。</p>
+<p>默认情况下的，ng-include 只能加载当前页面同源的（相同域名，协议，端口）的文件<br>ng - include加载level1.php时，将name&#x3D;<script>alert(/这是一个彩蛋：xss漏洞具象化/)</script>作为参数传递给level1.php。<br>由于level1.php未对name参数做严格过滤，浏览器解析level1.php返回的 HTML 时，会执行恶意脚本alert(&#x2F;xss&#x2F;)，从而触发 XSS 攻击。</p>
 </blockquote>
 <p>关卡：</p>
 <blockquote>

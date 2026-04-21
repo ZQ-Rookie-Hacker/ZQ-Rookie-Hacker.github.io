@@ -1,4 +1,4 @@
-﻿.container-narrow {
+﻿﻿﻿.container-narrow {
     margin: 0 auto;
     max-width: 970px
 }
@@ -450,14 +450,14 @@ em{
     width: auto;
     padding: 12px;
     background: #1a1a1a;
-    border-left: 3px solid #00ff00;
+    border-left: 3px solid #2bbc8a;
 }
 
 /* TOC 标题样式 */
 .toc .toc-title {
     font-size: 14px;
     font-weight: bold;
-    color: #00ff00;
+    color: #2bbc8a;
     display: block;
     margin-bottom: 10px;
     padding-bottom: 8px;
@@ -475,16 +475,16 @@ em{
 }
 
 .toc-article a:hover {
-    color: #00ff00;
-    background: rgba(0, 255, 0, 0.1);
+    color: #2bbc8a;
+    background: rgba(43, 188, 138, 0.1);
     padding-left: 12px;
 }
 
 /* 当前激活的TOC项 */
 .toc-article a.toc-active {
-    color: #00ff00;
+    color: #2bbc8a;
     font-weight: bold;
-    background: rgba(0, 255, 0, 0.15);
+    background: rgba(43, 188, 138, 0.15);
 }
 
 /* make TOC scrollable within the sidebar so active item can move into view */

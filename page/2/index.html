@@ -123,11 +123,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/30/ARL食用指南/" >ARL食用指南</a>
+			<a href="/2026/04/13/CORS/" >CORS</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-30  </div>
+		<div class="date">post @ 2026-04-13  </div>
 		</div>
 	</div>
 	
@@ -137,660 +137,34 @@
   <div class="row">
 	
 	
-		<h2 id="0x01-部署前环境准备"><a href="#0x01-部署前环境准备" class="headerlink" title="0x01.部署前环境准备"></a>0x01.部署前环境准备</h2><ol>
-<li><p><strong>核心依赖：Docker + Docker Compose（插件版）</strong><br>Kali 2025 默认预装 Docker，但需确认 <strong>Docker Compose 插件版</strong> 可用（避免独立包冲突）：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>Docker Compose 安装冲突（独立包 vs 插件版）</strong></p>
-<ul>
-<li>现象：执行 <code>sudo apt install docker-compose</code> 时提示“trying to overwrite…”</li>
-<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
+		<h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><p><strong><code>文章链接</code></strong>：<a href="https://zq-rookie-hacker.github.io/2026/04/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/">浏览器同源策略与CORS解析</a></p>
+<p>补充：在下面的靶场中，存在隐藏请求。隐藏请求是前后端数据交互的重点所在<br><img src="/images/CORS/image_1.png" alt="在这里插入图片描述"></p>
 <hr>
-<h2 id="0x02-配置-Docker-国内加速器"><a href="#0x02-配置-Docker-国内加速器" class="headerlink" title="0x02.配置 Docker 国内加速器"></a>0x02.配置 Docker 国内加速器</h2><p>Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。</p>
+<h3 id="0x01-基于源站反射的-CORS-漏洞"><a href="#0x01-基于源站反射的-CORS-漏洞" class="headerlink" title="0x01.基于源站反射的 CORS 漏洞"></a>0x01.基于源站反射的 CORS 漏洞</h3><p>该网站存在不安全的 CORS 配置，因为它<code>信任所有</code>源站。<br>要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将该代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<p><img src="/images/CORS/image_2.png" alt="在这里插入图片描述"></p>
+<p>增加<code>Origin</code>字段<br><img src="/images/CORS/image_3.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p><code>Access-Control-Allow-Origin</code>：允许谁访问</p>
+<blockquote>
+<p>存在两种形式：</p>
+<blockquote>
 <ol>
-<li><p><strong>编辑 Docker 配置文件</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>写入正确格式的加速源</strong><br><strong>正确配置（含国内稳定源）</strong>：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-<li><p><strong>使加速配置生效</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
-<ul>
-<li>生效标志：输出中显示配置的所有加速源。</li>
-</ul>
-</li>
+<li>具体源    只允许这一个源访问，其他都拒绝    如：Access-Control-Allow-Origin: <a target="_blank" rel="noopener" href="https://web.example.com/">https://web.example.com</a></li>
+<li>通配符 *    允许任意源访问，但不允许携带凭证    Access-Control-Allow-Origin: *</li>
 </ol>
-<hr>
-<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
-
-<hr>
-	
-	</div>
-  <a type="button" href="/2025/12/30/ARL食用指南/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/30/Java基础/" >Java基础</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-30  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、Java虚拟机与平台特性"><a href="#一、Java虚拟机与平台特性" class="headerlink" title="一、Java虚拟机与平台特性"></a>一、Java虚拟机与平台特性</h2><h3 id="1-JVM架构详解"><a href="#1-JVM架构详解" class="headerlink" title="1. JVM架构详解"></a>1. JVM架构详解</h3><ul>
-<li><p><strong>类加载器子系统</strong>：</p>
-<ul>
-<li>启动类加载器（Bootstrap）：加载<code>rt.jar</code>等核心库</li>
-<li>扩展类加载器（Extension）：加载<code>jre/lib/ext</code>目录</li>
-<li>应用类加载器（Application）：加载<code>CLASSPATH</code>路径</li>
-<li>自定义类加载器：继承<code>ClassLoader</code>实现热部署</li>
-</ul>
-</li>
-<li><p><strong>运行时数据区</strong>：</p>
-<p><img src="/images/Java%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
-</li>
-<li><p><strong>垃圾回收机制</strong>：</p>
-<ul>
-<li><strong>分代收集</strong>：新生代（Eden+S0+S1）和老年代</li>
-<li><strong>GC算法</strong>：<ul>
-<li>标记-清除：产生内存碎片</li>
-<li>复制算法：适用于新生代（90%对象存活率低）</li>
-<li>标记-整理：适用于老年代</li>
-</ul>
-</li>
-<li><strong>常见GC器</strong>：<ul>
-<li>Serial：单线程，适合客户端应用</li>
-<li>Parallel：多线程吞吐量优先</li>
-<li>CMS：低延迟，但会产生碎片</li>
-<li>G1：分区收集，预测停顿时间</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-跨平台原理"><a href="#2-跨平台原理" class="headerlink" title="2. 跨平台原理"></a>2. 跨平台原理</h3><ul>
-<li><strong>字节码文件</strong>（<code>.class</code>）：<ul>
-<li>由Java编译器生成，与操作系统无关</li>
-<li>包含：常量池、字段表、方法表、属性表</li>
-</ul>
-</li>
-<li><strong>JVM执行过程</strong>：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>编译后字节码（<code>javap -c Test.class</code>）：  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  Code:</span><br><span class="line">     0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     3: ldc           #3  // String Hello</span><br><span class="line">     5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     8: return</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="二、基础语法与数据类型"><a href="#二、基础语法与数据类型" class="headerlink" title="二、基础语法与数据类型"></a>二、基础语法与数据类型</h2><h3 id="1-基本数据类型解析"><a href="#1-基本数据类型解析" class="headerlink" title="1. 基本数据类型解析"></a>1. 基本数据类型解析</h3><table>
-<thead>
-<tr>
-<th>基本类型</th>
-<th>包装类</th>
-<th>大小</th>
-<th>默认值</th>
-<th>取值范围</th>
-<th>特殊说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>byte</code></td>
-<td><code>Byte</code></td>
-<td>1字节</td>
-<td>0</td>
-<td>-128~127</td>
-<td>适合存储小整数</td>
-</tr>
-<tr>
-<td><code>short</code></td>
-<td><code>Short</code></td>
-<td>2字节</td>
-<td>0</td>
-<td>-32768~32767</td>
-<td></td>
-</tr>
-<tr>
-<td><code>int</code></td>
-<td><code>Integer</code></td>
-<td>4字节</td>
-<td>0</td>
-<td>-2^31~2^31-1</td>
-<td>最常用整型</td>
-</tr>
-<tr>
-<td><code>long</code></td>
-<td><code>Long</code></td>
-<td>8字节</td>
-<td>0L</td>
-<td>-2^63~2^63-1</td>
-<td>后缀<code>L</code></td>
-</tr>
-<tr>
-<td><code>float</code></td>
-<td><code>Float</code></td>
-<td>4字节</td>
-<td>0.0f</td>
-<td>±3.40282347E+38F</td>
-<td>后缀<code>f</code></td>
-</tr>
-<tr>
-<td><code>double</code></td>
-<td><code>Double</code></td>
-<td>8字节</td>
-<td>0.0d</td>
-<td>±1.79769313486231570E+308</td>
-<td>默认浮点类型</td>
-</tr>
-<tr>
-<td><code>char</code></td>
-<td><code>Character</code></td>
-<td>2字节</td>
-<td>‘\u0000’</td>
-<td>0~65535</td>
-<td>Unicode字符</td>
-</tr>
-<tr>
-<td><code>boolean</code></td>
-<td><code>Boolean</code></td>
-<td>1位</td>
-<td>false</td>
-<td>true&#x2F;false</td>
-<td>无具体大小</td>
-</tr>
-</tbody></table>
-<p>关键说明</p>
-<ol>
-<li>包装类均为<strong>引用类型</strong>，首字母大写（两个特殊情况：<code>int</code> 对应 <code>Integer</code>、<code>char</code> 对应 <code>Character</code>，其余基本类型直接首字母大写即可）</li>
-<li>包装类主要用于需要使用对象的场景（如集合框架、反射等），可实现基本类型与包装类的自动装箱&#x2F;拆箱</li>
-</ol>
-	
-	</div>
-  <a type="button" href="/2025/12/30/Java基础/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/28/浏览器搜索指令大全/" >浏览器搜索指令大全</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、通用浏览器搜索指令"><a href="#一、通用浏览器搜索指令" class="headerlink" title="一、通用浏览器搜索指令"></a>一、通用浏览器搜索指令</h2><h3 id="1-基础操作符"><a href="#1-基础操作符" class="headerlink" title="1. 基础操作符"></a>1. 基础操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符（替代任意字符）</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-位置限定操作符"><a href="#2-位置限定操作符" class="headerlink" title="2. 位置限定操作符"></a>2. 位置限定操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">intitle:    # 标题中包含关键词</span><br><span class="line">allintitle: # 所有关键词都在标题中</span><br><span class="line">inurl:      # URL中包含关键词</span><br><span class="line">allinurl:   # 所有关键词都在URL中</span><br><span class="line">intext:     # 正文中包含关键词</span><br><span class="line">allintext:  # 所有关键词都在正文中</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-站点与文件操作符"><a href="#3-站点与文件操作符" class="headerlink" title="3. 站点与文件操作符"></a>3. 站点与文件操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站（Google特有）</span><br><span class="line">link:       # 查找链接到指定页面的链接（Google特有）</span><br><span class="line">cache:      # 查看Google缓存版本（Google特有）</span><br><span class="line">info:       # 获取页面基本信息（Google特有）</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-特殊符号操作符"><a href="#4-特殊符号操作符" class="headerlink" title="4. 特殊符号操作符"></a>4. 特殊符号操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义（Google特有）</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、搜索引擎特有指令"><a href="#二、搜索引擎特有指令" class="headerlink" title="二、搜索引擎特有指令"></a>二、搜索引擎特有指令</h2>
-	
-	</div>
-  <a type="button" href="/2025/12/28/浏览器搜索指令大全/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/25/kali右键菜单添加/" >Kali右键菜单添加</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-25  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<blockquote>
-<blockquote>
-<blockquote>
-<hr>
-<h3 id="🔍-核心原理"><a href="#🔍-核心原理" class="headerlink" title="🔍 核心原理"></a>🔍 <strong>核心原理</strong></h3><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>正确做法</th>
-<th>错误做法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>安装路径</strong></td>
-<td>通过官方脚本安装到 <code>/usr/bin/</code></td>
-<td>安装到 <code>~/.cargo/bin/</code>（需额外配置 PATH）</td>
-</tr>
-<tr>
-<td><strong>文件位置</strong></td>
-<td>移动到 <code>~/.local/share/applications/</code></td>
-<td>保留在桌面或 <code>/usr/share/</code></td>
-</tr>
-<tr>
-<td><strong>Categories 标签</strong></td>
-<td><code>kali-reconnaissance;kali-network-information;kali-network-service-discovery;</code></td>
-<td><code>Security;</code> 或 <code>kali-network-service-discovery;</code>（缺少 <code>kali-network-information</code>）</td>
-</tr>
-<tr>
-<td><strong>图标</strong></td>
-<td><code>Icon=system-run</code></td>
-<td><code>kali-rustscan</code>（不存在）</td>
-</tr>
-<tr>
-<td><strong>命令格式</strong></td>
-<td><code>Exec=xfce4-terminal -e &quot;bash -c &#39;read -p \&quot;IP: \&quot; ip; rustscan -a $ip -- -sV; read -p \&quot;按 Enter 键退出\&quot;&#39;&quot;</code></td>
-<td><code>rustscan --help</code>（只显示帮助）</td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>✅ <strong>验证安装</strong>：</p>
-<pre><code class="language-bash">which rustscan
-# 预期输出：/usr/bin/rustscan
-
-rustscan --version
-# 预期输出：2.1.1（或最新版本）
-</code></pre>
 </blockquote>
-<blockquote>
-<p>💡 <strong>关键原理</strong>：  </p>
-<ul>
-<li>安装脚本会自动将二进制文件放到 <strong><code>/usr/bin/</code></strong>（Linux 标准 PATH 路径）  </li>
-<li><strong>无需手动配置 PATH</strong>，系统自动识别命令</li>
-</ul>
-</blockquote>
-<hr>
-<h4 id="✅-步骤-2：在桌面创建启动器"><a href="#✅-步骤-2：在桌面创建启动器" class="headerlink" title="✅ 步骤 2：在桌面创建启动器"></a>✅ <strong>步骤 2：在桌面创建启动器</strong></h4><ol>
-<li><strong>右键桌面空白处</strong> → 选择 <strong>“创建启动器(L)…”</strong>  </li>
-<li><strong>填写信息</strong>：一般会自动填充</li>
-</ol>
-<hr>
-<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>✅ <strong>验证目录</strong>：</p>
-<pre><code class="language-bash">ls -ld ~/.local/share/applications
-# 预期输出：drwxr-xr-x 2 ... /home/rookie-hacker/.local/share/applications
-</code></pre>
-</blockquote>
-<hr>
-<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>✏️ <strong>修改内容</strong>：</p>
-<pre><code class="language-ini"># 现在查看右键菜单中其他快捷方式的格式
-cat /usr/share/applications/xxx.desktop
-# 找到 Categories 行，替换为精准标签
-Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; 
-</code></pre>
-</blockquote>
-<blockquote>
-<p>✅ <strong>‘完整’配置示例</strong>：</p>
-<pre><code class="language-ini">[Desktop Entry]
-Version=1.0
-Type=Application
-Name=
-Comment=
-Exec=
-Icon=system-run
-Terminal=true
-Type=Application
-Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; # 主要修改这里，其他在创建启动器的时候会自动填充
-StartupNotify=false
-</code></pre>
-</blockquote>
-<blockquote>
-<p>✏️ <strong>保存并退出</strong>：  </p>
-<ul>
-<li>：wq</li>
-</ul>
-</blockquote>
-<hr>
-<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="⚠️-常见错误解决方案"><a href="#⚠️-常见错误解决方案" class="headerlink" title="⚠️ 常见错误解决方案"></a>⚠️ <strong>常见错误解决方案</strong></h3><table>
-<thead>
-<tr>
-<th>问题</th>
-<th>原因</th>
-<th>解决方案</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong><code>which rustscan</code> 无输出</strong></td>
-<td>安装失败</td>
-<td>重新执行安装脚本：<code>curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | sudo bash</code></td>
-</tr>
-<tr>
-<td><strong>移动时报错 “不是目录”</strong></td>
-<td><code>~/.local/share/applications</code> 是文件</td>
-<td>执行 <code>rm -f ~/.local/share/applications</code> 再重建目录</td>
-</tr>
-<tr>
-<td><strong>菜单只在”网络扫描”显示</strong></td>
-<td>缺少 <code>kali-network-information</code> 标签</td>
-<td>用 <code>sed</code> 修正 Categories 行：<code>sed -i &#39;s/Categories=.*/Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery;/&#39; ~/.local/share/applications/rustscan.desktop</code></td>
-</tr>
-<tr>
-<td><strong>终端报错 <code>rustscan: command not found</code></strong></td>
-<td>PATH 未包含 <code>/usr/bin/</code></td>
-<td>执行 <code>echo &#39;export PATH=&quot;$PATH:/usr/bin&quot;&#39; &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc</code></td>
-</tr>
-<tr>
-<td><strong>图标不显示</strong></td>
-<td>未使用 <code>system-run</code></td>
-<td>确保 <code>Icon=system-run</code>（不是 <code>kali-rustscan</code>）</td>
-</tr>
-</tbody></table>
-<hr>
-</blockquote>
-</blockquote>
-</blockquote>
-
-	
-	</div>
-  <a type="button" href="/2025/12/25/kali右键菜单添加/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/18/DIV与CSS基础/" >DIV与CSS基础</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="1-DIV和CSS样式"><a href="#1-DIV和CSS样式" class="headerlink" title="1. DIV和CSS样式"></a>1. DIV和CSS样式</h2><p><strong>详细解释：</strong></p>
-<ul>
-<li><strong>DIV</strong> 是HTML中的一个块级元素，用于将文档分割为独立的区块。它本身没有特定的语义，主要作为容器使用，通过CSS来定义其外观和布局。</li>
-<li><strong>CSS</strong>（层叠样式表）是一种描述HTML或XML文档外观和格式的样式表语言。CSS的核心理念是将内容与表现分离，使网页结构更清晰、更易于维护。</li>
-</ul>
-<p><strong>为什么使用DIV+CSS：</strong></p>
-<ul>
-<li>与传统的表格布局相比，DIV+CSS布局更加灵活、代码更简洁</li>
-<li>提高网页加载速度（减少冗余HTML标签）</li>
-<li>更好的SEO优化（搜索引擎更容易抓取内容）</li>
-<li>便于后期维护和修改</li>
-</ul>
-<p><strong>示例：</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>DIV+CSS示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">80%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span> auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.header</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.content</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.sidebar</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">25%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f0f0f0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">15px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.main</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">75%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">15px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.footer</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">10px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-top</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;header&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>我的网站<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;sidebar&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h2</span>&gt;</span>导航栏<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>关于<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>服务<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;main&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h2</span>&gt;</span>主要内容区域<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span>&gt;</span>这里是网站的主要内容...<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;footer&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>© 2023 我的网站. 保留所有权利.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-样式表类型"><a href="#2-样式表类型" class="headerlink" title="2. 样式表类型"></a>2. 样式表类型</h2><h3 id="2-1-嵌入样式表"><a href="#2-1-嵌入样式表" class="headerlink" title="2.1 嵌入样式表"></a>2.1 嵌入样式表</h3><p><strong>详细解释：</strong></p>
-	
-	</div>
-  <a type="button" href="/2025/12/18/DIV与CSS基础/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/14/编码技术/" >编码技术</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-14  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、编码基础概述"><a href="#一、编码基础概述" class="headerlink" title="一、编码基础概述"></a>一、编码基础概述</h2><h3 id="1-1-为什么需要编码"><a href="#1-1-为什么需要编码" class="headerlink" title="1.1 为什么需要编码"></a>1.1 为什么需要编码</h3><p>在计算机系统中，不同系统、协议和应用程序对数据的表示和处理方式存在差异。编码技术解决了以下问题：</p>
-<ul>
-<li><strong>字符表示</strong>：将人类可读的字符转换为计算机可处理的二进制数据</li>
-<li><strong>数据传输</strong>：确保特殊字符在传输过程中不被误解或破坏</li>
-<li><strong>安全过滤</strong>：绕过基于特定字符集的过滤机制</li>
-<li><strong>数据压缩</strong>：在某些情况下提高传输效率</li>
-</ul>
-<h3 id="1-2-编码与加密的区别"><a href="#1-2-编码与加密的区别" class="headerlink" title="1.2 编码与加密的区别"></a>1.2 编码与加密的区别</h3><ul>
-<li><strong>编码</strong>：数据格式的转换，是可逆的、公开的转换过程，不提供保密性</li>
-<li><strong>加密</strong>：通过密钥将数据转换为密文，提供保密性和完整性保护</li>
-</ul>
-<h3 id="1-3-编码在网络安全中的重要性"><a href="#1-3-编码在网络安全中的重要性" class="headerlink" title="1.3 编码在网络安全中的重要性"></a>1.3 编码在网络安全中的重要性</h3><p>渗透测试中，攻击者常利用编码技术：</p>
-<ul>
-<li>绕过WAF（Web应用防火墙）和输入过滤</li>
-<li>隐藏恶意负载</li>
-<li>规避安全检测机制</li>
-<li>利用解析差异实施攻击</li>
-</ul>
-<h2 id="二、基础字符编码"><a href="#二、基础字符编码" class="headerlink" title="二、基础字符编码"></a>二、基础字符编码</h2>
-	
-	</div>
-  <a type="button" href="/2025/12/14/编码技术/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/13/kali的常用命令/" >Kali常用命令</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="1-系统基本操作"><a href="#1-系统基本操作" class="headerlink" title="1. 系统基本操作"></a>1. 系统基本操作</h2><h3 id="系统控制"><a href="#系统控制" class="headerlink" title="系统控制"></a>系统控制</h3><ul>
-<li><code>reboot</code> - 重启系统</li>
-<li><code>shutdown -h now</code> - 立即关闭系统</li>
-<li><code>shutdown -h hours:minutes &amp;</code> - 按预定时间关闭系统</li>
-<li><code>shutdown -c</code> - 取消预定的关机操作</li>
-<li><code>shutdown -r now</code> - 立即重启系统</li>
-<li><code>init 0</code> - 关闭系统</li>
-<li><code>telinit 0</code> - 关闭系统</li>
-<li><code>clear</code> - 清屏</li>
-</ul>
-<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><ul>
-<li><code>env</code> - 显示当前所有环境变量</li>
-<li><code>echo $PATH</code> - 查看PATH环境变量</li>
-<li><code>echo $JAVA_HOME</code> - 查看JAVA_HOME环境变量</li>
-<li><code>echo $PATH | grep jdk</code> - 检查PATH中是否包含JDK路径</li>
-</ul>
-<h3 id="用户切换与管理"><a href="#用户切换与管理" class="headerlink" title="用户切换与管理"></a>用户切换与管理</h3><ul>
-<li><code>su -l</code> - 切换登录用户</li>
-<li><code>su - root</code> - 切换到root用户</li>
-<li><code>su 用户名</code> - 切换到普通用户</li>
-<li><code>logout</code> - 注销当前用户</li>
-<li><code>passwd</code> - 修改当前用户密码</li>
-<li><code>passwd root</code> - 修改root用户密码</li>
-</ul>
-<h3 id="历史命令"><a href="#历史命令" class="headerlink" title="历史命令"></a>历史命令</h3><ul>
-<li><code>history</code> - 查看历史命令</li>
-<li><code>!!</code> - 重复上一条命令</li>
-<li><code>!n</code> - 重复第n条命令</li>
-</ul>
-<h2 id="2-文件和目录操作"><a href="#2-文件和目录操作" class="headerlink" title="2. 文件和目录操作"></a>2. 文件和目录操作</h2>
-	
-	</div>
-  <a type="button" href="/2025/12/13/kali的常用命令/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/13/端口协议/" >端口协议</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、端口基础概念"><a href="#一、端口基础概念" class="headerlink" title="一、端口基础概念"></a>一、端口基础概念</h2><h3 id="1-端口的作用"><a href="#1-端口的作用" class="headerlink" title="1. 端口的作用"></a>1. 端口的作用</h3><ul>
-<li>一台拥有IP地址的主机可以提供多种网络服务（如Web、FTP、SMTP等）</li>
-<li>通过”IP地址+端口号”的组合来区分不同的网络服务</li>
-<li>解决了IP地址与网络服务之间”一对多”的关系问题</li>
-</ul>
-<h3 id="2-端口类型"><a href="#2-端口类型" class="headerlink" title="2. 端口类型"></a>2. 端口类型</h3><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>描述</th>
-<th>特点</th>
-<th>常见端口示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>TCP端口</strong></td>
-<td>传输控制协议端口</td>
-<td>需要在客户端和服务器之间建立连接，提供可靠的数据传输</td>
-<td>21(FTP)、23(Telnet)、25(SMTP)、80(HTTP)</td>
-</tr>
-<tr>
-<td><strong>UDP端口</strong></td>
-<td>用户数据包协议端口</td>
-<td>无需建立连接，传输速度快但安全性低</td>
-<td>53(DNS)、161(SNMP)、8000(QQ)</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>重要提示</strong>：TCP和UDP端口号相互独立，例如TCP 235端口与UDP 235端口不冲突</p>
-</blockquote>
-<h3 id="3-端口范围划分"><a href="#3-端口范围划分" class="headerlink" title="3. 端口范围划分"></a>3. 端口范围划分</h3><table>
-<thead>
-<tr>
-<th>范围</th>
-<th>类型</th>
-<th>描述</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0-1023</td>
-<td>预留端口</td>
-<td>由操作系统保留，仅超级用户特权应用可使用</td>
-<td>系统关键服务</td>
-</tr>
-<tr>
-<td>1024-49151</td>
-<td>登记端口</td>
-<td>一般服务器程序使用的端口范围</td>
-<td>自定义服务端口</td>
-</tr>
-<tr>
-<td>49152-65535</td>
-<td>临时端口</td>
-<td>客户端进程动态选择的端口</td>
-<td>临时通信使用</td>
-</tr>
-</tbody></table>
-<h2 id="二、TCP协议详解"><a href="#二、TCP协议详解" class="headerlink" title="二、TCP协议详解"></a>二、TCP协议详解</h2><h3 id="1-TCP三次握手建立连接"><a href="#1-TCP三次握手建立连接" class="headerlink" title="1. TCP三次握手建立连接"></a>1. TCP三次握手建立连接</h3>
-	
-	</div>
-  <a type="button" href="/2025/12/13/端口协议/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/08/任务导向计网学习/" >任务导向计网学习</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-08  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h2><ol>
-<li><p>资源下载</p>
-<blockquote>
-<p>eve-ng 懒人版镜像文件在eve-ng懒人社区下载，记住要下载其客户端窗口<br>vm或其他虚拟机软件部署</p>
 </blockquote>
 </li>
-<li><p>网络配置<br><img src="/images/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_1.png" alt="在这里插入图片描述"></p>
+<li><p><code>Access-Control-Allow-Credentials</code>：是否允许携带凭证</p>
+<blockquote>
+<p>允许这个跨域请求携带用户的敏感凭证（如 Cookie、HTTP 认证信息、TLS 客户端证书）。<br>缺失表示不允许携带凭证（默认行为）</p>
+</blockquote>
 </li>
-</ol>
-<hr>
-<h2 id="二、网络设备以及配置知识"><a href="#二、网络设备以及配置知识" class="headerlink" title="二、网络设备以及配置知识"></a>二、网络设备以及配置知识</h2><h3 id="网络设备知识"><a href="#网络设备知识" class="headerlink" title="网络设备知识"></a>网络设备知识</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">华为：</span><br><span class="line">	1.路由器：AR系列（save）</span><br><span class="line">	2.交换机：CE系列（commit）</span><br><span class="line">	3.防火墙： </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="基础实验一"><a href="#基础实验一" class="headerlink" title="基础实验一"></a>基础实验一</h3><h4 id="0-任务导向"><a href="#0-任务导向" class="headerlink" title="0. 任务导向"></a>0. 任务导向</h4><p><img src="/images/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_2.png" alt="在这里插入图片描述"></p>
-<p>知识要点：</p>
+</ul>
+<p>再次修改，可以证明存在CORS漏洞<br><img src="/images/CORS/image_4.png" alt="在这里插入图片描述"></p>
 	
 	</div>
-  <a type="button" href="/2025/12/08/任务导向计网学习/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/04/13/CORS/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -800,11 +174,11 @@ StartupNotify=false
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/06/PHP基础详解/" >PHP基础详解</a>
+			<a href="/2026/04/12/浏览器同源策略与CORS解析/" >浏览器同源策略与CORS解析</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-06  </div>
+		<div class="date">post @ 2026-04-12  </div>
 		</div>
 	</div>
 	
@@ -814,31 +188,16 @@ StartupNotify=false
   <div class="row">
 	
 	
-		<h2 id="1-PHP简述"><a href="#1-PHP简述" class="headerlink" title="1. PHP简述"></a>1. PHP简述</h2><h3 id="详细解释"><a href="#详细解释" class="headerlink" title="详细解释"></a>详细解释</h3><p>PHP（Hypertext Preprocessor，超文本预处理器）是一种通用开源脚本语言，主要用于Web开发。它最初被设计为服务器端脚本语言，现在已发展成为一种通用编程语言。</p>
-<h3 id="核心特点："><a href="#核心特点：" class="headerlink" title="核心特点："></a>核心特点：</h3><ul>
-<li><strong>开源免费</strong>：PHP是完全开源的，可以自由使用和修改</li>
-<li><strong>跨平台</strong>：可以在Windows、Linux、macOS等操作系统上运行</li>
-<li><strong>嵌入HTML</strong>：PHP代码可以嵌入到HTML中，便于Web开发</li>
-<li><strong>服务器端执行</strong>：PHP代码在服务器上执行，结果以纯HTML形式返回给浏览器</li>
-<li><strong>丰富的库</strong>：PHP拥有超过1000个内置函数，支持各种功能</li>
-</ul>
-<h3 id="PHP在Web开发中的角色："><a href="#PHP在Web开发中的角色：" class="headerlink" title="PHP在Web开发中的角色："></a>PHP在Web开发中的角色：</h3><ul>
-<li>生成动态网页内容</li>
-<li>处理表单数据</li>
-<li>与数据库交互</li>
-<li>创建会话和Cookie</li>
-<li>生成图像和PDF</li>
-<li>与其他系统通信</li>
-</ul>
-<h3 id="PHP与Java-JavaScript的区别："><a href="#PHP与Java-JavaScript的区别：" class="headerlink" title="PHP与Java&#x2F;JavaScript的区别："></a>PHP与Java&#x2F;JavaScript的区别：</h3><ul>
-<li>PHP是服务器端语言，Java可以是客户端也可以是服务器端</li>
-<li>Java与JavaScript没有关系，只是名字相似</li>
-<li>PHP执行在服务器上，JavaScript执行在客户端</li>
-</ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3>
+		<h2 id="前言：为什么需要同源策略？"><a href="#前言：为什么需要同源策略？" class="headerlink" title="前言：为什么需要同源策略？"></a>前言：为什么需要同源策略？</h2><p>互联网诞生之初，浏览器允许任意网页随意访问其他网站的数据。这带来了巨大的安全隐患：恶意网站可以悄悄读取你在银行网站上的个人信息，甚至冒充你进行操作。为了解决这个问题，浏览器引入了 <strong>同源策略</strong>，作为一道基本的安全防线。</p>
+<p>但同源策略过于严格，现代 Web 应用又需要合法的跨域通信（比如前端调用不同域名的 API）。于是，W3C 制定了 <strong>CORS</strong>，在保证安全的前提下，为跨域访问打开一扇可控的门。</p>
+<p>本笔记将按照 <strong>“问题 → 解决方案 → 细节机制 → 安全风险”</strong> 的逻辑，为你彻底讲清同源策略与 CORS。</p>
+<hr>
+<h2 id="1-同源策略：浏览器安全的基石"><a href="#1-同源策略：浏览器安全的基石" class="headerlink" title="1. 同源策略：浏览器安全的基石"></a>1. 同源策略：浏览器安全的基石</h2><h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果没有同源策略，当你登录银行网站 <code>https://bank.com</code> 后，再打开一个恶意网站 <code>https://evil.com</code>，恶意网站可以这样攻击：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
+<p>由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。</p>
 	
 	</div>
-  <a type="button" href="/2025/12/06/PHP基础详解/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/04/12/浏览器同源策略与CORS解析/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -938,45 +297,45 @@ StartupNotify=false
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/浏览器/">浏览器<span>1</span></a></li>
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
 		
 			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
 		
 			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
 		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
-		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
-		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
-		
-			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>54</span></a></li>

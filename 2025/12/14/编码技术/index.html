@@ -732,6 +732,23 @@
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
+	  
+	  <!-- 字数统计（延迟计算） -->
+	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
+	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+	  </div>
+	  
+	  <script>
+	    // 延迟计算字数，避免阻塞渲染
+	    setTimeout(function() {
+	      var content = document.querySelector('.mypage');
+	      if (content) {
+	        var text = content.innerText || content.textContent;
+	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
+	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
+	      }
+	    }, 500);
+	  </script>
 	</div>
 
 	
@@ -780,23 +797,23 @@
 			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
 			</style>
 			<div id="vcomment" class="comment"></div>
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
-<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
-valineConfig.el='#vcomment';
-new Valine(valineConfig);
-    // new Valine({
-    //     el: '#vcomment',
-    //     appId: "",
-    //     appKey: "",
-    //     placeholder: "说点什么吧~",
-    //     avatar:"monsterid",
-    //     visitor: "true",
-    //     requiredFields: "nick,mail".split(','),
-    // });
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
 </script>
-
 		</section>
 	
 	
@@ -920,9 +937,6 @@ new Valine(valineConfig);
 
 <!--
  -->
-
-
-
 	</div>
   </div>
   <div class="container-narrow">

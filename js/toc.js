@@ -1,35 +1,53 @@
+// 防抖函数
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 document.addEventListener('DOMContentLoaded', function(){
-  try{
-    // Dynamically enable/disable sticky behavior for category-stick based on available viewport
-    function updateCategoryStick(){
-      var cat = document.querySelector('.category-stick');
-      var tocWrapper = document.querySelector('.toc-wrapper');
-      if(!cat) return;
-      var topCard = document.querySelector('.top-card');
-      var topHeight = topCard ? Math.ceil(topCard.getBoundingClientRect().height) + 8 : 68;
-      // Desktop only: enable sticky/fixed behavior when viewport allows
-      if(window.innerWidth > 979){
-        // make category-stick fixed below top-card
-        cat.classList.add('fixed');
-        cat.style.top = (topHeight + 8) + 'px';
-        // set width to match card
-        cat.style.width = (topCard ? topCard.getBoundingClientRect().width : 220) + 'px';
-        // ensure category-stick fits in viewport, allow internal scroll
-        var maxh = window.innerHeight - (topHeight + 20);
-        cat.style.maxHeight = maxh + 'px';
-        cat.style.overflow = 'auto';
-        // do not hide per-article TOC; keep it visible
-      } else {
-        cat.classList.remove('fixed');
-        cat.style.top = '';
-        cat.style.width = '';
-        cat.style.maxHeight = '';
-        cat.style.overflow = '';
+  // 延迟执行，避免阻塞页面渲染
+  setTimeout(function(){
+    try{
+      // Dynamically enable/disable sticky behavior for category-stick based on available viewport
+      function updateCategoryStick(){
+        var cat = document.querySelector('.category-stick');
+        var tocWrapper = document.querySelector('.toc-wrapper');
+        if(!cat) return;
+        var topCard = document.querySelector('.top-card');
+        var topHeight = topCard ? Math.ceil(topCard.getBoundingClientRect().height) + 8 : 68;
+        // Desktop only: enable sticky/fixed behavior when viewport allows
+        if(window.innerWidth > 979){
+          // make category-stick fixed below top-card
+          cat.classList.add('fixed');
+          cat.style.top = (topHeight + 8) + 'px';
+          // set width to match card
+          cat.style.width = (topCard ? topCard.getBoundingClientRect().width : 220) + 'px';
+          // ensure category-stick fits in viewport, allow internal scroll
+          var maxh = window.innerHeight - (topHeight + 20);
+          cat.style.maxHeight = maxh + 'px';
+          cat.style.overflow = 'auto';
+          // do not hide per-article TOC; keep it visible
+        } else {
+          cat.classList.remove('fixed');
+          cat.style.top = '';
+          cat.style.width = '';
+          cat.style.maxHeight = '';
+          cat.style.overflow = '';
+        }
       }
-    }
-    updateCategoryStick();
-    window.addEventListener('resize', updateCategoryStick);
-    window.addEventListener('orientationchange', updateCategoryStick);
+      
+      // 使用防抖优化resize事件
+      var debouncedUpdate = debounce(updateCategoryStick, 100);
+      updateCategoryStick();
+      window.addEventListener('resize', debouncedUpdate);
+      window.addEventListener('orientationchange', debouncedUpdate);
 
     var toc = document.querySelector('.toc-article');
     if(!toc) return;

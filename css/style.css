@@ -1,4 +1,4 @@
-﻿﻿﻿.container-narrow {
+﻿﻿﻿﻿﻿.container-narrow {
     margin: 0 auto;
     max-width: 970px
 }
@@ -153,7 +153,17 @@ li i {
     background-color: #000;
     color: #fff;
     font-family: dos;
-    -webkit-text-fill-color: #bbb
+    -webkit-text-fill-color: #bbb;
+    border: 2px solid #2bbc8a;
+    border-radius: 4px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+#local-search-input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(43, 188, 138, 0.5);
+    border-color: #2bbc8a;
 }
 
 #local-search-result {

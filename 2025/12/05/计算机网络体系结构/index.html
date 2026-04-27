@@ -370,18 +370,30 @@ FTP程序
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
+		  <h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
 <li>计算机网络的概念<ul>
 <li>定义<ul>
 <li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
@@ -1080,40 +1092,51 @@ FTP程序
 </li>
 </ul>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="计算机网络体系结构">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="计算机网络体系结构">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -1123,7 +1146,7 @@ FTP程序
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2025/11/13/VPN代理与流量流向分析/" type="button" class="btn btn-default ">下一页<i
+    <a href="/2025/12/05/应用层/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -1131,25 +1154,17 @@ FTP程序
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -1167,16 +1182,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -1279,16 +1294,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

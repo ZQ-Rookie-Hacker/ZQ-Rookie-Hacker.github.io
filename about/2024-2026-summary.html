@@ -102,17 +102,20 @@
 
 
 
+
+
 <div class="row page">
-	<!-- cols -->
-	
-	<div class="col-md-12"> 
-	
+		<!-- cols -->
+		
+		<div class="col-md-12">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  
 
-	  <h2 id="1-学习历程"><a href="#1-学习历程" class="headerlink" title="1. 学习历程"></a>1. 学习历程</h2><blockquote>
+		  <h2 id="1-学习历程"><a href="#1-学习历程" class="headerlink" title="1. 学习历程"></a>1. 学习历程</h2><blockquote>
 <ul>
 <li><strong>2024年7月</strong>，刚高考完，我还是一个连计算机基础操作都不懂的准大一学生，但是我喜欢我的专业，并愿意为之付出时间。</li>
 <li><strong>2024年的这个暑期</strong>，我学习了C语言的基础知识，以及一些高数，线代等等的基础知识，但是对网安的概念还是模糊的</li>
@@ -147,58 +150,67 @@
 </ol>
 </blockquote>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="2024-2026年度总结">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="2024-2026年度总结">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -216,19 +228,17 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
 		
 
-</div><!-- row -->
+	</div><!-- row -->
 
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

@@ -124,18 +124,30 @@ Access-Control-Allow-Credentials：是否允许携带凭证
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><p><strong><code>文章链接</code></strong>：<a href="https://zq-rookie-hacker.github.io/2026/04/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/">浏览器同源策略与CORS解析</a></p>
+		  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><p><strong><code>文章链接</code></strong>：<a href="https://zq-rookie-hacker.github.io/2026/04/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/">浏览器同源策略与CORS解析</a></p>
 <p>补充：在下面的靶场中，存在隐藏请求。隐藏请求是前后端数据交互的重点所在<br><img src="/images/CORS/image_1.png" alt="在这里插入图片描述"></p>
 <hr>
 <h3 id="0x01-基于源站反射的-CORS-漏洞"><a href="#0x01-基于源站反射的-CORS-漏洞" class="headerlink" title="0x01.基于源站反射的 CORS 漏洞"></a>0x01.基于源站反射的 CORS 漏洞</h3><p>该网站存在不安全的 CORS 配置，因为它<code>信任所有</code>源站。<br>要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将该代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
@@ -254,40 +266,51 @@ Access-Control-Allow-Credentials：是否允许携带凭证
 <p>解码提交即可</p>
 <hr>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="CORS">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="CORS">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -305,25 +328,17 @@ Access-Control-Allow-Credentials：是否允许携带凭证
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -341,16 +356,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -453,16 +468,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

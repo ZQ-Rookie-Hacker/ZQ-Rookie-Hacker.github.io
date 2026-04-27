@@ -111,18 +111,30 @@
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h2 id="从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路"><a href="#从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路" class="headerlink" title="从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路"></a>从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路</h2><p>本文完整保留<a target="_blank" rel="noopener" href="https://portswigger.net/research/splitting-the-email-atom">《Splitting the email atom》</a>原文研究逻辑、试错过程、Payload案例，融合邮箱解析库原理、规则差异、漏洞本质等精华内容，以零基础可懂的语言，还原安全研究者从发现异常→挖掘原理→绕过防护→实战攻破大厂的全流程，无核心知识点遗漏。</p>
+		  <h2 id="从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路"><a href="#从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路" class="headerlink" title="从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路"></a>从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路</h2><p>本文完整保留<a target="_blank" rel="noopener" href="https://portswigger.net/research/splitting-the-email-atom">《Splitting the email atom》</a>原文研究逻辑、试错过程、Payload案例，融合邮箱解析库原理、规则差异、漏洞本质等精华内容，以零基础可懂的语言，还原安全研究者从发现异常→挖掘原理→绕过防护→实战攻破大厂的全流程，无核心知识点遗漏。</p>
 <hr>
 <h1 id="前言：颠覆对电子邮件地址的认知"><a href="#前言：颠覆对电子邮件地址的认知" class="headerlink" title="前言：颠覆对电子邮件地址的认知"></a>前言：颠覆对电子邮件地址的认知</h1><p>常规认知中，邮箱格式为<strong>本地部分@域名</strong>，系统仅做简单格式校验，但真实情况为：</p>
 <ol>
@@ -292,40 +304,51 @@
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>本项研究的核心价值，在于揭示了一个被普遍忽略的事实：<strong>看似标准化的邮箱地址，背后是混乱的解析规则和大量的安全漏洞</strong>。</p>
 <p>对于安全初学者而言，该研究也印证了安全研究的核心逻辑：<strong>漏洞并非只存在于复杂的功能模块中，更多藏在被所有人忽略的基础协议、解析细节里</strong>。而邮箱解析的规则差异、第三方库的违规实现，也警示开发者：基础功能的校验并非“简单格式匹配”，统一规则、严格校验，才是防范安全漏洞的核心。</p>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="邮箱地址解析">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="邮箱地址解析">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -342,25 +365,17 @@
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -378,16 +393,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -490,16 +505,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

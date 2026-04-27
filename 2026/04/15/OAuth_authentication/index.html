@@ -126,18 +126,30 @@ OAuth 1.0 存在的问题">
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><h4 id="OAuth诞生前：古老的-密码共享-时代"><a href="#OAuth诞生前：古老的-密码共享-时代" class="headerlink" title="OAuth诞生前：古老的&quot;密码共享&quot;时代"></a><strong><code>OAuth诞生前：古老的&quot;密码共享&quot;时代</code></strong></h4><p>在OAuth诞生之前，互联网上几乎没有标准化的授权方案。当你想让一个第三方应用（比如一款帮你分析好友社交网络的工具）访问你在另一个平台（比如你的社交账号）上的数据时，<code>唯一的办法</code>就是把你的用户名和密码直接告诉它。但是，这样存在巨大的安全风险：用户与密码可能会被保存、滥用，甚至被恶意程序用来做任何事，而你毫无办法</p>
+		  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><h4 id="OAuth诞生前：古老的-密码共享-时代"><a href="#OAuth诞生前：古老的-密码共享-时代" class="headerlink" title="OAuth诞生前：古老的&quot;密码共享&quot;时代"></a><strong><code>OAuth诞生前：古老的&quot;密码共享&quot;时代</code></strong></h4><p>在OAuth诞生之前，互联网上几乎没有标准化的授权方案。当你想让一个第三方应用（比如一款帮你分析好友社交网络的工具）访问你在另一个平台（比如你的社交账号）上的数据时，<code>唯一的办法</code>就是把你的用户名和密码直接告诉它。但是，这样存在巨大的安全风险：用户与密码可能会被保存、滥用，甚至被恶意程序用来做任何事，而你毫无办法</p>
 <p>后来，一些大型科技公司（比如Google、Facebook）意识到了这个巨大的安全风险，开始各自推出私有的授权方案，例如FlickrAuth和GoogleAuthSub。但这些方案彼此不兼容，开发者需要为每个不同的平台单独学习和适配，极其痛苦</p>
 <hr>
 <h4 id="OAuth-1-0：从-共享密码-到-安全授权"><a href="#OAuth-1-0：从-共享密码-到-安全授权" class="headerlink" title="OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;"></a><strong><code>OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;</code></strong></h4><p>为了解决这个”授权困境”，OAuth（开放授权）应运而生。它的故事始于2006年，当时Twitter的一位开发者Blaine Cook在为Twitter实现OpenID时，发现没有一个好的方案来安全地授权第三方应用访问Twitter的API。于是，他与Chris Messina等人一起发起讨论，最终催生了OAuth协议。</p>
@@ -272,7 +284,7 @@ OAuth 1.0 存在的问题">
 <blockquote>
 <ol>
 <li>窃取令牌<br>由于 access_token 直接出现在回调 URL 的 # 片段中（例如 <a target="_blank" rel="noopener" href="https://app.com/callback#access_token=xyz%EF%BC%89%EF%BC%8C%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E8%8E%B7%E5%8F%96%EF%BC%9A">https://app.com/callback#access_token=xyz），攻击者可以通过以下方式获取：</a><blockquote>
-<p>读取浏览器历史记录<br>通过 HTTP Referer 头泄露（如果页面有跳转）<br>利用 XSS 漏洞：document.location.hash<br>恶意浏览器插件<br>2. 令牌替换 &#x2F; 重放<br>攻击者拿到令牌后，直接用它冒充受害者调用资源服务器的 API。<br>如果客户端应用只验证令牌是否有效，但不检查令牌与当前用户的绑定关系（常见错误），攻击者用自己的令牌就能访问受害者的数据。<br>3. 篡改回调参数<br>有些客户端会从回调 URL 中直接读取 email 等参数，而不验证这些参数是否与令牌真正关联。<br>攻击者可以手动修改回调 URL 中的 email 为 <a href="mailto:&#x76;&#105;&#99;&#x74;&#105;&#x6d;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">victim@example.com</a>，然后让客户端用这个伪造的身份建立会话。</p>
+<p>读取浏览器历史记录<br>通过 HTTP Referer 头泄露（如果页面有跳转）<br>利用 XSS 漏洞：document.location.hash<br>恶意浏览器插件<br>2. 令牌替换 &#x2F; 重放<br>攻击者拿到令牌后，直接用它冒充受害者调用资源服务器的 API。<br>如果客户端应用只验证令牌是否有效，但不检查令牌与当前用户的绑定关系（常见错误），攻击者用自己的令牌就能访问受害者的数据。<br>3. 篡改回调参数<br>有些客户端会从回调 URL 中直接读取 email 等参数，而不验证这些参数是否与令牌真正关联。<br>攻击者可以手动修改回调 URL 中的 email 为 <a href="mailto:&#x76;&#x69;&#99;&#x74;&#x69;&#x6d;&#64;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#101;&#x2e;&#99;&#111;&#x6d;">victim@example.com</a>，然后让客户端用这个伪造的身份建立会话。</p>
 </blockquote>
 </li>
 </ol>
@@ -333,7 +345,7 @@ OAuth 1.0 存在的问题">
 </tbody></table>
 <p>补充微信小程序标准的登录流程（<code>OAuth 2.0</code>）<br><img src="/images/OAuth_authentication/image_5.png" alt="在这里插入图片描述"></p>
 <hr>
-<h3 id="0x01-通过-OAuth-隐式流程绕过身份验证"><a href="#0x01-通过-OAuth-隐式流程绕过身份验证" class="headerlink" title="0x01.通过 OAuth 隐式流程绕过身份验证"></a>0x01.通过 OAuth 隐式流程绕过身份验证</h3><p>该实验使用 OAuth 服务，允许用户通过社交媒体账户登录。客户端应用程序的验证存在缺陷，使得攻击者无需知道其他用户的密码即可登录其账户。<br>要解决该实验，请登录 Carlos 的账户。他的邮箱地址是 <a href="mailto:&#x63;&#x61;&#x72;&#108;&#x6f;&#115;&#64;&#x63;&#x61;&#114;&#x6c;&#111;&#115;&#45;&#x6d;&#111;&#110;&#x74;&#x6f;&#121;&#x61;&#46;&#110;&#101;&#x74;">carlos@carlos-montoya.net</a>。<br>您可以使用以下凭证登录自己的社交媒体账户：wiener:peter</p>
+<h3 id="0x01-通过-OAuth-隐式流程绕过身份验证"><a href="#0x01-通过-OAuth-隐式流程绕过身份验证" class="headerlink" title="0x01.通过 OAuth 隐式流程绕过身份验证"></a>0x01.通过 OAuth 隐式流程绕过身份验证</h3><p>该实验使用 OAuth 服务，允许用户通过社交媒体账户登录。客户端应用程序的验证存在缺陷，使得攻击者无需知道其他用户的密码即可登录其账户。<br>要解决该实验，请登录 Carlos 的账户。他的邮箱地址是 <a href="mailto:&#99;&#97;&#x72;&#108;&#111;&#115;&#x40;&#x63;&#x61;&#x72;&#x6c;&#111;&#115;&#45;&#109;&#111;&#x6e;&#x74;&#111;&#x79;&#x61;&#46;&#110;&#101;&#x74;">carlos@carlos-montoya.net</a>。<br>您可以使用以下凭证登录自己的社交媒体账户：wiener:peter</p>
 <p>主页面点击 <code>my account</code><br><img src="/images/OAuth_authentication/image_6.png" alt="在这里插入图片描述"></p>
 <p>点击之后，没有放行，然后抓取了响应包，不知道为什么这样？ 是要重定向到 <code> /social-login</code><br><img src="/images/OAuth_authentication/image_7.png" alt="在这里插入图片描述"></p>
 <p>继续放行，得到以下信息<br><img src="/images/OAuth_authentication/image_8.png" alt="在这里插入图片描述"></p>
@@ -714,40 +726,51 @@ OAuth 1.0 存在的问题">
 <p>复制提交即可</p>
 <hr>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="OAuth authentication">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="OAuth authentication">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -765,25 +788,17 @@ OAuth 1.0 存在的问题">
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -801,16 +816,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -913,16 +928,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

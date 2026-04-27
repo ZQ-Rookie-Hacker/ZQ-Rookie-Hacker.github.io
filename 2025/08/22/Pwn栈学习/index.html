@@ -113,18 +113,30 @@
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h2 id="一、pwn环境搭建"><a href="#一、pwn环境搭建" class="headerlink" title="一、pwn环境搭建"></a>一、pwn环境搭建</h2><h3 id="1-gdb插件配置"><a href="#1-gdb插件配置" class="headerlink" title="1.gdb插件配置"></a>1.gdb插件配置</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.gdbinit 启动gdb自动加载</span><br><span class="line"></span><br><span class="line">#source /home/ggbond2025/tools/pwndbg/gdbinit.py</span><br><span class="line">#source ~/tools/peda/peda.py</span><br><span class="line">#source ~/tools/gef/gef.py</span><br><span class="line">set disassembly-flavor intel</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 定义插件切换命令</span><br><span class="line">define use-pwndbg</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载pwndbg</span><br><span class="line">  source ~/tools/pwndbg/gdbinit.py</span><br><span class="line">  echo 使用pwndbg调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-peda</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载peda</span><br><span class="line">  source ~/tools/peda/peda.py</span><br><span class="line">  echo 使用peda调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-gef</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载gef</span><br><span class="line">  source ~/tools/gef/gef.py</span><br><span class="line">  echo 使用gef调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#(gdb) use-pwndbg  # 切换到pwndbg</span><br><span class="line">#(gdb) use-peda    # 切换到peda</span><br><span class="line">#(gdb) use-gef     # 切换到gef</span><br><span class="line"></span><br><span class="line">use-pwndbg  #默认启动gdb 即启动 pwndbg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+		  <h2 id="一、pwn环境搭建"><a href="#一、pwn环境搭建" class="headerlink" title="一、pwn环境搭建"></a>一、pwn环境搭建</h2><h3 id="1-gdb插件配置"><a href="#1-gdb插件配置" class="headerlink" title="1.gdb插件配置"></a>1.gdb插件配置</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.gdbinit 启动gdb自动加载</span><br><span class="line"></span><br><span class="line">#source /home/ggbond2025/tools/pwndbg/gdbinit.py</span><br><span class="line">#source ~/tools/peda/peda.py</span><br><span class="line">#source ~/tools/gef/gef.py</span><br><span class="line">set disassembly-flavor intel</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 定义插件切换命令</span><br><span class="line">define use-pwndbg</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载pwndbg</span><br><span class="line">  source ~/tools/pwndbg/gdbinit.py</span><br><span class="line">  echo 使用pwndbg调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-peda</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载peda</span><br><span class="line">  source ~/tools/peda/peda.py</span><br><span class="line">  echo 使用peda调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-gef</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载gef</span><br><span class="line">  source ~/tools/gef/gef.py</span><br><span class="line">  echo 使用gef调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#(gdb) use-pwndbg  # 切换到pwndbg</span><br><span class="line">#(gdb) use-peda    # 切换到peda</span><br><span class="line">#(gdb) use-gef     # 切换到gef</span><br><span class="line"></span><br><span class="line">use-pwndbg  #默认启动gdb 即启动 pwndbg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">分屏指令</span><br><span class="line"></span><br><span class="line">输出内容分终端指令</span><br><span class="line"></span><br><span class="line">set context-output /dev/pts/0(1,2,3,...)</span><br><span class="line"></span><br><span class="line">在终端执行tty,查看当前终端编号</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">典型使用场景（PWN 调试中常见）：</span><br><span class="line">多终端调试：</span><br><span class="line">打开两个终端窗口，终端 A 运行 GDB 调试程序，终端 B 专门显示调试上下文。</span><br><span class="line">在终端 B 中执行 tty 命令，查看其设备路径（假设为 /dev/pts/2）。</span><br><span class="line">在 GDB 中执行 set context-output /dev/pts/2，此后调试上下文会自动输出到终端 B，而 GDB 命令交互仍在终端 A 中进行。</span><br><span class="line">若要恢复默认输出（在 GDB 自身终端显示上下文），可执行 set context-output &quot;&quot;。</span><br><span class="line">需确保目标设备路径（如 /dev/pts/2）存在且可写，否则会报错。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">具体分屏实现</span><br><span class="line"></span><br><span class="line">下载tmux-&gt;在使用指令重定向输出</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -1239,40 +1251,51 @@
 <p>通过具体例子能更直观区分：对于 <code>s = &quot;1234567890&quot;</code>（长度10），<code>s[-4:]</code> 是 <code>&#39;7890&#39;</code>，<code>s[:-4]</code> 是 <code>&#39;123456&#39;</code>。</p>
 <hr>
 
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="Pwn栈学习">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="Pwn栈学习">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -1290,25 +1313,17 @@
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -1326,16 +1341,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -1438,16 +1453,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

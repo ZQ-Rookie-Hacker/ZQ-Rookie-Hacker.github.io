@@ -508,28 +508,22 @@ em{
     font-weight: bold;
 }
 
-/* fixed small card at page right-top (JS will set left/width to align with sidebar column) */
+/* small card at page right-top showing date + categories/tags */
 .top-card {
-    position: static;
-    top: auto;
-    z-index: auto;
-    background: transparent;
+    margin-bottom: 12px;
 }
 .top-card .meta-widget { margin:6px 0; }
 
-/* category stick: become fixed within sidebar when fits (JS positions via left/width) */
-.category-stick { width: 220px; }
-.category-stick.fixed { position: static; z-index: auto; }
-.category-stick.fixed .widget-wrap { background: transparent; }
+/* category tree inside sidebar — scrolls with parent sticky container */
+.category-stick { width: 100%; }
+.category-stick .widget-wrap { background: transparent; }
 
-/* ensure TOC sits below category list and scrolls with page */
+/* TOC sits below category list, scrolls together within sticky sidebar */
 .toc-wrapper { margin-top: 8px; }
 
-/* adjust small-screen behavior */
+/* small-screen: everything in normal flow */
 @media screen and (max-width: 979px){
-    .top-card, .category-stick { position: static; width: auto; }
-    .top-card { right: auto; top: auto; }
-    .category-stick.fixed { position: static; right: auto; top: auto; }
+    .top-card, .category-stick { width: auto; }
     .toc-wrapper { margin-top: 0 !important; }
 }
 
@@ -607,30 +601,61 @@ hr {
     border-top: 2px solid #fff
 }
 
-/* Make post sidebar sticky on larger screens so it fills the viewport while reading */
-#post_meta {
-    /* container for sidebar; no longer fully sticky */
-}
+/* Post sidebar — sticky behavior moved to .sticky-meta class */
 
-/* make original sidebar content sticky instead of whole container */
+/* Sidebar follows viewport on desktop via position:sticky */
 .sticky-meta {
-    /* default: not sticky; JS will add .is-sticky when it fits the viewport */
     position: static;
-    max-height: calc(100vh - 120px);
-    overflow: auto;
 }
 
-.sticky-meta.is-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 80px;
-    z-index: 5;
+@media screen and (min-width: 980px) {
+    /* Flex row: sidebar column stretches to article height so sticky works */
+    .row.post {
+        display: flex;
+        /* default align-items: stretch ensures #side_meta is as tall as .col-md-9 */
+    }
+    .row.post::before,
+    .row.post::after {
+        display: none;
+    }
+    .row.post > .col-md-9 {
+        flex: 1;
+        max-width: 75%;
+    }
+    #top_meta {
+        display: none;
+    }
+    #side_meta {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding-left: 15px;
+        /* stretch makes this as tall as the article, giving sticky sidebar room */
+    }
+    /* Sidebar sticks at viewport top while article scrolls past */
+    .sticky-meta {
+        float: none !important;
+        width: 100% !important;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 80px;
+        z-index: 5;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+    .sticky-meta::-webkit-scrollbar {
+        width: 4px;
+    }
+    .sticky-meta::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 2px;
+    }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 979px) {
     .sticky-meta {
         position: static;
-        top: auto;
+        max-height: none;
+        overflow: visible;
     }
 }
 
@@ -876,4 +901,47 @@ border: 2px solid rgb(255, 255, 255) !important;
     width: 100%;
     height: 100%;
     fill: #ffffff !important;
+}
+
+/* Reading progress bar — fixed thin bar at page top */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2bbc8a, #fefe54);
+    z-index: 10000;
+    width: 0;
+    transition: width 0.1s linear;
+}
+
+/* Article stats shown below title */
+.article-stats {
+    margin-bottom: 18px;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: #888;
+    border-left: 3px solid #2bbc8a;
+    background: rgba(43,188,138,0.06);
+}
+
+/* Category tree — collapsed by default, click title to expand */
+.category-stick .widget-title {
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.category-stick .widget-title::after {
+    content: ' [展开]';
+    font-size: 0.7em;
+    color: #666;
+}
+.category-stick.expanded .widget-title::after {
+    content: ' [折叠]';
+}
+.category-stick .category-tree {
+    display: none;
+}
+.category-stick.expanded .category-tree {
+    display: block;
 }

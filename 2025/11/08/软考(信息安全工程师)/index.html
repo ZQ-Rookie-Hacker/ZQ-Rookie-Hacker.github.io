@@ -135,18 +135,30 @@
 
 
 
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
 <div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
 
-	  <h2 id="一、信息安全基础概念"><a href="#一、信息安全基础概念" class="headerlink" title="一、信息安全基础概念"></a>一、信息安全基础概念</h2><h3 id="1-信息安全基本属性"><a href="#1-信息安全基本属性" class="headerlink" title="1. 信息安全基本属性"></a>1. 信息安全基本属性</h3><ul>
+		  <h2 id="一、信息安全基础概念"><a href="#一、信息安全基础概念" class="headerlink" title="一、信息安全基础概念"></a>一、信息安全基础概念</h2><h3 id="1-信息安全基本属性"><a href="#1-信息安全基本属性" class="headerlink" title="1. 信息安全基本属性"></a>1. 信息安全基本属性</h3><ul>
 <li><strong>机密性</strong>：确保信息不泄露给未授权的个体、进程或实体</li>
 <li><strong>完整性</strong>：保护数据和系统的准确性和完备性，防止未授权篡改</li>
 <li><strong>可用性</strong>：确保授权用户在需要时可以正常访问和使用资源</li>
@@ -1393,40 +1405,51 @@
 </ol>
 <p><img src="/images/%E8%BD%AF%E8%80%83(%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88)/image-6.png" alt="在这里插入图片描述"></p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(1)李工可以通过两种远程方式访问服务器进行运维，请写出两种方式?</span><br><span class="line">  ssh telnet</span><br><span class="line"></span><br><span class="line">(2)请写出上述两种通信协议的默认端口号。</span><br><span class="line">  ssh:22 telnet:23</span><br><span class="line"></span><br><span class="line">(3)出于安全考虑，李工应该选择那种方式进行远程运维?</span><br><span class="line">  ssh</span><br><span class="line"></span><br><span class="line">(4)请写出李工可以选择远程安全登录运维管理的开源工具。</span><br><span class="line">  OpenSSH</span><br><span class="line"></span><br><span class="line">李亮通过SSH登入到服务后，执行cat /etc/passwd 命今点显示如图2-1的画面。文件中的一行记录对应着一个用户,每行记录用冒号(:)分隔为 7 个字段。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(1)第2个字段“X&quot;表示用来验证用户合法性的口令，真正的口令存放在什么文件中?(写出完整路径和名称)</span><br><span class="line">  /etc/shadow</span><br><span class="line"></span><br><span class="line">(2)请写出图2-1中权限最低的用户名称。</span><br><span class="line">  bin</span><br><span class="line">(3)请写出图2-1中系统允许远程登陆的用户名称。</span><br><span class="line">  user1 user2 root</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">UID=0→ root(最高权限)</span><br><span class="line">UID=1~999→系统账户(如 bin, daemon, sshd)</span><br><span class="line">普通用户UID&gt;1000</span><br><span class="line"></span><br><span class="line">若：/bin/bash /bin/sh /usr/bin/zsh 等可交互 Shell → 允许登录</span><br><span class="line">若：/sbin/nologin/bin/false→禁止登录</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Linux中可通过/etc/hosts,allow和/etc/hosts,denv这两个文件分许和禁止远程丰机对本地服务的访问运维。李工对服务器的这两个进行配置，实现禁止除了李工之外的任何主机进行远程，</span><br><span class="line">请写出在这两个文件中加入的配置。</span><br><span class="line"></span><br><span class="line">在/etc/hosts.deny中加入sshd:all:deny(:deny可以不写)</span><br><span class="line">在/etc/hosts.allow中加入sshd:192.168.1.23:allow(:allow可以不写)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">李工通过网络安全监测对系统的网络活动和内部活动进行分析，获取系统当前的状态信息，以发现有可能的异常行为。</span><br><span class="line">(1)李工需要查看系统的活动进程，可以使用什么命令查看?</span><br><span class="line">  ps</span><br><span class="line"></span><br><span class="line">(2)李工需要查看系统中在线的用户信息，可以使用什么命令查看?</span><br><span class="line">  who</span><br><span class="line"></span><br><span class="line">(3)李工需要查看系统中的地址解析缓存表，可以使用什么命令查看?</span><br><span class="line">  arp</span><br><span class="line"></span><br><span class="line">(4)李工需要检查系统中进程使用的文件、tcp/udp端口、用户等相关信息，可以使用什么命令查看?</span><br><span class="line">  lsof</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Linux服务器的日志文件可提供审计，有助于系统管理员及时发现系统入侵行为或系统安全隐患。</span><br><span class="line">李工根据安全需求查看相关日志:</span><br><span class="line">(1)查看每一次用户登录和注销的历史信息的日志文件是哪个?</span><br><span class="line">(2)查看不良的登入尝试记录的日志文件是哪个?</span><br><span class="line"></span><br><span class="line">(1)-(2)备选答案:</span><br><span class="line">A. lastlog</span><br><span class="line">B. loginlog</span><br><span class="line">C.utmp</span><br><span class="line">D.wtmp</span><br><span class="line">E.sulog</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">审计机制是 UNIXinux系统安全的重要组成部分,审计有助于系统管理员及时发现系统入侵行为或系统安全隐患。不同版本的 UNIXLinux日志文件的目录是不同的,早期版本UNx的审计日志目录放在/usr/adm:较新版本的在/arladm; Solaris,Linux和BSD在 UNIXarlog。常见日志文件如下:lastlog:记录用户最近成功登录的时间;</span><br><span class="line">·loginlog:不良的登录尝试记录;</span><br><span class="line">·messages:记录输出到系统主控台以及由 syslog系统服务程序产生的消息；</span><br><span class="line">·utmp:记录当前登录的每个用户;</span><br><span class="line">·utmpx:扩展的utmp;</span><br><span class="line">·wtmp:记录每一次用户登录和注销的历史信息;</span><br><span class="line">·wimp:扩展的wmp;</span><br><span class="line">·vold.log:记录使用外部介质出现的错误;</span><br><span class="line">·xferkig:记录fp的存取情况,</span><br><span class="line">·sulog:记录su命令的使用情况;</span><br><span class="line">·acct:记录每个用户使用过的命令。</span><br></pre></td></tr></table></figure>
-	  <div class="article-footer-copyright">
+		  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
 </div>
 
-	  
-	  <!-- 字数统计（延迟计算） -->
-	  <div class="post-word-count" style="margin: 10px 0; color: #666; font-size: 12px;">
-	    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
-	  </div>
-	  
-	  <script>
-	    // 延迟计算字数，避免阻塞渲染
-	    setTimeout(function() {
-	      var content = document.querySelector('.mypage');
-	      if (content) {
-	        var text = content.innerText || content.textContent;
-	        var wordCount = Math.ceil(text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length / 2);
-	        document.getElementById('word-count').textContent = '~' + wordCount + ' 字';
-	      }
-	    }, 500);
-	  </script>
-	</div>
 
-	
-	<span id="" class="leancloud-visitors view" data-flag-title="软考(信息安全工程师)">
-		<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
-	</span>
-	
-	
-	<div>
-  	<center>
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var wordCount = chineseChars + englishWords;
+		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
 
-	<div class="pagination">
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="软考(信息安全工程师)">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
 
     
     
@@ -1444,25 +1467,17 @@
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">留言</h2>
+	    </center>
+		</div>
 
-    
-</section>
-
--->
-	
-		<section id="comments" class="comments">
-			<style>
-			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
-			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
-			</style>
-			<div id="vcomment" class="comment"></div>
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
 <script>
 // 延迟加载评论系统
 window.addEventListener('load', function() {
@@ -1480,16 +1495,16 @@ window.addEventListener('load', function() {
   }, 1000); // 延迟1秒加载
 });
 </script>
-		</section>
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
 
 
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
 
 	<!-- small fixed card (date + brief meta) -->
 	<div class="top-card">
@@ -1592,16 +1607,14 @@ window.addEventListener('load', function() {
 	</div>
 
 </div><!-- col-md-3 -->
+
+
+		</div>
+
 		
 
-	</div>
-	
-		
+	</div><!-- row -->
 
-</div><!-- row -->
-
-<!--
- -->
 	</div>
   </div>
   <div class="container-narrow">

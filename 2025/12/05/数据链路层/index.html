@@ -1770,10 +1770,14 @@ TCP&amp;#x2F;IP体系结构
 		      var content = document.querySelector('.mypage');
 		      if (content) {
 		        var text = content.innerText || content.textContent;
-		        var chineseChars = (text.match(/[一-龥]/g) || []).length;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
 		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
-		        var wordCount = chineseChars + englishWords;
-		        var readingTime = Math.max(1, Math.ceil(wordCount / 300));
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
 		        var wcEl = document.getElementById('word-count');
 		        var rtEl = document.getElementById('reading-time');
 		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
@@ -1806,13 +1810,13 @@ TCP&amp;#x2F;IP体系结构
 
     
     
-    <a href="/2025/12/05/传输层/" type="button" class="btn btn-default"><i
+    <a href="/2025/12/05/计算机网络体系结构/" type="button" class="btn btn-default"><i
                 class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2025/12/05/物理层/" type="button" class="btn btn-default ">下一页<i
+    <a href="/2025/11/13/VPN代理与流量流向分析/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 

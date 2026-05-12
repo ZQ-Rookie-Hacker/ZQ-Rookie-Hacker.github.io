@@ -117,11 +117,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/05/08/CVE-2024-23897/" >CVE-2024-23897：Jenkins任意文件读取</a>
+			<a href="/2025/11/08/软考(信息安全工程师)/" >软考(信息安全工程师)</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-05-08  </div>
+		<div class="date">post @ 2025-11-08  </div>
 		</div>
 	</div>
 	
@@ -131,26 +131,45 @@
   <div class="row">
 	
 	
-		<h3 id="0x00-前置知识"><a href="#0x00-前置知识" class="headerlink" title="0x00.前置知识"></a>0x00.前置知识</h3><ul>
-<li>Jenkins CLI：Jenkins自带的一个命令行工具。我们通常使用 jenkins-cli.jar 文件来远程连接并下达指令</li>
-<li>args4j 库与 @ 语法：Jenkins用于解析命令行参数的一个库。它为方便操作而设计，如果在一个参数值前加 @，它会自动读取指定文件的内容来替换这个参数值</li>
-<li>权限影响：<ul>
-<li>如果拥有 Overall&#x2F;Read 权限：能读取目标文件的全部内容。</li>
-<li>如果是匿名用户（默认情况）：没有Overall&#x2F;Read权限，大部分CLI命令无法调用。但 who-am-i 和 help 这两个例外命令仍然可用，可用来读取目标文件的前3行，但足以获取敏感信息（如密钥头信息、路径等）。也可以尝试使用 connect-node 命令来读取完整内容</li>
+		<h2 id="一、信息安全基础概念"><a href="#一、信息安全基础概念" class="headerlink" title="一、信息安全基础概念"></a>一、信息安全基础概念</h2><h3 id="1-信息安全基本属性"><a href="#1-信息安全基本属性" class="headerlink" title="1. 信息安全基本属性"></a>1. 信息安全基本属性</h3><ul>
+<li><strong>机密性</strong>：确保信息不泄露给未授权的个体、进程或实体</li>
+<li><strong>完整性</strong>：保护数据和系统的准确性和完备性，防止未授权篡改</li>
+<li><strong>可用性</strong>：确保授权用户在需要时可以正常访问和使用资源</li>
+<li><strong>可控性</strong>：对信息传播及内容具有控制能力</li>
+<li><strong>抗抵赖性</strong>：确保行为发起者无法否认其行为（如发送消息、签署文件）</li>
+</ul>
+<h3 id="2-网络信息安全基本功能"><a href="#2-网络信息安全基本功能" class="headerlink" title="2. 网络信息安全基本功能"></a>2. 网络信息安全基本功能</h3><ul>
+<li><strong>防御</strong>：事前采取的安全措施（防火墙、加密、访问控制）</li>
+<li><strong>检测</strong>：事中或持续性的监控（IDS、态势感知）</li>
+<li><strong>应急</strong>：事件发生后的紧急响应措施</li>
+<li><strong>恢复</strong>：将受影响系统恢复到正常状态</li>
+</ul>
+<h3 id="3-信息安全管理流程"><a href="#3-信息安全管理流程" class="headerlink" title="3. 信息安全管理流程"></a>3. 信息安全管理流程</h3><ol>
+<li>确定管理对象</li>
+<li>评估对象价值</li>
+<li>识别对象威胁</li>
+<li>识别对象脆弱性</li>
+<li>确定对象风险级别</li>
+<li>制定防范措施</li>
+<li>实施和落实防范措施</li>
+<li>运行与维护网络信息安全管理设备</li>
+</ol>
+<h3 id="4-国家网络安全体系"><a href="#4-国家网络安全体系" class="headerlink" title="4. 国家网络安全体系"></a>4. 国家网络安全体系</h3><ul>
+<li><strong>中国网络安全审查技术与认证中心(CCRC)</strong>：负责网络安全设备审查</li>
+<li><strong>入网许可证</strong>：由工信部下属实验室（泰尔实验室、威尔实验室）认证</li>
+<li><strong>无线产品核准</strong>：由国家无线电管理委员会负责</li>
+<li><strong>网络安全等级保护制度</strong>：<ul>
+<li>工作流程：定级→备案→建设整改→等级测评→运营维护</li>
+<li>等级划分：1-5级（从用户自主保护级到访问验证保护级）</li>
 </ul>
 </li>
+<li><strong>国家计算机网络应急技术处理协调中心(CNCERT&#x2F;CC)</strong>：负责网络安全事件应急处理</li>
+<li><strong>四大顶级安全会议</strong>：S&amp;P、CCS、NDSS、USENIX Security</li>
 </ul>
-<p><strong><code>正常情况下</code></strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 你想告诉 Jenkins “我是 Alice”</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i Alice</span><br></pre></td></tr></table></figure>
-<p>参数是 Alice → 正常输出。</p>
-<p><strong><code>漏洞利用（用 @ 读文件）</code></strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 想让 Jenkins 读自己的 /etc/passwd</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i @/etc/passwd</span><br></pre></td></tr></table></figure>
-<p>因为 @ 语法：Jenkins 把 &#x2F;etc&#x2F;passwd 文件内容当作参数传给 who-am-i 命令 → 文件内容被返回给你</p>
-<p><strong><code>@ 的初衷</code></strong>：避免命令行参数太长或太复杂。<br>比如你有一个程序需要接收 100 个参数，手打一遍很痛苦，也容易超过命令行的长度限制。于是设计者让你把参数写进一个文本文件（比如 args.txt），然后在命令行只写 @args.txt，程序就会自动读取文件内容，把它当作你手打的那些参数</p>
-<p><strong><code>Jenkins 敏感文件结构图</code>（具体版本具体分析）</strong></p>
+<h3 id="5-网络安全组织结构"><a href="#5-网络安全组织结构" class="headerlink" title="5. 网络安全组织结构"></a>5. 网络安全组织结构</h3>
 	
 	</div>
-  <a type="button" href="/2025/05/08/CVE-2024-23897/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/11/08/软考(信息安全工程师)/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -160,11 +179,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/02/19/tor的代理/" >Tor的代理</a>
+			<a href="/2025/10/22/Pwn堆学习/" >Pwn堆学习</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-02-19  </div>
+		<div class="date">post @ 2025-10-22  </div>
 		</div>
 	</div>
 	
@@ -174,53 +193,65 @@
   <div class="row">
 	
 	
-		<h2 id="一、结论"><a href="#一、结论" class="headerlink" title="一、结论"></a>一、结论</h2><ul>
-<li><strong>宿主机全局VPN（TUN&#x2F;全局模式）</strong>：Tor Browser零配置可用，系统Tor自动走全局，proxychains4仅需配置本地9050；</li>
-<li><strong>宿主机应用级代理（仅7897端口，非全局）</strong>：Tor Browser需在<strong>自身设置</strong>配7897，终端工具走Tor需在<strong>系统Tor的torrc</strong>配7897，proxychains4始终只对接本地9050；</li>
-<li><strong>proxychains4</strong>：纯程序级流量分流工具，可实现「程序→Tor→VPN」或「程序→直接VPN」两种走向，按需配置即可。</li>
-</ul>
-<h2 id="二、逐句验证与修正（标✅-❌）"><a href="#二、逐句验证与修正（标✅-❌）" class="headerlink" title="二、逐句验证与修正（标✅&#x2F;❌）"></a>二、逐句验证与修正（标✅&#x2F;❌）</h2><h3 id="1-「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」"><a href="#1-「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」" class="headerlink" title="1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」"></a>1. 「宿主机的vpn开的是全局代理，即计算机所有流量都走宿主机的全局vpn，同时由于tor-browser中内置tor服务，会自动查找tor节点，就不需要任何配置就可以使用」</h3><p>✅ <strong>完全正确</strong></p>
+		<h2 id="一、堆的核心概念"><a href="#一、堆的核心概念" class="headerlink" title="一、堆的核心概念"></a>一、堆的核心概念</h2><h3 id="1-什么是堆（heap）"><a href="#1-什么是堆（heap）" class="headerlink" title="1. 什么是堆（heap）?"></a>1. 什么是堆（heap）?</h3><blockquote>
+<p>堆是程序运行时动态分配内存的区域，由程序员通过 malloc()、calloc()、realloc()、free() 等函数手动管理（与栈不同，栈由系统自动管理），即由“用户”自己管理的内存区域称为堆</p>
+</blockquote>
+<hr>
+<h3 id="2-堆操作：用户态、glibc层、内核态"><a href="#2-堆操作：用户态、glibc层、内核态" class="headerlink" title="2. 堆操作：用户态、glibc层、内核态"></a>2. 堆操作：用户态、glibc层、内核态</h3><blockquote>
 <ul>
-<li>全局VPN是<strong>网络层接管</strong>，宿主机所有流量（含虚拟机穿透的流量）会被强制走VPN通道，虚拟机无需任何网络配置；</li>
-<li>Tor Browser内置的独立Tor客户端，会通过虚拟机的全局网络通道自动连接Tor节点，开箱即用，无需配置上游代理；</li>
-<li>此时虚拟机系统Tor服务（9050）也会自动走宿主机全局VPN，和Tor Browser内置Tor互不干扰。</li>
-</ul>
-<h3 id="2-「如果宿主机开的是系统代理，比如其代理端口是-7897-，-为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897-端口，此时tor-browser理论上就可以正常使用了」"><a href="#2-「如果宿主机开的是系统代理，比如其代理端口是-7897-，-为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897-端口，此时tor-browser理论上就可以正常使用了」" class="headerlink" title="2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」"></a>2. 「如果宿主机开的是系统代理，比如其代理端口是 7897  ， 为了实现tor-browser的正常使用，则需要对虚拟机的tor服务的代理编辑为宿主机的7897 端口，此时tor-browser理论上就可以正常使用了」</h3><p>❌ <strong>核心误区</strong><br>混淆了<strong>两套完全独立、无任何配置共享</strong>的Tor实例，这是最关键的易错点：</p>
+<li><code>用户态</code><br> malloc()、free() 等函数是 C 标准库（glibc）提供的 用户态函数，不是操作系统直接提供的系统调用。<br>它们内部会 <strong>间接调用</strong> 系统调用（如 sbrk、mmap），但大部分时间在 用户态自己管理内存。<blockquote>
 <ul>
-<li><strong>虚拟机系统Tor服务</strong>（&#x2F;usr&#x2F;bin&#x2F;tor，监听127.0.0.1:9050）：仅服务于终端、proxychains4等命令行工具，配置文件为<code>/etc/tor/torrc</code>；</li>
-<li><strong>Tor Browser内置Tor客户端</strong>：浏览器专属，独立进程、独立链路，配置仅在浏览器内生效，和系统Tor无任何关联。</li>
+<li><code>glibc层</code><br>用户态调用 malloc()&#x2F;free() 时，glibc 在用户态直接处理（如切分内存池、维护 Bin 链表），仅当内存池不足时才触发系统调用让内核分配物理内存；<blockquote>
+<ul>
+<li><code>内核态</code><br>内核态在堆操作中只做一件事：当glibc需要“批发”大块内存时，才介入分配物理内存。<br>所有堆的具体管理（Chunk结构、Bin分类、合并释放等）全程在用户态完成，内核态完全不参与</li>
 </ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>组件</th>
-<th>归属</th>
-<th>监听端口</th>
-<th>配置文件&#x2F;位置</th>
-<th>作用对象</th>
-<th>是否与其他Tor实例共享配置</th>
+<th>层级</th>
+<th>负责方</th>
+<th>作用</th>
+<th>是否触发系统调用</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>虚拟机系统Tor服务</td>
-<td>虚拟机系统</td>
-<td>127.0.0.1:9050</td>
-<td>&#x2F;etc&#x2F;tor&#x2F;torrc</td>
-<td>终端、proxychains4、命令行工具</td>
-<td>完全独立</td>
+<td><strong>用户程序</strong></td>
+<td>用户态</td>
+<td>调用malloc()&#x2F;free()等</td>
+<td>仅触发glibc操作</td>
 </tr>
 <tr>
-<td>Tor Browser内置Tor</td>
-<td>Tor Browser自带</td>
-<td>随机端口（非9050）</td>
-<td>浏览器内Connection设置</td>
-<td>Tor Browser自身</td>
-<td>完全独立</td>
+<td><strong>glibc层</strong></td>
+<td>用户态 (C标准库)</td>
+<td>管理内存池、切分Chunk、维护Bin链表</td>
+<td><strong>99%操作不触发系统调用</strong></td>
+</tr>
+<tr>
+<td><strong>内核态</strong></td>
+<td>操作系统内核</td>
+<td>分配&#x2F;释放物理内存页（<code>sbrk</code>&#x2F;<code>mmap</code>&#x2F;<code>munmap</code>）</td>
+<td>仅物理内存操作</td>
 </tr>
 </tbody></table>
+<blockquote>
+<ul>
+<li>内核态 <strong>不知道Chunk&#x2F;Bin是什么</strong>，只关心“整个堆区域”的物理内存地址  </li>
+<li>glibc在用户态 <strong>自己维护所有堆结构</strong>（prev_size、size、fd&#x2F;bk指针）  </li>
+<li><strong>所有堆漏洞（堆溢出、Double Free、UAF）都在用户态触发</strong>，内核态无法防御！</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="3-堆相关的函数"><a href="#3-堆相关的函数" class="headerlink" title="3 堆相关的函数"></a>3 堆相关的函数</h3>
 	
 	</div>
-  <a type="button" href="/2025/02/19/tor的代理/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/10/22/Pwn堆学习/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -269,7 +300,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">31</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/claude-code/">claude code</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -320,48 +351,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
 		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/域工具/">域工具<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
 		
 			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
 		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
-		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
-		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
 		
 			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
-			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
 			<li><a href="/tags/Git/">Git<span>1</span></a></li>
 		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
 		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
 		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/claude-code/">claude code<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>57</span></a></li>
+		   <li><a href="/tags">...<span>61</span></a></li>
 		 
 		</ul>
 	</div>
@@ -374,6 +405,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/04/28/clc-hack指南/" ><i class="fa fa-file-o"></i>clc-hack指南</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>SRC挖掘思路_V1.2</a>
+      </li>
+    
+      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
@@ -383,14 +422,6 @@
     
       <li>
         <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>

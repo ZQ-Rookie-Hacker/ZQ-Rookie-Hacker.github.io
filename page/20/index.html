@@ -117,11 +117,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/04/Linux中的解压/" >Linux中的解压</a>
+			<a href="/2025/08/22/Pwn栈学习/" >Pwn栈学习</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-12-04  </div>
+		<div class="date">post @ 2025-08-22  </div>
 		</div>
 	</div>
 	
@@ -131,171 +131,23 @@
   <div class="row">
 	
 	
-		<h3 id="一、前置：工具安装（缺失时执行）"><a href="#一、前置：工具安装（缺失时执行）" class="headerlink" title="一、前置：工具安装（缺失时执行）"></a>一、前置：工具安装（缺失时执行）</h3><table>
-<thead>
-<tr>
-<th>压缩格式</th>
-<th>所需工具（压缩+解压）</th>
-<th>Kali安装命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RAR（.rar）</td>
-<td><code>rar</code>（压缩）、<code>unrar</code>（解压）</td>
-<td><code>sudo apt install -y rar unrar</code></td>
-</tr>
-<tr>
-<td>ZIP（.zip）</td>
-<td><code>zip</code>（压缩）、<code>unzip</code>（解压）</td>
-<td><code>sudo apt install -y zip unzip</code></td>
-</tr>
-<tr>
-<td>7Z（.7z）</td>
-<td><code>p7zip-full</code>（全能工具）</td>
-<td><code>sudo apt install -y p7zip-full</code></td>
-</tr>
-<tr>
-<td>TAR系列（.tar&#x2F;.tar.gz等）</td>
-<td><code>tar</code>（系统内置）</td>
-<td>无需安装，默认自带</td>
-</tr>
-</tbody></table>
-<h3 id="二、分格式完整操作指南（核心）"><a href="#二、分格式完整操作指南（核心）" class="headerlink" title="二、分格式完整操作指南（核心）"></a>二、分格式完整操作指南（核心）</h3><h4 id="1-ZIP格式（-zip）"><a href="#1-ZIP格式（-zip）" class="headerlink" title="1. ZIP格式（.zip）"></a>1. ZIP格式（.zip）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>zip 目标包.zip 源文件1 源文件2 目录/</code></td>
-<td>目录需加 <code>-r</code> 递归压缩：<code>zip -r 目标包.zip 目录/</code></td>
-</tr>
-<tr>
-<td>压缩并加密（内容加密）</td>
-<td><code>zip -e 目标包.zip 源文件</code></td>
-<td>回车后手动输入密码（安全，密码不显示）</td>
-</tr>
-<tr>
-<td>压缩并加密（密码明文）</td>
-<td><code>zip -P 密码 目标包.zip 源文件</code></td>
-<td>密码直接跟在 <code>-P</code> 后（无空格），如 <code>zip -P123 test.zip file.txt</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>unzip 压缩包.zip</code></td>
-<td>默认保留文件夹结构，文件散落在当前目录</td>
-</tr>
-<tr>
-<td>解压到指定目录（核心）</td>
-<td><code>unzip 压缩包.zip -d 目标目录</code></td>
-<td>例：<code>unzip test.zip -d ./5.8attachment</code>（目录自动创建，无需手动建）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>unzip -P 密码 压缩包.zip</code></td>
-<td>例：<code>unzip -Pfcmit.cc 5.8attachment.zip</code></td>
-</tr>
-<tr>
-<td>强制覆盖现有文件</td>
-<td><code>unzip -o 压缩包.zip</code></td>
-<td>跳过“是否覆盖”提示，直接替换</td>
-</tr>
-<tr>
-<td>仅查看压缩包内容（不解压）</td>
-<td><code>unzip -l 压缩包.zip</code></td>
-<td>查看文件&#x2F;目录结构，确认后再解压</td>
-</tr>
-</tbody></table>
-<h4 id="2-7Z格式（-7z）"><a href="#2-7Z格式（-7z）" class="headerlink" title="2. 7Z格式（.7z）"></a>2. 7Z格式（.7z）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>7z a 目标包.7z 源文件/目录</code></td>
-<td>自动递归压缩目录，无需额外参数</td>
-</tr>
-<tr>
-<td>压缩并加密（内容+文件名）</td>
-<td><code>7z a -p密码 目标包.7z 源文件</code></td>
-<td>密码直接跟 <code>-p</code>（无空格），如 <code>7z a -p123 test.7z dir/</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>7z x 压缩包.7z</code></td>
-<td><code>x</code> 是保留结构的核心参数（用 <code>e</code> 会扁平化解压，不推荐）</td>
-</tr>
-<tr>
-<td>解压到指定目录（核心）</td>
-<td><code>7z x 压缩包.7z -o目标目录</code></td>
-<td>例：<code>7z x test.7z -o./5.8attachment</code>（<code>-o</code> 后无空格，直接接目录）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>7z x 压缩包.7z -p密码</code></td>
-<td>例：<code>7z x 5.8attachment.7z -pfcmit.cc</code></td>
-</tr>
-<tr>
-<td>仅查看压缩包内容</td>
-<td><code>7z l 压缩包.7z</code></td>
-<td>列出所有文件&#x2F;目录，不解压</td>
-</tr>
-</tbody></table>
-<h4 id="3-RAR格式（-rar）"><a href="#3-RAR格式（-rar）" class="headerlink" title="3. RAR格式（.rar）"></a>3. RAR格式（.rar）</h4><table>
-<thead>
-<tr>
-<th>操作场景</th>
-<th>命令示例</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基础压缩（文件&#x2F;目录）</td>
-<td><code>rar a 目标包.rar 源文件/目录</code></td>
-<td>自动递归压缩目录，无需 <code>-r</code> 参数</td>
-</tr>
-<tr>
-<td>压缩并加密（内容加密）</td>
-<td><code>rar a -p 目标包.rar 源文件</code></td>
-<td>回车后输入密码（安全）；<code>-hp</code> 参数可加密文件名+内容</td>
-</tr>
-<tr>
-<td>压缩并加密（密码明文）</td>
-<td><code>rar a -p密码 目标包.rar 源文件</code></td>
-<td>例：<code>rar a -p123 test.rar file.txt</code></td>
-</tr>
-<tr>
-<td>基础解压（保留结构）</td>
-<td><code>unrar x 压缩包.rar</code></td>
-<td><code>x</code> 保留结构，<code>e</code> 扁平化解压（不推荐）</td>
-</tr>
-<tr>
-<td>解压到指定目录</td>
-<td><code>unrar x 压缩包.rar 目标目录</code></td>
-<td>例：<code>unrar x test.rar ./5.8attachment</code>（目录需提前创建：<code>mkdir -p 目录</code>）</td>
-</tr>
-<tr>
-<td>解压加密文件</td>
-<td><code>unrar x -p密码 压缩包.rar</code></td>
-<td>例：<code>unrar x -p123 test.rar</code></td>
-</tr>
-<tr>
-<td>仅查看压缩包内容</td>
-<td><code>unrar l 压缩包.rar</code></td>
-<td>列出文件&#x2F;目录结构</td>
-</tr>
-</tbody></table>
-<h4 id="4-TAR系列格式（打包-压缩）"><a href="#4-TAR系列格式（打包-压缩）" class="headerlink" title="4. TAR系列格式（打包+压缩）"></a>4. TAR系列格式（打包+压缩）</h4>
+		<h2 id="一、pwn环境搭建"><a href="#一、pwn环境搭建" class="headerlink" title="一、pwn环境搭建"></a>一、pwn环境搭建</h2><h3 id="1-gdb插件配置"><a href="#1-gdb插件配置" class="headerlink" title="1.gdb插件配置"></a>1.gdb插件配置</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.gdbinit 启动gdb自动加载</span><br><span class="line"></span><br><span class="line">#source /home/ggbond2025/tools/pwndbg/gdbinit.py</span><br><span class="line">#source ~/tools/peda/peda.py</span><br><span class="line">#source ~/tools/gef/gef.py</span><br><span class="line">set disassembly-flavor intel</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 定义插件切换命令</span><br><span class="line">define use-pwndbg</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载pwndbg</span><br><span class="line">  source ~/tools/pwndbg/gdbinit.py</span><br><span class="line">  echo 使用pwndbg调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-peda</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载peda</span><br><span class="line">  source ~/tools/peda/peda.py</span><br><span class="line">  echo 使用peda调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">define use-gef</span><br><span class="line">  # 卸载其他插件</span><br><span class="line">  python import sys; [sys.modules.pop(mod) for mod in list(sys.modules.keys()) if &quot;pwndbg&quot; in mod or &quot;peda&quot; in mod or &quot;gef&quot; in mod]</span><br><span class="line">  # 加载gef</span><br><span class="line">  source ~/tools/gef/gef.py</span><br><span class="line">  echo 使用gef调试插件\n</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#(gdb) use-pwndbg  # 切换到pwndbg</span><br><span class="line">#(gdb) use-peda    # 切换到peda</span><br><span class="line">#(gdb) use-gef     # 切换到gef</span><br><span class="line"></span><br><span class="line">use-pwndbg  #默认启动gdb 即启动 pwndbg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">分屏指令</span><br><span class="line"></span><br><span class="line">输出内容分终端指令</span><br><span class="line"></span><br><span class="line">set context-output /dev/pts/0(1,2,3,...)</span><br><span class="line"></span><br><span class="line">在终端执行tty,查看当前终端编号</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">典型使用场景（PWN 调试中常见）：</span><br><span class="line">多终端调试：</span><br><span class="line">打开两个终端窗口，终端 A 运行 GDB 调试程序，终端 B 专门显示调试上下文。</span><br><span class="line">在终端 B 中执行 tty 命令，查看其设备路径（假设为 /dev/pts/2）。</span><br><span class="line">在 GDB 中执行 set context-output /dev/pts/2，此后调试上下文会自动输出到终端 B，而 GDB 命令交互仍在终端 A 中进行。</span><br><span class="line">若要恢复默认输出（在 GDB 自身终端显示上下文），可执行 set context-output &quot;&quot;。</span><br><span class="line">需确保目标设备路径（如 /dev/pts/2）存在且可写，否则会报错。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">具体分屏实现</span><br><span class="line"></span><br><span class="line">下载tmux-&gt;在使用指令重定向输出</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="2-ROPgadget安装"><a href="#2-ROPgadget安装" class="headerlink" title="2.ROPgadget安装"></a>2.ROPgadget安装</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pip安装</span><br><span class="line"># 确保已安装 pip（如果未安装）</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install python3-pip -y</span><br><span class="line"></span><br><span class="line"># 安装 ROPgadget</span><br><span class="line">pip install ROPgadget</span><br><span class="line"></span><br><span class="line"># 验证安装</span><br><span class="line">ROPgadget --version</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-ropper安装"><a href="#3-ropper安装" class="headerlink" title="3.ropper安装"></a>3.ropper安装</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pip install ropper</span><br><span class="line"></span><br><span class="line"># 验证安装</span><br><span class="line">ropper --version</span><br><span class="line"># 输出：Ropper 1.13.5</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="二、学习笔记"><a href="#二、学习笔记" class="headerlink" title="二、学习笔记"></a>二、学习笔记</h2><h3 id="（1）基础知识及指令"><a href="#（1）基础知识及指令" class="headerlink" title="（1）基础知识及指令"></a>（1）基础知识及指令</h3>
 	
 	</div>
-  <a type="button" href="/2024/12/04/Linux中的解压/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/08/22/Pwn栈学习/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -305,11 +157,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/11/10/SSH隧道技术/" >SSH隧道技术</a>
+			<a href="/2025/05/08/CVE-2024-23897/" >CVE-2024-23897：Jenkins任意文件读取</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-11-10  </div>
+		<div class="date">post @ 2025-05-08  </div>
 		</div>
 	</div>
 	
@@ -319,20 +171,26 @@
   <div class="row">
 	
 	
-		<h2 id="1-什么是SSH隧道-为什么需要SSH隧道？"><a href="#1-什么是SSH隧道-为什么需要SSH隧道？" class="headerlink" title="1.什么是SSH隧道+为什么需要SSH隧道？"></a><code>1.什么是SSH隧道+为什么需要SSH隧道？</code></h2><blockquote>
-<p>SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上安全地传输数据。<br>比如：你想从家里访问公司内网的数据库，但数据库只能在公司内网访问，这时候 SSH 隧道就能帮你 “穿墙” 访问。</p>
-</blockquote>
-<h2 id="2-SSH的隧道类型"><a href="#2-SSH的隧道类型" class="headerlink" title="2.SSH的隧道类型"></a><code>2.SSH的隧道类型</code></h2><h3 id="SSH反向连接（远程端口转发）"><a href="#SSH反向连接（远程端口转发）" class="headerlink" title="SSH反向连接（远程端口转发）"></a><code>SSH反向连接</code>（远程端口转发）</h3><p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_1.png" alt="在这里插入图片描述"></p>
-<p>  因此可以通过访问内网2来访问内网1的主机（因为内网2是允许外网主机访问的）</p>
-<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_2.png" alt="在这里插入图片描述"></p>
-<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_3.png" alt="在这里插入图片描述"></p>
-<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_4.png" alt="在这里插入图片描述"></p>
-<blockquote>
-<p>如果此时就是想访问server 1 可以修改命令为 ssh -L 80:127.0.0.1 用户@server1_ip</p>
-</blockquote>
+		<h3 id="0x00-前置知识"><a href="#0x00-前置知识" class="headerlink" title="0x00.前置知识"></a>0x00.前置知识</h3><ul>
+<li>Jenkins CLI：Jenkins自带的一个命令行工具。我们通常使用 jenkins-cli.jar 文件来远程连接并下达指令</li>
+<li>args4j 库与 @ 语法：Jenkins用于解析命令行参数的一个库。它为方便操作而设计，如果在一个参数值前加 @，它会自动读取指定文件的内容来替换这个参数值</li>
+<li>权限影响：<ul>
+<li>如果拥有 Overall&#x2F;Read 权限：能读取目标文件的全部内容。</li>
+<li>如果是匿名用户（默认情况）：没有Overall&#x2F;Read权限，大部分CLI命令无法调用。但 who-am-i 和 help 这两个例外命令仍然可用，可用来读取目标文件的前3行，但足以获取敏感信息（如密钥头信息、路径等）。也可以尝试使用 connect-node 命令来读取完整内容</li>
+</ul>
+</li>
+</ul>
+<p><strong><code>正常情况下</code></strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 你想告诉 Jenkins “我是 Alice”</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i Alice</span><br></pre></td></tr></table></figure>
+<p>参数是 Alice → 正常输出。</p>
+<p><strong><code>漏洞利用（用 @ 读文件）</code></strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 想让 Jenkins 读自己的 /etc/passwd</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i @/etc/passwd</span><br></pre></td></tr></table></figure>
+<p>因为 @ 语法：Jenkins 把 &#x2F;etc&#x2F;passwd 文件内容当作参数传给 who-am-i 命令 → 文件内容被返回给你</p>
+<p><strong><code>@ 的初衷</code></strong>：避免命令行参数太长或太复杂。<br>比如你有一个程序需要接收 100 个参数，手打一遍很痛苦，也容易超过命令行的长度限制。于是设计者让你把参数写进一个文本文件（比如 args.txt），然后在命令行只写 @args.txt，程序就会自动读取文件内容，把它当作你手打的那些参数</p>
+<p><strong><code>Jenkins 敏感文件结构图</code>（具体版本具体分析）</strong></p>
 	
 	</div>
-  <a type="button" href="/2024/11/10/SSH隧道技术/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/05/08/CVE-2024-23897/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -381,7 +239,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">31</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">3</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/claude-code/">claude code</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -432,48 +290,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
+			<li><a href="/tags/claude-code/">claude code<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+		
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+		
+			<li><a href="/tags/AI/">AI<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
 			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
 			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
 		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
-		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
-		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
-		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
-		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
-		
-			<li><a href="/tags/域工具/">域工具<span>1</span></a></li>
-		
-			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
-		
-		
-		   <li><a href="/tags">...<span>57</span></a></li>
+		   <li><a href="/tags">...<span>61</span></a></li>
 		 
 		</ul>
 	</div>
@@ -486,6 +344,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/04/28/clc-hack指南/" ><i class="fa fa-file-o"></i>clc-hack指南</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>SRC挖掘思路_V1.2</a>
+      </li>
+    
+      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
@@ -495,14 +361,6 @@
     
       <li>
         <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>

@@ -1,0 +1,466 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 6 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		bi bi la~bu!
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2026/02/03/crawlers基础/" >crawlers基础</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-02-03  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、爬取基础"><a href="#一、爬取基础" class="headerlink" title="一、爬取基础"></a>一、爬取基础</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">检查网页源代码的目的是：查看所要爬取的内容是由那个url加载的，之后的代码实现就是围绕这个url</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-简单网页抓取"><a href="#1-简单网页抓取" class="headerlink" title="1.简单网页抓取"></a>1.简单网页抓取</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request import urlopen <span class="comment"># urllib中的一个叫request模块中的urlopen函数</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://www.baidu.com&quot;</span></span><br><span class="line">response = <span class="title function_ invoke__">urlopen</span>(url) <span class="comment"># urlopen函数是访问这个网址，返回一个http.client.HTTPResponse对象</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(response.<span class="title function_ invoke__">read</span>().<span class="title function_ invoke__">decode</span>(<span class="string">&quot;utf-8&quot;</span>)) <span class="comment"># read()函数是读取响应体，返回字节类型的内容  # ctrl+f charset: 得知网页是由那个字符集编码的</span></span><br><span class="line"><span class="comment"># 字符解码之后，就可看到正常的html代码了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将html代码写入到test.html文件中</span></span><br><span class="line"></span><br><span class="line">with <span class="title function_ invoke__">open</span>(<span class="string">&quot;./test.html&quot;</span>, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:  <span class="comment">#  with: 上下文管理器 open()函数: 打开一个文件，&quot;w&quot;表示写入模式，encoding指定编码格式 as f: 表示将文件对象赋值给f</span></span><br><span class="line">    f.<span class="title function_ invoke__">write</span>(response.<span class="title function_ invoke__">read</span>().<span class="title function_ invoke__">decode</span>(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">上述脚本是无法实现要求的：</span><br><span class="line">HTTP响应体只能被读取一次。当你第一次调用response.<span class="title function_ invoke__">read</span>()后，响应内容已经被消耗了，第二次调用会返回空字节，所以文件写入的是空内容</span><br><span class="line"></span><br><span class="line">也就是说，要使用变量存储一下网页内容</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen <span class="comment"># urllib中的一个叫request模块中的urlopen函数</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://www.baidu.com&quot;</span></span><br><span class="line">response = urlopen(url) <span class="comment"># urlopen函数是访问这个网址，返回一个http.client.HTTPResponse对象</span></span><br><span class="line"></span><br><span class="line">html_content = response.read().decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(html_content) <span class="comment"># read()函数是读取响应体，返回字节类型的内容  # ctrl+f charset: 得知网页是由那个字符集编码的</span></span><br><span class="line"><span class="comment"># 字符解码之后，就可看到正常的html代码了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将html代码写入到test.html文件中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./test.html&quot;</span>, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:  <span class="comment">#  with: 上下文管理器 open()函数: 打开一个文件，&quot;w&quot;表示写入模式，encoding指定编码格式 as f: 表示将文件对象赋值给f</span></span><br><span class="line">    f.write(html_content)  <span class="comment"># write()函数: 将内容写入文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># w 覆盖 a 追加</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-requests库-get"><a href="#2-requests库-get" class="headerlink" title="2.requests库-get"></a>2.requests库-get</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">一些基本框架</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爬取百度的页面源代码</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://www.baidu.com&quot;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(url) <span class="comment"># get()函数: 发送一个GET请求，返回一个Response对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.status_code) <span class="comment"># 获取状态码</span></span><br><span class="line"></span><br><span class="line">resp.encoding = <span class="string">&quot;utf-8&quot;</span> <span class="comment"># 手动指定编码格式</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.text) <span class="comment"># 拿到页面源代码</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爬取百度的页面源代码</span></span><br><span class="line"></span><br><span class="line">query = <span class="built_in">input</span>(<span class="string">&quot;请输入要搜索的内容: &quot;</span>)</span><br><span class="line">url = <span class="string">f&quot;https://www.sogou.com/web?query=<span class="subst">&#123;query&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(url) <span class="comment"># get()函数: 发送一个GET请求，返回一个Response对象  这种简单的搜索几乎都是get请求</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.text) <span class="comment"># 拿到页面源代码</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/crawlers%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
+	
+	</div>
+  <a type="button" href="/2026/02/03/crawlers基础/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2026/02/02/Linux包管理&网络传输工具/" >Linux包管理&amp;网络传输工具</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-02-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="一、核心框架升级"><a href="#一、核心框架升级" class="headerlink" title="一、核心框架升级"></a>一、核心框架升级</h2><table>
+<thead>
+<tr>
+<th>核心阵营</th>
+<th>核心定位</th>
+<th>代表工具</th>
+<th>核心解决的问题</th>
+<th>安全场景优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>包管理工具</td>
+<td>软件全生命周期管理（安装&#x2F;更新&#x2F;卸载&#x2F;依赖）</td>
+<td>dpkg、apt、gdebi-core、rpm、yum、dnf、flatpak、snap</td>
+<td>系统工具部署、CTF环境搭建、漏洞复现依赖处理</td>
+<td>🌟🌟🌟🌟🌟（核心必备）</td>
+</tr>
+<tr>
+<td>通用网络文件传输工具</td>
+<td>网络文件&#x2F;数据传输（拉取&#x2F;推送）</td>
+<td>wget、curl</td>
+<td>漏洞利用脚本下载、靶机文件上传、接口测试</td>
+<td>🌟🌟🌟🌟🌟（渗透核心）</td>
+</tr>
+<tr>
+<td>包管理配套辅助工具</td>
+<td>包管理优化（查询&#x2F;配置&#x2F;清理）</td>
+<td>aptitude、synaptic、dpkg-reconfigure、apt-mark、yum-utils</td>
+<td>工具版本锁定（CTF兼容）、依赖清理（避免暴露痕迹）</td>
+<td>🌟🌟🌟🌟（实战常用）</td>
+</tr>
+</tbody></table>
+<p><strong>安全核心原则</strong>：</p>
+<ol>
+<li>渗透测试中「优先使用本地包安装工具」（避免依赖仓库暴露网络痕迹）；</li>
+<li>服务器配置中「用apt-mark锁定工具版本」（防止自动升级导致漏洞复现失败）；</li>
+<li>网络传输优先用「wget&#x2F;curl的无痕迹参数」（如忽略SSL证书、禁用日志）。</li>
+</ol>
+<h2 id="二、第一阵营：包管理工具"><a href="#二、第一阵营：包管理工具" class="headerlink" title="二、第一阵营：包管理工具"></a>二、第一阵营：包管理工具</h2><h3 id="（一）Debian系"><a href="#（一）Debian系" class="headerlink" title="（一）Debian系"></a>（一）Debian系</h3><h4 id="1-底层工具：dpkg"><a href="#1-底层工具：dpkg" class="headerlink" title="1. 底层工具：dpkg"></a>1. 底层工具：dpkg</h4><ul>
+<li><strong>安全实战场景</strong>：渗透测试中，通过<code>dpkg -L 软件名</code>查询工具安装路径（如Hydra、Nmap），便于调用二进制文件或修改配置；</li>
+<li><strong>常见错误修复</strong>：<ul>
+<li>安装deb包时提示“权限不足”：<code>sudo dpkg -i 包名.deb</code>（加sudo避免权限问题）；</li>
+<li>安装失败后无法重新安装：<code>sudo dpkg --purge 软件名</code>（彻底清理残留，再重新安装）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-现代高层工具：apt"><a href="#2-现代高层工具：apt" class="headerlink" title="2. 现代高层工具：apt"></a>2. 现代高层工具：apt</h4><ul>
+<li><strong>安全专属命令</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt autoremove -y    <span class="comment"># 清理无用依赖（渗透后避免残留工具痕迹）</span></span><br><span class="line"><span class="built_in">sudo</span> apt clean            <span class="comment"># 清空apt缓存（防止缓存中留存敏感工具包）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark hold nmap   <span class="comment"># 锁定Nmap版本（CTF中避免自动升级导致脚本不兼容）</span></span><br><span class="line"><span class="built_in">sudo</span> apt mark unhold nmap <span class="comment"># 解锁版本（后续需要升级时使用）</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>渗透测试避坑点</strong>：<code>apt update</code>会联网获取仓库信息，可能暴露靶机IP，无网络场景下禁用，直接用本地包安装。</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2026/02/02/Linux包管理&网络传输工具/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/5/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/7/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myExploitServer/tree/main" title="A simple SRC vulnerability mining and penetration testing auxiliary tool" target="_blank">myExploitServer</a></li>
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myVulhub/tree/main" title="A simple web interface vulhub management tool" target="_blank">myVulhub</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

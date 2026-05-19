@@ -1,0 +1,885 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>JWT | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x.00.JWT基础知识
+🧩 JWT 的核心结构
+
+一个 JWT 由三部分组成，用 . 分隔：
+1eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+
+
+
+部分
+名称
+说明
+
+
+
+第一段
+Header（头部）
+包含令牌类型（typ: &amp;quot;JWT&amp;quot;）和签名算法（如 HS256、RS256）。Base64Url 编码。
+
+
+第二段
+Payload（载荷）
+包含声明（claims），如主题声明（sub）、过期时间（exp）、签发时间（iat）等。Base64Url 编码。
+
+
+第三段
+Signature（签名）
+对前两部分进行签名，防止篡改。
+
+
+
+注册声明
+
+官方声明
+iss (issuer)：签发方
+iat (issued at)：签发时间
+sub (subject)：主题（一般放用户唯一标识）
+aud (audience)：受众
+exp (expiration time)：过期时间
+nbf (not before)：在此时间之前不可用
+jti (JWT ID)：唯一编号，防重放
+
+
+公共声明（Public Claims）:由 IANA 统一登记维护，行业通用、无冲突风险，不属于官方注册声明但广泛使用
+auth_time：用户实际完成身份认证的时间
+nonce：随机值，多用于 OIDC 场景，防止重放攻击
+azp：授权参与方，通常存储客户端 ID
+scope：权限范围字段，定义令牌可访问的资源范围
+client_id：调用接口的客户端唯一标识
+sid：会话 ID，关联用户当前登录会话
+at_hash：访问令牌哈希值，OIDC 中用于校验令牌一致性
+
+
+私有声明（Private Claims）:业务方自定义字段，无统一标准，JWT 渗透测试中最核心的篡改目标
+role&amp;#x2F;roles：用户角色，常见值 user&amp;#x2F;admin&amp;#x2F;root
+username：登录用户名
+userId&amp;#x2F;uid&amp;#x2F;id：用户唯一标识 ID
+admin：布尔型标识，true 代表管理员权限
+permissions：权限数组，存储具体操作权限
+email：用户邮箱
+group：用户所属分组
+is_admin：管理员权限标识
+
+
+
+
+✅ JWT 的典型使用流程
+
+登录：客户端发送用户名&amp;#x2F;密码 → 服务器验证成功 → 生成 JWT 并返回。
+存储：客户端通常将 JWT 保存在 localStorage、sessionStorage 或 HttpOnly Cookie 中。
+请求：客户端在后续请求的 Authorization 头或是Cookie中携带 JWT
+验证：服务器收到 JWT 后，验证签名、有效期、issuer 等，从载荷中提取用户身份。
+
+
+📦 JWT vs Session（传统会话）
+
+
+
+
+
+特性
+JWT
+Session
+
+
+
+服务端存储
+无状态（不存储）
+有状态（存储会话数据）
+
+
+扩展性
+易于水平扩展
+需要共享存储（如 Redis）
+
+
+吊销能力
+困难（需黑名单）
+简单（删除会话记录）
+
+
+载荷大小
+较大（包含用户信息）
+很小（仅 session ID）
+
+
+
+流程图
+
+实现身份认证依靠的是检查 令牌的完整性（未被篡改）和真实性（由服务器签发），就会设置JWT的比对机制
+对称签名算法(HS256，即 HMAC+SHA256)：同一个密钥既用于生成签名，也用于验证签名。这个密钥必须绝对保密，不能让客户端或任何第三方知道。若服务器可以使用所存处的密钥成功对应客户端发来的jwt进行解密，则通过认证。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="JWT"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> JWT</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="0x-00-JWT基础知识"><a href="#0x-00-JWT基础知识" class="headerlink" title="0x.00.JWT基础知识"></a>0x.00.JWT基础知识</h3><ol>
+<li><code>🧩 JWT 的核心结构</code></li>
+</ol>
+<p>一个 JWT 由三部分组成，用 <code>.</code> 分隔：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一段</td>
+<td><strong>Header（头部）</strong></td>
+<td>包含令牌类型（<code>typ: &quot;JWT&quot;</code>）和签名算法（如 <code>HS256</code>、<code>RS256</code>）。Base64Url 编码。</td>
+</tr>
+<tr>
+<td>第二段</td>
+<td><strong>Payload（载荷）</strong></td>
+<td>包含声明（claims），如主题声明（<code>sub</code>）、过期时间（<code>exp</code>）、签发时间（<code>iat</code>）等。Base64Url 编码。</td>
+</tr>
+<tr>
+<td>第三段</td>
+<td><strong>Signature（签名）</strong></td>
+<td>对前两部分进行签名，防止篡改。</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p><code>注册声明</code></p>
+<ul>
+<li>官方声明<ul>
+<li>iss (issuer)：签发方</li>
+<li>iat (issued at)：签发时间</li>
+<li>sub (subject)：主题（一般放用户唯一标识）</li>
+<li>aud (audience)：受众</li>
+<li>exp (expiration time)：过期时间</li>
+<li>nbf (not before)：在此时间之前不可用</li>
+<li>jti (JWT ID)：唯一编号，防重放</li>
+</ul>
+</li>
+<li>公共声明（<code>Public Claims</code>）:由 IANA 统一登记维护，行业通用、无冲突风险，不属于官方注册声明但广泛使用<ul>
+<li>auth_time：用户实际完成身份认证的时间</li>
+<li>nonce：随机值，多用于 OIDC 场景，防止重放攻击</li>
+<li>azp：授权参与方，通常存储客户端 ID</li>
+<li>scope：权限范围字段，定义令牌可访问的资源范围</li>
+<li>client_id：调用接口的客户端唯一标识</li>
+<li>sid：会话 ID，关联用户当前登录会话</li>
+<li>at_hash：访问令牌哈希值，OIDC 中用于校验令牌一致性</li>
+</ul>
+</li>
+<li>私有声明（<code>Private Claims</code>）:业务方自定义字段，无统一标准，JWT 渗透测试中最核心的篡改目标<ul>
+<li>role&#x2F;roles：用户角色，常见值 user&#x2F;admin&#x2F;root</li>
+<li>username：登录用户名</li>
+<li>userId&#x2F;uid&#x2F;id：用户唯一标识 ID</li>
+<li>admin：布尔型标识，true 代表管理员权限</li>
+<li>permissions：权限数组，存储具体操作权限</li>
+<li>email：用户邮箱</li>
+<li>group：用户所属分组</li>
+<li>is_admin：管理员权限标识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>✅ JWT 的典型使用流程</code></p>
+<ul>
+<li><strong>登录</strong>：客户端发送用户名&#x2F;密码 → 服务器验证成功 → 生成 JWT 并返回。</li>
+<li><strong>存储</strong>：客户端通常将 JWT 保存在 <code>localStorage</code>、<code>sessionStorage</code> 或 <code>HttpOnly Cookie</code> 中。</li>
+<li><strong>请求</strong>：客户端在后续请求的 <code>Authorization</code> 头或是<code>Cookie</code>中携带 JWT</li>
+<li><strong>验证</strong>：服务器收到 JWT 后，验证签名、有效期、issuer 等，从载荷中提取用户身份。</li>
+</ul>
+</li>
+<li><p><code>📦 JWT vs Session（传统会话）</code></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JWT</th>
+<th>Session</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务端存储</td>
+<td>无状态（不存储）</td>
+<td>有状态（存储会话数据）</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>易于水平扩展</td>
+<td>需要共享存储（如 Redis）</td>
+</tr>
+<tr>
+<td>吊销能力</td>
+<td>困难（需黑名单）</td>
+<td>简单（删除会话记录）</td>
+</tr>
+<tr>
+<td>载荷大小</td>
+<td>较大（包含用户信息）</td>
+<td>很小（仅 session ID）</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li><code>流程图</code></li>
+</ol>
+<p><img src="/images/JWT/image_1.png" alt="在这里插入图片描述"><br>实现身份认证依靠的是检查 令牌的<code>完整性</code>（未被篡改）和<code>真实性</code>（由服务器签发），就会设置JWT的比对机制</p>
+<p><strong><code>对称签名算法</code></strong>(HS256，即 HMAC+SHA256)：同一个密钥既用于生成签名，也用于验证签名。这个密钥必须绝对保密，不能让<code>客户端</code>或<code>任何第三方</code>知道。若服务器可以使用所存处的密钥成功对应客户端发来的jwt进行解密，则通过认证。</p>
+<p><strong><code>非对称签名算法</code></strong>(RS256，即 RSA+SHA256)：服务端用私钥（Private Key） 生成签名，客户端或资源服务器用对应的公钥（Public Key） 验证签名。私钥只有服务端持有，公钥可以公开，则核心是<code>私钥</code>。 若服务器可以使用所存处的公钥成功对应客户端发来的jwt进行解密，则通过认证</p>
+<p><strong><code>注意：</code></strong> jwt 的生成过程都是 <code>Header</code> 与 <code>Payload</code> 分别  <code>Base64URL</code> 随后将其拼接在一起，然后进行 <code>hash</code>，再对hash后的结果进行<code>签名</code>得到 <code>signature</code>，然后再对signature进行 <code>Base64URL</code>。最后三部分拼接在一起，即：<code>Base64Header.Base64Payload.Base64Signature</code></p>
+<p>说到底，无论是那种加密算法服务端的密钥是万万不能泄露的</p>
+<p>例子：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">对RS256</span><br><span class="line">1. 公钥解密签名 → 得到【签发时的原始哈希】</span><br><span class="line">2. 重新计算当前 Header+Payload → 得到【当前哈希】</span><br><span class="line">3. 比对：原始哈希 == 当前哈希</span><br></pre></td></tr></table></figure>
+<p>自然会有一个疑惑就是：header中是给出签名算法的，也就是说攻击者修改了header或是payload之后，知道是使用那种哈希算法对修改后的结果进行哈希。假设，攻击者得到了<code>签名密钥</code>，那哈希的意义何在？ 我们又知道JWT是无状态的令牌（<code>不存令牌本身</code>、<code>不存 Header/Payload</code>、<code>不存任何哈希值</code>、<code>不存用户登录状态</code>）,也就是说 不存在 <code>原哈希值</code>与客户端发来的<code>现哈希值</code>进行比对进而确定用户身份。所以重新哈希的目的或是能力不在验证用户身份，而是 验证<code>「当前内容」</code>和<code>「当前签名</code>」是配套的</p>
+<p>还有一个概念是：哈希比对只负责<code>防篡改</code>，不负责<code>认身份</code>。 其中的<code>防篡改</code>防的不是 “身份被冒充”，防的是 “令牌内容被恶意乱改”</p>
+<p>例子：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">攻击者在传输 / 存储过程中，非法修改了 Header 或 Payload 的内容，试图破坏令牌的合法性。</span><br><span class="line"></span><br><span class="line">把 sub:wiener（普通用户）改成 sub:administrator（管理员）；</span><br><span class="line">把 exp:123456（过期时间）改成 exp:999999（永久有效）；</span><br><span class="line">把 alg:RS256（非对称算法）改成 alg:none（无签名，绕过验签）</span><br><span class="line"></span><br><span class="line">这些操作的本质是：把 “一套合法的令牌”，变成了 “一套内容被改、但签名还没同步更新的残缺令牌”</span><br><span class="line"></span><br><span class="line">在这里记：被服务端加密的 `哈希值` 进而形成的signature记为 `旧哈希值`</span><br><span class="line">在这里记：服务端接受客户端发来的似乎是真实的jwt的header+payload的重新计算的哈希值记为 `新哈希值`</span><br><span class="line"></span><br><span class="line">若 `旧哈希值` 不等于  `新哈希值`，说明jwt被篡改</span><br><span class="line"></span><br><span class="line">注意，这一切建立在签名密钥没有被掌握</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<ol start="6">
+<li><code>JWT的存储</code><ul>
+<li><p>0x01. localStorage</p>
+<ul>
+<li>特点：持久化存储，数据不会随浏览器关闭、设备重启丢失，仅可通过手动清除或代码删除；JavaScript 可自由读写</li>
+<li>传输方式：需前端手动读取令牌，放入请求头 <code>Authorization: Bearer &lt;token&gt;</code> 中携带</li>
+<li>漏洞关联：极易遭受 XSS 攻击窃取令牌，攻击者获取后可直接伪造用户身份</li>
+<li>适用场景：简易项目、教学 demo、CTF 渗透测试靶场</li>
+</ul>
+</li>
+<li><p>0x02. sessionStorage</p>
+<ul>
+<li>特点：会话级存储，关闭标签页后数据立即清空；JavaScript 可自由读写</li>
+<li>传输方式：需前端手动读取令牌，放入请求头 <code>Authorization: Bearer &lt;token&gt;</code> 中携带</li>
+<li>漏洞关联：同样存在 XSS 攻击导致令牌泄露的风险</li>
+<li>适用场景：临时会话、安全性要求较低的临时业务场景</li>
+</ul>
+</li>
+<li><p>0x03.普通 Cookie</p>
+<ul>
+<li>特点：可设置过期时间，遵循<code>同源策略</code>；JavaScript 可读取</li>
+<li>传输方式：浏览器会<code>自动</code>随 HTTP 请求发送，无需前端手动处理</li>
+<li>漏洞关联：存在 XSS 攻击窃取令牌的风险</li>
+</ul>
+</li>
+<li><p>0x04.HttpOnly Cookie</p>
+<ul>
+<li>特点：浏览器自动存储，JavaScript 无法访问读取</li>
+<li>传输方式：浏览器<code>自动</code>随 HTTP 请求发送，无需前端代码处理</li>
+<li>漏洞关联：从根源避免 XSS 攻击窃取令牌，安全性更高</li>
+<li>适用场景：企业级生产环境、对身份认证安全要求较高的正式项目</li>
+</ul>
+</li>
+<li><p>0x05.前端内存变量（如 Vuex&#x2F;Redux&#x2F;全局变量）</p>
+<ul>
+<li>特点：仅存储于<code>浏览器内存</code>中，页面刷新或跳转后数据<code>直接丢失</code></li>
+<li>传输方式：前端可直接读取使用，随请求手动携带</li>
+<li>漏洞关联：无持久化泄露风险，但无法维持登录状态</li>
+<li>适用场景：<code>不单独使用</code>，通常配合 Cookie 实现登录状态持久化</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><code>一些涨知识的文章</code><br><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/security/jwt-intro.html">JWT 基础概念详解</a><br><a target="_blank" rel="noopener" href="https://cn-sec.com/archives/4942609.html">Burp Suite 插件实战：利用 JWT Editor 一站式通杀四种 JWT 认证缺陷</a><br><a target="_blank" rel="noopener" href="https://jishuzhan.net/article/1971976721224757249">burpsuite网络安全学院: JWT attacks靶场通关</a></li>
+</ul>
+<hr>
+<h3 id="0x01-通过未验证签名绕过-JWT-身份验证"><a href="#0x01-通过未验证签名绕过-JWT-身份验证" class="headerlink" title="0x01.通过未验证签名绕过 JWT 身份验证"></a>0x01.通过未验证签名绕过 JWT 身份验证</h3><p>本实验采用基于 JWT的机制来管理会话。由于实现存在缺陷，服务器<code>不会</code>对接收到的任意 JWT 令牌进行签名验证。<br>要完成本实验，你需要修改会话令牌，从而访问位于 &#x2F;admin 的管理员面板，然后删除用户 carlos。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<p><img src="/images/JWT/image_2.png" alt="在这里插入图片描述"></p>
+<p>修改wiener为administrator，直接发送不用什么加密<br><img src="/images/JWT/image_3.png" alt="在这里插入图片描述"></p>
+<p>跟随重定向<br><img src="/images/JWT/image_4.png" alt="在这里插入图片描述"></p>
+<p>随后就是访问&#x2F;admin，使用delete的api就可以删除用户了</p>
+<p>这次攻击之所以能成功，是因为服务器在解析 JWT 时错误地使用了<code>仅解码</code>（Decode）而<code>非验证</code>（Verify）的方法</p>
+<hr>
+<h3 id="0x02-利用存在缺陷的签名验证实现-JWT-认证绕过"><a href="#0x02-利用存在缺陷的签名验证实现-JWT-认证绕过" class="headerlink" title="0x02.利用存在缺陷的签名验证实现 JWT 认证绕过"></a>0x02.利用存在缺陷的签名验证实现 JWT 认证绕过</h3><p>本实验采用基于 JWT 的会话管理机制。服务器存在不安全配置，会接受未签名的 JWT。<br>要完成该实验，需修改你的会话令牌，以访问位于 &#x2F;admin 的管理员面板，然后删除用户 carlos。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<p><img src="/images/JWT/image_5.png" alt="在这里插入图片描述"></p>
+<p>失败，应为alg为none,就需要移除 signature<br><img src="/images/JWT/image_6.png" alt="在这里插入图片描述"></p>
+<p><img src="/images/JWT/image_7.png" alt="在这里插入图片描述"><br>随后就是访问&#x2F;admin，使用delete的api就可以删除用户了</p>
+<hr>
+<h3 id="0x03-通过弱签名密钥绕过-JWT-身份认证"><a href="#0x03-通过弱签名密钥绕过-JWT-身份认证" class="headerlink" title="0x03.通过弱签名密钥绕过 JWT 身份认证"></a>0x03.通过弱签名密钥绕过 JWT 身份认证</h3><p>要完成本实验需要：暴力破解网站的 JWT 签名密钥；用该密钥为修改后的会话令牌重新签名；凭借修改后的令牌获取&#x2F;admin管理员面板的访问权限删除用户carlos。你可使用以下凭据登录个人账户：wiener:peter<br>同时推荐使用hashcat工具暴力破解密钥</p>
+<p><img src="/images/JWT/image_8.png" alt="在这里插入图片描述"><br> HS256对称签名算法 ，测试弱口令爆破<br><img src="/images/JWT/image_9.png" alt="在这里插入图片描述"><br>使用了JWT editor 插件内置的字段（适用于靶场而已），密钥：<code>secret1</code></p>
+<p>创建密钥<br><img src="/images/JWT/image_10.png" alt="在这里插入图片描述"></p>
+<p>sign<br><img src="/images/JWT/image_11.png" alt="在这里插入图片描述"></p>
+<p>调用api删除用户即可<br><img src="/images/JWT/image_12.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x04-通过-JWK-头部注入绕过-JWT-身份认证"><a href="#0x04-通过-JWK-头部注入绕过-JWT-身份认证" class="headerlink" title="0x04.通过 JWK 头部注入绕过 JWT 身份认证"></a>0x04.通过 JWK 头部注入绕过 JWT 身份认证</h3><p>本实验采用基于 JWT（JSON Web 令牌） 的会话管理机制。服务器支持在 JWT 头部中使用 jwk（JSON Web Key）参数，该参数原本的设计用途是直接在令牌内嵌入用于验证签名的公钥，简化验签流程。但该服务器存在致命漏洞：完全未校验 JWT 头部中提供的 jwk 公钥是否来自可信源，直接用该公钥验证 JWT 签名。<br>要完成本实验，你需要：自行生成一对 RSA 密钥，篡改普通用户（wiener）的 JWT 令牌（将 sub 字段改为管理员身份）；用自己的私钥对篡改后的 JWT 签名，并将公钥通过 jwk 字段嵌入 JWT 头部;用该伪造的 JWT 访问 &#x2F;admin 管理员面板;在管理员面板中删除用户 carlos<br>你可以使用以下凭据登录普通用户账户，获取初始有效 JWT：wiener:peter</p>
+<p><code>jwk（JSON Web Key）</code>是 JWT 标准预留字段，<code>设计初衷</code>是分布式系统中公钥自动发现，仅允许信任的第三方公钥传入，而非客户端任意传入。</p>
+<p><code>漏洞所在</code>：服务端验签时未遵守「公钥可信原则」，而是无条件优先提取 JWT Header 中jwk字段的公钥，无任何合法性、来源校验，直接用该公钥执行验签操作。</p>
+<p><code>安全前提被突破</code>：RS256 的安全核心是「私钥绝密 + 公钥可信」，开发者的错误实现让客户端完全控制验签公钥，等效于赋予攻击者 “自主签发合法 JWT” 的权限，彻底绕过了服务端的密钥信任体系。</p>
+<p><code>RS256</code>即非对称签名算法  - 公钥，则可以尝试 <code>jwk</code><br><img src="/images/JWT/image_13.png" alt="在这里插入图片描述"></p>
+<p>生成密钥(RSA)，至于是多少位，没有任何关系，默认就行<br><img src="/images/JWT/image_14.png" alt="在这里插入图片描述"></p>
+<p>运用一下<br><img src="/images/JWT/image_15.png" alt="在这里插入图片描述"></p>
+<p>自动修改（补充，安全的生产标准下，不存在<code>jwk</code>参数的）<br><img src="/images/JWT/image_16.png" alt="在这里插入图片描述"></p>
+<p>访问&#x2F;admin<br><img src="/images/JWT/image_17.png" alt="在这里插入图片描述"></p>
+<p>随后调用一下删除用户的api就行</p>
+<hr>
+<h3 id="0x05-通过-jku-头部注入实现-JWT-身份认证绕过"><a href="#0x05-通过-jku-头部注入实现-JWT-身份认证绕过" class="headerlink" title="0x05.通过 jku 头部注入实现 JWT 身份认证绕过"></a>0x05.通过 jku 头部注入实现 JWT 身份认证绕过</h3><p>本实验采用基于 JWT（JSON Web Token） 的会话管理机制。服务端支持在 JWT 头部使用 jku（JSON Web Key Set URL，JSON Web 密钥集地址）参数，但存在致命安全缺陷：在根据该参数拉取验签用的公钥时，完全未校验提供的 URL 是否属于可信域名。<br>实验目标：伪造一个合法的 JWT，以此绕过身份认证，访问 &#x2F;admin 路径下的管理员后台，最终删除用户 carlos。<br>可用登录凭证：用户名：wiener；密码：peter</p>
+<p><code>jku（JSON Web Key Set URL）</code>是 JWT 标准（RFC 7515）中的可选扩展头部字段，<code>设计初衷</code>是为分布式 &#x2F; 微服务架构下的 JWT 验签提供<code>「公钥动态发现」</code>能力</p>
+<ul>
+<li><p><code>正常安全</code>的实现逻辑：</p>
+<ul>
+<li>服务端（资源服务器）<code>不硬编码</code>公钥，而是通过预配置的<code>可信固定 URL</code>（如授权服务器的&#x2F;.well-known&#x2F;jwks.json，符合 OpenID Connect 标准），定期拉取 <strong>JWKS（JSON Web Key Set，公钥集合）</strong> 文件；</li>
+<li><code>JWKS </code>文件中存储服务端的官方 RSA 公钥集合，用于 JWT 验签；</li>
+<li>验签时，服务端<code>仅允许</code>jku指向预配置的可信域名 &#x2F; URL，<code>严格校验域名白名单</code>，拒绝任何外部 &#x2F; 不可信 URL。</li>
+</ul>
+</li>
+<li><p><code>设计优势</code>：</p>
+<ul>
+<li>适配分布式架构：授权服务器可<code>动态轮换</code>密钥，无需所有资源服务器手动更新公钥；</li>
+<li>无状态认证：服务端不存储会话，仅依赖 JWT + 可信公钥完成验签；</li>
+<li>兼容 RS256 等非对称算法，完整保留哈希防篡改、密钥信任的安全机制。</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;jku&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://trusted-auth.example.com/.well-known/jwks.json&quot;</span> <span class="comment">// 仅可信域名</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<p><strong><code>漏洞产生的根本原因</code></strong></p>
+<blockquote>
+<ol>
+<li>核心错误：未对 jku URL 做任何可信性校验<blockquote>
+<p>服务端支持jku字段，但在拉取公钥时，完全不校验 URL 的域名、来源、合法性，直接信任客户端传入的任意 URL。<br>等效于将「验签用公钥的控制权」完全交给了攻击者，彻底突破了 RS256 非对称算法的公钥可信核心安全底线。</p>
+<ol start="2">
+<li>漏洞本质（与 JWK 注入的同源性）<blockquote>
+<p>都是「服务端放弃公钥可信原则，允许攻击者控制验签公钥」的实现错误；<br>唯一区别：公钥的传递方式从「直接嵌入 JWT 头部的jwk字段」，变为「通过jku URL 拉取」。<br>3. 漏洞产生的诱因</p>
+<blockquote>
+<p>开发者误用 jku 标准：仅实现了「jku 拉取公钥」的功能，未理解「公钥必须来自可信来源」的核心要求；<br>图省事：未配置域名白名单，直接开放 jku 的 URL 权限；<br>JWT 库的默认风险：部分 JWT 解析库默认支持 jku 拉取，未强制开启 URL 校验，开发者直接复用示例代码。</p>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p><code>RS256</code><br><img src="/images/JWT/image_18.png" alt="在这里插入图片描述"></p>
+<p>创建密钥对，复制公钥<br><img src="/images/JWT/image_19.png" alt="在这里插入图片描述"></p>
+<p>存储到服务器<br><img src="/images/JWT/image_20.png" alt="在这里插入图片描述"></p>
+<p><code>原来</code>的数据包分析<br><img src="/images/JWT/image_21.png" alt="在这里插入图片描述"></p>
+<p>修改<br><img src="/images/JWT/image_22.png" alt="在这里插入图片描述"></p>
+<p>签名<br><img src="/images/JWT/image_23.png" alt="在这里插入图片描述"></p>
+<p>都是发现还是无法通关，在检查了一遍之后发现是 <code>公钥</code> 的问题。jku 字段的标准要求是：服务端拉取的<code>必须是</code> JWKS（JSON Web Key Set）格式，也就是必须用 <code>keys 数组</code>包裹你的公钥，绝对不能直接放单个 JWK<br><img src="/images/JWT/image_24.png" alt="在这里插入图片描述"></p>
+<p>重新上传服务器之后的结果<br><img src="/images/JWT/image_25.png" alt="在这里插入图片描述"></p>
+<p>调用删除api删除账号即可</p>
+<hr>
+<h3 id="0x06-通过-JWT-头部中的-kid-路径遍历实现身份认证绕过"><a href="#0x06-通过-JWT-头部中的-kid-路径遍历实现身份认证绕过" class="headerlink" title="0x06.通过 JWT 头部中的 kid 路径遍历实现身份认证绕过"></a>0x06.通过 JWT 头部中的 kid 路径遍历实现身份认证绕过</h3><p>本实验使用基于 JWT 的机制来管理会话。为了验证签名，服务端会读取 JWT 头部中的 kid 参数，并根据该参数从服务器文件系统中读取对应的密钥。<br>你的实验目标：伪造一个 JWT，获取 &#x2F;admin 管理员面板的访问权限，然后删除用户 carlos。<br>你可以使用以下账号登录自己的账户：用户名：wiener;密码：peter</p>
+<p><code>kid</code>&#x3D; Key ID（密钥 ID），作用是标识用哪一组密钥验签<br><code>安全逻辑</code>：服务端维护 密钥ID ↔ 密钥内容 的映射表，绝不把 kid 直接当文件路径使用<br><code>验签流程</code>：拿到 JWT → 读取 kid → 查映射表取密钥 → 验证签名</p>
+<p><strong><code>攻击核心逻辑</code></strong>：服务端验签依赖 kid 指向文件的内容作为密钥,然后构造 kid 为路径遍历字符串，指向内容已知 &#x2F; 可控的文件（最常用：<code>/dev/null</code> 空文件）</p>
+<p><img src="/images/JWT/image_26.png" alt="在这里插入图片描述"></p>
+<p>调用删除api删除账号即可</p>
+<hr>
+<h3 id="0x07-JWT-算法混淆绕过"><a href="#0x07-JWT-算法混淆绕过" class="headerlink" title="0x07.JWT 算法混淆绕过"></a>0x07.JWT 算法混淆绕过</h3><p>本实验使用 基于 JWT 的机制 来处理会话。虽然服务器采用了 强安全性的 RSA 非对称密钥对 进行签名和验证，但由于实现逻辑上的缺陷，导致其易受 算法混淆（Algorithm Confusion） 攻击。<br>实验目标：首先获取服务器的 公钥（该公钥通过标准接口对外暴露）;使用 该公钥 来签名一个 你修改过的会话令牌（JWT）；利用这个伪造的令牌访问 &#x2F;admin 管理员面板，删除用户 carlos 完成实验。<br>可用登录凭证：用户名：wiener；密码：peter</p>
+<ul>
+<li><p><code>正常逻辑（RSA）</code></p>
+<ul>
+<li>密钥对：服务器持有 私钥（Private Key） 和 公钥（Public Key）。</li>
+<li>签名：服务器用 私钥 给 JWT 签名（只有服务器有，别人没有）。</li>
+<li>验签：服务器用 公钥 验证签名（所有人都能拿到公钥）。</li>
+<li>结果：只有服务器能生成合法 JWT，你无法伪造</li>
+</ul>
+</li>
+<li><p><code>存在的漏洞逻辑</code></p>
+<blockquote>
+<p>服务器没有强制指定验签算法（比如强制写死 RS256），而是 直接从 JWT Header 的 alg 字段读取算法 去验签<br>这就给了我们机会：</p>
+<blockquote>
+<ol>
+<li>获取公钥：从实验室暴露的接口（通常是 &#x2F;jwks.json 或 .well-known&#x2F;jwks.json）拿到服务器的 公钥（Public Key）。</li>
+<li>篡改算法：把 JWT Header 的 alg 从 RS256 改为 HS256（对称加密算法）。</li>
+<li>关键操作：用 服务器的公钥 作为 HS256 的密钥 去签名你的 JWT。</li>
+<li>欺骗服务器：<blockquote>
+<p>服务器看到 alg: HS256，就会用 对称密钥 去验签。<br>它把你传进去的 公钥字符串 直接当成了 HS256 密钥。<br>因为你确实用这个密钥签过名，哈希匹配成功！<br>服务器就会信任你伪造的 JWT。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>总结：<code>获取服务器公钥 → 用公钥做HS256签名 → 服务器用同一公钥验签 → 绕过</code></p>
+<ul>
+<li><p>如果服务器连公钥也不公开的话，这个攻击链就失效了，但是在很多真实生成场景下，公钥根本藏不住，必须公开</p>
+<blockquote>
+<ol>
+<li>前端 &#x2F; 客户端需要验证 JWT 合法性（比如 APP、小程序、前端页面）</li>
+<li>微服务之间互相校验 JWT</li>
+<li>第三方服务对接你的系统</li>
+<li>HTTPS 证书本身就自带公钥，流量抓包就能提取</li>
+</ol>
+</blockquote>
+</li>
+<li><p>就算强行藏公钥，也只是「隐匿式安全」</p>
+<blockquote>
+<p>攻击者可以抓 TLS 证书、逆向安装包、挖源码泄露、目录遍历拿到公钥<br>靠 “藏信息” 防攻击，在网安里叫Security through obscurity，行业公认是垃圾防御</p>
+</blockquote>
+</li>
+</ul>
+<p><strong><code>一些思考</code></strong>：现在假设就是完全藏住了公钥，那这样<code>对称签名算法</code>有什么区别呢？难道’密钥’服务器存储私钥，其他提供服务的服务器存储公钥？但是这样的话所有JWT的生成都需要在’密钥’服务器产生，然后传输回去，这样符合JWT的设计初衷吗？（不清楚）那又引出了一个另外的一个问题：对称签名算法是不是不能解决上面提到的4个场景的需求？</p>
+<p><strong><code>回答</code></strong>：<code>非对称签名算法</code> 是 分布式 &#x2F; 多角色场景的<code>唯一解</code>。<code>集中密钥服务器</code> + 公钥分发 是JWT<code>最安全最普遍</code>的标准架构</p>
+<p><strong>真实的生产环境如何获取公钥呢？</strong></p>
+<ol>
+<li><code>从 HTTPS 证书提取</code>：很多系统 JWT 签名密钥与 HTTPS 证书共用同一套 RSA 密钥对，直接从证书导出公钥即可。</li>
+<li>官方文档 &#x2F; 对接手册：直接提供公钥</li>
+<li>标准 JWKS 端点（最常用、99% 系统）：https:&#x2F;&#x2F;业务域名&#x2F;.well-known&#x2F;jwks.json</li>
+</ol>
+<p>也可以利用工具进行敏感文件枚举</p>
+<p>获取公钥：<a target="_blank" rel="noopener" href="https://0a4700060465545180a6eebe000e003c.web-security-academy.net/jwks.json">https://0a4700060465545180a6eebe000e003c.web-security-academy.net/jwks.json</a><br><img src="/images/JWT/image_27.png" alt="在这里插入图片描述"></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;keys&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;kty&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RSA&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AQAB&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;use&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sig&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;kid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;4c0749d5-30b5-458a-84cc-6301d3528041&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;n&quot;</span><span class="punctuation">:</span> <span class="string">&quot;g0JNnK2w5LyqkZT9rWBYf3iFS7emdv2YifQRcJ-ngZSCSLyvin-z5HSS506QmP3XGE0MPWtsxPpqOFGXI3paRCTNo2iWGm36nHlY2KPYWPhkVN7i3sFhmQKBg0MEbBaZrsIeKgVb-4brHyzO_2Ox_MyISdBLmNd1P-YRtrcDSe6ILIeYWSOeEKXWEHXItOwxlvq3cz0XBtgcgm4So0J_m5t--XrZworAecvLEpaal4Aq2UGk1SUQoqcMei9YBaDEXBUE2msQGXTYZ8CZvL6EinOaBxRKU-5UzBsd3UNh474YyGJcShXhEUGBVKK_MwBsYnFxXWfBgQgdnC-QFf1AWQ&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>创建签名算法，直接复制”n”密钥输入框中<br><img src="/images/JWT/image_28.png" alt="在这里插入图片描述"><br>结果失败<br><img src="/images/JWT/image_29.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>标准的 RSA 公钥，核心就两个东西：</p>
+<ul>
+<li>n：模数（modulus）一个超级大的整数，二进制形式，是 RSA 加密 &#x2F; 签名的核心参数。</li>
+<li>e：公钥指数（public exponent）一般固定是 AQAB，对应十进制 65537。</li>
+</ul>
+</li>
+<li><p>从服务器拿到的公钥的<code>n</code>值是什么？</p>
+<blockquote>
+<p>RSA 公钥模数 n 的「原始二进制大整数」，经过 Base64URL 编码后得到的字符串<br>拆成三层说：</p>
+<blockquote>
+<p>原始 n：是一段二进制字节流（一堆不可见的 01 比特），是个超大整数。<br>  为什么要编码：二进制不能直接放在 JSON 里传输，所以用 Base64URL 把它转成可见字符串。<br>  看到的那串长字符：就是编码后的结果，不是原始 n 本身，只是它的 “文本包装”</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p><code>DER</code>：二进制格式，机器直接读取，人眼看是乱码<br><code>PEM</code>：文本格式，就是把 DER 二进制数据做了 Base64 编码，然后加上<br><code>JW Editor 的 k 值</code>：对PEM进行Base64编码后的结果</p>
+<p>重新一来遍</p>
+<p>json格式化<br><img src="/images/JWT/image_30.png" alt="在这里插入图片描述"></p>
+<p>创建RSA，目的是复制随后得pem<br><img src="/images/JWT/image_31.png" alt="在这里插入图片描述"></p>
+<p>将复制得pem进行base64编码<br><img src="/images/JWT/image_32.png" alt="在这里插入图片描述"></p>
+<p>对称签名<br><img src="/images/JWT/image_33.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/JWT/image_34.png" alt="在这里插入图片描述"></p>
+<p>调用删除api删除账号即可</p>
+<hr>
+<h3 id="0x08-通过算法混淆绕过JWT认证（无暴露密钥）"><a href="#0x08-通过算法混淆绕过JWT认证（无暴露密钥）" class="headerlink" title="0x08.通过算法混淆绕过JWT认证（无暴露密钥）"></a>0x08.通过算法混淆绕过JWT认证（无暴露密钥）</h3><p>本实验室使用基于JWT的机制来处理会话。它使用一个强大的RSA密钥对来签名和验证令牌。然而，由于实现缺陷，该机制容易受到算法混淆攻击。<br>要解决本实验室，首先获取服务器的公钥。使用该密钥签名一个修改后的会话令牌，该令牌能让你访问&#x2F;admin管理面板，然后删除用户carlos。<br>你可以使用以下凭证登录自己的账户：wiener:peter</p>
+<p>这一题的漏洞原理与上一关是一样的，<code>存在的区别</code>：服务器未直接暴露公钥端点，需要从<code>两个有效</code>的 JWT 中暴力推导出 RSA 公钥的<code>模数 n</code>，再用该公钥作为 HMAC 密钥签名一个修改后的会话令牌，访问 &#x2F;admin 并删除用户 carlos</p>
+<p>为什么需要两个有效的JWT？<br><img src="/images/JWT/image_35.png" alt="在这里插入图片描述"></p>
+<p>先获取两个有效的JWT（登录两次）</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJraWQiOiI5YzVhM2VjNi1iMDZjLTQ4OGEtYWExZS0wNmYyODY0OGQ0YzMiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsImV4cCI6MTc3NTgwODQzMSwic3ViIjoid2llbmVyIn0.c--vNUqKtkbTaJSaMoe5nq2dpE9RrmGUJF7E1950NqbNtH-N8h9k2a1HrjdbvxW6tkgW0J88Nd8ZT_V9L87V_zAm5m0RkRqnpjOjhBe6Cg3OM6PDzBA4ZVbjQuA3q4kaZ38mHxMWk_CAJYeBqhEnzqD5N4inj8YprDvWrl6MOKDcd0TrtF2EdP3USWutmYZ2mKj0o82Lr3qdyAoAPpA9NVLoAh4nksj6hgPSIHxIFpVEYaZpSds9C-kY9hvTFS0ATuRDsVRJB5nU7mCcWiUYzUikMogFIuFiJMnLIddHos7wZvgEtO5C2Os_RZjPq12EwdPIE1x8P4zjKYyvE1dYqQ</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJraWQiOiI5YzVhM2VjNi1iMDZjLTQ4OGEtYWExZS0wNmYyODY0OGQ0YzMiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb3J0c3dpZ2dlciIsImV4cCI6MTc3NTgwODUxMSwic3ViIjoid2llbmVyIn0.dUT_YgXCg28V_0KSn5lbigbv1z4AMqF8RGMcQgoUr10jiV3S93y0JLDmIHSv2zX5NSbm7u3NGTGDlqbU6sbxa7t6uzqDyB_5QG9ziVDbsUNca8wHS051gGL6U8_6AENSnP9NttToxmtDJVW4Y5AbAH52JvBPv24lpvqWvjRR3cd-KTkm5IUP2gEr0vwiUbU59gVy6Ac6tlKJNAByHZ6awjtBgmvqC4THCoU2YtPBGdeRwRAx-0VZoE-qrSzHdfPubTzQGvwfHT-NLfrBuIoRv9z9sWfe_JtgO7cqqpJYzkOISCGEcQZ5XowO4B8745sphdVrUMDa-IZm4i-iXMCEfA</span><br></pre></td></tr></table></figure>
+
+<p>计算：<br><code>docker pull portswigger/sig2n</code><br><code>docker run --rm portswigger/sig2n &quot;&lt;TOKEN1&gt;&quot; &quot;&lt;TOKEN2&gt;&quot; &gt; pub.pem</code></p>
+<p><img src="/images/JWT/image_36.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>输出行</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Running command: python3 jwt_forgery.py...</code></td>
+<td>容器内实际执行的脚本名</td>
+</tr>
+<tr>
+<td><code>Found n with multiplier 1:</code></td>
+<td>✅ <strong>数学推导成功</strong>。<code>multiplier 1</code> 表示 GCD 直接得到了纯净的 RSA 模数 <code>n</code>，无需剔除额外公因子</td>
+</tr>
+<tr>
+<td><code>Base64 encoded x509 key: LS0tLS1...</code></td>
+<td>📜 <strong>标准 RSA 公钥（X.509&#x2F;SubjectPublicKeyInfo 格式）</strong> 的 Base64 编码。这是绝大多数验证库（OpenSSL&#x2F;Node&#x2F;Java&#x2F;Python）默认接受的格式</td>
+</tr>
+<tr>
+<td><code>Tampered JWT: eyJraWQiOiI5...</code></td>
+<td>🎫 工具自动用该公钥 + <code>alg: HS256</code> 伪造的 JWT。<strong>但 Payload 仍是 <code>sub: &quot;wiener&quot;</code></strong>，仅用于验证密钥可用，无法直接提权</td>
+</tr>
+<tr>
+<td><code>Base64 encoded pkcs1 key: LS0tLS1...</code></td>
+<td>🔑 <strong>PKCS#1 格式公钥</strong> 的 Base64 编码。仅包含 RSA 参数，部分旧库或特定语言（如 Go <code>crypto/rsa</code>）需要此格式</td>
+</tr>
+<tr>
+<td><code>Tampered JWT: eyJraWQiOiI5...</code></td>
+<td>用 PKCS#1 格式生成的另一个测试 Token（签名值不同，因密钥编码格式影响 HMAC 输入）</td>
+</tr>
+</tbody></table>
+<p>其中有两种格式的公钥 <code>X.509</code> 和 <code>PKCS#1</code></p>
+<p>先尝试 <code>Base64 encoded x509 key: LS0tLS1...</code> 这个就是纯净的公钥进行base64url编码后的结果了，所以直接创建HS256<br><img src="/images/JWT/image_37.png" alt="在这里插入图片描述"></p>
+<p>结果失败<br><img src="/images/JWT/image_38.png" alt="在这里插入图片描述"></p>
+<p>尝试 <code>PKCS#1 </code><br><img src="/images/JWT/image_39.png" alt="在这里插入图片描述"><br>但是最终结果是不行的,理论上是可行的，蒜鸟蒜鸟</p>
+<p>暂定吧，以后有时间再搞</p>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="JWT">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/12/浏览器同源策略与CORS解析/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/04/06/认证/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-10
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x-00-JWT%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-article-text">0x.00.JWT基础知识</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-%E9%80%9A%E8%BF%87%E6%9C%AA%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E7%BB%95%E8%BF%87-JWT-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-article-text">0x01.通过未验证签名绕过 JWT 身份验证</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-%E5%88%A9%E7%94%A8%E5%AD%98%E5%9C%A8%E7%BC%BA%E9%99%B7%E7%9A%84%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E5%AE%9E%E7%8E%B0-JWT-%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x02.利用存在缺陷的签名验证实现 JWT 认证绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-%E9%80%9A%E8%BF%87%E5%BC%B1%E7%AD%BE%E5%90%8D%E5%AF%86%E9%92%A5%E7%BB%95%E8%BF%87-JWT-%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="toc-article-text">0x03.通过弱签名密钥绕过 JWT 身份认证</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x04-%E9%80%9A%E8%BF%87-JWK-%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87-JWT-%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="toc-article-text">0x04.通过 JWK 头部注入绕过 JWT 身份认证</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x05-%E9%80%9A%E8%BF%87-jku-%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5%E5%AE%9E%E7%8E%B0-JWT-%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x05.通过 jku 头部注入实现 JWT 身份认证绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x06-%E9%80%9A%E8%BF%87-JWT-%E5%A4%B4%E9%83%A8%E4%B8%AD%E7%9A%84-kid-%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E5%AE%9E%E7%8E%B0%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x06.通过 JWT 头部中的 kid 路径遍历实现身份认证绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x07-JWT-%E7%AE%97%E6%B3%95%E6%B7%B7%E6%B7%86%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x07.JWT 算法混淆绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x08-%E9%80%9A%E8%BF%87%E7%AE%97%E6%B3%95%E6%B7%B7%E6%B7%86%E7%BB%95%E8%BF%87JWT%E8%AE%A4%E8%AF%81%EF%BC%88%E6%97%A0%E6%9A%B4%E9%9C%B2%E5%AF%86%E9%92%A5%EF%BC%89"><span class="toc-article-text">0x08.通过算法混淆绕过JWT认证（无暴露密钥）</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

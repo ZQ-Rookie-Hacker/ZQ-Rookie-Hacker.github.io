@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 5 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		bi bi la~bu!
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2026/03/23/BloodHound/" >BloodHound食用</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-03-23  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="1-手册概述"><a href="#1-手册概述" class="headerlink" title="1. 手册概述"></a>1. 手册概述</h2><p>BloodHound 是域渗透测试中核心的可视化分析工具，其预构建分析查询可精准定位域内高价值目标、攻击路径、高危权限配置与协议漏洞。本手册系统拆解所有预构建查询的核心用途、实战价值，并给出分阶段使用策略，帮助渗透测试人员高效利用查询结果规划攻击链路。</p>
+<h2 id="2-预构建查询分类详解"><a href="#2-预构建查询分类详解" class="headerlink" title="2. 预构建查询分类详解"></a>2. 预构建查询分类详解</h2><h3 id="2-1-域基础信息类（Domain-Information）"><a href="#2-1-域基础信息类（Domain-Information）" class="headerlink" title="2.1 域基础信息类（Domain Information）"></a>2.1 域基础信息类（Domain Information）</h3><table>
+<thead>
+<tr>
+<th>查询名称</th>
+<th>核心作用</th>
+<th>实战价值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Find all Domain Admins</td>
+<td>列出<code>Domain Admins</code>组的所有成员</td>
+<td>明确域内最高权限账号，锁定渗透最终目标</td>
+<td>所有后续查询的核心参照目标</td>
+</tr>
+<tr>
+<td>Map Domain Trusts</td>
+<td>可视化域信任关系（父子域&#x2F;外部域&#x2F;林信任）</td>
+<td>规划跨域渗透路径，找到从子域突破到父域的链路</td>
+<td>需结合域控拓扑分析信任方向</td>
+</tr>
+<tr>
+<td>Find Computers with Unsupported Operating Systems</td>
+<td>查找运行已停止支持系统（Win7&#x2F;2008&#x2F;XP等）的主机</td>
+<td>定位最易突破的初始攻击入口（漏洞多、补丁少）</td>
+<td>优先作为初始打点的目标清单</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-危险权限类（Dangerous-Privileges）"><a href="#2-2-危险权限类（Dangerous-Privileges）" class="headerlink" title="2.2 危险权限类（Dangerous Privileges）"></a>2.2 危险权限类（Dangerous Privileges）</h3><table>
+<thead>
+<tr>
+<th>查询名称</th>
+<th>核心作用</th>
+<th>实战价值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Find Principals with DCSync Rights</td>
+<td>查找拥有<code>DCSync</code>权限的主体（用户&#x2F;组&#x2F;计算机）</td>
+<td>拿到该权限可直接同步所有域账号哈希，控制整个域</td>
+<td>域内最高危权限，优先级最高的攻击目标</td>
+</tr>
+<tr>
+<td>Users with Foreign Domain Group Membership</td>
+<td>查找属于外部域组的用户</td>
+<td>作为跨域攻击入口，利用用户在其他域的权限突破边界</td>
+<td>需结合域信任关系分析权限传递</td>
+</tr>
+<tr>
+<td>Groups with Foreign Domain Group Membership</td>
+<td>查找包含外部域成员的组</td>
+<td>利用组权限传递特性，实现跨域横向渗透</td>
+<td>重点关注高权限组（如管理员组）的外部成员</td>
+</tr>
+<tr>
+<td>Find Computers where Domain Users are Local Admin</td>
+<td>查找普通域用户为本地管理员的主机</td>
+<td>横向移动核心入口，拿到主机权限后窃取高权限凭证</td>
+<td>优先对这类主机进行横向打点</td>
+</tr>
+<tr>
+<td>Find Computers where Domain Users can read LAPS passwords</td>
+<td>查找可读取LAPS密码的主机</td>
+<td>直接获取主机本地管理员权限，无需破解</td>
+<td>LAPS为本地管理员密码管理工具，是高价值目标</td>
+</tr>
+<tr>
+<td>Find All Paths from Domain Users to High Value Targets</td>
+<td>生成从普通域用户到高价值目标的完整攻击路径</td>
+<td>渗透核心导航，明确“从哪台机、用哪个账号”提权</td>
+<td>初始渗透阶段首选查询</td>
+</tr>
+<tr>
+<td>Find Workstations where Domain Users can RDP</td>
+<td>查找普通用户可RDP的工作站</td>
+<td>直接登录后提权、窃取凭证</td>
+<td>优先选择核心业务人员的工作站</td>
+</tr>
+<tr>
+<td>Find Servers where Domain Users can RDP</td>
+<td>查找普通用户可RDP的服务器</td>
+<td>服务器承载关键服务，易接触高权限账号</td>
+<td>重点关注数据库、应用服务器</td>
+</tr>
+<tr>
+<td>Find Dangerous Privileges for Domain Users Groups</td>
+<td>查找域用户组的危险特权（如<code>SeImpersonatePrivilege</code>）</td>
+<td>利用特权实现本地提权，获取系统权限</td>
+<td>结合提权工具（如JuicyPotato）使用</td>
+</tr>
+<tr>
+<td>Find Domain Admin Logons to non-Domain Controllers</td>
+<td>查找域管理员登录过的非域控主机</td>
+<td>窃取这些主机的凭证可直接拿到域管权限</td>
+<td>最稳定的提权方式之一，优先分析</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-Kerberos-协议类（Kerberos-Interaction）"><a href="#2-3-Kerberos-协议类（Kerberos-Interaction）" class="headerlink" title="2.3 Kerberos 协议类（Kerberos Interaction）"></a>2.3 Kerberos 协议类（Kerberos Interaction）</h3><table>
+<thead>
+<tr>
+<th>查询名称</th>
+<th>核心作用</th>
+<th>实战价值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Find Kerberoastable Members of High Value Groups</td>
+<td>查找高价值组中可被Kerberoasting攻击的成员</td>
+<td>优先攻击高权限服务账号，提升提权效率</td>
+<td>高价值组包括域管组、企业管理员组等</td>
+</tr>
+<tr>
+<td>List all Kerberoastable Accounts</td>
+<td>列出所有带SPN的用户&#x2F;服务账号</td>
+<td>发起Kerberoasting攻击，离线破解NTLM哈希</td>
+<td>需结合Impacket等工具请求服务票据</td>
+</tr>
+<tr>
+<td>Find Kerberoastable Users with most privileges</td>
+<td>查找权限最高的可Kerberoasting用户</td>
+<td>精准定位高价值攻击目标，减少无效破解</td>
+<td>结合权限图谱分析用户所属组</td>
+</tr>
+<tr>
+<td>Find AS-REP Roastable Users (DontReqPreAuth)</td>
+<td>查找无需Kerberos预认证的用户</td>
+<td>发起AS-REP Roasting攻击，直接获取NT哈希</td>
+<td>攻击门槛极低，无前置权限也可执行</td>
+</tr>
+</tbody></table>
+<h3 id="2-4-最短路径类（Shortest-Paths）"><a href="#2-4-最短路径类（Shortest-Paths）" class="headerlink" title="2.4 最短路径类（Shortest Paths）"></a>2.4 最短路径类（Shortest Paths）</h3>
+	
+	</div>
+  <a type="button" href="/2026/03/23/BloodHound/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2026/03/09/SRC挖掘思路_V1.1/" >SRC挖掘思路_V1.1</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-03-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="一、逻辑漏洞——那些”另类”的挖掘角度"><a href="#一、逻辑漏洞——那些”另类”的挖掘角度" class="headerlink" title="一、逻辑漏洞——那些”另类”的挖掘角度"></a>一、逻辑漏洞——那些”另类”的挖掘角度</h1><h2 id="1-1-Cookie-里的参数，删着删着就出洞了"><a href="#1-1-Cookie-里的参数，删着删着就出洞了" class="headerlink" title="1.1 Cookie 里的参数，删着删着就出洞了"></a>1.1 Cookie 里的参数，删着删着就出洞了</h2><p>数据包中的 cookie 有一大串参数，且其他参数暂时没有发现或者是大概率不会出问题的参数时，要不要因”害怕”而不敢测试？</p>
+<p><strong>这里要反过来想</strong>：一个大厂用户量很大，如果每个用户的 cookie 都在动态变化，那服务端就需要维护一套复杂的 cookie 生成&#x2F;校验机制，每次请求都要查库验证——这对性能的消耗是巨大的。所以为了降成本，很多系统实际上会为每个用户分配一个<strong>固定的 cookie 值</strong>，服务端只做简单的字符串匹配（查表比对），而不是每次都重新计算。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个假设的底层逻辑是”成本驱动架构决策”——大厂用户量大，性能压力会把架构往”简单校验”方向推。如果 cookie 是每次动态生成的，那每个请求都要跑一遍生成算法 + 数据库查询；而固定 cookie 只需要一次写入、后续直接比对。对于千万级 DAU 的系统，这个性能差距是数量级的。所以当你看到 cookie 里参数很多时，不要被”看起来很复杂”吓住——<strong>表面复杂 ≠ 实际安全</strong>，很多参数只是历史遗留的装饰品，服务端根本不去校验它们。</p>
+<p><strong>再深一层</strong>：那我怎么知道哪些参数可能是”装饰品”、哪些是真的？这就是”删除法”的前置判断——你要对参数做<strong>价值排序</strong>。一般来说，cookie 里类似 <code>utm_source</code>、<code>_ga</code>、<code>ref</code> 这种明显是分析&#x2F;追踪类的，大概率不参与鉴权；而 <code>token</code>、<code>sid</code>、<code>uid</code>、<code>auth</code> 这种命名的，可疑度更高。但排序只是帮你提高效率——<strong>最终判定依据永远是”删了之后响应变没变”</strong>。不要靠猜，要靠测。</p>
+</blockquote>
+<p>这意味着什么？意味着 cookie 里的参数大概率是可以预测的，甚至可以暴力枚举的。</p>
+<p><strong>做法就是逐步删除</strong> cookie 中的参数并观察回显，直到回显错误。这里的逻辑是：如果我删除了某个参数，服务端依然正常返回，说明这个参数<strong>没有被校验</strong>，去掉也没关系。一直删到某个参数——删了之后返回异常——那就锁定了真正起鉴权作用的参数。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：删除测试法的本质是<strong>控制变量实验</strong>。你把 cookie 的每个参数当作一个自变量，逐一置零（删除），观测因变量（响应是否正常）。这个方法之所以有效，是因为大多数后端对 cookie 的解析是”按 key 取值”的——你没传的 key，后端取值就是 null&#x2F;undefined，不参与比较。所以删到某个 key 响应变了，说明这个 key 参与了决策逻辑。</p>
+<p><strong>再深一层——为什么先删而不是先改？</strong> 这是一个策略优先级问题。改一个参数的值，你不知道改成什么才算”对”——搜索空间太大了（假设值是 32 位 hex，可能性是 16^32）。但删除是二元的：删了之后正常 or 异常，一次请求就出结果。<strong>删除是 O(1) 的探测，修改是 O(∞) 的猜测</strong>。所以永远先删后改，先定位目标再攻破目标——这是所有安全测试的通用策略：先缩小攻击面，再精准打击。</p>
+</blockquote>
+<p>然后对剩下的 cookie 参数的每一位（也可以看规律）进行字母爆破。为什么是字母爆破？因为 cookie 参数往往就是一串大小写的英文字符（session id、token 这些都是 hex 或 base64，本质上就是 A-Za-z0-9）。每一位爆破 52 次（26+26），当回显不同时那就有料了——说明这一位的值会影响服务端的判断结果。</p>
+<blockquote>
+<p><strong>再深一层——逐位爆破能成功的前提是什么？</strong> 前提是服务端的字符串比较是<strong>逐字符比对、且比对失败即返回</strong>的。如果服务端做了”恒等比较”（整个字符串一起比对，返回整体 true&#x2F;false），那逐位爆破就看不到差异——你改任何一位，结果都是”不匹配”，没有中间状态。但好消息是，很多系统出于性能考虑，字符串比较用的是 <code>memcmp</code> 或者简单的循环比对，第一个不同的字符就 break 了——因为比对时间不同，你就可以通过<strong>时间侧信道</strong>（响应时间差异）来逐位推断。即使没有时间差异，有些系统在不同比对结果下返回了不同的业务状态码（”未登录” vs “无权限”），这也给了你逐位爆破的信号。<strong>所以逐位爆破的前提是”存在可观测的逐位差异信号”——时间差异、状态差异、内容差异，三者至少有一个。</strong></p>
+</blockquote>
+	
+	</div>
+  <a type="button" href="/2026/03/09/SRC挖掘思路_V1.1/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/4/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/6/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+		
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myExploitServer/tree/main" title="A simple SRC vulnerability mining and penetration testing auxiliary tool" target="_blank">myExploitServer</a></li>
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myVulhub/tree/main" title="A simple web interface vulhub management tool" target="_blank">myVulhub</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

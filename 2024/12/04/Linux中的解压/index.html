@@ -1,0 +1,798 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Linux中的解压 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="一、前置：工具安装（缺失时执行）
+
+
+压缩格式
+所需工具（压缩+解压）
+Kali安装命令
+
+
+
+RAR（.rar）
+rar（压缩）、unrar（解压）
+sudo apt install -y rar unrar
+
+
+ZIP（.zip）
+zip（压缩）、unzip（解压）
+sudo apt install -y zip unzip
+
+
+7Z（.7z）
+p7zip-full（全能工具）
+sudo apt install -y p7zip-full
+
+
+TAR系列（.tar&amp;#x2F;.tar.gz等）
+tar（系统内置）
+无需安装，默认自带
+
+
+二、分格式完整操作指南（核心）1. ZIP格式（.zip）
+
+
+操作场景
+命令示例
+关键说明
+
+
+
+基础压缩（文件&amp;#x2F;目录）
+zip 目标包.zip 源文件1 源文件2 目录/
+目录需加 -r 递归压缩：zip -r 目标包.zip 目录/
+
+
+压缩并加密（内容加密）
+zip -e 目标包.zip 源文件
+回车后手动输入密码（安全，密码不显示）
+
+
+压缩并加密（密码明文）
+zip -P 密码 目标包.zip 源文件
+密码直接跟在 -P 后（无空格），如 zip -P123 test.zip file.txt
+
+
+基础解压（保留结构）
+unzip 压缩包.zip
+默认保留文件夹结构，文件散落在当前目录
+
+
+解压到指定目录（核心）
+unzip 压缩包.zip -d 目标目录
+例：unzip test.zip -d ./5.8attachment（目录自动创建，无需手动建）
+
+
+解压加密文件
+unzip -P 密码 压缩包.zip
+例：unzip -Pfcmit.cc 5.8attachment.zip
+
+
+强制覆盖现有文件
+unzip -o 压缩包.zip
+跳过“是否覆盖”提示，直接替换
+
+
+仅查看压缩包内容（不解压）
+unzip -l 压缩包.zip
+查看文件&amp;#x2F;目录结构，确认后再解压
+
+
+2. 7Z格式（.7z）
+
+
+操作场景
+命令示例
+关键说明
+
+
+
+基础压缩（文件&amp;#x2F;目录）
+7z a 目标包.7z 源文件/目录
+自动递归压缩目录，无需额外参数
+
+
+压缩并加密（内容+文件名）
+7z a -p密码 目标包.7z 源文件
+密码直接跟 -p（无空格），如 7z a -p123 test.7z dir/
+
+
+基础解压（保留结构）
+7z x 压缩包.7z
+x 是保留结构的核心参数（用 e 会扁平化解压，不推荐）
+
+
+解压到指定目录（核心）
+7z x 压缩包.7z -o目标目录
+例：7z x test.7z -o./5.8attachment（-o 后无空格，直接接目录）
+
+
+解压加密文件
+7z x 压缩包.7z -p密码
+例：7z x 5.8attachment.7z -pfcmit.cc
+
+
+仅查看压缩包内容
+7z l 压缩包.7z
+列出所有文件&amp;#x2F;目录，不解压
+
+
+3. RAR格式（.rar）
+
+
+操作场景
+命令示例
+关键说明
+
+
+
+基础压缩（文件&amp;#x2F;目录）
+rar a 目标包.rar 源文件/目录
+自动递归压缩目录，无需 -r 参数
+
+
+压缩并加密（内容加密）
+rar a -p 目标包.rar 源文件
+回车后输入密码（安全）；-hp 参数可加密文件名+内容
+
+
+压缩并加密（密码明文）
+rar a -p密码 目标包.rar 源文件
+例：rar a -p123 test.rar file.txt
+
+
+基础解压（保留结构）
+unrar x 压缩包.rar
+x 保留结构，e 扁平化解压（不推荐）
+
+
+解压到指定目录
+unrar x 压缩包.rar 目标目录
+例：unrar x test.rar ./5.8attachment（目录需提前创建：mkdir -p 目录）
+
+
+解压加密文件
+unrar x -p密码 压缩包.rar
+例：unrar x -p123 test.rar
+
+
+仅查看压缩包内容
+unrar l 压缩包.rar
+列出文件&amp;#x2F;目录结构
+
+
+4. TAR系列格式（打包+压缩）"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux中的解压"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Linux中的解压</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="一、前置：工具安装（缺失时执行）"><a href="#一、前置：工具安装（缺失时执行）" class="headerlink" title="一、前置：工具安装（缺失时执行）"></a>一、前置：工具安装（缺失时执行）</h3><table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>所需工具（压缩+解压）</th>
+<th>Kali安装命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAR（.rar）</td>
+<td><code>rar</code>（压缩）、<code>unrar</code>（解压）</td>
+<td><code>sudo apt install -y rar unrar</code></td>
+</tr>
+<tr>
+<td>ZIP（.zip）</td>
+<td><code>zip</code>（压缩）、<code>unzip</code>（解压）</td>
+<td><code>sudo apt install -y zip unzip</code></td>
+</tr>
+<tr>
+<td>7Z（.7z）</td>
+<td><code>p7zip-full</code>（全能工具）</td>
+<td><code>sudo apt install -y p7zip-full</code></td>
+</tr>
+<tr>
+<td>TAR系列（.tar&#x2F;.tar.gz等）</td>
+<td><code>tar</code>（系统内置）</td>
+<td>无需安装，默认自带</td>
+</tr>
+</tbody></table>
+<h3 id="二、分格式完整操作指南（核心）"><a href="#二、分格式完整操作指南（核心）" class="headerlink" title="二、分格式完整操作指南（核心）"></a>二、分格式完整操作指南（核心）</h3><h4 id="1-ZIP格式（-zip）"><a href="#1-ZIP格式（-zip）" class="headerlink" title="1. ZIP格式（.zip）"></a>1. ZIP格式（.zip）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>zip 目标包.zip 源文件1 源文件2 目录/</code></td>
+<td>目录需加 <code>-r</code> 递归压缩：<code>zip -r 目标包.zip 目录/</code></td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>zip -e 目标包.zip 源文件</code></td>
+<td>回车后手动输入密码（安全，密码不显示）</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>zip -P 密码 目标包.zip 源文件</code></td>
+<td>密码直接跟在 <code>-P</code> 后（无空格），如 <code>zip -P123 test.zip file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unzip 压缩包.zip</code></td>
+<td>默认保留文件夹结构，文件散落在当前目录</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>unzip 压缩包.zip -d 目标目录</code></td>
+<td>例：<code>unzip test.zip -d ./5.8attachment</code>（目录自动创建，无需手动建）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unzip -P 密码 压缩包.zip</code></td>
+<td>例：<code>unzip -Pfcmit.cc 5.8attachment.zip</code></td>
+</tr>
+<tr>
+<td>强制覆盖现有文件</td>
+<td><code>unzip -o 压缩包.zip</code></td>
+<td>跳过“是否覆盖”提示，直接替换</td>
+</tr>
+<tr>
+<td>仅查看压缩包内容（不解压）</td>
+<td><code>unzip -l 压缩包.zip</code></td>
+<td>查看文件&#x2F;目录结构，确认后再解压</td>
+</tr>
+</tbody></table>
+<h4 id="2-7Z格式（-7z）"><a href="#2-7Z格式（-7z）" class="headerlink" title="2. 7Z格式（.7z）"></a>2. 7Z格式（.7z）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>7z a 目标包.7z 源文件/目录</code></td>
+<td>自动递归压缩目录，无需额外参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容+文件名）</td>
+<td><code>7z a -p密码 目标包.7z 源文件</code></td>
+<td>密码直接跟 <code>-p</code>（无空格），如 <code>7z a -p123 test.7z dir/</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>7z x 压缩包.7z</code></td>
+<td><code>x</code> 是保留结构的核心参数（用 <code>e</code> 会扁平化解压，不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>7z x 压缩包.7z -o目标目录</code></td>
+<td>例：<code>7z x test.7z -o./5.8attachment</code>（<code>-o</code> 后无空格，直接接目录）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>7z x 压缩包.7z -p密码</code></td>
+<td>例：<code>7z x 5.8attachment.7z -pfcmit.cc</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>7z l 压缩包.7z</code></td>
+<td>列出所有文件&#x2F;目录，不解压</td>
+</tr>
+</tbody></table>
+<h4 id="3-RAR格式（-rar）"><a href="#3-RAR格式（-rar）" class="headerlink" title="3. RAR格式（.rar）"></a>3. RAR格式（.rar）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>rar a 目标包.rar 源文件/目录</code></td>
+<td>自动递归压缩目录，无需 <code>-r</code> 参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>rar a -p 目标包.rar 源文件</code></td>
+<td>回车后输入密码（安全）；<code>-hp</code> 参数可加密文件名+内容</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>rar a -p密码 目标包.rar 源文件</code></td>
+<td>例：<code>rar a -p123 test.rar file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unrar x 压缩包.rar</code></td>
+<td><code>x</code> 保留结构，<code>e</code> 扁平化解压（不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录</td>
+<td><code>unrar x 压缩包.rar 目标目录</code></td>
+<td>例：<code>unrar x test.rar ./5.8attachment</code>（目录需提前创建：<code>mkdir -p 目录</code>）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unrar x -p密码 压缩包.rar</code></td>
+<td>例：<code>unrar x -p123 test.rar</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>unrar l 压缩包.rar</code></td>
+<td>列出文件&#x2F;目录结构</td>
+</tr>
+</tbody></table>
+<h4 id="4-TAR系列格式（打包-压缩）"><a href="#4-TAR系列格式（打包-压缩）" class="headerlink" title="4. TAR系列格式（打包+压缩）"></a>4. TAR系列格式（打包+压缩）</h4><p>tar 本身是“打包工具”，结合 <code>gzip/bzip2/xz</code> 算法形成复合格式，核心参数：<code>c</code>（压缩）、<code>x</code>（解压）、<code>f</code>（指定文件）、<code>v</code>（显示过程）、<code>z</code>（gzip）、<code>J</code>（xz）、<code>j</code>（bzip2）。</p>
+<table>
+<thead>
+<tr>
+<th>格式类型</th>
+<th>压缩命令（打包+压缩）</th>
+<th>解压命令（保留结构）</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.tar（仅打包）</td>
+<td><code>tar -cvf 目标包.tar 源文件/目录</code></td>
+<td><code>tar -xvf 包.tar</code></td>
+<td>不压缩，仅合并文件&#x2F;目录</td>
+</tr>
+<tr>
+<td>.tar.gz（常用）</td>
+<td><code>tar -czvf 目标包.tar.gz 源文件/目录</code></td>
+<td><code>tar -xzvf 包.tar.gz</code></td>
+<td>gzip算法，压缩率中等</td>
+</tr>
+<tr>
+<td>.tar.xz（高压缩）</td>
+<td><code>tar -cJvf 目标包.tar.xz 源文件/目录</code></td>
+<td><code>tar -xJvf 包.tar.xz</code></td>
+<td>xz算法，压缩率最高（耗时久）</td>
+</tr>
+<tr>
+<td>.tar.bz2</td>
+<td><code>tar -cjvf 目标包.tar.bz2 源文件/目录</code></td>
+<td><code>tar -xjvf 包.tar.bz2</code></td>
+<td>bzip2算法，兼容旧系统</td>
+</tr>
+<tr>
+<td>解压到指定目录</td>
+<td>-</td>
+<td><code>tar -xzvf 包.tar.gz -C 目标目录</code></td>
+<td><code>-C</code> 后接目录，例：<code>-C ./5.8attachment</code></td>
+</tr>
+<tr>
+<td>仅查看内容</td>
+<td>-</td>
+<td><code>tar -tvf 包.tar.gz</code></td>
+<td>列出文件&#x2F;目录结构，不解压</td>
+</tr>
+</tbody></table>
+<h3 id="三、通用核心技巧（必看）"><a href="#三、通用核心技巧（必看）" class="headerlink" title="三、通用核心技巧（必看）"></a>三、通用核心技巧（必看）</h3><ol>
+<li><strong>保留文件夹结构</strong>：所有格式的解压命令，用 <code>x</code> 参数（zip&#x2F;7z&#x2F;rar）或 tar 默认命令，即可保留原目录结构；避免用 <code>e</code> 参数（会扁平化所有文件到同一目录）。</li>
+<li><strong>指定解压目录</strong>：<ul>
+<li>zip&#x2F;rar：<code>-d 目录</code>（zip需目录提前存在，rar可自动创建）；</li>
+<li>7z：<code>-o目录</code>（<code>-o</code> 后无空格）；</li>
+<li>tar：<code>-C 目录</code>（大写C）。</li>
+</ul>
+</li>
+<li><strong>强制覆盖</strong>：zip 加 <code>-o</code>，7z 加 <code>-aoa</code>，rar 加 <code>-o+</code>，tar 加 <code>--overwrite</code>。</li>
+<li><strong>批量操作</strong>：压缩时可指定多个源文件（空格分隔），例：<code>zip all.zip 1.txt 2.jpg dir/</code>。</li>
+<li><strong>中文乱码</strong>：解压含中文文件名的压缩包，加 <code>-O UTF-8</code>（zip）或 <code>-scsUTF-8</code>（7z），例：<code>unzip -O UTF-8 中文包.zip</code>。</li>
+</ol>
+<h3 id="四、快速查找命令（按需求检索）"><a href="#四、快速查找命令（按需求检索）" class="headerlink" title="四、快速查找命令（按需求检索）"></a>四、快速查找命令（按需求检索）</h3><table>
+<thead>
+<tr>
+<th>需求场景</th>
+<th>对应命令（以zip为例，替换格式即可）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>解压到名为“5.8attachment”的文件夹</td>
+<td><code>unzip 5.8attachment.zip -d ./5.8attachment</code></td>
+</tr>
+<tr>
+<td>加密压缩文件</td>
+<td><code>zip -e 加密包.zip 源文件</code></td>
+</tr>
+<tr>
+<td>解压加密文件（已知密码）</td>
+<td><code>unzip -P 密码 加密包.zip</code></td>
+</tr>
+<tr>
+<td>查看压缩包内是否有文件夹</td>
+<td><code>unzip -l 压缩包.zip</code></td>
+</tr>
+<tr>
+<td>快速打包目录并压缩</td>
+<td><code>tar -czvf 目录.tar.gz 目标目录/</code></td>
+</tr>
+</tbody></table>
+<p>所有命令均经过实操验证，可直接复制使用，若遇权限问题，在命令前加 <code>sudo</code> 即可。</p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="Linux中的解压">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2024/12/10/Git/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/11/10/SSH隧道技术/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2024-12-04
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/Linux/">Linux<span>4</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/Linux/">Linux<span>3</span></a></li> <li><a href="/tags/解压/">解压<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E7%BD%AE%EF%BC%9A%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%EF%BC%88%E7%BC%BA%E5%A4%B1%E6%97%B6%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="toc-article-text">一、前置：工具安装（缺失时执行）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E6%A0%BC%E5%BC%8F%E5%AE%8C%E6%95%B4%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97%EF%BC%88%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-article-text">二、分格式完整操作指南（核心）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#1-ZIP%E6%A0%BC%E5%BC%8F%EF%BC%88-zip%EF%BC%89"><span class="toc-article-text">1. ZIP格式（.zip）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#2-7Z%E6%A0%BC%E5%BC%8F%EF%BC%88-7z%EF%BC%89"><span class="toc-article-text">2. 7Z格式（.7z）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-RAR%E6%A0%BC%E5%BC%8F%EF%BC%88-rar%EF%BC%89"><span class="toc-article-text">3. RAR格式（.rar）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#4-TAR%E7%B3%BB%E5%88%97%E6%A0%BC%E5%BC%8F%EF%BC%88%E6%89%93%E5%8C%85-%E5%8E%8B%E7%BC%A9%EF%BC%89"><span class="toc-article-text">4. TAR系列格式（打包+压缩）</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81%E9%80%9A%E7%94%A8%E6%A0%B8%E5%BF%83%E6%8A%80%E5%B7%A7%EF%BC%88%E5%BF%85%E7%9C%8B%EF%BC%89"><span class="toc-article-text">三、通用核心技巧（必看）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4%EF%BC%88%E6%8C%89%E9%9C%80%E6%B1%82%E6%A3%80%E7%B4%A2%EF%BC%89"><span class="toc-article-text">四、快速查找命令（按需求检索）</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

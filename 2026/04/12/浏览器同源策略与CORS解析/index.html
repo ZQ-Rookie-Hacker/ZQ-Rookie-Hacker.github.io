@@ -1,0 +1,617 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>浏览器同源策略与CORS解析 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="前言：为什么需要同源策略？互联网诞生之初，浏览器允许任意网页随意访问其他网站的数据。这带来了巨大的安全隐患：恶意网站可以悄悄读取你在银行网站上的个人信息，甚至冒充你进行操作。为了解决这个问题，浏览器引入了 同源策略，作为一道基本的安全防线。
+但同源策略过于严格，现代 Web 应用又需要合法的跨域通信（比如前端调用不同域名的 API）。于是，W3C 制定了 CORS，在保证安全的前提下，为跨域访问打开一扇可控的门。
+本笔记将按照 “问题 → 解决方案 → 细节机制 → 安全风险” 的逻辑，为你彻底讲清同源策略与 CORS。
+
+1. 同源策略：浏览器安全的基石问题由来如果没有同源策略，当你登录银行网站 https://bank.com 后，再打开一个恶意网站 https://evil.com，恶意网站可以这样攻击：
+1234// 恶意网站中的脚本fetch(&amp;#x27;https://bank.com/api/account&amp;#x27;)  .then(res =&amp;gt; res.json())  .then(data =&amp;gt; sendToAttacker(data));
+由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="浏览器同源策略与CORS解析"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 浏览器同源策略与CORS解析</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="前言：为什么需要同源策略？"><a href="#前言：为什么需要同源策略？" class="headerlink" title="前言：为什么需要同源策略？"></a>前言：为什么需要同源策略？</h2><p>互联网诞生之初，浏览器允许任意网页随意访问其他网站的数据。这带来了巨大的安全隐患：恶意网站可以悄悄读取你在银行网站上的个人信息，甚至冒充你进行操作。为了解决这个问题，浏览器引入了 <strong>同源策略</strong>，作为一道基本的安全防线。</p>
+<p>但同源策略过于严格，现代 Web 应用又需要合法的跨域通信（比如前端调用不同域名的 API）。于是，W3C 制定了 <strong>CORS</strong>，在保证安全的前提下，为跨域访问打开一扇可控的门。</p>
+<p>本笔记将按照 <strong>“问题 → 解决方案 → 细节机制 → 安全风险”</strong> 的逻辑，为你彻底讲清同源策略与 CORS。</p>
+<hr>
+<h2 id="1-同源策略：浏览器安全的基石"><a href="#1-同源策略：浏览器安全的基石" class="headerlink" title="1. 同源策略：浏览器安全的基石"></a>1. 同源策略：浏览器安全的基石</h2><h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果没有同源策略，当你登录银行网站 <code>https://bank.com</code> 后，再打开一个恶意网站 <code>https://evil.com</code>，恶意网站可以这样攻击：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
+<p>由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。</p>
+<h3 id="解决方案：同源策略"><a href="#解决方案：同源策略" class="headerlink" title="解决方案：同源策略"></a>解决方案：同源策略</h3><p>浏览器规定：<strong>只有协议、域名、端口完全相同的两个页面，才能通过脚本互相读取数据</strong>。不同源的页面发起的请求，浏览器会发送请求，但<strong>拦截响应</strong>，不让 JavaScript 拿到数据。这样就阻止了恶意网站读取银行的数据。</p>
+<h3 id="同源判断规则"><a href="#同源判断规则" class="headerlink" title="同源判断规则"></a>同源判断规则</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_1.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>对比 URL</th>
+<th>判断步骤</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>https://api.hello.com/forget</code></td>
+<td>域名不同</td>
+<td>❌ 跨域</td>
+</tr>
+<tr>
+<td><code>http://hello.com/api/login</code></td>
+<td>协议不同</td>
+<td>❌ 跨域</td>
+</tr>
+<tr>
+<td><code>https://api.hello.com:8080/register</code></td>
+<td>端口不同</td>
+<td>❌ 跨域</td>
+</tr>
+<tr>
+<td><code>https://hello.com/login</code></td>
+<td>全部相同</td>
+<td>✅ 同源</td>
+</tr>
+</tbody></table>
+<h3 id="同源策略限制了什么？"><a href="#同源策略限制了什么？" class="headerlink" title="同源策略限制了什么？"></a>同源策略限制了什么？</h3><table>
+<thead>
+<tr>
+<th>限制类型</th>
+<th>说明</th>
+<th>为什么这样限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DOM 访问</td>
+<td>无法读取跨域 iframe 的内容</td>
+<td>防止恶意页面操作其他网站的界面</td>
+</tr>
+<tr>
+<td>存储访问</td>
+<td>无法读取跨域的 Cookie、LocalStorage</td>
+<td>防止窃取登录凭证、本地数据</td>
+</tr>
+<tr>
+<td>网络请求</td>
+<td>跨域请求的响应被拦截</td>
+<td>防止窃取敏感数据</td>
+</tr>
+</tbody></table>
+<h3 id="例外：跨域写操作和嵌入资源"><a href="#例外：跨域写操作和嵌入资源" class="headerlink" title="例外：跨域写操作和嵌入资源"></a>例外：跨域写操作和嵌入资源</h3><ul>
+<li><strong>表单提交</strong>（<code>&lt;form action=&quot;...&quot;&gt;</code>）不受限，因为只是写入（提交数据），不读取数据。</li>
+<li><strong>图片、脚本、样式等资源</strong> 默认允许嵌入，因为这些资源是展示型的，脚本无法直接读取其内容（比如 <code>&lt;img&gt;</code> 虽然能加载图片，但无法用 JS 读取图片的原始像素数据）。</li>
+</ul>
+<blockquote>
+<p><strong>总结</strong>：同源策略是浏览器的“默认隔离”，让不同源的网页无法互相读取数据，从而保护用户隐私和安全。</p>
+</blockquote>
+<hr>
+<h2 id="2-CORS-的诞生：在安全与功能之间找平衡"><a href="#2-CORS-的诞生：在安全与功能之间找平衡" class="headerlink" title="2. CORS 的诞生：在安全与功能之间找平衡"></a>2. CORS 的诞生：在安全与功能之间找平衡</h2><h3 id="问题由来-1"><a href="#问题由来-1" class="headerlink" title="问题由来"></a>问题由来</h3><p>随着 Web 应用复杂化，前端代码经常需要调用不同源的 API（例如 <code>web.example.com</code> 调用 <code>api.example.com</code>）。如果完全禁止跨域读取，现代 Web 开发将寸步难行。我们需要一种机制，让服务器可以 <strong>主动声明</strong> 哪些源可以访问它的资源，浏览器根据声明决定是否放行。</p>
+<h3 id="解决方案：CORS（跨域资源共享）"><a href="#解决方案：CORS（跨域资源共享）" class="headerlink" title="解决方案：CORS（跨域资源共享）"></a>解决方案：CORS（跨域资源共享）</h3><p>CORS 通过在 HTTP 头部增加一系列 <code>Access-Control-*</code> 字段，让服务器告知浏览器：</p>
+<ul>
+<li>允许哪些源访问</li>
+<li>允许哪些方法、哪些头部</li>
+<li>是否允许携带凭证（Cookie、Authorization）</li>
+<li>预检请求的缓存时间</li>
+</ul>
+<p>浏览器在收到响应后，检查这些头部，只有符合规则时才将数据交给 JavaScript。</p>
+<h3 id="CORS-的核心思想"><a href="#CORS-的核心思想" class="headerlink" title="CORS 的核心思想"></a>CORS 的核心思想</h3><ul>
+<li><strong>默认拒绝，显式授权</strong>：任何跨域请求，服务器必须明确返回允许的源，浏览器才会放行。</li>
+<li><strong>预检机制</strong>：对于可能修改数据的请求（如 PUT、DELETE），先询问服务器是否允许，避免直接执行危险操作。</li>
+</ul>
+<hr>
+<h2 id="3-简单请求：最简单的跨域场景"><a href="#3-简单请求：最简单的跨域场景" class="headerlink" title="3. 简单请求：最简单的跨域场景"></a>3. 简单请求：最简单的跨域场景</h2><h3 id="问题由来-2"><a href="#问题由来-2" class="headerlink" title="问题由来"></a>问题由来</h3><p>对于简单的 GET、POST 请求（例如获取公开数据），我们希望尽量减少开销，直接发送一次请求即可。</p>
+<h3 id="解决方案：简单请求"><a href="#解决方案：简单请求" class="headerlink" title="解决方案：简单请求"></a>解决方案：简单请求</h3><p>浏览器定义了一类 <strong>简单请求</strong>（满足条件的方法、头、Content-Type），这类请求不触发预检，直接发送，但服务器仍然必须在响应中包含 <code>Access-Control-Allow-Origin</code>。</p>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><ul>
+<li>方法：<code>GET</code>、<code>HEAD</code>、<code>POST</code></li>
+<li>只能使用简单头部（<code>Accept</code>、<code>Accept-Language</code>、<code>Content-Language</code>、<code>Content-Type</code>，且 <code>Content-Type</code> 只能是 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code>）</li>
+<li>不能有自定义头部（如 <code>X-Custom-Header</code>）</li>
+</ul>
+<h3 id="交互步骤"><a href="#交互步骤" class="headerlink" title="交互步骤"></a>交互步骤</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_2.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么这样设计？"><a href="#为什么这样设计？" class="headerlink" title="为什么这样设计？"></a>为什么这样设计？</h3><ul>
+<li><strong>简单请求</strong> 被认为是安全的，不会修改服务器资源，所以可以直接发送。</li>
+<li>但即便如此，服务器仍需明确授权，否则浏览器不会交出数据。</li>
+</ul>
+<hr>
+<h2 id="4-非简单请求与预检：保护服务器的安全"><a href="#4-非简单请求与预检：保护服务器的安全" class="headerlink" title="4. 非简单请求与预检：保护服务器的安全"></a>4. 非简单请求与预检：保护服务器的安全</h2><h3 id="问题由来-3"><a href="#问题由来-3" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果跨域请求可能修改服务器数据（如 PUT、DELETE），或携带自定义头（如 <code>X-Auth-Token</code>），服务器需要预先知道并决定是否允许。否则，恶意网站可能通过一次跨域请求直接删除数据。</p>
+<h3 id="解决方案：预检请求（OPTIONS）"><a href="#解决方案：预检请求（OPTIONS）" class="headerlink" title="解决方案：预检请求（OPTIONS）"></a>解决方案：预检请求（OPTIONS）</h3><p>浏览器在发送真实请求前，先发送一个 <strong>OPTIONS</strong> 请求，询问服务器：</p>
+<ul>
+<li>是否允许该 <code>Origin</code>？</li>
+<li>是否允许该方法（如 PUT）？</li>
+<li>是否允许携带这些自定义头？</li>
+</ul>
+<p>服务器返回允许的配置，浏览器核对后，若允许才发送真实请求。这样，即使恶意网站发起跨域请求，如果服务器未授权，真实请求根本不会发出。</p>
+<h3 id="交互步骤-1"><a href="#交互步骤-1" class="headerlink" title="交互步骤"></a>交互步骤</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_3.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么需要预检？"><a href="#为什么需要预检？" class="headerlink" title="为什么需要预检？"></a>为什么需要预检？</h3><ul>
+<li><strong>防止 CSRF 攻击</strong>：如果没有预检，恶意网站可以直接用 PUT 删除用户数据，而浏览器无法事先阻止。</li>
+<li><strong>节省服务器资源</strong>：服务器在预检阶段就拒绝不满足条件的请求，避免后续处理。</li>
+<li><strong>灵活授权</strong>：服务器可以针对不同的方法、头部精细控制。</li>
+</ul>
+<hr>
+<h2 id="5-预检缓存：优化性能"><a href="#5-预检缓存：优化性能" class="headerlink" title="5. 预检缓存：优化性能"></a>5. 预检缓存：优化性能</h2><h3 id="问题由来-4"><a href="#问题由来-4" class="headerlink" title="问题由来"></a>问题由来</h3><p>对于同一个 API 的多次非简单请求，每次都发送 OPTIONS 会造成不必要的网络开销，降低性能。</p>
+<h3 id="解决方案：预检缓存"><a href="#解决方案：预检缓存" class="headerlink" title="解决方案：预检缓存"></a>解决方案：预检缓存</h3><p>服务器可以在预检响应中返回 <code>Access-Control-Max-Age</code>，告诉浏览器在指定秒数内，对于相同的请求（相同 URL、方法、头部）不再发送预检，直接发送实际请求。</p>
+<h3 id="交互步骤-2"><a href="#交互步骤-2" class="headerlink" title="交互步骤"></a>交互步骤</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_4.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么这样设计？-1"><a href="#为什么这样设计？-1" class="headerlink" title="为什么这样设计？"></a>为什么这样设计？</h3><ul>
+<li>减少网络往返，提升性能。</li>
+<li>缓存时间不宜过长，否则当服务器策略变更时，浏览器仍用旧策略，可能造成安全问题。</li>
+</ul>
+<hr>
+<h2 id="6-携带凭证（Cookie-Authorization）的请求"><a href="#6-携带凭证（Cookie-Authorization）的请求" class="headerlink" title="6. 携带凭证（Cookie&#x2F;Authorization）的请求"></a>6. 携带凭证（Cookie&#x2F;Authorization）的请求</h2><h3 id="问题由来-5"><a href="#问题由来-5" class="headerlink" title="问题由来"></a>问题由来</h3><p>很多 API 需要验证用户身份，通常通过 Cookie 或 Authorization 头传递凭证。但默认情况下，跨域请求不会携带这些凭证，因为如果恶意网站能携带用户的 Cookie 跨域请求，就可能冒充用户。</p>
+<h3 id="解决方案：显式授权"><a href="#解决方案：显式授权" class="headerlink" title="解决方案：显式授权"></a>解决方案：显式授权</h3><ul>
+<li><strong>前端</strong>：必须在 <code>fetch</code> 或 <code>XMLHttpRequest</code> 中设置 <code>credentials: &#39;include&#39;</code>（或 <code>withCredentials = true</code>），表示愿意发送凭证。</li>
+<li><strong>服务器</strong>：必须在响应中返回 <code>Access-Control-Allow-Credentials: true</code>，且 <code>Access-Control-Allow-Origin</code> 不能为 <code>*</code>，必须指定具体源。</li>
+<li>浏览器只有同时满足这两个条件，才会在请求中带上 Cookie，并将响应中的 Set-Cookie 存入。</li>
+</ul>
+<h3 id="交互步骤-3"><a href="#交互步骤-3" class="headerlink" title="交互步骤"></a>交互步骤</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_5.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么这样设计？-2"><a href="#为什么这样设计？-2" class="headerlink" title="为什么这样设计？"></a>为什么这样设计？</h3><ul>
+<li>防止恶意网站未经用户同意就携带用户的凭证跨域请求（CSRF 攻击）。</li>
+<li>要求前端显式启用凭证，并要求服务器明确授权，双重保障。</li>
+</ul>
+<hr>
+<h2 id="7-漏洞场景-①：反射-Origin-未严格校验"><a href="#7-漏洞场景-①：反射-Origin-未严格校验" class="headerlink" title="7. 漏洞场景 ①：反射 Origin 未严格校验"></a>7. 漏洞场景 ①：反射 Origin 未严格校验</h2><h3 id="问题由来-6"><a href="#问题由来-6" class="headerlink" title="问题由来"></a>问题由来</h3><p>有些服务器为了方便，直接将请求的 <code>Origin</code> 原样反射到 <code>Access-Control-Allow-Origin</code> 中，而没有校验该 <code>Origin</code> 是否在白名单内。攻击者可以构造一个恶意网站，诱使用户访问，然后向该服务器发起请求。服务器反射了攻击者的 <code>Origin</code>，浏览器认为被授权，将数据交给恶意网站。</p>
+<h3 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_6.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么会出现这种漏洞？"><a href="#为什么会出现这种漏洞？" class="headerlink" title="为什么会出现这种漏洞？"></a>为什么会出现这种漏洞？</h3><ul>
+<li>服务器错误地认为只要反射 Origin 就能实现跨域，忽略了白名单校验。</li>
+<li>这种配置常见于开发环境或快速原型中，被误带到生产环境。</li>
+</ul>
+<h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><ul>
+<li>服务器必须维护一个严格的白名单，对每个请求的 <code>Origin</code> 进行完全匹配校验。</li>
+<li>只有白名单中的源才返回 <code>Access-Control-Allow-Origin</code>。</li>
+</ul>
+<hr>
+<h2 id="8-漏洞场景-②：内部网络暴露"><a href="#8-漏洞场景-②：内部网络暴露" class="headerlink" title="8. 漏洞场景 ②：内部网络暴露"></a>8. 漏洞场景 ②：内部网络暴露</h2><h3 id="问题由来-7"><a href="#问题由来-7" class="headerlink" title="问题由来"></a>问题由来</h3><p>许多企业内部服务（如管理后台、监控面板）部署在内网，且为了方便，配置了 <code>Access-Control-Allow-Origin: *</code>。当用户通过浏览器访问外网恶意网站时，恶意网站可以诱导用户的浏览器向内网服务发起跨域请求，由于内网服务允许任意源，浏览器会放行，攻击者就能读取内网敏感数据。</p>
+<h3 id="攻击流程-1"><a href="#攻击流程-1" class="headerlink" title="攻击流程"></a>攻击流程</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_7.png" alt="在这里插入图片描述"></p>
+<h3 id="为什么会出现这种漏洞？-1"><a href="#为什么会出现这种漏洞？-1" class="headerlink" title="为什么会出现这种漏洞？"></a>为什么会出现这种漏洞？</h3><ul>
+<li>内网服务开发者认为“内部使用，不需要 CORS 限制”，却忽略了浏览器跨域请求可能来自外部网页。</li>
+<li>即使服务部署在内网，只要用户能访问该服务，攻击者就能利用浏览器作为代理。</li>
+</ul>
+<h3 id="防御-1"><a href="#防御-1" class="headerlink" title="防御"></a>防御</h3><ul>
+<li>内网服务不应配置 <code>Access-Control-Allow-Origin: *</code>。</li>
+<li>如果需要跨域，应限制到具体的信任源（如公司内部域名）。</li>
+<li>敏感服务建议仅允许同源访问，或使用更严格的认证（如 IP 白名单、VPN）。</li>
+</ul>
+<hr>
+<h2 id="9-最佳实践：服务器端白名单校验"><a href="#9-最佳实践：服务器端白名单校验" class="headerlink" title="9. 最佳实践：服务器端白名单校验"></a>9. 最佳实践：服务器端白名单校验</h2><h3 id="问题由来-8"><a href="#问题由来-8" class="headerlink" title="问题由来"></a>问题由来</h3><p>如何安全地实现 CORS，避免上述漏洞？</p>
+<h3 id="解决方案：严格白名单校验"><a href="#解决方案：严格白名单校验" class="headerlink" title="解决方案：严格白名单校验"></a>解决方案：严格白名单校验</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_8.png" alt="在这里插入图片描述"></p>
+<h3 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h3><ul>
+<li><strong>白名单</strong>：应包含完整的协议、域名、端口（如 <code>https://web.example.com</code>），不要使用通配符。</li>
+<li><strong>动态反射</strong>：如果采用动态反射，务必对 Origin 进行白名单匹配，且只允许白名单内的源。</li>
+<li><strong>凭证请求</strong>：当需要凭证时，<code>Allow-Origin</code> 必须返回具体源，不能为 <code>*</code>。</li>
+<li><strong>预检缓存</strong>：设置合理的 <code>Max-Age</code>（如 3600 秒），避免缓存时间过长导致策略更新不及时。</li>
+</ul>
+<hr>
+<h2 id="10-总结：核心知识一览"><a href="#10-总结：核心知识一览" class="headerlink" title="10. 总结：核心知识一览"></a>10. 总结：核心知识一览</h2><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>知识点</th>
+<th>为什么存在？</th>
+<th>核心机制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>同源策略</td>
+<td>防止恶意网站窃取跨域数据</td>
+<td>只有同源的页面才能互相读取数据</td>
+</tr>
+<tr>
+<td>2</td>
+<td>简单请求</td>
+<td>对安全操作最小化开销</td>
+<td>一次请求，服务器返回 <code>Allow-Origin</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>非简单请求 + 预检</td>
+<td>防止危险操作未经授权执行</td>
+<td>先 OPTIONS 询问，再实际请求</td>
+</tr>
+<tr>
+<td>4</td>
+<td>预检缓存</td>
+<td>减少 OPTIONS 请求，提升性能</td>
+<td><code>Access-Control-Max-Age</code> 控制缓存时间</td>
+</tr>
+<tr>
+<td>5</td>
+<td>凭证请求</td>
+<td>允许携带 Cookie&#x2F;Authorization，但需显式授权</td>
+<td><code>credentials: &#39;include&#39;</code> + <code>Allow-Credentials: true</code> + 明确源</td>
+</tr>
+<tr>
+<td>6</td>
+<td>反射 Origin 漏洞</td>
+<td>服务器未校验 Origin，导致任意源可获取数据</td>
+<td>攻击者利用反射获得授权</td>
+</tr>
+<tr>
+<td>7</td>
+<td>内网暴露漏洞</td>
+<td>内网服务允许所有源，攻击者可读取内网数据</td>
+<td>浏览器作为跳板，窃取内网信息</td>
+</tr>
+<tr>
+<td>8</td>
+<td>防御最佳实践</td>
+<td>避免 CORS 配置错误</td>
+<td>严格白名单、最小权限、合理缓存</td>
+</tr>
+</tbody></table>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="浏览器同源策略与CORS解析">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/13/CORS/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/04/10/JWT/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-12
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/CORS/">CORS<span>2</span></a></li> <li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%EF%BC%9F"><span class="toc-article-text">前言：为什么需要同源策略？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8%E7%9A%84%E5%9F%BA%E7%9F%B3"><span class="toc-article-text">1. 同源策略：浏览器安全的基石</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5"><span class="toc-article-text">解决方案：同源策略</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%8C%E6%BA%90%E5%88%A4%E6%96%AD%E8%A7%84%E5%88%99"><span class="toc-article-text">同源判断规则</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E9%99%90%E5%88%B6%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-article-text">同源策略限制了什么？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BE%8B%E5%A4%96%EF%BC%9A%E8%B7%A8%E5%9F%9F%E5%86%99%E6%93%8D%E4%BD%9C%E5%92%8C%E5%B5%8C%E5%85%A5%E8%B5%84%E6%BA%90"><span class="toc-article-text">例外：跨域写操作和嵌入资源</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-CORS-%E7%9A%84%E8%AF%9E%E7%94%9F%EF%BC%9A%E5%9C%A8%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8A%9F%E8%83%BD%E4%B9%8B%E9%97%B4%E6%89%BE%E5%B9%B3%E8%A1%A1"><span class="toc-article-text">2. CORS 的诞生：在安全与功能之间找平衡</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-1"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9ACORS%EF%BC%88%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB%EF%BC%89"><span class="toc-article-text">解决方案：CORS（跨域资源共享）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#CORS-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-article-text">CORS 的核心思想</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82%EF%BC%9A%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E8%B7%A8%E5%9F%9F%E5%9C%BA%E6%99%AF"><span class="toc-article-text">3. 简单请求：最简单的跨域场景</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-2"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82"><span class="toc-article-text">解决方案：简单请求</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-article-text">条件</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%A4%E4%BA%92%E6%AD%A5%E9%AA%A4"><span class="toc-article-text">交互步骤</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F"><span class="toc-article-text">为什么这样设计？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-%E9%9D%9E%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82%E4%B8%8E%E9%A2%84%E6%A3%80%EF%BC%9A%E4%BF%9D%E6%8A%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%89%E5%85%A8"><span class="toc-article-text">4. 非简单请求与预检：保护服务器的安全</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-3"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82%EF%BC%88OPTIONS%EF%BC%89"><span class="toc-article-text">解决方案：预检请求（OPTIONS）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%A4%E4%BA%92%E6%AD%A5%E9%AA%A4-1"><span class="toc-article-text">交互步骤</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%A2%84%E6%A3%80%EF%BC%9F"><span class="toc-article-text">为什么需要预检？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-%E9%A2%84%E6%A3%80%E7%BC%93%E5%AD%98%EF%BC%9A%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD"><span class="toc-article-text">5. 预检缓存：优化性能</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-4"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E9%A2%84%E6%A3%80%E7%BC%93%E5%AD%98"><span class="toc-article-text">解决方案：预检缓存</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%A4%E4%BA%92%E6%AD%A5%E9%AA%A4-2"><span class="toc-article-text">交互步骤</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F-1"><span class="toc-article-text">为什么这样设计？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-%E6%90%BA%E5%B8%A6%E5%87%AD%E8%AF%81%EF%BC%88Cookie-Authorization%EF%BC%89%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-article-text">6. 携带凭证（Cookie&#x2F;Authorization）的请求</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-5"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E6%98%BE%E5%BC%8F%E6%8E%88%E6%9D%83"><span class="toc-article-text">解决方案：显式授权</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%A4%E4%BA%92%E6%AD%A5%E9%AA%A4-3"><span class="toc-article-text">交互步骤</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F-2"><span class="toc-article-text">为什么这样设计？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#7-%E6%BC%8F%E6%B4%9E%E5%9C%BA%E6%99%AF-%E2%91%A0%EF%BC%9A%E5%8F%8D%E5%B0%84-Origin-%E6%9C%AA%E4%B8%A5%E6%A0%BC%E6%A0%A1%E9%AA%8C"><span class="toc-article-text">7. 漏洞场景 ①：反射 Origin 未严格校验</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-6"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B"><span class="toc-article-text">攻击流程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E7%A7%8D%E6%BC%8F%E6%B4%9E%EF%BC%9F"><span class="toc-article-text">为什么会出现这种漏洞？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%98%B2%E5%BE%A1"><span class="toc-article-text">防御</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8-%E6%BC%8F%E6%B4%9E%E5%9C%BA%E6%99%AF-%E2%91%A1%EF%BC%9A%E5%86%85%E9%83%A8%E7%BD%91%E7%BB%9C%E6%9A%B4%E9%9C%B2"><span class="toc-article-text">8. 漏洞场景 ②：内部网络暴露</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-7"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B-1"><span class="toc-article-text">攻击流程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E7%A7%8D%E6%BC%8F%E6%B4%9E%EF%BC%9F-1"><span class="toc-article-text">为什么会出现这种漏洞？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%98%B2%E5%BE%A1-1"><span class="toc-article-text">防御</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#9-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E7%99%BD%E5%90%8D%E5%8D%95%E6%A0%A1%E9%AA%8C"><span class="toc-article-text">9. 最佳实践：服务器端白名单校验</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AE%E9%A2%98%E7%94%B1%E6%9D%A5-8"><span class="toc-article-text">问题由来</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E4%B8%A5%E6%A0%BC%E7%99%BD%E5%90%8D%E5%8D%95%E6%A0%A1%E9%AA%8C"><span class="toc-article-text">解决方案：严格白名单校验</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9"><span class="toc-article-text">关键点</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-%E6%80%BB%E7%BB%93%EF%BC%9A%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E4%B8%80%E8%A7%88"><span class="toc-article-text">10. 总结：核心知识一览</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

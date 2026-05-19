@@ -1,0 +1,748 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>业务逻辑漏洞 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="业务逻辑漏洞0x01.对客户端控制的过度信任
+任务：买夹克衫
+
+
+抓取添加物品的数据包
+结果
+
+0x02.高级逻辑漏洞
+任务：买夹克衫"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="业务逻辑漏洞"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 业务逻辑漏洞</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="业务逻辑漏洞"><a href="#业务逻辑漏洞" class="headerlink" title="业务逻辑漏洞"></a>业务逻辑漏洞</h2><h3 id="0x01-对客户端控制的过度信任"><a href="#0x01-对客户端控制的过度信任" class="headerlink" title="0x01.对客户端控制的过度信任"></a>0x01.对客户端控制的过度信任</h3><ul>
+<li>任务：买夹克衫</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_1.png" alt="在这里插入图片描述"></p>
+<p>抓取添加物品的数据包<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_2.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_3.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x02-高级逻辑漏洞"><a href="#0x02-高级逻辑漏洞" class="headerlink" title="0x02.高级逻辑漏洞"></a>0x02.高级逻辑漏洞</h3><ul>
+<li>任务：买夹克衫</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_4.png" alt="在这里插入图片描述"></p>
+<p>抓取添加物品的数据包，没有price参数<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_5.png" alt="在这里插入图片描述"></p>
+<p>在物品数量上操作<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_6.png" alt="在这里插入图片描述"></p>
+<p>抓取数据包<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_7.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_8.png" alt="在这里插入图片描述"></p>
+<p>但是此时是无法付款的，因为购物总金额不是正数 -&gt; 正确购买其他商品，使总金额变正<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_9.png" alt="在这里插入图片描述"></p>
+<p>但是，靶场没有解决成功，因为最终购买到的物品没有目标物品 -&gt; 倒过来，正常买夹克衫</p>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_10.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x03-安全控制不一致"><a href="#0x03-安全控制不一致" class="headerlink" title="0x03.安全控制不一致"></a>0x03.安全控制不一致</h3><ul>
+<li>任务：进入管理面板并删除用户 <code>carlos</code></li>
+</ul>
+<p>用环境所给的邮箱注册账号<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_11.png" alt="在这里插入图片描述"></p>
+<p>搜后台 <code>/admin</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_12.png" alt="在这里插入图片描述"></p>
+<p>禁止访问 -&gt; 伪装<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_13.png" alt="在这里插入图片描述"></p>
+<p>遗漏的信息,管理员的邮箱域名是 <code>@dontwannacry.com</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_14.png" alt="在这里插入图片描述"></p>
+<p>修改<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_15.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>补充</li>
+</ul>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">如果没有给.com就需要一个一个试</span><br><span class="line"></span><br><span class="line">通用后缀</span><br><span class="line">.com.net.org.cn.com.cn.net.cn.org.cn</span><br><span class="line">企业/办公常用</span><br><span class="line">.cc.co.info.io</span><br><span class="line">政府/教育/机构</span><br><span class="line">.gov.gov.cn.edu.edu.cn</span><br><span class="line">国际邮箱常用</span><br><span class="line">.me.pro.cloud.app</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>再次访问<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_16.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x04-商业规则执行有缺陷"><a href="#0x04-商业规则执行有缺陷" class="headerlink" title="0x04.商业规则执行有缺陷"></a>0x04.商业规则执行有缺陷</h3><ul>
+<li>任务：利用这个缺陷买一件“轻便l33t皮夹克”</li>
+</ul>
+<p>给了一个优惠码<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_17.png" alt="在这里插入图片描述"></p>
+<p>优惠卷用过了就不可以在使用了<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_18.png" alt="在这里插入图片描述"></p>
+<p>有一个特别的地方，注册订阅就送优惠卷<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_19.png" alt="在这里插入图片描述"></p>
+<p>如何检查优惠卷使用？正确的逻辑跟上一次的状态以及之前的状态都进行比较。<br>而此题仅检查上一次的状态</p>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_20.png" alt="在这里插入图片描述"></p>
+<p>注意，最后一次的优惠卷金额太大了，导致购物总金额为0<br>解决方法：买多点其他物品<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_21.png" alt="在这里插入图片描述"></p>
+<p>发现很抽象的东西<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_22.png" alt="在这里插入图片描述"></p>
+<p>我在购买3个95.5，然后优惠卷的金额居然变了<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_23.png" alt="在这里插入图片描述"></p>
+<p>但是0元居然可以购买!<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_24.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x05-低级逻辑缺陷"><a href="#0x05-低级逻辑缺陷" class="headerlink" title="0x05.低级逻辑缺陷"></a>0x05.低级逻辑缺陷</h3><ul>
+<li><p>任务：买一件“轻便l33t皮夹克</p>
+</li>
+<li><p>考点：最大数值溢出</p>
+<ul>
+<li>32位：</li>
+<li>64位：</li>
+</ul>
+</li>
+</ul>
+<p>攻击时，不要使用高并发，因为如果后端对这一处理没有加锁的化就会导致计算混乱，不可预测</p>
+<hr>
+<h3 id="0x06-特殊输入处理不一致"><a href="#0x06-特殊输入处理不一致" class="headerlink" title="0x06.特殊输入处理不一致"></a>0x06.特殊输入处理不一致</h3><ul>
+<li><p>实验任务：进入管理面板并删除用户 <code>carlos</code></p>
+</li>
+<li><p>提示：</p>
+<blockquote>
+<p>你可以使用实验室横幅中的链接访问连接到你私人邮件服务器的电子邮件客户端。客户端会显示所有发送到的消息以及任意子域名。你唯一的电子邮件地址ID会显示在邮件客户端中。@YOUR-EMAIL-ID.web-security-academy.net</p>
+</blockquote>
+</li>
+</ul>
+<p>注册账号hacker<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_25.png" alt="在这里插入图片描述"></p>
+<p>注册账号hacker2 -&gt; 在hacker的注册邮箱上使用其子域名注册账号<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_26.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>其子域名的邮件发到父域名的邮箱</p>
+</blockquote>
+<p>要登录到后台，就需要邮箱域名是 @<code>DontWannaCry</code>  -&gt; 输入截断</p>
+<p>可以成功注册<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_27.png" alt="在这里插入图片描述"></p>
+<p>登录后发现原有的字符被截断了<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_28.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>只识别到255个字符，那也就是说可以通过控制字符，实现精准截断</p>
+</blockquote>
+<p>payload:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbattacker@dontwannacry.com.exploit-0aa000dc03c3d6c0805ec51501f6004b.exploit-server.net</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_29.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x07-双重用途终端的弱隔离"><a href="#0x07-双重用途终端的弱隔离" class="headerlink" title="0x07.双重用途终端的弱隔离"></a>0x07.双重用途终端的弱隔离</h3><ul>
+<li><p>任务：访问账户并删除用户 <code>administrator</code> <code>carlos</code></p>
+</li>
+<li><p>提示：该实验基于用户输入对其权限水平做出了错误假设。因此可以利用其账户管理功能的逻辑，获取任意用户账户的访问权限</p>
+</li>
+<li><p>什么是双重用途端点 ？</p>
+<blockquote>
+<p>指同一个 API 端点（如&#x2F;my-account&#x2F;change-password）被设计用于处理两种不同场景的请求：</p>
+<blockquote>
+<p>1.已登录用户修改自己的密码（需要验证当前密码）</p>
+</blockquote>
+<blockquote>
+<p>2.管理员重置用户密码（无需验证当前密码，因为管理员有权限）</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>尝试修改密码<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_30.png" alt="在这里插入图片描述"></p>
+<p>由回显可知，后端认为我是administrator，但是我的一些用户信息(csrf、cookie等)是没有改变的，依然是原来的用户信息<br>这就很致命了，因为管理修改其他用户包含管理员本身的密码是不用验证被修改账号的当前密码的</p>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_31.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_32.png" alt="在这里插入图片描述"></p>
+<p>登录后台删除账号即可</p>
+<hr>
+<h3 id="0x08-工作流程验证不足"><a href="#0x08-工作流程验证不足" class="headerlink" title="0x08.工作流程验证不足"></a>0x08.工作流程验证不足</h3><ul>
+<li><p>任务：买一件“轻便l33t皮夹克”</p>
+</li>
+<li><p>提示：对采购流程中的事件顺序做出了错误的假设</p>
+</li>
+<li><p>解释</p>
+<blockquote>
+<p>后端没有校验你有没有走完业务流程，允许你直接跳过所有中间步骤，强行请求最终的 “执行接口”，让操作直接生效。<br>大部分网站的功能都是分步骤的业务流程，比如：</p>
+<blockquote>
+<p>1.购物：选商品 → 加入购物车 → 结算 → 支付 → 下单成功<br>2.改密：验证旧密码 → 输入新密码 → 确认<br>3.转账：输入金额 → 验证短信 → 确认转账</p>
+<p>正常逻辑：必须走完前面所有步骤，才能执行最后一步。而 Insufficient workflow validation 就是：<br>后端不检查你是否完成了前置步骤，你直接请求最后一步的接口，操作照样生效</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>正常付款 -&gt; 返回包存在重定向<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_33.png" alt="在这里插入图片描述"></p>
+<p>在购买夹克衫的响应包增加一样的location字段<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_34.png" alt="在这里插入图片描述"></p>
+<p>结果<img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_35.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x09-通过有缺陷的状态机实现的认证绕过"><a href="#0x09-通过有缺陷的状态机实现的认证绕过" class="headerlink" title="0x09.通过有缺陷的状态机实现的认证绕过"></a>0x09.通过有缺陷的状态机实现的认证绕过</h3><ul>
+<li>任务：访问管理员界面，删除用户 <code>carlos</code></li>
+<li>提示：对登录过程中的事件顺序做出了错误的假设</li>
+<li>解释</li>
+</ul>
+<blockquote>
+<p>状态机是应用程序中管理对象生命周期和行为流转的核心机制，就像自动售货机的工作流程：</p>
+<blockquote>
+<p>1.初始状态：等待投币（未登录）<br>2.中间状态：已投币，等待选择商品（已登录但未选择角色）<br>3.最终状态：已出货，完成交易（已选择角色，正常访问系统）</p>
+<p>在安全场景中，状态机缺陷指攻击者通过构造非预期的状态转移请求，绕过正常业务流程限制，进入未授权状态。</p>
+<p>正常的登录流程：</p>
+<blockquote>
+<p>1.用户提交账号密码（wiener:peter）<br>2.服务器验证通过，创建会话<br>3.强制跳转到 &#x2F;role-selector 页面（用户需选择 “User” 或 “Content author” 角色）<br>4.用户选择角色后，服务器记录角色信息，允许访问系统</p>
+<p>此环境的关键漏洞点:</p>
+<blockquote>
+<p>1.用户必然会进入角色选择页面：没有在后端强制校验 “角色是否已选择”<br>2.未选择角色时会有默认安全值：实际未选择角色时，系统默认分配了最高权限的 administrator 角色，而非最低权限的 guest 角色</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>登录之后需要选择一个角色，说明后端不知道账户的角色<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_36.png" alt="在这里插入图片描述"></p>
+<p>登录的时候就进行劫持，转到&#x2F;admin<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_37.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_38.png" alt="在这里插入图片描述"></p>
+<p>原因也说过了，因为在不知道用户角色的时候默认是admin,不进入选择角色页面，直接重定向到&#x2F;admin （此时的权限即admin权限是可以访问的）</p>
+<hr>
+<h3 id="0x0a-无限货币逻辑缺陷"><a href="#0x0a-无限货币逻辑缺陷" class="headerlink" title="0x0a.无限货币逻辑缺陷"></a>0x0a.无限货币逻辑缺陷</h3><ul>
+<li>任务：买一件“轻便l33t皮夹克”</li>
+<li>提示：采购流程存在逻辑缺陷</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_39.png" alt="在这里插入图片描述"></p>
+<p>查看列表<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_40.png" alt="在这里插入图片描述"></p>
+<p>走遍一兑换优惠卷以及购买 gift card 的全流程<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_41.png" alt="在这里插入图片描述"><br>跳转页面<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_42.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>1.加入购物车<br>2.使用优惠卷<br>3.付款<br>4.跳转页面 -&gt; 启动3xx 重定向<br>5.兑换礼品卡</p>
+</blockquote>
+<p>这题比较好的是每一次交易的令牌是相同的，比较简单，不用每次重新替换，而每次的礼品卡需要重新替换</p>
+<ul>
+<li>使用宏自动化执行</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_43.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>新键新规则，目标包括所有url</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_44.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>新建宏指令</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_45.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>添加相关数据包</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_46.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>编辑第四个数据包</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_47.png" alt="在这里插入图片描述"></p>
+<p> 寻找变量code<br> <img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_48.png" alt="在这里插入图片描述"></p>
+<p>注意，这里的变量名字命名不是随意的即 gift-card -&gt; 最后的数据包的参数</p>
+<ul>
+<li>编辑第5个数据包</li>
+</ul>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_49.png" alt="在这里插入图片描述"><br>最后测试宏，发现多了三块钱就说明创建成功</p>
+<p>注意要勾选对话规则<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_50.png" alt="在这里插入图片描述"></p>
+<p>在攻击器中设置payload<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_51.png" alt="在这里插入图片描述"><br>注意要单线程</p>
+<ul>
+<li>tips<ul>
+<li><ol>
+<li>在攻击过程中不要添加任何商品</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>对话规则勾起后会在攻击器重启用</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>暂时发现，只要再这个网站无论是哪一个功能，随便拦截一个请求然后发送到攻击器均可以攻击成功</li>
+</ol>
+<ul>
+<li>因为攻击器在发一边请求时，宏都会在每次请求前执行一遍。 也就说，所抓取的数据包只不过是在不停的刷新页面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_52.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x0b-通过加密预言机绕过认证"><a href="#0x0b-通过加密预言机绕过认证" class="headerlink" title="0x0b.通过加密预言机绕过认证"></a>0x0b.通过加密预言机绕过认证</h3><ul>
+<li>任务：删除该用户 <code>carlos</code></li>
+<li>提示：存在一个逻辑缺陷，暴露给用户加密预言机</li>
+<li>解释</li>
+</ul>
+<blockquote>
+<p>在加密点可以“制作”任意内容的密文，然后在解密点可以“读取”任意密文对应的明文。这就是所谓的“加密预言机”</p>
+<p>一个例子解释：</p>
+<ol>
+<li>正常登录，抓取关键 Cookie<blockquote>
+<p>用提供的账号 wiener:peter 登录，记得勾选“Stay logged in”。<br>登录成功后，在 Burp 的 Proxy → HTTP history 里，找到包含 stay-logged-in cookie 的响应包。这个 cookie 看起来像一串乱码，是加密后的 username:timestamp 格式。<br>2. 触发加密点 (Encryptor)</p>
+<blockquote>
+<p>发表一条评论，在邮箱（Email）字段里随便输入一个无效的邮箱地址，比如 test。<br>提交后会收到一个重定向，响应头里会设置一个新的 notification cookie。<br>找到这个设置 notification cookie 的响应包，把它发送到 Repeater，重命名为 Encryptor。这个 POST 请求就是你的“加密机”——你修改邮箱参数，它能返回加密后的值（就是新的 notification cookie）。<br>3. 触发解密点 (Decryptor)</p>
+<blockquote>
+<p>接着访问重定向后的页面，此时请求里会带着刚才那个 notification cookie。<br>找到这个 GET 请求的响应包，里面会明文显示 Invalid email address: test 这样的错误信息。<br>把这个 GET 请求也发送到 Repeater，重命名为 Decryptor。这个 GET 请求就是你的“解密机”——你修改 notification cookie 的值，它能在错误消息里显示对应的明文</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_53.png" alt="在这里插入图片描述"></p>
+<p>评论时提交<code>正确</code>的邮箱格式<br><code>请求包</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_54.png" alt="在这里插入图片描述"></p>
+<p><code>重定向请求包</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_55.png" alt="在这里插入图片描述"></p>
+<p>评论时提交<code>错误</code>的邮箱格式<br><code>请求包</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_56.png" alt="在这里插入图片描述"></p>
+<p><code>重定向请求包</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_57.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>错误的邮箱格式，会多返回一个notification（密文），重定向后交给服务器然后返回错误信息，也就说存在对notification的解密<br>由题目可知，目标是伪装administrator,那cookie就需要研究研究了</p>
+</blockquote>
+<p><code>stay-logged-in</code>与<code>notification</code>的密文长度以及密文特点有点像，是否是同一加密机制？<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_58.png" alt="在这里插入图片描述"></p>
+<p>将<code>stay-logged-in</code>赋值给<code>notification</code> 发现cookie被解密了<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_59.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<ol>
+<li>成功解密，说明是同一加密机制</li>
+<li>wiener:1774939875390<br>其中 wiener 是用户名；1774939875390 是加密的salt，可能是时间戳</li>
+<li>已知email处是加密点（可能其他地方也是，不在测试了），又因为是同一加密机制，且有知道cookie的格式</li>
+<li>存在利用email处的加密点伪造administrator的cookie,从而登录后台</li>
+</ol>
+</blockquote>
+<p>尝试<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_60.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_61.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>Invalid email address: administrator:1774939875390<br>除去 <code>Invalid email address:</code> 就保留了正确的cookie格式 <code>administrator:1774939875390</code></p>
+</blockquote>
+<p>对notification进行解码</p>
+<blockquote>
+<p>oW7xYTFPJL%2bDAE%2bF365rC1SRPFy9tckMymejLoJRKaANcbK0ILZuJnvm343wuadapsCFSHDmirnC58eqrGLvJw%3d%3d<br>经url+base64解码后发现是一个64位的密文，推测其是AES分组密码算法<br>AES 块大小固定为 16 字节</p>
+</blockquote>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_62.png" alt="在这里插入图片描述"></p>
+<p>模拟器加密过程</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">X假设为AES填充的字符</span><br><span class="line">Q是手动填充的字符</span><br><span class="line"></span><br><span class="line">注意：AES填充的字符是不会对加解密产生影响的，这是由其自己的算法决定</span><br><span class="line"></span><br><span class="line">email=administrator:1774939875390</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: administr</span><br><span class="line">	ator:17749398753</span><br><span class="line">	90XXXXXXXXXXXXXx</span><br><span class="line"></span><br><span class="line">要删除 Invalid email address: 利用AES块为16个字符</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line"></span><br><span class="line">则 email=QQQQQQQQQadministrator:1774939875390</span><br><span class="line"></span><br><span class="line">对与这个的密文</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">删除这段密文前32字节后即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">解密时，AES会自动不到64位</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">注意之前提到的AES填充的字符不会影响加解密，所以解密的结果是 administrator:1774939875390</span><br></pre></td></tr></table></figure>
+
+
+<p>发送payload<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_63.png" alt="在这里插入图片描述"></p>
+<p>对<code>notification</code>操作<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_64.png" alt="在这里插入图片描述"></p>
+<p>解密<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_65.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>也就是说 	<code>xJJTLbPidUaRP21pzYfotsV7BKn9enoHJY98hwcBq/4=</code>	就是管理员持续登录的cookie</p>
+</blockquote>
+<p>随便抓取一个包（以home页面为例），修改 <code>stay-logged-in</code></p>
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_66.png" alt="在这里插入图片描述"></p>
+<p>原因：没有删除session参数，依然保持着wiener用户的会话<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_67.png" alt="在这里插入图片描述"></p>
+<p>路径<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_68.png" alt="在这里插入图片描述"><br>随后一步一步根据回显删除账户即可</p>
+<p>补充：不通过抓包，修改<code>浏览器</code>的cookie （注意，记得url编码）<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_69.png" alt="在这里插入图片描述"></p>
+<p>实际也可以删除<code>session</code>,也可以像我一样赋值别的值</p>
+<p>补充一下第一种方法的图片<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_70.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x0c-利用电子邮件地址解析差异绕过访问控制"><a href="#0x0c-利用电子邮件地址解析差异绕过访问控制" class="headerlink" title="0x0c.利用电子邮件地址解析差异绕过访问控制"></a>0x0c.利用电子邮件地址解析差异绕过访问控制</h3><ul>
+<li><p>任务：注册账户并删除 <code>carlos</code></p>
+</li>
+<li><p>提示：该环境会验证电子邮件地址，防止攻击者注册未经授权域名的地址。解析器在验证逻辑和解析电子邮件地址时使用的库存在差异</p>
+</li>
+<li><p>文章链接：<a target="_blank" rel="noopener" href="https://portswigger.net/research/splitting-the-email-atom">Splitting the email atom: exploiting parsers to bypass access controls</a></p>
+</li>
+</ul>
+<p>邮箱地址是  <code>hack@qq.com@163.com</code> 在没有过滤的情况下其过程是 <code>163.com</code> 邮件服务器解析后发送邮件到<code>hack@qq.com</code>，即在这个过程中 <code>163.com</code> 只是充当一个中继服务<br>可是，在现实中，不可能允许你输入多个@，所以需要找到绕过的方法，下图就是利用编码绕过<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_71.png" alt="在这里插入图片描述"><br><code>charset</code>即字符集，有 <code>utf-8</code> 、<code>utf-7</code>、<code>iso-8859-1</code> 、<code>gb2312/gbk/big5</code>（可用于中文场景绕过）…</p>
+<p><code>q</code>即 Quoted-Printable （Q编码），所在位置是编码方式。 <code>b</code>代表base64编码</p>
+<p>补充：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Hanford/article/details/53364021">utf-7</a> 是一个很古老的编码，基本只应用在邮箱中。其中一些字符经普通的utf-7编码后会在首尾分别加<code>+</code>  <code>-</code> ，如：<code>+xxxx-</code>。而<code>+</code>在邮箱解析有其他特殊意义,所以专门给邮箱 &#x2F; IMAP 协议用的 <code>Modified UTF-7</code>（修改版 UTF-7），它为了避开 + 在邮件里的冲突，把起始符号从 <code>+ </code>改成了<code> &amp;</code> ,即 <code>&amp;xxxx-</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_72.png" alt="在这里插入图片描述"></p>
+<p>很显然所需注册账号的邮箱后缀应为 <code>@ginandjuice.shop</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_73.png" alt="在这里插入图片描述"></p>
+<p>构造payload</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">经过尝试，邮箱地址不可以有多个@，且只有utf-7可以</span><br><span class="line">=?utf-7?q?attacker@exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">@ 的utf-7编码：&amp;AEA-</span><br><span class="line"></span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">发现还是错误</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_74.png" alt="在这里插入图片描述"><br>&#x3D;00 即 \x00 即 null，作者在尾部放置了一个空字符，其原理是： 空字符截断 + 邮箱解析缺陷，导致后续内容被完全忽略</p>
+<p>新paylaod</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">空格的utf-7编码：&amp;ACA-</span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net&amp;ACA-?=@ginandjuice.shop</span><br></pre></td></tr></table></figure>
+
+<p>邮箱成功获取邮件<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_75.png" alt="在这里插入图片描述"></p>
+<p>登录验证<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_76.png" alt="在这里插入图片描述"></p>
+<p>进入后台删除即可</p>
+<hr>
+<h2 id="思路总结"><a href="#思路总结" class="headerlink" title="思路总结"></a>思路总结</h2><ol>
+<li><p><strong>完整走一遍正常流程，摸清业务链路</strong></p>
+<ul>
+<li>正常注册、登录、下单、支付、改密、查看资料等，走完所有步骤。</li>
+<li>抓包记录：接口、参数、顺序、关键字段（金额、数量、角色、状态、ID、邮箱、Cookie）。</li>
+<li>搞懂：系统<strong>期望你怎么操作</strong>，这是破坏逻辑的前提。</li>
+</ul>
+</li>
+<li><p><strong>无视前端，只盯服务端校验</strong></p>
+<ul>
+<li>前端限制（JS校验、按钮灰掉、输入框限制）全部默认可绕过。</li>
+<li>核心判断标准：<strong>服务端到底有没有校验、校验了什么</strong>。</li>
+</ul>
+</li>
+<li><p><strong>寻找“逻辑断点”——只找这几类薄弱点</strong></p>
+<ul>
+<li>关键参数是否可随意改：价格、数量、商品ID、权限标识、用户ID、订单状态。</li>
+<li>业务流程是否可跳步：不登录进后台、不加购直接支付、不验证直接改密。</li>
+<li>状态机是否混乱：登录后不选角色直接进管理页、订单状态可手动篡改。</li>
+<li>规则是否有漏洞：优惠券可重复用、积分可刷、金额可溢出。</li>
+<li>输入解析是否不一致：邮箱&#x2F;手机号前后端解析不一样、超长截断、编码绕过。</li>
+<li>权限是否混用：同一个接口普通用户&#x2F;管理员共用，仅靠参数区分权限。</li>
+</ul>
+</li>
+<li><p><strong>统一试探手法：构造“非正常请求”</strong></p>
+<ul>
+<li>改参数：把价格改成0、数量改成负数、用户ID改成管理员ID。</li>
+<li>跳步骤：直接请求最后一步接口，跳过前面验证。</li>
+<li>改状态：把订单状态“未支付”改成“已支付”。</li>
+<li>边界值：超大整数（溢出）、超长字符串（截断）、特殊字符、畸形编码。</li>
+<li>重复操作：重复提交、重复兑换礼品卡、重复使用优惠券。</li>
+</ul>
+</li>
+<li><p><strong>单点不行就组合利用</strong></p>
+<ul>
+<li>单个参数无效 → 搭配多个参数一起改。</li>
+<li>直接改金额失败 → 用负数+优惠券组合实现0元。</li>
+<li>无法直接越权 → 用加密预言机、邮箱绕过、Cookie伪造间接提权。</li>
+</ul>
+</li>
+<li><p><strong>自动化放大漏洞效果</strong></p>
+<ul>
+<li>重放、循环请求：刷钱、刷积分、无限兑换。</li>
+<li>批量篡改：批量越权、批量查询数据。</li>
+<li>用宏&#x2F;脚本自动跑完整个利用链。</li>
+</ul>
+</li>
+</ol>
+<p><strong>先摸清正常流程 → 找到服务端没校验的地方 → 篡改参数&#x2F;跳步骤&#x2F;改状态 → 组合利用达到越权、免费、刷资源等目的。</strong></p>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="业务逻辑漏洞">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/06/认证/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/03/23/BloodHound/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-01
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">业务逻辑漏洞</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A7%E5%88%B6%E7%9A%84%E8%BF%87%E5%BA%A6%E4%BF%A1%E4%BB%BB"><span class="toc-article-text">0x01.对客户端控制的过度信任</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-%E9%AB%98%E7%BA%A7%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">0x02.高级逻辑漏洞</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-%E5%AE%89%E5%85%A8%E6%8E%A7%E5%88%B6%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="toc-article-text">0x03.安全控制不一致</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x04-%E5%95%86%E4%B8%9A%E8%A7%84%E5%88%99%E6%89%A7%E8%A1%8C%E6%9C%89%E7%BC%BA%E9%99%B7"><span class="toc-article-text">0x04.商业规则执行有缺陷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x05-%E4%BD%8E%E7%BA%A7%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7"><span class="toc-article-text">0x05.低级逻辑缺陷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x06-%E7%89%B9%E6%AE%8A%E8%BE%93%E5%85%A5%E5%A4%84%E7%90%86%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="toc-article-text">0x06.特殊输入处理不一致</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x07-%E5%8F%8C%E9%87%8D%E7%94%A8%E9%80%94%E7%BB%88%E7%AB%AF%E7%9A%84%E5%BC%B1%E9%9A%94%E7%A6%BB"><span class="toc-article-text">0x07.双重用途终端的弱隔离</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x08-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E9%AA%8C%E8%AF%81%E4%B8%8D%E8%B6%B3"><span class="toc-article-text">0x08.工作流程验证不足</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x09-%E9%80%9A%E8%BF%87%E6%9C%89%E7%BC%BA%E9%99%B7%E7%9A%84%E7%8A%B6%E6%80%81%E6%9C%BA%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x09.通过有缺陷的状态机实现的认证绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0a-%E6%97%A0%E9%99%90%E8%B4%A7%E5%B8%81%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7"><span class="toc-article-text">0x0a.无限货币逻辑缺陷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0b-%E9%80%9A%E8%BF%87%E5%8A%A0%E5%AF%86%E9%A2%84%E8%A8%80%E6%9C%BA%E7%BB%95%E8%BF%87%E8%AE%A4%E8%AF%81"><span class="toc-article-text">0x0b.通过加密预言机绕过认证</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0c-%E5%88%A9%E7%94%A8%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%B7%AE%E5%BC%82%E7%BB%95%E8%BF%87%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-article-text">0x0c.利用电子邮件地址解析差异绕过访问控制</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%9D%E8%B7%AF%E6%80%BB%E7%BB%93"><span class="toc-article-text">思路总结</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

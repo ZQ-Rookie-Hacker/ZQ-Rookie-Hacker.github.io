@@ -1,0 +1,1238 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>物理层 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="2.1   通信基础2.1.1   基本概念
+①. 数据、信号与码元
+通信目的：传输信息（文字、图像、视频等）
+数据：传送信息的实体
+信号：数据的电气或电磁表现
+分类：
+模拟数据&amp;#x2F;信号：取值连续
+数字数据&amp;#x2F;信号：取值离散
+
+
+码元：
+定义：固定时长的信号波形表示k进制数
+码元宽度：信号周期
+信息量：1码元可携带若干比特
+
+
+
+
+②. 信源、信道与信宿
+通信系统模型：
+信源：产生和发送数据的源头
+信道：信号的传输介质
+分类：
+按信号形式：模拟信道、数字信道
+按传输介质：无线信道、有线信道
+
+
+信号类型：
+基带信号：未调制的原始电信号
+宽带信号：调制后的频分复用模拟信号
+
+
+
+
+信宿：接收数据的终点
+
+
+数据传输方式：
+串行传输：逐比特按序传输（长距离）
+并行传输：多比特同时传输（近距离）
+
+
+通信交互方式：
+单向通信：单方向（广播）
+半双工通信：双向但不能同时
+全双工通信：双向同时
+
+
+
+
+③. 速率、波特与带宽
+速率：
+码元传输速率（波特率）：每秒传输码元数（Baud）
+信息传输速率（比特率）：每秒传输比特数（b&amp;#x2F;s）
+关系：比特率 &amp;#x3D; 波特率 × n（n为每码元比特数）
+
+
+带宽：
+模拟系统：频率范围（Hz）
+计算机网络：最高数据率（b&amp;#x2F;s）
+
+
+
+
+
+2.1.2    信道的极限容量
+信道失真影响
+失真不影响通信质量的条件
+导致严重失真的因素
+码元传输速率高
+信号传输距离远
+噪声干扰大
+传输介质质量差
+
+
+
+
+奈奎斯特定理(奈氏准则)
+适用场景: 理想低通(无噪声、带宽有限)信道
+核心公式: 极限数据传输速率&amp;#x3D;2Wlog₂V (b&amp;#x2F;s)
+关键参数
+W: 信道频率带宽(Hz)
+V: 码元离散电平数量
+
+
+重要结论①. 码元传输速率存在上限②. 带宽越大传输能力越强③. 只限制码元速率不限制信息速率
+提高数据速率的方法: 多元制调制
+
+
+香农定理
+适用场景: 带宽受限且有高斯噪声的信道
+核心公式: 极限数据传输速率&amp;#x3D;Wlog₂(1+S&amp;#x2F;N) (b&amp;#x2F;s)
+关键参数
+W: 信道频率带宽(Hz)
+S: 信号平均功率
+N: 高斯噪声功率
+
+
+信噪比表示方法
+无单位记法: S&amp;#x2F;N
+分贝记法: 10log₁₀(S&amp;#x2F;N) dB
+
+
+重要结论①. 带宽&amp;#x2F;信噪比越大速率越高②. 给定条件下速率上限确定③. 低于极限速率可实现无差错传输④. 实际速率远低于理论极限
+
+
+奈氏准则 vs 香农定理
+奈氏准则: 仅考虑带宽与码元速率
+香农定理: 同时考虑带宽和信噪比
+共同结论: 单个码元携带比特数有限
+
+
+
+2.1.3   编码与调制
+信号与数据转换
+编码: 数据→数字信号
+调制: 数据→模拟信号
+
+
+数字数据转换方式
+数字发送器→数字信号
+调制器→模拟信号
+
+
+模拟数据转换方式
+PCM编码器→数字信号
+放大器调制器→模拟信号
+
+
+四种编码与调制方式
+数字数据编码为数字信号
+常用编码方式
+归零(RZ)编码
+特点: 码元中间跳变到零电平
+优点: 提供自同步机制
+缺点: 占用带宽
+
+
+非归零(NRZ)编码
+特点: 不归零
+优点: 编码效率最高
+缺点: 需要时钟线同步
+
+
+反向非归零(NRZI)编码
+特点: 电平跳变表示0,不变表示1
+应用: USB 2.0
+
+
+曼彻斯特编码
+特点: 码元中间电平跳变
+应用: 标准以太网
+
+
+差分曼彻斯特编码
+特点: 码元开始处跳变表示0
+优点: 抗干扰能力强
+应用: 宽带高速网
+
+
+
+
+
+
+模拟数据编码为数字信号
+步骤
+采样
+奈奎斯特定理: 采样频率≥2倍最大频率
+
+
+量化
+电平幅值→离散数字量
+
+
+编码
+离散整数→二进制编码
+
+
+
+
+应用: PCM编码
+
+
+数字数据调制为模拟信号
+调制方式
+调幅(AM)&amp;#x2F;幅移键控(ASK)
+特点: 改变振幅表示1和0
+缺点: 抗干扰能力差
+
+
+调频(FM)&amp;#x2F;频移键控(FSK)
+特点: 改变频率表示1和0
+优点: 抗干扰能力强
+
+
+调相(PM)&amp;#x2F;相移键控(PSK)
+特点: 改变相位表示1和0
+变种: DPSK(差分相移键控)
+
+
+正交幅度调制(QAM)
+特点: AM与PM结合
+数据传输速率公式: R&amp;#x3D;Blog₂(mn)
+
+
+
+
+
+
+模拟数据调制为模拟信号
+应用
+电话机和本地局交换机
+
+
+技术: 频分复用(FDM)
+
+
+
+
+
+2.2   传输介质2.2.1    双绞线、同轴电缆、光纤与无线传输介质
+传输介质分类
+导向传输介质
+铜线或光纤
+电磁波沿固体介质传播
+
+
+非导向传输介质
+自由空间（空气、真空或海水）
+无线传输
+
+
+
+
+①. 双绞线
+特点
+最常用传输介质
+两根绝缘铜导线绞合
+减少电磁干扰
+
+
+分类
+屏蔽双绞线(STP)
+非屏蔽双绞线(UTP)
+
+
+性能
+价格便宜
+模拟&amp;#x2F;数字传输
+通信距离：几千米到数十千米
+带宽取决于铜线粗细和传输距离
+
+
+
+
+②. 同轴电缆
+结构
+内导体
+绝缘层
+外导体屏蔽层
+绝缘保护套层
+
+
+分类
+50Ω同轴电缆
+传送基带数字信号
+早期局域网应用
+
+
+75Ω同轴电缆
+传送宽带信号
+有线电视系统应用
+
+
+
+
+特点
+良好抗干扰特性
+传输较高速率数据
+
+
+
+
+③. 光纤
+原理
+利用光脉冲通信
+1：有光脉冲
+0：无光脉冲
+
+
+结构
+纤芯（8-100μm）
+包层（较低折射率）
+
+
+传输原理
+全反射现象
+
+
+分类
+多模光纤
+多条光线传输
+适合近距离
+
+
+单模光纤
+单波长传输
+适合远距离
+
+
+
+
+优点
+通信容量大
+传输损耗小
+抗干扰性能好
+无串音干扰
+体积小重量轻
+
+
+
+
+④. 无线传输介质
+应用场景
+蜂窝移动电话
+无线局域网(WLAN)
+特殊场合移动联网
+
+
+(1) 无线电波
+特点
+穿透能力强
+传输距离长
+全向传播
+
+
+
+
+(2) 微波、红外线和激光
+共同特点
+需要视线通路
+指向性强
+
+
+微波通信
+频率：2-40GHz
+容量大
+直线传播
+需中继站
+
+
+卫星通信
+地球同步卫星中继
+优点
+容量大
+距离远
+覆盖广
+
+
+缺点
+保密性差
+传播时延长"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="物理层"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 物理层</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
+<li>①. 数据、信号与码元<ul>
+<li>通信目的：传输信息（文字、图像、视频等）</li>
+<li>数据：传送信息的实体</li>
+<li>信号：数据的电气或电磁表现</li>
+<li>分类：<ul>
+<li>模拟数据&#x2F;信号：取值连续</li>
+<li>数字数据&#x2F;信号：取值离散</li>
+</ul>
+</li>
+<li>码元：<ul>
+<li>定义：固定时长的信号波形表示k进制数</li>
+<li>码元宽度：信号周期</li>
+<li>信息量：1码元可携带若干比特</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 信源、信道与信宿<ul>
+<li>通信系统模型：<ul>
+<li>信源：产生和发送数据的源头</li>
+<li>信道：信号的传输介质<ul>
+<li>分类：<ul>
+<li>按信号形式：模拟信道、数字信道</li>
+<li>按传输介质：无线信道、有线信道</li>
+</ul>
+</li>
+<li>信号类型：<ul>
+<li>基带信号：未调制的原始电信号</li>
+<li>宽带信号：调制后的频分复用模拟信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信宿：接收数据的终点</li>
+</ul>
+</li>
+<li>数据传输方式：<ul>
+<li>串行传输：逐比特按序传输（长距离）</li>
+<li>并行传输：多比特同时传输（近距离）</li>
+</ul>
+</li>
+<li>通信交互方式：<ul>
+<li>单向通信：单方向（广播）</li>
+<li>半双工通信：双向但不能同时</li>
+<li>全双工通信：双向同时</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 速率、波特与带宽<ul>
+<li>速率：<ul>
+<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
+<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
+<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
+</ul>
+</li>
+<li>带宽：<ul>
+<li>模拟系统：频率范围（Hz）</li>
+<li>计算机网络：最高数据率（b&#x2F;s）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
+<li>信道失真影响<ul>
+<li>失真不影响通信质量的条件</li>
+<li>导致严重失真的因素<ul>
+<li>码元传输速率高</li>
+<li>信号传输距离远</li>
+<li>噪声干扰大</li>
+<li>传输介质质量差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>奈奎斯特定理(奈氏准则)<ul>
+<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>V: 码元离散电平数量</li>
+</ul>
+</li>
+<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
+<li>提高数据速率的方法: 多元制调制</li>
+</ul>
+</li>
+<li>香农定理<ul>
+<li>适用场景: 带宽受限且有高斯噪声的信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>S: 信号平均功率</li>
+<li>N: 高斯噪声功率</li>
+</ul>
+</li>
+<li>信噪比表示方法<ul>
+<li>无单位记法: S&#x2F;N</li>
+<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
+</ul>
+</li>
+<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
+</ul>
+</li>
+<li>奈氏准则 vs 香农定理<ul>
+<li>奈氏准则: 仅考虑带宽与码元速率</li>
+<li>香农定理: 同时考虑带宽和信噪比</li>
+<li>共同结论: 单个码元携带比特数有限</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
+<li>信号与数据转换<ul>
+<li>编码: 数据→数字信号</li>
+<li>调制: 数据→模拟信号</li>
+</ul>
+</li>
+<li>数字数据转换方式<ul>
+<li>数字发送器→数字信号</li>
+<li>调制器→模拟信号</li>
+</ul>
+</li>
+<li>模拟数据转换方式<ul>
+<li>PCM编码器→数字信号</li>
+<li>放大器调制器→模拟信号</li>
+</ul>
+</li>
+<li>四种编码与调制方式<ul>
+<li>数字数据编码为数字信号<ul>
+<li>常用编码方式<ul>
+<li>归零(RZ)编码<ul>
+<li>特点: 码元中间跳变到零电平</li>
+<li>优点: 提供自同步机制</li>
+<li>缺点: 占用带宽</li>
+</ul>
+</li>
+<li>非归零(NRZ)编码<ul>
+<li>特点: 不归零</li>
+<li>优点: 编码效率最高</li>
+<li>缺点: 需要时钟线同步</li>
+</ul>
+</li>
+<li>反向非归零(NRZI)编码<ul>
+<li>特点: 电平跳变表示0,不变表示1</li>
+<li>应用: USB 2.0</li>
+</ul>
+</li>
+<li>曼彻斯特编码<ul>
+<li>特点: 码元中间电平跳变</li>
+<li>应用: 标准以太网</li>
+</ul>
+</li>
+<li>差分曼彻斯特编码<ul>
+<li>特点: 码元开始处跳变表示0</li>
+<li>优点: 抗干扰能力强</li>
+<li>应用: 宽带高速网</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据编码为数字信号<ul>
+<li>步骤<ul>
+<li>采样<ul>
+<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
+</ul>
+</li>
+<li>量化<ul>
+<li>电平幅值→离散数字量</li>
+</ul>
+</li>
+<li>编码<ul>
+<li>离散整数→二进制编码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用: PCM编码</li>
+</ul>
+</li>
+<li>数字数据调制为模拟信号<ul>
+<li>调制方式<ul>
+<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
+<li>特点: 改变振幅表示1和0</li>
+<li>缺点: 抗干扰能力差</li>
+</ul>
+</li>
+<li>调频(FM)&#x2F;频移键控(FSK)<ul>
+<li>特点: 改变频率表示1和0</li>
+<li>优点: 抗干扰能力强</li>
+</ul>
+</li>
+<li>调相(PM)&#x2F;相移键控(PSK)<ul>
+<li>特点: 改变相位表示1和0</li>
+<li>变种: DPSK(差分相移键控)</li>
+</ul>
+</li>
+<li>正交幅度调制(QAM)<ul>
+<li>特点: AM与PM结合</li>
+<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据调制为模拟信号<ul>
+<li>应用<ul>
+<li>电话机和本地局交换机</li>
+</ul>
+</li>
+<li>技术: 频分复用(FDM)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
+<li>传输介质分类<ul>
+<li>导向传输介质<ul>
+<li>铜线或光纤</li>
+<li>电磁波沿固体介质传播</li>
+</ul>
+</li>
+<li>非导向传输介质<ul>
+<li>自由空间（空气、真空或海水）</li>
+<li>无线传输</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>①. 双绞线<ul>
+<li>特点<ul>
+<li>最常用传输介质</li>
+<li>两根绝缘铜导线绞合</li>
+<li>减少电磁干扰</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>屏蔽双绞线(STP)</li>
+<li>非屏蔽双绞线(UTP)</li>
+</ul>
+</li>
+<li>性能<ul>
+<li>价格便宜</li>
+<li>模拟&#x2F;数字传输</li>
+<li>通信距离：几千米到数十千米</li>
+<li>带宽取决于铜线粗细和传输距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 同轴电缆<ul>
+<li>结构<ul>
+<li>内导体</li>
+<li>绝缘层</li>
+<li>外导体屏蔽层</li>
+<li>绝缘保护套层</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>50Ω同轴电缆<ul>
+<li>传送基带数字信号</li>
+<li>早期局域网应用</li>
+</ul>
+</li>
+<li>75Ω同轴电缆<ul>
+<li>传送宽带信号</li>
+<li>有线电视系统应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>良好抗干扰特性</li>
+<li>传输较高速率数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 光纤<ul>
+<li>原理<ul>
+<li>利用光脉冲通信</li>
+<li>1：有光脉冲</li>
+<li>0：无光脉冲</li>
+</ul>
+</li>
+<li>结构<ul>
+<li>纤芯（8-100μm）</li>
+<li>包层（较低折射率）</li>
+</ul>
+</li>
+<li>传输原理<ul>
+<li>全反射现象</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>多模光纤<ul>
+<li>多条光线传输</li>
+<li>适合近距离</li>
+</ul>
+</li>
+<li>单模光纤<ul>
+<li>单波长传输</li>
+<li>适合远距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信容量大</li>
+<li>传输损耗小</li>
+<li>抗干扰性能好</li>
+<li>无串音干扰</li>
+<li>体积小重量轻</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>④. 无线传输介质<ul>
+<li>应用场景<ul>
+<li>蜂窝移动电话</li>
+<li>无线局域网(WLAN)</li>
+<li>特殊场合移动联网</li>
+</ul>
+</li>
+<li>(1) 无线电波<ul>
+<li>特点<ul>
+<li>穿透能力强</li>
+<li>传输距离长</li>
+<li>全向传播</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(2) 微波、红外线和激光<ul>
+<li>共同特点<ul>
+<li>需要视线通路</li>
+<li>指向性强</li>
+</ul>
+</li>
+<li>微波通信<ul>
+<li>频率：2-40GHz</li>
+<li>容量大</li>
+<li>直线传播</li>
+<li>需中继站</li>
+</ul>
+</li>
+<li>卫星通信<ul>
+<li>地球同步卫星中继</li>
+<li>优点<ul>
+<li>容量大</li>
+<li>距离远</li>
+<li>覆盖广</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>保密性差</li>
+<li>传播时延长</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-2-物理层接口的特性"><a href="#2-2-2-物理层接口的特性" class="headerlink" title="2.2.2    物理层接口的特性"></a>2.2.2    物理层接口的特性</h3><ul>
+<li>定义<ul>
+<li>在连接各种计算机的传输介质上传输比特流</li>
+<li>屏蔽硬件设备和传输介质的差异</li>
+</ul>
+</li>
+<li>主要任务<ul>
+<li>确定与传输介质接口有关的特性<ul>
+<li>机械特性<ul>
+<li>接线器的形状和尺寸</li>
+<li>引脚数量和排列</li>
+<li>固定和锁定装置</li>
+</ul>
+</li>
+<li>电气特性<ul>
+<li>各条线上的电压范围</li>
+<li>传输速率</li>
+<li>距离限制</li>
+</ul>
+</li>
+<li>功能特性<ul>
+<li>电平电压的意义</li>
+<li>每条线的功能</li>
+</ul>
+</li>
+<li>过程特性（规程特性）<ul>
+<li>不同功能事件的出现顺序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-物理层设备"><a href="#2-3-物理层设备" class="headerlink" title="2.3   物理层设备"></a>2.3   物理层设备</h2><h3 id="2-3-1-中继器"><a href="#2-3-1-中继器" class="headerlink" title="2.3.1    中继器"></a>2.3.1    中继器</h3><ul>
+<li>主要功能<ul>
+<li>放大、整形并转发信号</li>
+<li>消除信号失真和衰减</li>
+<li>扩大网络传输距离</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>信号再生（非简单放大）</li>
+<li>双端口设计<ul>
+<li>数据从一个端口输入</li>
+<li>从另一个端口发出</li>
+</ul>
+</li>
+<li>仅作用于信号电气部分</li>
+</ul>
+</li>
+<li>网络特性<ul>
+<li>连接的是网段而非子网</li>
+<li>仍属于同一局域网</li>
+<li>故障影响<ul>
+<li>对相邻两个网段产生影响</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用限制<ul>
+<li>理论上数量无限</li>
+<li>实际限制因素<ul>
+<li>信号延迟范围规定</li>
+<li>5-4-3规则示例<ul>
+<li>10BASE5以太网规范</li>
+<li>最多4个中继器串联</li>
+<li>5段介质中3段可接计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>与放大器的区别<ul>
+<li>放大器<ul>
+<li>放大模拟信号</li>
+<li>原理：放大衰减信号</li>
+</ul>
+</li>
+<li>中继器<ul>
+<li>放大数字信号</li>
+<li>原理：整形再生信号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-2-集线器"><a href="#2-3-2-集线器" class="headerlink" title="2.3.2    集线器"></a>2.3.2    集线器</h3><ul>
+<li>定义<ul>
+<li>集线器(Hub)实质上是一个多端口的中继器</li>
+</ul>
+</li>
+<li>工作原理<ul>
+<li>端口接收数据信号</li>
+<li>信号整形放大（再生）</li>
+<li>转发到其他所有工作端口（除输入端口外）</li>
+<li>多端口输入时会发生冲突导致数据无效</li>
+</ul>
+</li>
+<li>功能特点<ul>
+<li>信号放大和转发</li>
+<li>扩大网络传输范围</li>
+<li>不具备信号定向传送能力</li>
+<li>标准的共享式设备</li>
+</ul>
+</li>
+<li>组网特性<ul>
+<li>组网灵活</li>
+<li>所有节点通信集中在中心节点</li>
+<li>组成共享式网络</li>
+<li>逻辑上仍是总线网</li>
+<li>每个端口连接同一网络的不同网段</li>
+<li>只能半双工工作</li>
+<li>网络吞吐率受限</li>
+</ul>
+</li>
+</ul>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="物理层">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2025/12/05/数据链路层/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/12/05/网络层/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2025-12-05
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/408/">408<span>7</span></a></li> <li><a href="/categories/408/计算机网络/">计算机网络<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li> <li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-1-%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80"><span class="toc-article-text">2.1   通信基础</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-article-text">2.1.1   基本概念</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-2-%E4%BF%A1%E9%81%93%E7%9A%84%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F"><span class="toc-article-text">2.1.2    信道的极限容量</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1-3-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6"><span class="toc-article-text">2.1.3   编码与调制</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-2-%E4%BC%A0%E8%BE%93%E4%BB%8B%E8%B4%A8"><span class="toc-article-text">2.2   传输介质</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2-1-%E5%8F%8C%E7%BB%9E%E7%BA%BF%E3%80%81%E5%90%8C%E8%BD%B4%E7%94%B5%E7%BC%86%E3%80%81%E5%85%89%E7%BA%A4%E4%B8%8E%E6%97%A0%E7%BA%BF%E4%BC%A0%E8%BE%93%E4%BB%8B%E8%B4%A8"><span class="toc-article-text">2.2.1    双绞线、同轴电缆、光纤与无线传输介质</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2-2-%E7%89%A9%E7%90%86%E5%B1%82%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-article-text">2.2.2    物理层接口的特性</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-3-%E7%89%A9%E7%90%86%E5%B1%82%E8%AE%BE%E5%A4%87"><span class="toc-article-text">2.3   物理层设备</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3-1-%E4%B8%AD%E7%BB%A7%E5%99%A8"><span class="toc-article-text">2.3.1    中继器</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3-2-%E9%9B%86%E7%BA%BF%E5%99%A8"><span class="toc-article-text">2.3.2    集线器</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

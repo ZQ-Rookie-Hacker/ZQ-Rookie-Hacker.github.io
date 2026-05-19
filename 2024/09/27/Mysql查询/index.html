@@ -1,0 +1,1105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Mysql查询 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="关键字1select,show,create,drop,alter,as（起别名）,grant,revoke,
+
+mysql用户操作一、用户存在查询1234567891011121.直接查询（查询mysql库）：select User, Host from mysql.user where user = &amp;#x27;要查询的用户名&amp;#x27; and Host = &amp;#x27;对应的主机&amp;#x27;;//注意具体字段名字的大小写，要与mysql库中匹配示例：&amp;gt;&amp;gt;select User,Host from mysql.user where User=&amp;#x27;root&amp;#x27; and Host=&amp;#x27;localhost&amp;#x27;;//查询为空则不存在//查询所有用户-- 查看所有用户（显示用户名和允许连接的主机）select user, Host from mysql.user; //使用exists函数select exists(select User,Host from mysql.user where User=&amp;#x27;root&amp;#x27; and Host=&amp;#x27;localhost&amp;#x27;); //用户存在返回1，不存在返回02.间接查询（权限查询）--&amp;gt;一下会提到，暂不解释
+
+
+
+二、用户创建与删除12345678//创建语法格式create user &amp;#x27;用户名&amp;#x27;@&amp;#x27;主机&amp;#x27; identified by &amp;#x27;密码&amp;#x27;;&amp;gt;&amp;gt;&amp;#x27;用户名&amp;#x27;@&amp;#x27;主机&amp;#x27;：&amp;gt;用户名 是自定义的账号&amp;gt;主机 限制用户从哪里连接（localhost 仅本地、% 允许任意主机、固定ip地址、模糊网段、CIDR 子网）//删除语法drop user &amp;#x27;用户名&amp;#x27;@&amp;#x27;主机&amp;#x27;;
+
+
+
+主机格式
+含义
+适用场景
+
+
+
+&amp;#39;user&amp;#39;@&amp;#39;localhost&amp;#39;
+仅本机连接
+本地管理用户（安全）
+
+
+&amp;#39;user&amp;#39;@&amp;#39;192.168.1.100&amp;#39;
+固定 IP 连接
+特定机器的服务账号
+
+
+&amp;#39;user2&amp;#39;@&amp;#39;db.server.com&amp;#39;
+固定域名
+
+
+
+&amp;#39;user&amp;#39;@&amp;#39;192.168.1.%&amp;#39; （也可使用_）
+模糊网段连接
+企业内网用户（控制一个网段）
+
+
+&amp;#39;user&amp;#39;@&amp;#39;192.168.1.0/24&amp;#39;
+CIDR 子网连接
+精准网段控制（专业场景）
+
+
+&amp;#39;user&amp;#39;@&amp;#39;%&amp;#39;
+任意主机连接
+测试环境（生产慎用）
+
+
+
+用 CREATE USER 创建的用户，默认几乎没有实际操作权限，仅具备最基础的登录能力，可执行少量无需特殊权限的操作例如：
+
+SHOW ENGINES（查看所有存储引擎列表 ）SHOW CHARACTER SET（查看字符集信息 ）这类语句，用于了解 MySQL 服务器的基础配置，无需额外权限就能执行。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Mysql查询"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Mysql查询</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>,<span class="keyword">show</span>,<span class="keyword">create</span>,<span class="keyword">drop</span>,<span class="keyword">alter</span>,<span class="keyword">as</span>（起别名）,<span class="keyword">grant</span>,<span class="keyword">revoke</span>,</span><br></pre></td></tr></table></figure>
+
+<h1 id="mysql用户操作"><a href="#mysql用户操作" class="headerlink" title="mysql用户操作"></a><code>mysql用户操作</code></h1><h2 id="一、用户存在查询"><a href="#一、用户存在查询" class="headerlink" title="一、用户存在查询"></a>一、用户存在查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>直接查询（查询mysql库）：</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">User</span>, Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;要查询的用户名&#x27;</span> <span class="keyword">and</span> Host <span class="operator">=</span> <span class="string">&#x27;对应的主机&#x27;</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>注意具体字段名字的大小写，要与mysql库中匹配</span><br><span class="line">示例：</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>;<span class="operator">/</span><span class="operator">/</span>查询为空则不存在</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查询所有用户</span><br><span class="line"><span class="comment">-- 查看所有用户（显示用户名和允许连接的主机）</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>, Host <span class="keyword">from</span> mysql.user; </span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>使用<span class="keyword">exists</span>函数</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exists</span>(<span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>); <span class="operator">/</span><span class="operator">/</span>用户存在返回<span class="number">1</span>，不存在返回<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>间接查询（权限查询）<span class="comment">--&gt;一下会提到，暂不解释</span></span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h2 id="二、用户创建与删除"><a href="#二、用户创建与删除" class="headerlink" title="二、用户创建与删除"></a>二、用户创建与删除</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>创建语法格式</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;密码&#x27;</span>;</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>：</span><br><span class="line"><span class="operator">&gt;</span>用户名 是自定义的账号</span><br><span class="line"><span class="operator">&gt;</span>主机 限制用户从哪里连接（localhost 仅本地、<span class="operator">%</span> 允许任意主机、固定ip地址、模糊网段、CIDR 子网）</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>删除语法</span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>主机格式</th>
+<th>含义</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;user&#39;@&#39;localhost&#39;</code></td>
+<td>仅本机连接</td>
+<td>本地管理用户（安全）</td>
+</tr>
+<tr>
+<td><code>&#39;user&#39;@&#39;192.168.1.100&#39;</code></td>
+<td>固定 IP 连接</td>
+<td>特定机器的服务账号</td>
+</tr>
+<tr>
+<td><code>&#39;user2&#39;@&#39;db.server.com&#39;</code></td>
+<td>固定域名</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&#39;user&#39;@&#39;192.168.1.%&#39;</code> （也可使用_）</td>
+<td>模糊网段连接</td>
+<td>企业内网用户（控制一个网段）</td>
+</tr>
+<tr>
+<td><code>&#39;user&#39;@&#39;192.168.1.0/24&#39;</code></td>
+<td>CIDR 子网连接</td>
+<td>精准网段控制（专业场景）</td>
+</tr>
+<tr>
+<td><code>&#39;user&#39;@&#39;%&#39;</code></td>
+<td>任意主机连接</td>
+<td>测试环境（生产慎用）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>用 CREATE USER 创建的用户，默认几乎没有实际操作权限，仅具备最基础的登录能力，可执行少量无需特殊权限的操作<br>例如：</p>
+<blockquote>
+<p>SHOW ENGINES（查看所有存储引擎列表 ）<br>SHOW CHARACTER SET（查看字符集信息 ）<br>这类语句，用于了解 MySQL 服务器的基础配置，无需额外权限就能执行。</p>
+</blockquote>
+</blockquote>
+<p>具体实例：</p>
+<blockquote>
+<p><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_1.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<hr>
+<h2 id="三、用户赋权与撤权"><a href="#三、用户赋权与撤权" class="headerlink" title="三、用户赋权与撤权"></a>三、用户赋权与撤权</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>赋权语法格式</span><br><span class="line"><span class="keyword">grant</span> 权限列表 <span class="keyword">on</span> 具体数据库.具体表 <span class="keyword">to</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span> </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;identified by &#x27;</span>密码<span class="string">&#x27; with 选项;&#x27;</span> 为可选参数 </span><br><span class="line">创建新用户：若用户不存在，会创建用户并设置密码。</span><br><span class="line">修改已有用户密码：若用户已存在，会修改其密码。</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>撤权语法格式</span><br><span class="line"><span class="keyword">revoke</span> 权限列表 <span class="keyword">on</span> 具体数据库.具体表 <span class="keyword">from</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>注意：赋权和撤权之后都要执行：flush privileges  刷新权限</span><br></pre></td></tr></table></figure>
+<h3 id="1-权限列表（小写）"><a href="#1-权限列表（小写）" class="headerlink" title="1.权限列表（小写）"></a>1.权限列表（小写）</h3><table>
+<thead>
+<tr>
+<th>权限类型</th>
+<th>英文名称（小写）</th>
+<th>作用</th>
+<th>适用级别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>基础数据操作</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>查询</td>
+<td><code>select</code></td>
+<td>读取表数据</td>
+<td>数据库、表、列</td>
+</tr>
+<tr>
+<td>插入</td>
+<td><code>insert</code></td>
+<td>向表中添加数据</td>
+<td>数据库、表</td>
+</tr>
+<tr>
+<td>更新</td>
+<td><code>update</code></td>
+<td>修改表数据</td>
+<td>数据库、表、列</td>
+</tr>
+<tr>
+<td>删除</td>
+<td><code>delete</code></td>
+<td>删除表数据</td>
+<td>数据库、表</td>
+</tr>
+<tr>
+<td><strong>结构管理</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>创建</td>
+<td><code>create</code></td>
+<td>创建数据库、表、索引</td>
+<td>数据库、表</td>
+</tr>
+<tr>
+<td>删除</td>
+<td><code>drop</code></td>
+<td>删除数据库、表</td>
+<td>数据库、表</td>
+</tr>
+<tr>
+<td>修改结构</td>
+<td><code>alter</code></td>
+<td>修改表结构（如添加列）</td>
+<td>数据库、表</td>
+</tr>
+<tr>
+<td>索引管理</td>
+<td><code>index</code></td>
+<td>创建&#x2F;删除索引</td>
+<td>表</td>
+</tr>
+<tr>
+<td><strong>用户与权限</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>授权</td>
+<td><code>grant option</code></td>
+<td>允许用户将自己的权限授予他人</td>
+<td>全局、数据库、表</td>
+</tr>
+<tr>
+<td>创建用户</td>
+<td><code>create user</code></td>
+<td>创建新用户</td>
+<td>全局</td>
+</tr>
+<tr>
+<td><strong>高级功能</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>执行存储过程</td>
+<td><code>execute</code></td>
+<td>执行存储过程&#x2F;函数</td>
+<td>数据库、存储过程</td>
+</tr>
+<tr>
+<td>创建视图</td>
+<td><code>create view</code></td>
+<td>创建视图</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>显示视图</td>
+<td><code>show view</code></td>
+<td>查看视图定义</td>
+<td>表</td>
+</tr>
+<tr>
+<td>创建(临时)表</td>
+<td><code>create (temporary) tables</code></td>
+<td>创建(临时)表</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>创建(临时)库</td>
+<td><code>create (temporary) database</code></td>
+<td>创建(临时)库</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>锁表</td>
+<td><code>lock tables</code></td>
+<td>锁定表</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td><strong>服务器管理</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>超级权限</td>
+<td><code>super</code></td>
+<td>管理服务器（如终止线程）</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>查看进程</td>
+<td><code>show processlist</code></td>
+<td>查看运行中的查询</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>重载权限</td>
+<td><code>reload</code></td>
+<td>刷新权限（等价于 <code>flush privileges</code>）</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>备份</td>
+<td><code>replication client</code></td>
+<td>查看主从复制信息</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>复制</td>
+<td><code>replication slave</code></td>
+<td>配置从库复制</td>
+<td>全局</td>
+</tr>
+<tr>
+<td><strong>特殊权限</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>所有权限</td>
+<td><code>all privileges</code></td>
+<td>授予所有可用权限（谨慎使用）</td>
+<td>全局、数据库、表</td>
+</tr>
+<tr>
+<td>使用权限</td>
+<td><code>usage</code></td>
+<td>空权限（仅允许连接，无任何操作权限）</td>
+<td>全局</td>
+</tr>
+</tbody></table>
+<h3 id="2-作用域"><a href="#2-作用域" class="headerlink" title="2.作用域"></a>2.作用域</h3><table>
+<thead>
+<tr>
+<th>作用域格式</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>*.*</code></td>
+<td><code>grant select on *.*</code></td>
+<td>所有数据库的所有表</td>
+</tr>
+<tr>
+<td><code>数据库名.*</code></td>
+<td><code>grant insert on sales.*</code></td>
+<td>指定sales数据库的所有表</td>
+</tr>
+<tr>
+<td><code>数据库名.表名</code></td>
+<td><code>grant update on hr.employees</code></td>
+<td>指定hr数据库和employees表</td>
+</tr>
+<tr>
+<td><code>列名</code>(特殊语法)</td>
+<td><code>grant select (id,name), update (salary) ON hr.employees</code></td>
+<td>列级权限 （指定库与表）</td>
+</tr>
+</tbody></table>
+<h3 id="3-WITH-选项（小写）"><a href="#3-WITH-选项（小写）" class="headerlink" title="3.WITH 选项（小写）"></a>3.WITH 选项（小写）</h3><table>
+<thead>
+<tr>
+<th>选项名称（小写）</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>with grant option</code></td>
+<td>允许用户将自己的权限授予其他用户</td>
+<td><code>grant select on db.* to &#39;user&#39;@&#39;%&#39; with grant option;</code></td>
+</tr>
+<tr>
+<td><code>with max_queries_per_hour n</code></td>
+<td>限制每小时允许的查询次数</td>
+<td><code>grant select on db.* to &#39;user&#39;@&#39;%&#39; with max_queries_per_hour 1000;</code></td>
+</tr>
+<tr>
+<td><code>with max_updates_per_hour n</code></td>
+<td>限制每小时允许的更新次数</td>
+<td><code>grant update on db.* to &#39;user&#39;@&#39;%&#39; with max_updates_per_hour 500;</code></td>
+</tr>
+<tr>
+<td><code>with max_connections_per_hour n</code></td>
+<td>限制每小时允许的连接次数</td>
+<td><code>grant all on db.* to &#39;user&#39;@&#39;%&#39; with max_connections_per_hour 100;</code></td>
+</tr>
+<tr>
+<td><code>with max_user_connections n</code></td>
+<td>限制同时在线的用户连接数</td>
+<td><code>grant all on db.* to &#39;user&#39;@&#39;%&#39; with max_user_connections 5;</code></td>
+</tr>
+<tr>
+<td><code>with require ssl</code></td>
+<td>强制用户使用 SSL 加密连接</td>
+<td><code>grant all on db.* to &#39;user&#39;@&#39;%&#39; with require ssl;</code></td>
+</tr>
+<tr>
+<td><code>with require x509</code></td>
+<td>强制用户使用 X.509 证书认证</td>
+<td><code>grant all on db.* to &#39;user&#39;@&#39;%&#39; with require x509;</code></td>
+</tr>
+</tbody></table>
+<p>具体细节：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>若已通过 use test_db; 指定当前数据库，可省略数据库名，直接使用表名</span><br><span class="line">use test_db;          <span class="comment">-- 先切换到 test_db 数据库</span></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">update</span> <span class="keyword">on</span> users <span class="keyword">to</span> <span class="string">&#x27;user&#x27;</span>@<span class="string">&#x27;192.168.1.10&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>列权限必须关联表</span><br><span class="line">列权限不能单独存在，必须指定表</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">insert</span> (id, email) <span class="keyword">on</span> test_db.users <span class="keyword">to</span> <span class="string">&#x27;user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;  <span class="comment">-- 正确</span></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">insert</span> (id, email) <span class="keyword">on</span> <span class="operator">*</span>.users <span class="keyword">to</span> <span class="string">&#x27;user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;  <span class="comment">-- ❌ 错误：数据库名不能用通配符</span></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">insert</span> (id) <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;                  <span class="comment">-- 错误（不能对全局作用域授予列权限）</span></span><br><span class="line"></span><br><span class="line">列权限必须精确定位到具体数据库中的具体表，不能使用通配符替代数据库名或表名。如果需要批量授权，需逐个指定数据库和表</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>撤权示例</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 撤销用户对 test_db 库中所有表的查询权限</span></span><br><span class="line"><span class="keyword">revoke</span> <span class="keyword">select</span> <span class="keyword">on</span> test_db.<span class="operator">*</span> <span class="keyword">from</span> <span class="string">&#x27;app_user&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 撤销用户对特定表的更新权限</span></span><br><span class="line"><span class="keyword">revoke</span> <span class="keyword">update</span> <span class="keyword">on</span> test_db.products <span class="keyword">from</span> <span class="string">&#x27;data_user&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 同时撤销用户的增删改权限</span></span><br><span class="line"><span class="keyword">revoke</span> <span class="keyword">insert</span>, <span class="keyword">delete</span>, <span class="keyword">update</span> <span class="keyword">on</span> test_db.orders <span class="keyword">from</span> <span class="string">&#x27;restricted_user&#x27;</span>@<span class="string">&#x27;192.168.1.%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>具体实例：</p>
+<blockquote>
+<p><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_2.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<hr>
+<h2 id="四、用户权限查询"><a href="#四、用户权限查询" class="headerlink" title="四、用户权限查询"></a>四、用户权限查询</h2><p><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_3.png" alt="在这里插入图片描述"></p>
+<h3 id="1-权限概览"><a href="#1-权限概览" class="headerlink" title="1.权限概览"></a>1.权限概览</h3><h4 id="（1）权限层级"><a href="#（1）权限层级" class="headerlink" title="（1）权限层级"></a>（1）权限层级</h4><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>作用范围</th>
+<th>存储表</th>
+<th>查询方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局级</td>
+<td>所有数据库</td>
+<td><code>mysql.user</code></td>
+<td><code>show grants for user@host</code></td>
+</tr>
+<tr>
+<td>数据库级</td>
+<td>单个数据库</td>
+<td><code>mysql.db</code></td>
+<td><code>select * from mysql.db</code></td>
+</tr>
+<tr>
+<td>表级</td>
+<td>单个表</td>
+<td><code>mysql.tables_priv</code></td>
+<td><code>select * from mysql.tables_priv</code></td>
+</tr>
+<tr>
+<td>列级</td>
+<td>表中特定列</td>
+<td><code>mysql.columns_priv</code></td>
+<td><code>select * from mysql.columns_priv</code></td>
+</tr>
+<tr>
+<td>存储过程级</td>
+<td>存储过程&#x2F;函数</td>
+<td><code>mysql.procs_priv</code></td>
+<td><code>select * from mysql.procs_priv</code></td>
+</tr>
+</tbody></table>
+<h4 id="（2）解释"><a href="#（2）解释" class="headerlink" title="（2）解释"></a>（2）解释</h4><blockquote>
+<p>1.所谓的全局查询，就是使用查询语句show grants 查询用户的权限信息，	其查询结果的信息条数不定，每一条查询结果就对应一次赋权（当然，用户可以被一次性赋予多个权限，此处讨论的是用户被·赋权的次数），全局查询结果包含各种级别的权限信息（或存在权级覆盖）<br>2.所谓数据库级查询，是查询用户对数据库的操作权限</p>
+</blockquote>
+<h3 id="2-全局级权限查询"><a href="#2-全局级权限查询" class="headerlink" title="2.全局级权限查询"></a>2.全局级权限查询</h3><h4 id="（1）使用show-grants"><a href="#（1）使用show-grants" class="headerlink" title="（1）使用show grants"></a>（1）使用show grants</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>查询当前用户权限</span><br><span class="line"><span class="keyword">show</span> grants <span class="keyword">for</span> <span class="built_in">current_user</span></span><br><span class="line"><span class="keyword">show</span> grants;</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查询指定用户的权限（前提：当前用户具有管理员权限）</span><br><span class="line">查询格式： <span class="keyword">show</span> grants <span class="keyword">for</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span></span><br><span class="line"><span class="keyword">show</span> grants <span class="keyword">for</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>权限查询结果分析：<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_4.png" alt="在这里插入图片描述"></p>
+<ol>
+<li><code>GRANT</code> 是授予权限的关键字</li>
+<li><code>ALL PRIVILEGES</code> 表示所有权限（像对数据库、表的增删改查、创建、删除等各类操作权限 ）</li>
+<li><code>ON *.*</code>中，第一个 * 代表所有数据库，第二个 * 代表对应数据库里的所有表，即该用户对服务器上所有数据库的所有表都有操作权限。</li>
+<li><code>TO &#39;root&#39;@&#39;localhost&#39;</code>：指定权限授予的对象是从本地主机（localhost）登录的 root 用户</li>
+<li><code>IDENTIFIED BY PASSWORD &#39;*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B&#39;</code>：这是存储的密码哈希值，MySQL 不会明文存储密码，而是通过哈希算法处理后存储，用于验证用户登录时输入的密码是否正确，这里展示的就是 root 用户密码经过哈希后的结果 </li>
+<li><code>WITH GRANT OPTION</code>：意味着该用户不仅自己拥有这些权限，还能够将自己所拥有的权限授予其他用户，比如可以执行 GRANT 语句给其他 MySQL 用户分配权限 </li>
+<li><code>PROXY</code> 权限允许用户代表其他用户进行操作</li>
+<li><code>&quot;@&#39;&#39;</code> 这种形式在 MySQL 里可理解为涵盖了各类符合条件的用户场景</li>
+</ol>
+<h4 id="（2）查询系统表"><a href="#（2）查询系统表" class="headerlink" title="（2）查询系统表"></a>（2）查询系统表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">User</span>, Host,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,  Drop_priv <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span> <span class="operator">=</span> <span class="string">&#x27;test_user&#x27;</span> <span class="keyword">and</span> Host <span class="operator">=</span> <span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>结果解读</p>
+<table>
+<thead>
+<tr>
+<th>权限字段</th>
+<th>含义</th>
+<th>值类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>select_priv</code></td>
+<td>查询权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+<tr>
+<td><code>insert_priv</code></td>
+<td>插入权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+<tr>
+<td><code>update_priv</code></td>
+<td>更新权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+<tr>
+<td><code>delete_priv</code></td>
+<td>删除权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+<tr>
+<td><code>create_priv</code></td>
+<td>创建表权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+<tr>
+<td><code>drop_priv</code></td>
+<td>删除表权限</td>
+<td>‘Y’&#x2F;‘N’</td>
+</tr>
+</tbody></table>
+<h3 id="3-数据库级权限查询"><a href="#3-数据库级权限查询" class="headerlink" title="3.数据库级权限查询"></a>3.数据库级权限查询</h3><p>不作演示，与使用全局查询没什么区别</p>
+<h3 id="4-表级权限查询"><a href="#4-表级权限查询" class="headerlink" title="4.表级权限查询"></a>4.表级权限查询</h3><h4 id="（1）查询系统表"><a href="#（1）查询系统表" class="headerlink" title="（1）查询系统表"></a>（1）查询系统表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">User</span>,Host,table_priv,column_priv <span class="keyword">from</span> mysql.tables_priv <span class="keyword">where</span> <span class="keyword">User</span> <span class="operator">=</span> <span class="string">&#x27;test_user&#x27;</span> <span class="keyword">and</span> Host <span class="operator">=</span> <span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p> 结果解读</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+<th>示例值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>table_priv</code></td>
+<td>表级权限</td>
+<td>‘Select,Insert,Update’</td>
+</tr>
+<tr>
+<td><code>column_priv</code></td>
+<td>列级权限</td>
+<td>‘Select,Update’</td>
+</tr>
+</tbody></table>
+<p>如果用户没有表级，列级的权限，则查询为空，如</p>
+<blockquote>
+<p><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_5.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<p>现先赋权，后查权</p>
+<blockquote>
+<p>数据库级查询<img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_6.png" alt="在这里插入图片描述"><br>表级查询<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_7.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h4 id="（2）mysql-tables-priv-表（表级权限）"><a href="#（2）mysql-tables-priv-表（表级权限）" class="headerlink" title="（2）mysql.tables_priv&#96; 表（表级权限）"></a>（2）mysql.tables_priv&#96; 表（表级权限）</h4><table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Host</code></td>
+<td>varchar(60)</td>
+<td>主机名，用于指定允许访问的客户端IP或主机</td>
+</tr>
+<tr>
+<td><code>Db</code></td>
+<td>varchar(64)</td>
+<td>数据库名</td>
+</tr>
+<tr>
+<td><code>User</code></td>
+<td>varchar(32)</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td><code>Table_name</code></td>
+<td>varchar(64)</td>
+<td><strong>表名</strong>（注意大写T）</td>
+</tr>
+<tr>
+<td><code>Grantor</code></td>
+<td>varchar(93)</td>
+<td>授予该权限的用户</td>
+</tr>
+<tr>
+<td><code>Timestamp</code></td>
+<td>timestamp</td>
+<td>权限最后修改时间</td>
+</tr>
+<tr>
+<td><code>Table_priv</code></td>
+<td>set</td>
+<td>表级权限列表（如 <code>&#39;Select&#39;,&#39;Insert&#39;,&#39;Update&#39;,&#39;Delete&#39;</code> 等）</td>
+</tr>
+<tr>
+<td><code>Column_priv</code></td>
+<td>set</td>
+<td>列级权限列表（如 <code>&#39;Select&#39;,&#39;Insert&#39;,&#39;Update&#39;</code> 等）</td>
+</tr>
+</tbody></table>
+<h4 id="（3）权限类型"><a href="#（3）权限类型" class="headerlink" title="（3）权限类型"></a>（3）权限类型</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Insert&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Update&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Delete&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Create&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Drop&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span> </span><br><span class="line"><span class="keyword">from</span> mysql.tables_priv <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;用户名&#x27;</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>去除尾部条件即查询所有用户权限</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>FIND_IN_SET 将查询结果转化为bool值， <span class="number">1</span><span class="operator">&gt;</span><span class="number">0</span>（<span class="literal">true</span>） <span class="number">0</span><span class="operator">&gt;</span><span class="number">0</span>(<span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查其他高权限（类似 root）用户	<span class="keyword">SELECT</span> <span class="keyword">User</span>, Host <span class="keyword">FROM</span> mysql.user <span class="keyword">WHERE</span> Grant_priv<span class="operator">=</span><span class="string">&#x27;Y&#x27;</span> <span class="keyword">AND</span> Super_priv<span class="operator">=</span><span class="string">&#x27;Y&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-列级权限查询"><a href="#5-列级权限查询" class="headerlink" title="5.列级权限查询"></a>5.列级权限查询</h3><h4 id="（1）查询系统表-1"><a href="#（1）查询系统表-1" class="headerlink" title="（1）查询系统表"></a>（1）查询系统表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="keyword">user</span>,</span><br><span class="line">  host,</span><br><span class="line">  column_priv </span><br><span class="line"><span class="keyword">FROM</span> mysql.columns_priv</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;auditor&#x27;</span> <span class="keyword">AND</span> host <span class="operator">=</span> <span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>结果示例</p>
+<table>
+<thead>
+<tr>
+<th>database_name</th>
+<th>table_name</th>
+<th>column_name</th>
+<th>privileges</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hr</td>
+<td>employees</td>
+<td>salary</td>
+<td>Select</td>
+</tr>
+<tr>
+<td>hr</td>
+<td>employees</td>
+<td>ssn</td>
+<td>Select</td>
+</tr>
+<tr>
+<td>inventory</td>
+<td>products</td>
+<td>cost</td>
+<td>Select,Update</td>
+</tr>
+</tbody></table>
+<h4 id="（2）权限类型解析"><a href="#（2）权限类型解析" class="headerlink" title="（2）权限类型解析"></a>（2）权限类型解析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  column_name,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, column_priv) <span class="operator">&gt;</span> <span class="number">0</span> ,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Insert&#x27;</span>, column_priv) <span class="operator">&gt;</span> <span class="number">0</span> ,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;Update&#x27;</span>, column_priv) <span class="operator">&gt;</span> <span class="number">0</span> ,</span><br><span class="line">  FIND_IN_SET(<span class="string">&#x27;References&#x27;</span>, column_priv) <span class="operator">&gt;</span> <span class="number">0</span> </span><br><span class="line"><span class="keyword">FROM</span> mysql.columns_priv;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="（2）权限可视化工具"><a href="#（2）权限可视化工具" class="headerlink" title="（2）权限可视化工具"></a>（2）权限可视化工具</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  CONCAT(<span class="keyword">user</span>, <span class="string">&#x27;@&#x27;</span>, host) <span class="keyword">AS</span> <span class="keyword">user</span>,</span><br><span class="line">  <span class="keyword">CASE</span> </span><br><span class="line">    <span class="keyword">WHEN</span> table_name <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">AND</span> column_name <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">THEN</span> CONCAT(db, <span class="string">&#x27;.*&#x27;</span>)</span><br><span class="line">    <span class="keyword">WHEN</span> column_name <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">THEN</span> CONCAT(db, <span class="string">&#x27;.&#x27;</span>, table_name)</span><br><span class="line">    <span class="keyword">ELSE</span> CONCAT(db, <span class="string">&#x27;.&#x27;</span>, table_name, <span class="string">&#x27;.&#x27;</span>, column_name)</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">AS</span> object,</span><br><span class="line">  GROUP_CONCAT(</span><br><span class="line">    <span class="keyword">DISTINCT</span> </span><br><span class="line">    <span class="keyword">CASE</span> </span><br><span class="line">      <span class="keyword">WHEN</span> select_priv <span class="operator">=</span> <span class="string">&#x27;Y&#x27;</span> <span class="keyword">THEN</span> <span class="string">&#x27;SELECT&#x27;</span></span><br><span class="line">      <span class="keyword">WHEN</span> FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, table_priv) <span class="keyword">THEN</span> <span class="string">&#x27;SELECT&#x27;</span></span><br><span class="line">      <span class="keyword">WHEN</span> FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, column_priv) <span class="keyword">THEN</span> <span class="string">&#x27;SELECT&#x27;</span></span><br><span class="line">    <span class="keyword">END</span></span><br><span class="line">    SEPARATOR <span class="string">&#x27;,&#x27;</span></span><br><span class="line">  ) <span class="keyword">AS</span> permissions</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">  <span class="keyword">SELECT</span> <span class="keyword">user</span>, host, db, <span class="keyword">NULL</span> <span class="keyword">AS</span> table_name, <span class="keyword">NULL</span> <span class="keyword">AS</span> column_name, </span><br><span class="line">         select_priv, <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> table_priv, <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> column_priv</span><br><span class="line">  <span class="keyword">FROM</span> mysql.db</span><br><span class="line">  <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">  <span class="keyword">SELECT</span> <span class="keyword">user</span>, host, db, table_name, <span class="keyword">NULL</span>, </span><br><span class="line">         <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> select_priv, table_priv, <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> column_priv</span><br><span class="line">  <span class="keyword">FROM</span> mysql.tables_priv</span><br><span class="line">  <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">  <span class="keyword">SELECT</span> <span class="keyword">user</span>, host, db, table_name, column_name, </span><br><span class="line">         <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> select_priv, <span class="string">&#x27;&#x27;</span> <span class="keyword">AS</span> table_priv, column_priv</span><br><span class="line">  <span class="keyword">FROM</span> mysql.columns_priv</span><br><span class="line">) <span class="keyword">AS</span> combined</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;target_user&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">user</span>, host, object;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-实用查询示例"><a href="#6-实用查询示例" class="headerlink" title="6.实用查询示例"></a>6.实用查询示例</h3><h4 id="（1）-检查用户对特定表的权限"><a href="#（1）-检查用户对特定表的权限" class="headerlink" title="（1） 检查用户对特定表的权限"></a>（1） 检查用户对特定表的权限</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看用户对 hr.employees 表的权限</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="string">&#x27;Global&#x27;</span> <span class="keyword">AS</span> level,</span><br><span class="line">  IF(select_priv <span class="operator">=</span> <span class="string">&#x27;Y&#x27;</span>, <span class="string">&#x27;SELECT&#x27;</span>, <span class="string">&#x27;&#x27;</span>) <span class="keyword">AS</span> global_select</span><br><span class="line"><span class="keyword">FROM</span> mysql.user </span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;user1&#x27;</span> <span class="keyword">AND</span> host <span class="operator">=</span> <span class="string">&#x27;%&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="string">&#x27;Database&#x27;</span> <span class="keyword">AS</span> level,</span><br><span class="line">  IF(select_priv <span class="operator">=</span> <span class="string">&#x27;Y&#x27;</span>, <span class="string">&#x27;SELECT&#x27;</span>, <span class="string">&#x27;&#x27;</span>) <span class="keyword">AS</span> db_select</span><br><span class="line"><span class="keyword">FROM</span> mysql.db </span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;user1&#x27;</span> <span class="keyword">AND</span> host <span class="operator">=</span> <span class="string">&#x27;%&#x27;</span> <span class="keyword">AND</span> db <span class="operator">=</span> <span class="string">&#x27;hr&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="string">&#x27;Table&#x27;</span> <span class="keyword">AS</span> level,</span><br><span class="line">  IF(FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, table_priv) <span class="operator">&gt;</span> <span class="number">0</span>, <span class="string">&#x27;SELECT&#x27;</span>, <span class="string">&#x27;&#x27;</span>) <span class="keyword">AS</span> table_select</span><br><span class="line"><span class="keyword">FROM</span> mysql.tables_priv </span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;user1&#x27;</span> <span class="keyword">AND</span> host <span class="operator">=</span> <span class="string">&#x27;%&#x27;</span> <span class="keyword">AND</span> db <span class="operator">=</span> <span class="string">&#x27;hr&#x27;</span> <span class="keyword">AND</span> table_name <span class="operator">=</span> <span class="string">&#x27;employees&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="string">&#x27;Column&#x27;</span> <span class="keyword">AS</span> level,</span><br><span class="line">  GROUP_CONCAT(</span><br><span class="line">    IF(FIND_IN_SET(<span class="string">&#x27;Select&#x27;</span>, column_priv) <span class="operator">&gt;</span> <span class="number">0</span>, column_name, <span class="keyword">NULL</span>)</span><br><span class="line">  ) <span class="keyword">AS</span> columns_select</span><br><span class="line"><span class="keyword">FROM</span> mysql.columns_priv </span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;user1&#x27;</span> <span class="keyword">AND</span> host <span class="operator">=</span> <span class="string">&#x27;%&#x27;</span> </span><br><span class="line">  <span class="keyword">AND</span> db <span class="operator">=</span> <span class="string">&#x27;hr&#x27;</span> <span class="keyword">AND</span> table_name <span class="operator">=</span> <span class="string">&#x27;employees&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="（2）查找有敏感列访问权限的用户"><a href="#（2）查找有敏感列访问权限的用户" class="headerlink" title="（2）查找有敏感列访问权限的用户"></a>（2）查找有敏感列访问权限的用户</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span></span><br><span class="line">  CONCAT(<span class="keyword">user</span>, <span class="string">&#x27;@&#x27;</span>, host) <span class="keyword">AS</span> <span class="keyword">user</span>,</span><br><span class="line">  CONCAT(db, <span class="string">&#x27;.&#x27;</span>, table_name, <span class="string">&#x27;.&#x27;</span>, column_name) <span class="keyword">AS</span> <span class="keyword">column</span></span><br><span class="line"><span class="keyword">FROM</span> mysql.columns_priv</span><br><span class="line"><span class="keyword">WHERE</span> column_name <span class="keyword">IN</span> (<span class="string">&#x27;salary&#x27;</span>, <span class="string">&#x27;ssn&#x27;</span>, <span class="string">&#x27;credit_card&#x27;</span>)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-权限覆盖"><a href="#7-权限覆盖" class="headerlink" title="7.权限覆盖"></a>7.权限覆盖</h3><p>现有：</p>
+<ul>
+<li>数据库：test_db</li>
+<li>表：users、orders</li>
+<li>用户：app_user</li>
+</ul>
+<blockquote>
+<p>app_user<img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_8.png" alt="在这里插入图片描述"><br>赋权:<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_9.png" alt="在这里插入图片描述"><br>USAGE：允许用户连接到 MySQL 服务器，但无任何数据库操作权限。<br>SELECT, INSERT, UPDATE：用户可以查询、插入和更新所有数据库的表。</p>
+</blockquote>
+<blockquote>
+<p><code>1.</code>全局权限被数据库级权限覆盖<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_10.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">数据库范围</th>
+<th align="left"><code>SELECT</code> 权限</th>
+<th align="left"><code>INSERT</code> 权限</th>
+<th align="left"><code>UPDATE</code> 权限</th>
+<th align="left">解释说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>test_db</code></strong></td>
+<td align="left">✅ <strong>有</strong></td>
+<td align="left">❌ <strong>无</strong></td>
+<td align="left">❌ <strong>无</strong></td>
+<td align="left">数据库级 <code>SELECT</code> 权限覆盖了全局的同名权限，并<strong>移除</strong>了全局的 <code>INSERT/UPDATE</code>。</td>
+</tr>
+<tr>
+<td align="left"><strong>其他所有数据库</strong></td>
+<td align="left">✅ <strong>有</strong></td>
+<td align="left">✅ <strong>有</strong></td>
+<td align="left">✅ <strong>有</strong></td>
+<td align="left">全局权限 (<code>SELECT, INSERT, UPDATE ON *.*</code>) 仍然有效。</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>2.</code>全局权限被表级权限覆盖<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_11.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>权限范围</th>
+<th>数据库&#x2F;对象</th>
+<th>SELECT</th>
+<th>INSERT</th>
+<th>UPDATE</th>
+<th>解释说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>全局权限</strong></td>
+<td><code>*.*</code></td>
+<td>✅ 有</td>
+<td>✅ 有</td>
+<td>✅ 有</td>
+<td>基础权限：所有数据库的所有表</td>
+</tr>
+<tr>
+<td><strong>表级权限</strong></td>
+<td><code>test_db.users</code></td>
+<td>✅ 有</td>
+<td>❌ 无</td>
+<td>❌ 无</td>
+<td>表级权限覆盖了全局权限在特定表上的 INSERT&#x2F;UPDATE</td>
+</tr>
+<tr>
+<td><strong>其他数据库表</strong></td>
+<td>非 <code>test_db</code></td>
+<td>✅ 有</td>
+<td>✅ 有</td>
+<td>✅ 有</td>
+<td>全局权限生效</td>
+</tr>
+<tr>
+<td><strong>test_db 其他表</strong></td>
+<td><code>test_db.*</code> (除 users)</td>
+<td>❌ 无</td>
+<td>❌ 无</td>
+<td>❌ 无</td>
+<td><strong>没有显式授权</strong>，因此没有任何权限</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>3.</code>全局权限被列级覆盖<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_12.png" alt="在这里插入图片描述"><br>app_user被授予<code>全局查询</code>权限<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_13.png" alt="在这里插入图片描述"><br>app_user被授予<code>表级查询</code>权限<br><img src="/images/Mysql%E6%9F%A5%E8%AF%A2/image_14.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>能否执行</th>
+<th>依赖权限</th>
+<th>原理说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询 <code>test_db.users(id)</code></td>
+<td>✅ 允许</td>
+<td>列级+全局</td>
+<td>列级明确允许，无冲突</td>
+</tr>
+<tr>
+<td>查询 <code>test_db.users(create_date)</code></td>
+<td>❌ 拒绝</td>
+<td>列级限制</td>
+<td>列级未授权，覆盖全局权限</td>
+</tr>
+<tr>
+<td>查询 <code>test_db.orders(*)</code></td>
+<td>✅ 允许</td>
+<td>全局 <code>SELECT ON *.*</code></td>
+<td>无更细粒度限制，全局生效</td>
+</tr>
+<tr>
+<td>查询 <code>other_db.other_table</code></td>
+<td>✅ 允许</td>
+<td>全局 <code>SELECT ON *.*</code></td>
+<td>无更细粒度限制，全局生效</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="mysql中的file"><a href="#mysql中的file" class="headerlink" title="mysql中的file"></a><code>mysql中的file</code></h1>
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="Mysql查询">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2024/10/12/SQL注入/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/09/10/Blog/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2024-09-27
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-article-text">关键字</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#mysql%E7%94%A8%E6%88%B7%E6%93%8D%E4%BD%9C"><span class="toc-article-text">mysql用户操作</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E7%94%A8%E6%88%B7%E5%AD%98%E5%9C%A8%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">一、用户存在查询</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81%E7%94%A8%E6%88%B7%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%88%A0%E9%99%A4"><span class="toc-article-text">二、用户创建与删除</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81%E7%94%A8%E6%88%B7%E8%B5%8B%E6%9D%83%E4%B8%8E%E6%92%A4%E6%9D%83"><span class="toc-article-text">三、用户赋权与撤权</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E6%9D%83%E9%99%90%E5%88%97%E8%A1%A8%EF%BC%88%E5%B0%8F%E5%86%99%EF%BC%89"><span class="toc-article-text">1.权限列表（小写）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-article-text">2.作用域</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-WITH-%E9%80%89%E9%A1%B9%EF%BC%88%E5%B0%8F%E5%86%99%EF%BC%89"><span class="toc-article-text">3.WITH 选项（小写）</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">四、用户权限查询</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E6%9D%83%E9%99%90%E6%A6%82%E8%A7%88"><span class="toc-article-text">1.权限概览</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%881%EF%BC%89%E6%9D%83%E9%99%90%E5%B1%82%E7%BA%A7"><span class="toc-article-text">（1）权限层级</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89%E8%A7%A3%E9%87%8A"><span class="toc-article-text">（2）解释</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E5%85%A8%E5%B1%80%E7%BA%A7%E6%9D%83%E9%99%90%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">2.全局级权限查询</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%881%EF%BC%89%E4%BD%BF%E7%94%A8show-grants"><span class="toc-article-text">（1）使用show grants</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89%E6%9F%A5%E8%AF%A2%E7%B3%BB%E7%BB%9F%E8%A1%A8"><span class="toc-article-text">（2）查询系统表</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BA%A7%E6%9D%83%E9%99%90%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">3.数据库级权限查询</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-%E8%A1%A8%E7%BA%A7%E6%9D%83%E9%99%90%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">4.表级权限查询</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%881%EF%BC%89%E6%9F%A5%E8%AF%A2%E7%B3%BB%E7%BB%9F%E8%A1%A8"><span class="toc-article-text">（1）查询系统表</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89mysql-tables-priv-%E8%A1%A8%EF%BC%88%E8%A1%A8%E7%BA%A7%E6%9D%83%E9%99%90%EF%BC%89"><span class="toc-article-text">（2）mysql.tables_priv&#96; 表（表级权限）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%883%EF%BC%89%E6%9D%83%E9%99%90%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">（3）权限类型</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#5-%E5%88%97%E7%BA%A7%E6%9D%83%E9%99%90%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">5.列级权限查询</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%881%EF%BC%89%E6%9F%A5%E8%AF%A2%E7%B3%BB%E7%BB%9F%E8%A1%A8-1"><span class="toc-article-text">（1）查询系统表</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89%E6%9D%83%E9%99%90%E7%B1%BB%E5%9E%8B%E8%A7%A3%E6%9E%90"><span class="toc-article-text">（2）权限类型解析</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89%E6%9D%83%E9%99%90%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="toc-article-text">（2）权限可视化工具</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-%E5%AE%9E%E7%94%A8%E6%9F%A5%E8%AF%A2%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">6.实用查询示例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%881%EF%BC%89-%E6%A3%80%E6%9F%A5%E7%94%A8%E6%88%B7%E5%AF%B9%E7%89%B9%E5%AE%9A%E8%A1%A8%E7%9A%84%E6%9D%83%E9%99%90"><span class="toc-article-text">（1） 检查用户对特定表的权限</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%EF%BC%882%EF%BC%89%E6%9F%A5%E6%89%BE%E6%9C%89%E6%95%8F%E6%84%9F%E5%88%97%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E7%9A%84%E7%94%A8%E6%88%B7"><span class="toc-article-text">（2）查找有敏感列访问权限的用户</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-%E6%9D%83%E9%99%90%E8%A6%86%E7%9B%96"><span class="toc-article-text">7.权限覆盖</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#mysql%E4%B8%AD%E7%9A%84file"><span class="toc-article-text">mysql中的file</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

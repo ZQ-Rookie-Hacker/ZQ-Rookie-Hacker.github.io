@@ -1,0 +1,985 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>搜索指令大全 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="通用搜索指令基础操作符
+123456&amp;quot;&amp;quot;          # 精确匹配短语-           # 排除关键词*           # 通配符OR          # 逻辑或（必须大写）AND         # 逻辑与（通常空格即可）()          # 逻辑分组
+
+位置限定符
+123456intitle:    # 标题中包含关键词allintitle: # 所有关键词都在标题中inurl:      # URL中包含关键词allinurl:   # 所有关键词都在URL中intext:     # 正文中包含关键词allintext:  # 所有关键词都在正文中
+
+站点与文件限定符
+123456site:       # 限定特定网站或域名filetype:   # 限定文件类型related:    # 查找相关网站（Google特有）link:       # 查找链接到指定页面的链接（Google特有）cache:      # 查看Google缓存（Google特有）info:       # 获取页面基本信息（Google特有）
+
+特殊符号
+1234567@           # 搜索社交媒体用户名#           # 搜索话题标签$           # 搜索价格..          # 数值范围define:     # 查找定义（Google特有）weather:    # 查询天气stocks:     # 查询股票
+
+Bing 特有指令"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="搜索指令大全"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 搜索指令大全</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="通用搜索指令"><a href="#通用搜索指令" class="headerlink" title="通用搜索指令"></a>通用搜索指令</h2><p><strong>基础操作符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
+
+<p><strong>位置限定符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">intitle:    # 标题中包含关键词</span><br><span class="line">allintitle: # 所有关键词都在标题中</span><br><span class="line">inurl:      # URL中包含关键词</span><br><span class="line">allinurl:   # 所有关键词都在URL中</span><br><span class="line">intext:     # 正文中包含关键词</span><br><span class="line">allintext:  # 所有关键词都在正文中</span><br></pre></td></tr></table></figure>
+
+<p><strong>站点与文件限定符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站（Google特有）</span><br><span class="line">link:       # 查找链接到指定页面的链接（Google特有）</span><br><span class="line">cache:      # 查看Google缓存（Google特有）</span><br><span class="line">info:       # 获取页面基本信息（Google特有）</span><br></pre></td></tr></table></figure>
+
+<p><strong>特殊符号</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义（Google特有）</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
+
+<p><strong>Bing 特有指令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ip:IP地址                 # 按服务器IP地址搜索</span><br><span class="line">feed:URL                  # 搜索特定RSS/Atom源</span><br><span class="line">hasfeed:域名              # 搜索有RSS源的网站</span><br><span class="line">near:&quot;地标&quot;               # 附近地点搜索</span><br><span class="line">contains:&quot;文本&quot;           # 查找包含指定文本的页面</span><br><span class="line">LinkFromDomain:域名       # 查找链接到指定域名下的所有页面</span><br></pre></td></tr></table></figure>
+
+<p><strong>百度不支持</strong> <code>related:</code> <code>link:</code>（完整功能） <code>allin*</code> 系列 <code>after:/before:</code> <code>define:</code></p>
+<p><strong>搜索引擎支持速查</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>Google</th>
+<th>Bing</th>
+<th>百度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>site:</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>三大引擎都支持</td>
+</tr>
+<tr>
+<td><code>filetype:</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>格式支持有差异</td>
+</tr>
+<tr>
+<td><code>intitle:</code></td>
+<td>✓</td>
+<td>✓*</td>
+<td>✓</td>
+<td>*Bing用<code>title:</code></td>
+</tr>
+<tr>
+<td><code>inurl:</code></td>
+<td>✓</td>
+<td>✓*</td>
+<td>✓</td>
+<td>*Bing用<code>url:</code></td>
+</tr>
+<tr>
+<td><code>intext:</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>Bing不支持</td>
+</tr>
+<tr>
+<td><code>OR</code>&#x2F;&#96;</td>
+<td>&#96;</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>支持度有差异</td>
+</tr>
+<tr>
+<td><code>cache:</code></td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+<td>Google特有</td>
+</tr>
+<tr>
+<td><code>related:</code></td>
+<td>✓</td>
+<td>有限</td>
+<td>✗</td>
+<td>Google特有</td>
+</tr>
+<tr>
+<td><code>link:</code></td>
+<td>✓</td>
+<td>有限</td>
+<td>有限</td>
+<td>Google支持最完整</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Google-搜索"><a href="#Google-搜索" class="headerlink" title="Google 搜索"></a>Google 搜索</h2><p><strong>高级指令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">allinanchor:&quot;文本&quot;        # 所有关键词出现在链接锚文本</span><br><span class="line">allinpostauthor:&quot;作者&quot;    # 搜索特定博客作者的帖子</span><br><span class="line">after:2024-01-01 before:2024-12-31  # 精确日期范围</span><br><span class="line">cache:URL                 # 查看Google缓存的页面</span><br><span class="line">info:URL                  # 获取Google对URL的特定信息</span><br></pre></td></tr></table></figure>
+
+<p><strong>组合技巧</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 逻辑嵌套</span><br><span class="line">((A OR B) AND (C OR D)) -E -F</span><br><span class="line"></span><br><span class="line"># 位置限定组合</span><br><span class="line">(intitle:A OR intitle:B) AND (inurl:C OR inurl:D) AND (filetype:pdf OR filetype:doc)</span><br><span class="line"></span><br><span class="line"># 多站点+多文件类型</span><br><span class="line">(A OR B) (site:X.com OR site:Y.org) (filetype:pdf OR filetype:docx)</span><br><span class="line"></span><br><span class="line"># 教育/政府站点精准搜索</span><br><span class="line">site:.edu.cn OR site:.ac.cn &quot;关键词&quot; filetype:pdf</span><br><span class="line">关键词 (site:gov.cn OR site:edu.cn) -advertisement -spam</span><br><span class="line"></span><br><span class="line"># 时间控制</span><br><span class="line">关键词 after:2024-01-01 OR (2024..2024)</span><br></pre></td></tr></table></figure>
+
+<p><strong>intitle:index.of 利用</strong></p>
+<p><code>intitle:index.of</code> 筛选服务器开启了目录浏览的文件列表页——管理员未设置自定义首页、未做权限限制时，服务器直接生成文件列表页面并被爬虫抓取。加 <code>keyword</code> 缩小范围到目标资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">intitle:index.of &quot;parent directory&quot; mp3</span><br><span class="line">intitle:index.of &quot;last modified&quot; password</span><br><span class="line">intitle:index.of size pdf</span><br></pre></td></tr></table></figure>
+
+<p><strong>Edu SRC 常用语法</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># 注入漏洞</span><br><span class="line">site:edu.cn inurl:id|aspx|jsp|php|asp</span><br><span class="line"></span><br><span class="line"># 文件上传</span><br><span class="line">site:edu.cn inurl:file|load|editor|Files</span><br><span class="line"></span><br><span class="line"># 前台登录</span><br><span class="line">site:edu.cn intext:管理|验证码|系统|帐号</span><br><span class="line"></span><br><span class="line"># 敏感信息</span><br><span class="line">site:edu.cn 身份号码</span><br><span class="line"></span><br><span class="line"># 管理后台</span><br><span class="line">site:xxx.com intext:管理|后台|登陆|用户名|密码|验证码|系统|帐号</span><br><span class="line">site:xxx.com inurl:login|admin|manage|manager|admin_login|login_admin|system|boss|master</span><br><span class="line">site:xxx.com intitle:管理|后台|登陆|</span><br><span class="line"></span><br><span class="line"># 上传漏洞</span><br><span class="line">site:xxx.com inurl:file</span><br><span class="line">site:xxx.com inurl:load</span><br><span class="line"></span><br><span class="line"># 编辑器</span><br><span class="line">site:xxx.com inurl:fck</span><br><span class="line">site:xxx.com inurl:ewebeditor</span><br><span class="line"># ueditor 也值得关注</span><br><span class="line"></span><br><span class="line"># 重要文件</span><br><span class="line">site:xxx.com inurl:robots.txt</span><br><span class="line">site:xxx.com filetype:mdb</span><br><span class="line">site:xxx.com filetype:ini</span><br><span class="line">site:xxx.com filetype:php</span><br><span class="line">site:xxx.com filetype:asp</span><br></pre></td></tr></table></figure>
+
+<p><strong>安全研究速查</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>指令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE</td>
+<td><code>&quot;CVE-2024-XXXX&quot; (site:nvd.nist.gov OR site:exploit-db.com)</code></td>
+</tr>
+<tr>
+<td>恶意软件</td>
+<td><code>(&quot;malware family&quot;) (&quot;YARA rule&quot; OR &quot;IOC&quot;) site:github.com</code></td>
+</tr>
+<tr>
+<td>漏洞利用</td>
+<td><code>(&quot;vulnerability type&quot;) (&quot;exploit PoC&quot;) site:github.com -tutorial</code></td>
+</tr>
+<tr>
+<td>安全工具</td>
+<td><code>(&quot;tool name&quot;) (&quot;detection&quot; OR &quot;evasion&quot;) site:github.com stars:&gt;100</code></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td><code>(&quot;APT group&quot;) (&quot;campaign report&quot;) (site:fireeye.com OR site:crowdstrike.com)</code></td>
+</tr>
+<tr>
+<td>云安全</td>
+<td><code>(&quot;AWS&quot; OR &quot;Azure&quot;) (&quot;misconfiguration&quot;) (&quot;best practices&quot;) site:aws.amazon.com</code></td>
+</tr>
+<tr>
+<td>二进制</td>
+<td><code>(&quot;binary analysis&quot;) (&quot;reverse engineering&quot;) (&quot;IDA Pro&quot; OR &quot;Ghidra&quot;) site:github.com</code></td>
+</tr>
+<tr>
+<td>网络取证</td>
+<td><code>(&quot;network forensics&quot;) (&quot;PCAP analysis&quot;) (&quot;Zeek&quot; OR &quot;Suricata&quot;) filetype:pcap</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="GitHub-搜索"><a href="#GitHub-搜索" class="headerlink" title="GitHub 搜索"></a>GitHub 搜索</h2><p><strong>基础限定符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">in:name test               # 仓库标题搜索</span><br><span class="line">in:description test        # 仓库描述搜索</span><br><span class="line">in:readme test             # README文件搜索</span><br><span class="line">stars:&gt;3000 test           # stars数量大于3000</span><br><span class="line">stars:1000..3000 test      # stars在1000-3000之间</span><br><span class="line">forks:&gt;1000 test           # forks数量大于1000</span><br><span class="line">size:&gt;=5000 test           # 仓库大于5000KB(5MB)</span><br><span class="line">pushed:&gt;2019-02-12 test    # 发布时间大于指定日期</span><br><span class="line">created:&gt;2019-02-12 test   # 创建时间大于指定日期</span><br><span class="line">user:test                  # 用户名搜索</span><br><span class="line">license:apache-2.0 test    # LICENSE搜索</span><br><span class="line">language:java test         # 指定语言代码中搜索</span><br><span class="line">user:test in:name test     # 组合搜索</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>GitHub 搜索限制未登录用户约 5 页结果，建议登录后使用或配合 <code>site:github.com</code> 组合搜索。</p>
+</blockquote>
+<p><strong>邮件配置信息收集</strong></p>
+<p>不少开发者将 POP3&#x2F;SMTP 配置信息上传到 GitHub，可搜索泄露的账号密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">site:Github.com smtp</span><br><span class="line">site:Github.com smtp @qq.com</span><br><span class="line">site:Github.com smtp @126.com</span><br><span class="line">site:Github.com smtp @163.com</span><br><span class="line">site:Github.com smtp @sina.com.cn</span><br><span class="line">site:Github.com smtp password</span><br><span class="line">site:Github.com String password smtp</span><br><span class="line">site:Github.com smtp @baidu.com</span><br><span class="line">site:Github.com smtp @xxx.edu.cn</span><br></pre></td></tr></table></figure>
+
+<p><strong>数据库信息收集</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">site:Github.com sa password</span><br><span class="line">site:Github.com root password</span><br><span class="line">site:Github.com &quot;User ID=sa;Password&quot;</span><br><span class="line">site:Github.com inurl:sql</span><br></pre></td></tr></table></figure>
+
+<p><strong>SVN 信息收集</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">site:Github.com svn</span><br><span class="line">site:Github.com svn username</span><br><span class="line">site:Github.com svn password</span><br><span class="line">site:Github.com svn username password</span><br></pre></td></tr></table></figure>
+
+<p><strong>综合信息收集</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">site:Github.com password</span><br><span class="line">site:Github.com ftp ftppassword</span><br><span class="line">site:Github.com 密码</span><br><span class="line">site:Github.com 内部</span><br></pre></td></tr></table></figure>
+
+<p><strong>Edu SRC 思路</strong>：假设目标 <code>xx.edu.cn</code>，去 GitHub 和码云搜索与目标相关的信息，有些开发人员上传代码时连带配置信息也公开了（测试账号密码、数据库连接串、未公开资产等）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@xxx.edu.cn password</span><br><span class="line">cas edu.cn password</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="FOFA-搜索"><a href="#FOFA-搜索" class="headerlink" title="FOFA 搜索"></a>FOFA 搜索</h2><p><strong>教育资产全局搜索</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org=&quot;China Education and Research Network Center&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>后台系统定位</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org=&quot;China Education and Research Network Center&quot; &amp;&amp; &quot;系统&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>后台综合语法</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&quot;管理&quot; || &quot;后台&quot; || &quot;登陆&quot; || &quot;用户名&quot; || &quot;密码&quot; || &quot;验证码&quot; || &quot;系统&quot; || &quot;帐号&quot; || &quot;忘记密码&quot;) &amp;&amp; org=&quot;China Education and Research Network Center&quot;</span><br></pre></td></tr></table></figure>
+
+<p>后台漏洞相对较多（弱口令、忘记密码、短信轰炸等），也可以通过 <code>findsomething</code> 扩展找 AK 敏感信息泄露、未授权接口拼接、Log4j、Fastjson 利用点。其他引擎（Shodan、钟馗之眼、360 Quake、Censys）用法大同小异，掌握专属语法后灵活组合即可。</p>
+<p>挖洞方向：SQL注入关注带参数页面，单引号报错、<code>/1</code> <code>/0</code> 返回差异；后台弱口令和忘记密码功能容易出洞。</p>
+<hr>
+<h2 id="在线信息收集工具"><a href="#在线信息收集工具" class="headerlink" title="在线信息收集工具"></a>在线信息收集工具</h2><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>名称</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>企业信息</td>
+<td>天眼查</td>
+<td><a target="_blank" rel="noopener" href="https://www.tianyancha.com/">https://www.tianyancha.com/</a></td>
+</tr>
+<tr>
+<td>企业信息</td>
+<td>小蓝本</td>
+<td><a target="_blank" rel="noopener" href="https://www.xiaolanben.com/">https://www.xiaolanben.com/</a></td>
+</tr>
+<tr>
+<td>企业信息</td>
+<td>爱企查</td>
+<td><a target="_blank" rel="noopener" href="https://aiqicha.baidu.com/">https://aiqicha.baidu.com/</a></td>
+</tr>
+<tr>
+<td>企业信息</td>
+<td>企查查</td>
+<td><a target="_blank" rel="noopener" href="https://www.qcc.com/">https://www.qcc.com/</a></td>
+</tr>
+<tr>
+<td>企业信息</td>
+<td>国外企查</td>
+<td><a target="_blank" rel="noopener" href="https://opencorporates.com/">https://opencorporates.com/</a></td>
+</tr>
+<tr>
+<td>企业信息</td>
+<td>启信宝</td>
+<td><a target="_blank" rel="noopener" href="https://www.qixin.com/">https://www.qixin.com/</a></td>
+</tr>
+<tr>
+<td>备案信息</td>
+<td>备案信息查询</td>
+<td><a target="_blank" rel="noopener" href="http://www.beianx.cn/">http://www.beianx.cn/</a></td>
+</tr>
+<tr>
+<td>备案信息</td>
+<td>备案管理系统</td>
+<td><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">https://beian.miit.gov.cn/</a></td>
+</tr>
+<tr>
+<td>公众号</td>
+<td>搜狗微信搜索</td>
+<td><a target="_blank" rel="noopener" href="https://weixin.sogou.com/">https://weixin.sogou.com/</a></td>
+</tr>
+<tr>
+<td>域名注册</td>
+<td>域名注册查询</td>
+<td><a target="_blank" rel="noopener" href="https://buy.cloud.tencent.com/domain">https://buy.cloud.tencent.com/domain</a></td>
+</tr>
+<tr>
+<td>IP 反查</td>
+<td>IP 反查域名</td>
+<td><a target="_blank" rel="noopener" href="https://x.threatbook.cn/">https://x.threatbook.cn/</a></td>
+</tr>
+<tr>
+<td>IP 反查</td>
+<td>IP 反查域名</td>
+<td><a target="_blank" rel="noopener" href="http://dns.bugscaner.com/">http://dns.bugscaner.com/</a></td>
+</tr>
+<tr>
+<td>DNS 数据</td>
+<td>dnsdumpster</td>
+<td><a target="_blank" rel="noopener" href="https://dnsdumpster.com/">https://dnsdumpster.com/</a></td>
+</tr>
+<tr>
+<td>证书查询</td>
+<td>CertificateSearch</td>
+<td><a target="_blank" rel="noopener" href="https://crt.sh/">https://crt.sh/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>FOFA</td>
+<td><a target="_blank" rel="noopener" href="https://fofa.info/">https://fofa.info/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>全球鹰</td>
+<td><a target="_blank" rel="noopener" href="http://hunter.qianxin.com/">http://hunter.qianxin.com/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>360 Quake</td>
+<td><a target="_blank" rel="noopener" href="https://quake.360.cn/quake/">https://quake.360.cn/quake/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>钟馗之眼</td>
+<td><a target="_blank" rel="noopener" href="https://www.zoomeye.org/">https://www.zoomeye.org/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>零零信安</td>
+<td><a target="_blank" rel="noopener" href="https://0.zone/">https://0.zone/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>Shodan</td>
+<td><a target="_blank" rel="noopener" href="https://www.shodan.io/">https://www.shodan.io/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>Censys</td>
+<td><a target="_blank" rel="noopener" href="https://censys.io/">https://censys.io/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>ONYPHE</td>
+<td><a target="_blank" rel="noopener" href="https://www.onyphe.io/">https://www.onyphe.io/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>FullHunt</td>
+<td><a target="_blank" rel="noopener" href="https://fullhunt.io/">https://fullhunt.io/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>Soall Search Engine</td>
+<td><a target="_blank" rel="noopener" href="https://soall.org/">https://soall.org/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>Netlas</td>
+<td><a target="_blank" rel="noopener" href="https://app.netlas.io/responses/">https://app.netlas.io/responses/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>Leakix</td>
+<td><a target="_blank" rel="noopener" href="https://leakix.net/">https://leakix.net/</a></td>
+</tr>
+<tr>
+<td>网络空间</td>
+<td>DorkSearch</td>
+<td><a target="_blank" rel="noopener" href="https://dorksearch.com/">https://dorksearch.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>微步在线 情报社区</td>
+<td><a target="_blank" rel="noopener" href="https://x.threatbook.cn/">https://x.threatbook.cn/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>奇安信 威胁情报中心</td>
+<td><a target="_blank" rel="noopener" href="https://ti.qianxin.com/">https://ti.qianxin.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>360 威胁情报中心</td>
+<td><a target="_blank" rel="noopener" href="https://ti.360.cn/#/homepage">https://ti.360.cn/#/homepage</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>VirusTotal 在线查杀平台</td>
+<td><a target="_blank" rel="noopener" href="https://www.virustotal.com/gui/">https://www.virustotal.com/gui/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>VenusEye 威胁情报中心</td>
+<td><a target="_blank" rel="noopener" href="https://www.venuseye.com.cn/">https://www.venuseye.com.cn/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>绿盟科技 威胁情报云</td>
+<td><a target="_blank" rel="noopener" href="https://ti.nsfocus.com/">https://ti.nsfocus.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>IBM 情报中心</td>
+<td><a target="_blank" rel="noopener" href="https://exchange.xforce.ibmcloud.com/">https://exchange.xforce.ibmcloud.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>天际友盟安全智能平台</td>
+<td><a target="_blank" rel="noopener" href="https://redqueen.tj-un.com/">https://redqueen.tj-un.com</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>华为安全中心平台</td>
+<td><a target="_blank" rel="noopener" href="https://isecurity.huawei.com/sec">https://isecurity.huawei.com/sec</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>安恒威胁情报中心</td>
+<td><a target="_blank" rel="noopener" href="https://ti.dbappsecurity.com.cn/">https://ti.dbappsecurity.com.cn/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>AlienVault OTX</td>
+<td><a target="_blank" rel="noopener" href="https://otx.alienvault.com/">https://otx.alienvault.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>深信服</td>
+<td><a target="_blank" rel="noopener" href="https://sec.sangfor.com.cn/">https://sec.sangfor.com.cn/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>丁爸情报分析师的工具箱</td>
+<td><a target="_blank" rel="noopener" href="http://dingba.top/">http://dingba.top/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>听风者情报源</td>
+<td><a target="_blank" rel="noopener" href="https://start.me/p/X20Apn">https://start.me/p/X20Apn</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>GreyNoise Visualizer</td>
+<td><a target="_blank" rel="noopener" href="https://viz.greynoise.com/">https://viz.greynoise.com/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>URLhaus 数据库</td>
+<td><a target="_blank" rel="noopener" href="https://urlhaus.abuse.ch/browse/">https://urlhaus.abuse.ch/browse/</a></td>
+</tr>
+<tr>
+<td>威胁情报</td>
+<td>Pithus</td>
+<td><a target="_blank" rel="noopener" href="https://beta.pithus.org/">https://beta.pithus.org/</a></td>
+</tr>
+<tr>
+<td>枚举解析</td>
+<td>在线子域名查询</td>
+<td><a target="_blank" rel="noopener" href="http://tools.bugscaner.com/subdomain/">http://tools.bugscaner.com/subdomain/</a></td>
+</tr>
+<tr>
+<td>枚举解析</td>
+<td>DNSGrep 子域名查询</td>
+<td><a target="_blank" rel="noopener" href="https://www.dnsgrep.cn/subdomain">https://www.dnsgrep.cn/subdomain</a></td>
+</tr>
+<tr>
+<td>枚举解析</td>
+<td>OneForAll 子域名收集器</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/shmilylty/OneForAll">https://github.com/shmilylty/OneForAll</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>在线 cms 指纹识别</td>
+<td><a target="_blank" rel="noopener" href="http://whatweb.bugscaner.com/look/">http://whatweb.bugscaner.com/look/</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>Wappalyzer</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/AliasIO/wappalyzer">https://github.com/AliasIO/wappalyzer</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>TideFinger 潮汐指纹</td>
+<td><a target="_blank" rel="noopener" href="http://finger.tidesec.net/">http://finger.tidesec.net/</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>云悉指纹</td>
+<td><a target="_blank" rel="noopener" href="https://www.yunsee.cn/">https://www.yunsee.cn/</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>WhatWeb</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/urbanadventurer/WhatWeb">https://github.com/urbanadventurer/WhatWeb</a></td>
+</tr>
+<tr>
+<td>指纹识别</td>
+<td>数字观星 Finger-P</td>
+<td><a target="_blank" rel="noopener" href="https://fp.shuziguanxing.com/#/">https://fp.shuziguanxing.com/#/</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p><strong>通用速查</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令类型</th>
+<th>语法</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确匹配</td>
+<td><code>&quot; &quot;</code></td>
+<td><code>&quot;machine learning&quot;</code></td>
+</tr>
+<tr>
+<td>排除关键词</td>
+<td><code>-</code></td>
+<td><code>apple -fruit</code></td>
+</tr>
+<tr>
+<td>逻辑或</td>
+<td><code>OR</code></td>
+<td><code>car OR automobile</code></td>
+</tr>
+<tr>
+<td>站内搜索</td>
+<td><code>site:</code></td>
+<td><code>AI site:github.com</code></td>
+</tr>
+<tr>
+<td>文件类型</td>
+<td><code>filetype:</code></td>
+<td><code>report filetype:pdf</code></td>
+</tr>
+<tr>
+<td>标题搜索</td>
+<td><code>intitle:</code></td>
+<td><code>intitle:tutorial</code></td>
+</tr>
+<tr>
+<td>URL搜索</td>
+<td><code>inurl:</code></td>
+<td><code>inurl:admin</code></td>
+</tr>
+<tr>
+<td>定义查询</td>
+<td><code>define:</code></td>
+<td><code>define:algorithm</code></td>
+</tr>
+</tbody></table>
+<p><strong>搜索引擎对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令类型</th>
+<th>Google</th>
+<th>Bing</th>
+<th>百度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确匹配</td>
+<td><code>&quot; &quot;</code></td>
+<td><code>&quot; &quot;</code></td>
+<td><code>&quot; &quot;</code></td>
+</tr>
+<tr>
+<td>排除</td>
+<td><code>-</code></td>
+<td><code>-</code></td>
+<td><code>-</code></td>
+</tr>
+<tr>
+<td>逻辑或</td>
+<td><code>OR</code></td>
+<td><code>OR</code></td>
+<td><code>|</code></td>
+</tr>
+<tr>
+<td>站内搜索</td>
+<td><code>site:</code></td>
+<td><code>site:</code></td>
+<td><code>site:</code></td>
+</tr>
+<tr>
+<td>文件类型</td>
+<td><code>filetype:</code></td>
+<td><code>filetype:</code></td>
+<td><code>filetype:</code></td>
+</tr>
+<tr>
+<td>标题搜索</td>
+<td><code>intitle:</code></td>
+<td><code>title:</code></td>
+<td><code>intitle:</code></td>
+</tr>
+<tr>
+<td>URL搜索</td>
+<td><code>inurl:</code></td>
+<td><code>url:</code></td>
+<td><code>inurl:</code></td>
+</tr>
+<tr>
+<td>时间限定</td>
+<td><code>after:/before:</code></td>
+<td><code>date:</code></td>
+<td>无</td>
+</tr>
+<tr>
+<td>通配符</td>
+<td><code>*</code></td>
+<td><code>*</code></td>
+<td><code>*</code></td>
+</tr>
+<tr>
+<td>定义</td>
+<td><code>define:</code></td>
+<td><code>define:</code></td>
+<td>无</td>
+</tr>
+</tbody></table>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="搜索指令大全">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2025/12/30/ARL食用指南/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/12/25/kali右键菜单添加/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2025-12-28
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>5</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/信息收集/">信息收集<span>2</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/指令/">指令<span>3</span></a></li> <li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li> <li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li> <li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%80%9A%E7%94%A8%E6%90%9C%E7%B4%A2%E6%8C%87%E4%BB%A4"><span class="toc-article-text">通用搜索指令</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Google-%E6%90%9C%E7%B4%A2"><span class="toc-article-text">Google 搜索</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#GitHub-%E6%90%9C%E7%B4%A2"><span class="toc-article-text">GitHub 搜索</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#FOFA-%E6%90%9C%E7%B4%A2"><span class="toc-article-text">FOFA 搜索</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9C%A8%E7%BA%BF%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7"><span class="toc-article-text">在线信息收集工具</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%99%84%E5%BD%95"><span class="toc-article-text">附录</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

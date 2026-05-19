@@ -1,0 +1,577 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 22 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		bi bi la~bu!
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/04/Linux中的解压/" >Linux中的解压</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-04  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="一、前置：工具安装（缺失时执行）"><a href="#一、前置：工具安装（缺失时执行）" class="headerlink" title="一、前置：工具安装（缺失时执行）"></a>一、前置：工具安装（缺失时执行）</h3><table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>所需工具（压缩+解压）</th>
+<th>Kali安装命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAR（.rar）</td>
+<td><code>rar</code>（压缩）、<code>unrar</code>（解压）</td>
+<td><code>sudo apt install -y rar unrar</code></td>
+</tr>
+<tr>
+<td>ZIP（.zip）</td>
+<td><code>zip</code>（压缩）、<code>unzip</code>（解压）</td>
+<td><code>sudo apt install -y zip unzip</code></td>
+</tr>
+<tr>
+<td>7Z（.7z）</td>
+<td><code>p7zip-full</code>（全能工具）</td>
+<td><code>sudo apt install -y p7zip-full</code></td>
+</tr>
+<tr>
+<td>TAR系列（.tar&#x2F;.tar.gz等）</td>
+<td><code>tar</code>（系统内置）</td>
+<td>无需安装，默认自带</td>
+</tr>
+</tbody></table>
+<h3 id="二、分格式完整操作指南（核心）"><a href="#二、分格式完整操作指南（核心）" class="headerlink" title="二、分格式完整操作指南（核心）"></a>二、分格式完整操作指南（核心）</h3><h4 id="1-ZIP格式（-zip）"><a href="#1-ZIP格式（-zip）" class="headerlink" title="1. ZIP格式（.zip）"></a>1. ZIP格式（.zip）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>zip 目标包.zip 源文件1 源文件2 目录/</code></td>
+<td>目录需加 <code>-r</code> 递归压缩：<code>zip -r 目标包.zip 目录/</code></td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>zip -e 目标包.zip 源文件</code></td>
+<td>回车后手动输入密码（安全，密码不显示）</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>zip -P 密码 目标包.zip 源文件</code></td>
+<td>密码直接跟在 <code>-P</code> 后（无空格），如 <code>zip -P123 test.zip file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unzip 压缩包.zip</code></td>
+<td>默认保留文件夹结构，文件散落在当前目录</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>unzip 压缩包.zip -d 目标目录</code></td>
+<td>例：<code>unzip test.zip -d ./5.8attachment</code>（目录自动创建，无需手动建）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unzip -P 密码 压缩包.zip</code></td>
+<td>例：<code>unzip -Pfcmit.cc 5.8attachment.zip</code></td>
+</tr>
+<tr>
+<td>强制覆盖现有文件</td>
+<td><code>unzip -o 压缩包.zip</code></td>
+<td>跳过“是否覆盖”提示，直接替换</td>
+</tr>
+<tr>
+<td>仅查看压缩包内容（不解压）</td>
+<td><code>unzip -l 压缩包.zip</code></td>
+<td>查看文件&#x2F;目录结构，确认后再解压</td>
+</tr>
+</tbody></table>
+<h4 id="2-7Z格式（-7z）"><a href="#2-7Z格式（-7z）" class="headerlink" title="2. 7Z格式（.7z）"></a>2. 7Z格式（.7z）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>7z a 目标包.7z 源文件/目录</code></td>
+<td>自动递归压缩目录，无需额外参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容+文件名）</td>
+<td><code>7z a -p密码 目标包.7z 源文件</code></td>
+<td>密码直接跟 <code>-p</code>（无空格），如 <code>7z a -p123 test.7z dir/</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>7z x 压缩包.7z</code></td>
+<td><code>x</code> 是保留结构的核心参数（用 <code>e</code> 会扁平化解压，不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录（核心）</td>
+<td><code>7z x 压缩包.7z -o目标目录</code></td>
+<td>例：<code>7z x test.7z -o./5.8attachment</code>（<code>-o</code> 后无空格，直接接目录）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>7z x 压缩包.7z -p密码</code></td>
+<td>例：<code>7z x 5.8attachment.7z -pfcmit.cc</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>7z l 压缩包.7z</code></td>
+<td>列出所有文件&#x2F;目录，不解压</td>
+</tr>
+</tbody></table>
+<h4 id="3-RAR格式（-rar）"><a href="#3-RAR格式（-rar）" class="headerlink" title="3. RAR格式（.rar）"></a>3. RAR格式（.rar）</h4><table>
+<thead>
+<tr>
+<th>操作场景</th>
+<th>命令示例</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础压缩（文件&#x2F;目录）</td>
+<td><code>rar a 目标包.rar 源文件/目录</code></td>
+<td>自动递归压缩目录，无需 <code>-r</code> 参数</td>
+</tr>
+<tr>
+<td>压缩并加密（内容加密）</td>
+<td><code>rar a -p 目标包.rar 源文件</code></td>
+<td>回车后输入密码（安全）；<code>-hp</code> 参数可加密文件名+内容</td>
+</tr>
+<tr>
+<td>压缩并加密（密码明文）</td>
+<td><code>rar a -p密码 目标包.rar 源文件</code></td>
+<td>例：<code>rar a -p123 test.rar file.txt</code></td>
+</tr>
+<tr>
+<td>基础解压（保留结构）</td>
+<td><code>unrar x 压缩包.rar</code></td>
+<td><code>x</code> 保留结构，<code>e</code> 扁平化解压（不推荐）</td>
+</tr>
+<tr>
+<td>解压到指定目录</td>
+<td><code>unrar x 压缩包.rar 目标目录</code></td>
+<td>例：<code>unrar x test.rar ./5.8attachment</code>（目录需提前创建：<code>mkdir -p 目录</code>）</td>
+</tr>
+<tr>
+<td>解压加密文件</td>
+<td><code>unrar x -p密码 压缩包.rar</code></td>
+<td>例：<code>unrar x -p123 test.rar</code></td>
+</tr>
+<tr>
+<td>仅查看压缩包内容</td>
+<td><code>unrar l 压缩包.rar</code></td>
+<td>列出文件&#x2F;目录结构</td>
+</tr>
+</tbody></table>
+<h4 id="4-TAR系列格式（打包-压缩）"><a href="#4-TAR系列格式（打包-压缩）" class="headerlink" title="4. TAR系列格式（打包+压缩）"></a>4. TAR系列格式（打包+压缩）</h4>
+	
+	</div>
+  <a type="button" href="/2024/12/04/Linux中的解压/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/11/10/SSH隧道技术/" >SSH隧道技术</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-11-10  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="1-什么是SSH隧道-为什么需要SSH隧道？"><a href="#1-什么是SSH隧道-为什么需要SSH隧道？" class="headerlink" title="1.什么是SSH隧道+为什么需要SSH隧道？"></a><code>1.什么是SSH隧道+为什么需要SSH隧道？</code></h2><blockquote>
+<p>SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上安全地传输数据。<br>比如：你想从家里访问公司内网的数据库，但数据库只能在公司内网访问，这时候 SSH 隧道就能帮你 “穿墙” 访问。</p>
+</blockquote>
+<h2 id="2-SSH的隧道类型"><a href="#2-SSH的隧道类型" class="headerlink" title="2.SSH的隧道类型"></a><code>2.SSH的隧道类型</code></h2><h3 id="SSH反向连接（远程端口转发）"><a href="#SSH反向连接（远程端口转发）" class="headerlink" title="SSH反向连接（远程端口转发）"></a><code>SSH反向连接</code>（远程端口转发）</h3><p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_1.png" alt="在这里插入图片描述"></p>
+<p>  因此可以通过访问内网2来访问内网1的主机（因为内网2是允许外网主机访问的）</p>
+<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_2.png" alt="在这里插入图片描述"></p>
+<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_3.png" alt="在这里插入图片描述"></p>
+<p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_4.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>如果此时就是想访问server 1 可以修改命令为 ssh -L 80:127.0.0.1 用户@server1_ip</p>
+</blockquote>
+	
+	</div>
+  <a type="button" href="/2024/11/10/SSH隧道技术/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/21/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/23/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+		
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myExploitServer/tree/main" title="A simple SRC vulnerability mining and penetration testing auxiliary tool" target="_blank">myExploitServer</a></li>
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myVulhub/tree/main" title="A simple web interface vulhub management tool" target="_blank">myVulhub</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

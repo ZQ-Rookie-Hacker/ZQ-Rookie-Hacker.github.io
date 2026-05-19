@@ -1,0 +1,980 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 14 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		bi bi la~bu!
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/传输层/" >传输层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="5-1-传输层提供的服务"><a href="#5-1-传输层提供的服务" class="headerlink" title="5.1   传输层提供的服务"></a>5.1   传输层提供的服务</h2><h3 id="5-1-1-传输层的功能"><a href="#5-1-1-传输层的功能" class="headerlink" title="5.1.1   传输层的功能"></a>5.1.1   传输层的功能</h3><ul>
+<li>基本概念<ul>
+<li>位于网络层之上、应用层之下</li>
+<li>为运行在不同主机上的进程之间提供逻辑通信</li>
+<li>面向通信部分的最高层，用户功能中的最低层</li>
+<li>即使网络层协议不可靠，也能为应用程序提供可靠服务</li>
+</ul>
+</li>
+<li>通信特点<ul>
+<li>只有主机协议栈才有传输层</li>
+<li>路由器转发分组只用到下三层功能</li>
+<li>传输层只存在于通信子网以外的主机中</li>
+</ul>
+</li>
+<li>主要功能<ul>
+<li>应用进程之间的逻辑通信<ul>
+<li>通信的真正端点是主机中的进程</li>
+<li>端到端的逻辑通信</li>
+</ul>
+</li>
+<li>复用和分用<ul>
+<li>复用：不同应用进程使用同一传输协议</li>
+<li>分用：正确交付数据到目的应用进程</li>
+</ul>
+</li>
+<li>差错检测<ul>
+<li>检测报文首部和数据部分</li>
+<li>TCP：出错则要求重发</li>
+<li>UDP：出错则直接丢弃</li>
+<li>网络层只检验IP首部</li>
+</ul>
+</li>
+<li>提供两种传输协议<ul>
+<li>面向连接的TCP<ul>
+<li>提供可靠的全双工信道</li>
+</ul>
+</li>
+<li>无连接的UDP<ul>
+<li>提供不可靠信道</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-1-2-传输层的寻址与端口"><a href="#5-1-2-传输层的寻址与端口" class="headerlink" title="5.1.2   传输层的寻址与端口"></a>5.1.2   传输层的寻址与端口</h3><ul>
+<li>①. 端口的作用<ul>
+<li><p>端口能让应用层的各种进程将其数据通过端口向下交付给传输层</p>
+</li>
+<li><p>让传输层知道应当将其报文段中的数据向上通过端口交付给应用层相应的进程</p>
+</li>
+<li><p>端口在传输层的作用类似于IP地址在网络层的作用</p>
+<ul>
+<li>IP地址标识的是主机</li>
+<li>端口标识的是主机中的应用进程</li>
+</ul>
+</li>
+<li><p>各层服务访问点：</p>
+<ul>
+<li>数据链路层：帧的”类型”字段</li>
+<li>网络层：IP数据报的”协议”字段</li>
+<li>传输层：”端口号”字段</li>
+<li>应用层：”用户界面”</li>
+</ul>
+</li>
+<li><p>协议端口与硬件端口的区别</p>
+<ul>
+<li>协议端口是软件端口</li>
+<li>硬件端口是不同硬件设备交互的接口</li>
+<li>软件端口是应用层协议进程与传输实体交互的地址</li>
+<li>传输层使用软件端口</li>
+</ul>
+</li>
+<li><p>②. 端口号</p>
+<ul>
+<li>应用进程通过端口号进行标识</li>
+<li>端口号长度为16比特，可表示65536(2¹⁶)个不同端口号</li>
+<li>端口号只具有本地意义<ul>
+<li>只标识本计算机应用层中的各进程</li>
+<li>不同计算机的相同端口号没有联系</li>
+</ul>
+</li>
+<li>端口号分类：<ul>
+<li>服务器端使用的端口号<ul>
+<li>熟知端口号(0～1023)<ul>
+<li>IANA指派给TCP&#x2F;IP重要应用程序</li>
+<li>常用熟知端口号：<ul>
+<li>FTP: 21</li>
+<li>TELNET: 23</li>
+<li>SMTP: 25</li>
+<li>DNS: 53</li>
+<li>TFTP: 69</li>
+<li>HTTP: 80</li>
+<li>SNMP: 161</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>登记端口号(1024～49151)<ul>
+<li>供没有熟知端口号的应用程序使用</li>
+<li>必须在IANA登记以防止重复</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>客户端使用的端口号(49152～65535)<ul>
+<li>也称短暂端口号</li>
+<li>仅在客户进程运行时动态选择</li>
+<li>通信结束后端口号可复用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>③. 套接字</p>
+<ul>
+<li>网络中通过IP地址标识不同主机</li>
+<li>通过端口号标识主机中的不同应用进程</li>
+<li>套接字(Socket) &#x3D; IP地址:端口号<ul>
+<li>唯一标识网络中的一台主机上的一个应用进程</li>
+<li>是一个通信端点</li>
+</ul>
+</li>
+<li>通信过程：<ul>
+<li>主机A发给主机B的报文包含目的端口号和源端口号</li>
+<li>源端口号是”返回地址”的一部分</li>
+<li>B发回A的报文中的目的端口号是A到B报文的源端口号</li>
+<li>完整返回地址是A的IP地址和源端口号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-1-3-无连接服务与面向连接服务"><a href="#5-1-3-无连接服务与面向连接服务" class="headerlink" title="5.1.3   无连接服务与面向连接服务"></a>5.1.3   无连接服务与面向连接服务</h3><ul>
+<li>TCP&#x2F;IP传输协议<ul>
+<li>面向连接的传输控制协议 (TCP)<ul>
+<li>特点<ul>
+<li>全双工的可靠逻辑信道</li>
+<li>通信前需建立连接</li>
+<li>数据传输结束后释放连接</li>
+<li>不提供广播&#x2F;多播服务</li>
+</ul>
+</li>
+<li>可靠性措施<ul>
+<li>确认机制</li>
+<li>流量控制</li>
+<li>计时器</li>
+<li>连接管理</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>文件传输协议(FTP)</li>
+<li>超文本传输协议(HTTP)</li>
+<li>远程登录(TELNET)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>无连接的用户数据报协议 (UDP)<ul>
+<li>特点<ul>
+<li>不可靠的逻辑信道</li>
+<li>通信前无需建立连接</li>
+<li>无确认机制</li>
+</ul>
+</li>
+<li>附加服务<ul>
+<li>多路复用</li>
+<li>数据错误检查</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>协议简单</li>
+<li>执行速度快</li>
+<li>实时性好</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>小文件传送协议(TFTP)</li>
+<li>DNS</li>
+<li>SNMP</li>
+<li>实时传输协议(RTP)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-2-UDP-协议"><a href="#5-2-UDP-协议" class="headerlink" title="5.2   UDP 协议"></a>5.2   UDP 协议</h2><h3 id="5-2-1-UDP-数据报"><a href="#5-2-1-UDP-数据报" class="headerlink" title="5.2.1    UDP 数据报"></a>5.2.1    UDP 数据报</h3><ul>
+<li>UDP概述<ul>
+<li>UDP特点<ul>
+<li>仅在IP数据报服务上增加复用、分用和差错检测功能</li>
+<li>优点<ul>
+<li><ol>
+<li>无须建立连接</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>无连接状态</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>首部开销小(8B)</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>没有拥塞控制</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>支持多种交互通信方式</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>应用场景<ul>
+<li>DNS、SNMP等一次性传输较少数据的应用</li>
+<li>多媒体应用(IP电话、视频会议、流媒体等)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>UDP可靠性<ul>
+<li>不保证可靠交付</li>
+<li>可靠性可由应用层实现</li>
+</ul>
+</li>
+<li>UDP报文处理<ul>
+<li>面向报文</li>
+<li>保留报文边界</li>
+<li>报文不可分割</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>UDP首部格式<ul>
+<li>组成<ul>
+<li>源端口(2B)</li>
+<li>目的端口(2B)</li>
+<li>长度(2B)</li>
+<li>检验和(2B)</li>
+</ul>
+</li>
+<li>字段说明<ul>
+<li>源端口：源端口号，可选</li>
+<li>目的端口：目的端口号，必须</li>
+<li>长度：UDP数据报总长度(最小8)</li>
+<li>检验和：可选，全0表示不计算</li>
+</ul>
+</li>
+<li>处理流程<ul>
+<li>根据目的端口交付应用进程</li>
+<li>端口错误处理：丢弃报文并发送ICMP差错报文</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2025/12/05/传输层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/应用层/" >应用层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="6-1-网络应用模型"><a href="#6-1-网络应用模型" class="headerlink" title="6.1   网络应用模型"></a>6.1   网络应用模型</h2><h3 id="6-1-1-客户-服务器模型"><a href="#6-1-1-客户-服务器模型" class="headerlink" title="6.1.1    客户&#x2F;服务器模型"></a>6.1.1    客户&#x2F;服务器模型</h3><ul>
+<li>基本概念<ul>
+<li>有一个总是打开的主机称为服务器</li>
+<li>服务于许多来自其他称为客户机的主机请求</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li><ol>
+<li>服务器处于接收请求的状态</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>客户机发出服务请求，并等待接收结果</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>服务器收到请求后</li>
+</ol>
+<ul>
+<li>分析请求</li>
+<li>进行必要的处理</li>
+<li>得到结果并发送给客户机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务器特点<ul>
+<li>运行专门提供服务的程序</li>
+<li>可以同时处理多个客户请求<ul>
+<li>包括远程或本地客户</li>
+</ul>
+</li>
+<li>不需要知道客户程序地址</li>
+</ul>
+</li>
+<li>客户机特点<ul>
+<li>必须知道服务器程序地址</li>
+</ul>
+</li>
+<li>主要特征<ul>
+<li>客户是服务请求方</li>
+<li>服务器是服务提供方</li>
+<li>举例<ul>
+<li>Web应用程序<ul>
+<li>Web服务器服务于浏览器请求</li>
+<li>处理流程<ul>
+<li>接收客户机请求</li>
+<li>发送所请求对象响应</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>常见应用<ul>
+<li>Web</li>
+<li>文件传输协议(FTP)</li>
+<li>远程登录</li>
+<li>电子邮件</li>
+</ul>
+</li>
+<li>主要特点<ul>
+<li><ol>
+<li>网络中各计算机地位不平等</li>
+</ol>
+<ul>
+<li>服务器可管理客户机<ul>
+<li>通过用户权限限制</li>
+</ul>
+</li>
+<li>网络管理集中方便<ul>
+<li>由少数服务器负责</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>客户机间不直接通信</li>
+</ol>
+<ul>
+<li>举例<ul>
+<li>Web应用中两个浏览器不直接通信</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>可扩展性不佳</li>
+</ol>
+<ul>
+<li>限制因素<ul>
+<li>服务器硬件限制</li>
+<li>网络带宽限制</li>
+</ul>
+</li>
+<li>结果<ul>
+<li>服务器支持的客户机数量有限</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-1-2-P2P模型"><a href="#6-1-2-P2P模型" class="headerlink" title="6.1.2    P2P模型"></a>6.1.2    P2P模型</h3><ul>
+<li>基本概念<ul>
+<li>网络中的传输内容不再保存在中心服务器上</li>
+<li>每个节点同时具有下载、上传功能</li>
+<li>权利和义务大体对等</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>无固定客户和服务器划分</li>
+<li>任意对等方(Peer)直接相互通信</li>
+<li>本质仍使用客户&#x2F;服务器模型<ul>
+<li>节点既作为客户访问资源</li>
+<li>又作为服务器提供资源</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>减轻服务器计算压力</li>
+<li>消除对单个服务器的依赖</li>
+<li>任务分配到各个节点</li>
+<li>提高系统效率和资源利用率</li>
+<li>客户机间可直接共享文档</li>
+<li>可扩展性好</li>
+<li>网络健壮性强</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>占用较多内存</li>
+<li>影响整机速度</li>
+<li>对硬盘损伤较大</li>
+<li>占用大量网络流量(50%-90%)</li>
+<li>导致网络拥塞</li>
+<li>ISP通常反对P2P应用</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-2-域名系统-DNS"><a href="#6-2-域名系统-DNS" class="headerlink" title="6.2  域名系统(DNS)"></a>6.2  域名系统(DNS)</h2><h3 id="6-2-1-层次域名空间"><a href="#6-2-1-层次域名空间" class="headerlink" title="6.2.1    层次域名空间"></a>6.2.1    层次域名空间</h3><ul>
+<li><p>层次域名空间</p>
+<ul>
+<li>因特网采用层次树状结构的命名方法</li>
+<li>每个连接设备都有唯一的域名(Domain Name)</li>
+<li>域(Domain)是名字空间中的可管理划分<ul>
+<li>可划分为子域</li>
+<li>形成多级域名结构(顶级域、二级域、三级域等)</li>
+</ul>
+</li>
+<li>域名组成<ul>
+<li>由标号序列组成</li>
+<li>标号之间用点(“.”)分隔</li>
+<li>示例：<a target="_blank" rel="noopener" href="http://www.cskaoyan.com/">www.cskaoyan.com</a><ul>
+<li>com: 顶级域名</li>
+<li>cskaoyan: 二级域名</li>
+<li>www: 三级域名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>标号规则</p>
+<ul>
+<li>英文不区分大小写</li>
+<li>只能使用连字符(-)，不能使用其他标点符号</li>
+<li>单个标号不超过63个字符</li>
+<li>完整域名最长不超过255个字符</li>
+<li>域名书写顺序<ul>
+<li>最低级域名在最左边</li>
+<li>顶级域名在最右边</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>顶级域名分类(TLD)</p>
+<ul>
+<li>国家(地区)顶级域名(nTLD)<ul>
+<li>.cn: 中国</li>
+<li>.us: 美国</li>
+<li>.uk: 英国</li>
+</ul>
+</li>
+<li>通用顶级域名(gTLD)<ul>
+<li>.com: 公司</li>
+<li>.net: 网络服务机构</li>
+<li>.org: 非营利性组织</li>
+<li>.edu: 教育机构</li>
+<li>.gov: 政府部门</li>
+</ul>
+</li>
+<li>基础结构域名<ul>
+<li>arpa: 用于反向域名解析(IP→域名)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>域名空间树状结构</p>
+<ul>
+<li>根<ul>
+<li>顶级域名<ul>
+<li>aero</li>
+<li>com</li>
+<li>net</li>
+<li>org</li>
+<li>edu</li>
+<li>gov</li>
+<li>cn</li>
+<li>uk</li>
+</ul>
+</li>
+<li>二级域名(示例)<ul>
+<li>cskaoyan</li>
+<li>cctv</li>
+<li>google</li>
+<li>bj</li>
+<li>edu</li>
+<li>com</li>
+</ul>
+</li>
+<li>三级域名(示例)<ul>
+<li>mail</li>
+<li>www</li>
+<li>hust</li>
+<li>hit</li>
+</ul>
+</li>
+<li>四级域名(示例)<ul>
+<li>mail</li>
+<li>www</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>域名管理</p>
+<ul>
+<li>顶级域名由ICANN管理</li>
+<li>国家顶级域名下的二级域名由各国自行管理</li>
+<li>子域可委托给其他组织管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-2-2-域名服务器"><a href="#6-2-2-域名服务器" class="headerlink" title="6.2.2   域名服务器"></a>6.2.2   域名服务器</h3><ul>
+<li>定义<ul>
+<li>域名到IP地址的解析由运行在域名服务器上的程序完成</li>
+<li>管辖范围称为区（小于或等于域）</li>
+<li>每个区设置权限域名服务器保存域名到IP地址的映射</li>
+<li>域名服务器功能<ul>
+<li>进行域名到IP地址的解析</li>
+<li>具有连向其他域名服务器的信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DNS服务器层次结构<ul>
+<li>按层次方式组织</li>
+<li>映射分布在所有域名服务器上</li>
+<li>四种类型<ul>
+<li>根域名服务器<ul>
+<li>最高层次</li>
+<li>知道所有顶级域名服务器的域名和IP地址</li>
+<li>13个根域名服务器（实际是冗余服务器集群）</li>
+<li>功能<ul>
+<li>管辖顶级域（如.com）</li>
+<li>通常不直接转换域名，而是指引查询方向</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>顶级域名服务器<ul>
+<li>管理在该顶级域名服务器注册的所有二级域名</li>
+<li>响应DNS查询请求<ul>
+<li>可能给出最终结果</li>
+<li>可能指引下一步查询</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限域名服务器（授权域名服务器）<ul>
+<li>每台主机必须在此登记</li>
+<li>建议至少两台以提高可靠性</li>
+<li>功能<ul>
+<li>总能将其管辖的主机名转换为IP地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本地域名服务器<ul>
+<li>重要性<ul>
+<li>对域名系统非常重要</li>
+</ul>
+</li>
+<li>部署<ul>
+<li>ISP、大学或院系可拥有</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>接收主机的DNS查询请求</li>
+<li>在Windows系统中配置为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2025/12/05/应用层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/13/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/15/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+		
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+		
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+		
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+		
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myExploitServer/tree/main" title="A simple SRC vulnerability mining and penetration testing auxiliary tool" target="_blank">myExploitServer</a></li>
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myVulhub/tree/main" title="A simple web interface vulhub management tool" target="_blank">myVulhub</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

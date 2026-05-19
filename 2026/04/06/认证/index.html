@@ -1,0 +1,832 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>认证 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x01.用户名通过不同回复枚举
+任务：先列举一个有效的用户名，暴力破解该用户的密码，然后访问他们的账户页面
+提示：该环境易受用户名枚举和密码暴力破解攻击的攻击。
+
+在换一个密码，发现回显依然是 Invalid username 说明服务器优先检查用户名
+爆破username
+爆破密码
+登录访问即可
+
+0x02.2FA简单绕过
+任务：访问carlos的账户页面
+提示：双重认证可以被绕过。已经获得了有效的用户名和密码，但无法访问用户的双重身份验证码
+信息
+己账号信息：wiener:peter
+受害者账号信息：carlos:montoya"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="认证"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 认证</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="0x01-用户名通过不同回复枚举"><a href="#0x01-用户名通过不同回复枚举" class="headerlink" title="0x01.用户名通过不同回复枚举"></a>0x01.用户名通过不同回复枚举</h3><ul>
+<li>任务：先列举一个有效的用户名，暴力破解该用户的密码，然后访问他们的账户页面</li>
+<li>提示：该环境易受用户名枚举和密码暴力破解攻击的攻击。</li>
+</ul>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_1.png" alt="在这里插入图片描述"><br>在换一个密码，发现回显依然是 <code>Invalid username</code> 说明服务器优先检查用户名</p>
+<p>爆破username<br><img src="/images/%E8%AE%A4%E8%AF%81/image_2.png" alt="在这里插入图片描述"></p>
+<p>爆破密码<br><img src="/images/%E8%AE%A4%E8%AF%81/image_3.png" alt="在这里插入图片描述"></p>
+<p>登录访问即可</p>
+<hr>
+<h3 id="0x02-2FA简单绕过"><a href="#0x02-2FA简单绕过" class="headerlink" title="0x02.2FA简单绕过"></a>0x02.2FA简单绕过</h3><ul>
+<li>任务：访问<code>carlos</code>的账户页面</li>
+<li>提示：双重认证可以被绕过。已经获得了有效的用户名和密码，但无法访问用户的双重身份验证码</li>
+<li>信息<ul>
+<li>己账号信息：wiener:peter</li>
+<li>受害者账号信息：carlos:montoya</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_4.png" alt="在这里插入图片描述"></p>
+<p>可以知道正常的登录过程是：正确的<code>账号密码</code>+<code>邮箱code</code>验证</p>
+<p>尝试登录 <code>carlos</code></p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_5.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p><code>奇怪的认知</code>:<br>1.原子化认证</p>
+<blockquote>
+<p>第一步：输入用户名密码。<br>服务器校验：仅验证正确性，绝不下发能访问资源的 Session ID。<br>第二步：输入验证码。<br>服务器校验：确认验证码正确后，才生成一个全新的、高权限的 Session ID 并返回给浏览器</p>
+<p>2.阶段化认证</p>
+<blockquote>
+<p>第一步（密码）：服务器确认 “你是谁”。为了让你跳转到第二步页面 &#x2F;login2，服务器必须给你一个 “临时入场券”（Session）。<br><code>关键点</code>：这个 Session 处于 “半登录” 状态（只证明了你有账号密码，但还没证明你是本人）。<br>第二步（2FA）：验证 “你是本人”。验证通过后，系统可能只是更新这个 Session 的权限，而不是直接替换它。</p>
+<p><code>疑惑</code>：明明原子认证更加安全，为什么很多大型的网站依然使用阶段化认证</p>
+<blockquote>
+<p>1.<code>状态保持</code>：如果你在第一步输入了正确的账号密码，然后去接水喝，回来发现验证码输入框消失了，或者页面跳走了，你会很烦躁。系统需要保留你 “已通过密码” 的状态。<br>2.<code>多设备支持</code>：有时候 2FA 是发到手机上的，用户可能需要几秒到几十秒才能看到。如果不先给个临时 Session，超时后用户就得重新输密码，体验极差。<br>3.<code>资源隔离</code>：那个 “半 Session” 通常只能访问 &#x2F;login2 页面和一些静态资源，访问 &#x2F;my-account 会被拦截</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>这个环境的漏洞是 <code>资源隔离</code> 存在漏洞，即 系统未对仅完成密码验证、未通过 2FA 的半登录态 Session 实施严格的访问控制，导致该 Session 可直接越权访问需完整 2FA 认证的受保护资源（如&#x2F;my-account），从而绕过双因素认证流程</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_6.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x03-密码重置错误逻辑"><a href="#0x03-密码重置错误逻辑" class="headerlink" title="0x03.密码重置错误逻辑"></a>0x03.密码重置错误逻辑</h3><ul>
+<li>任务：先重置<code>carlos</code>的密码，然后登录进入他的“我的账户”页面</li>
+<li>提示：密码重置功能存在漏洞</li>
+<li>信息<ul>
+<li>己账号信息：wiener:peter</li>
+<li>受害者账号信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p>要求填入用户名或邮箱，但是我们只知道用户名，所以先尝试<br><img src="/images/%E8%AE%A4%E8%AF%81/image_7.png" alt="在这里插入图片描述"></p>
+<p>需要接受carlos的邮箱的邮件<br><img src="/images/%E8%AE%A4%E8%AF%81/image_8.png" alt="在这里插入图片描述"></p>
+<p>到头了，尝试输入自己的邮箱<br><img src="/images/%E8%AE%A4%E8%AF%81/image_9.png" alt="在这里插入图片描述"></p>
+<p>比较抽象的是居然收到了<br><img src="/images/%E8%AE%A4%E8%AF%81/image_10.png" alt="在这里插入图片描述"></p>
+<p>但是，我修改密码后，还是无法登录成功。反而发现wiener的密码被修改了。</p>
+<ul>
+<li>可以获取一些信息：<ul>
+<li>服务器不会校验输入邮箱与所要修改密码的用户邮箱</li>
+<li>账户的密码是与其邮箱绑定的</li>
+</ul>
+</li>
+</ul>
+<p>再次对密码重置页面进行抓包，有新的发现</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_11.png" alt="在这里插入图片描述"><br>数据包情况<br><img src="/images/%E8%AE%A4%E8%AF%81/image_12.png" alt="在这里插入图片描述"><br>将username改为carlos，其密码就被重置了</p>
+<ul>
+<li>补充<blockquote>
+<p>整个过程中session是没有改变的（截图中的session不相等是因为我之前在尝试）</p>
+<blockquote>
+<p>1.打开忘记密码页（未登录 &#x2F; 已登录 wiener）→ 持有固定 Session<br>2.输入用户名 carlos + 你的邮箱 → 发送请求 → Session 不变<br>3.收到重置邮件、打开重置链接 → Session 不变<br>4.输入新密码、抓包改 username&#x3D;carlos → 提交重置 → Session 不变<br>5.重置成功 → Session 依然不变</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p><code>session</code>不变的意义</p>
+<blockquote>
+<p>Session 从头到尾不变，它的核心意义只有一个：<br>直接证明 —— 这套密码重置逻辑，完全不依赖「当前会话身份」做校验，这就是漏洞能成立的根本原因</p>
+<ol>
+<li>说明：密码重置和「当前登录身份」彻底脱钩<blockquote>
+<p>正常安全设计里，密码重置会做绑定：<br>重置 token<br>当前 Session<br>目标用户名<br>这三者必须一一对应，才能改密。<br>而这里 Session 不变，说明：后端根本没检查 “这个 Session 是谁的”你哪怕是未登录访客，照样能重置 carlos 密码。<br>2. 说明：上述所利用操作完全不需要 “伪造会话”</p>
+<blockquote>
+<p>正是因为 Session 不变、也不校验，你只需要抓包改个 username&#x3D;carlos，就能直接覆盖目标用户。<br>如果 Session 会变、会绑定身份，你这种改包操作直接失效。<br>3. 暴露了最关键的逻辑缺陷</p>
+<blockquote>
+<p>Session 不变这件事本身，就是在告诉你：这个系统的密码重置权限，只由两个东西控制：<br>token + 提交的用户名<br>和当前会话无关，和你是谁无关。<br>这也是典型的业务逻辑越权漏洞。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li>对于所掌握的信息的再次解读<ul>
+<li>服务器不会校验输入邮箱与所要修改密码的用户邮箱<ul>
+<li>重置请求阶段」校验缺失：服务器仅检查「用户名存在」，完全不验证「填写的邮箱是否为该用户的注册邮箱」，允许你用自己的邮箱接收<code>任意</code>用户的<code>重置token</code></li>
+</ul>
+</li>
+<li>账户的密码是与其邮箱绑定的<ul>
+<li>重置执行阶段」校验缺失：正常逻辑下token仅允许修改绑定邮箱的用户密码，但该环境服务器<code>不校验</code>token与要修改的用户名<code>是否匹配</code>，只要token有效，就可修改任意用户的密码</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="0x04-通过细微不同的响应进行用户名枚举"><a href="#0x04-通过细微不同的响应进行用户名枚举" class="headerlink" title="0x04.通过细微不同的响应进行用户名枚举"></a>0x04.通过细微不同的响应进行用户名枚举</h3><ul>
+<li>任务：先枚举一个有效的用户名，暴力破解该用户的密码，然后访问他们的账户页面</li>
+</ul>
+<p> <img src="/images/%E8%AE%A4%E8%AF%81/image_13.png" alt="在这里插入图片描述"></p>
+<p>加载username与password的字典<br><img src="/images/%E8%AE%A4%E8%AF%81/image_14.png" alt="在这里插入图片描述"><br>挺难崩的，我直接burpsuite就出来了，没有遇到根据响应报的细微差别来判断账号密码是否正确</p>
+<p>另一种方法是先只对username进行爆破，通过细微的回显确定可以的username，随后进行password爆破<br><img src="/images/%E8%AE%A4%E8%AF%81/image_15.png" alt="在这里插入图片描述"></p>
+<p>从攻击的结果来看,数据包在长度方面存在细微的差异<br><img src="/images/%E8%AE%A4%E8%AF%81/image_16.png" alt="在这里插入图片描述"><br>随便点击,发现大部分回显均是 <code>Invalid username or password.</code> ， 所以过滤这个回显<br><img src="/images/%E8%AE%A4%E8%AF%81/image_17.png" alt="在这里插入图片描述"></p>
+<p>对<code>aq</code>密码爆破</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_18.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x05-用户名通过响应时间枚举"><a href="#0x05-用户名通过响应时间枚举" class="headerlink" title="0x05.用户名通过响应时间枚举"></a>0x05.用户名通过响应时间枚举</h3><ul>
+<li>任务：先枚举一个有效的用户名，暴力破解该用户的密码，然后访问他们的账户页面</li>
+<li>提示：还实施了一种IP的暴力破解防护。然而，通过操作 HTTP 请求头，这可以很容易地绕过</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+</ul>
+</li>
+</ul>
+<p>先爆破一下username,随机查看了几个返回包<br><img src="/images/%E8%AE%A4%E8%AF%81/image_19.png" alt="在这里插入图片描述"><br>从回显可知，服务器阻止了大量来自同一个<code>IP</code>(因为此次还没有登录，所以服务器不是通过用户进行识别)的快速请求，即存在<code>IP限制</code>。在网络传输中，服务器可以通过网络层（TCP&#x2F;IP 协议栈）的数据直接获取请求端的真实源 IP 地址，用于限流、风控等安全策略。需要注意的是：HTTP 请求头属于应用层数据，无法修改网络层的源 IP；<code>仅当</code>服务器依赖<code>X-Forwarded-For</code>、<code>X-Real-IP</code>等 HTTP 头识别客户端 IP（如服务器部署在反向代理 &#x2F; CDN 之后）时，伪造这些头字段<code>才能</code>欺骗服务器，实现 IP 限流的绕过。绝大多数直接读取 TCP 源 IP 的服务器，修改 HTTP 头无法绕过 IP 识别。</p>
+<p>wiener密码正确的时间延迟<br><img src="/images/%E8%AE%A4%E8%AF%81/image_20.png" alt="在这里插入图片描述"></p>
+<p>wiener密码错误的时间延迟<br><img src="/images/%E8%AE%A4%E8%AF%81/image_21.png" alt="在这里插入图片描述"></p>
+<p>wiener更长的错误密码的时间延迟<br><img src="/images/%E8%AE%A4%E8%AF%81/image_22.png" alt="在这里插入图片描述"></p>
+<p>不存在用户的时间延迟<br><img src="/images/%E8%AE%A4%E8%AF%81/image_23.png" alt="在这里插入图片描述"></p>
+<p>不存在用户的更长密码的时间延迟<br><img src="/images/%E8%AE%A4%E8%AF%81/image_24.png" alt="在这里插入图片描述"></p>
+<p>通过以上尝试可以得到一下信息：</p>
+<ol>
+<li>不存在用户无论其输入的密码长度是多少，其回显延迟差距不大。</li>
+<li>存在的用户（如wiener），其回显时间延迟受其输入的密码长度有关（密码越长时间延迟越长）<ul>
+<li>解释：服务器会执行额外的「密码哈希校验」逻辑</li>
+</ul>
+</li>
+</ol>
+<p>可以存在的可利用漏洞：<code>响应时间枚举用户名</code></p>
+<p>具体枚举思路：使用 <code>Pitchfork Attack</code> 实现 <code>用户</code>+<code>绕IP</code><br><img src="/images/%E8%AE%A4%E8%AF%81/image_25.png" alt="在这里插入图片描述"></p>
+<p><code>Response received</code>：从发送请求到服务器返回第一个响应字节的时间，单位：毫秒（ms）。<br><code>Response completed</code>：从发送请求到服务器返回完整响应的时间，单位：毫秒（ms）。<br><img src="/images/%E8%AE%A4%E8%AF%81/image_26.png" alt="在这里插入图片描述"></p>
+<p>爆破密码<br><img src="/images/%E8%AE%A4%E8%AF%81/image_27.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x06-存在缺陷的暴力破解防护（IP-封禁绕过）"><a href="#0x06-存在缺陷的暴力破解防护（IP-封禁绕过）" class="headerlink" title="0x06.存在缺陷的暴力破解防护（IP 封禁绕过）"></a>0x06.存在缺陷的暴力破解防护（IP 封禁绕过）</h3><ul>
+<li><p>任务：暴力破解受害者密码，然后登录访问他们的账户页面</p>
+</li>
+<li><p>提示：密码暴力破解防护中的逻辑缺陷而存在漏洞；进阶用户可通过「Burp 宏（Macro）」或「Turbo Intruder 插件」完成本实验，但即便不使用这些高级功能，仅用原生工具也可通关。</p>
+</li>
+<li><p>信息</p>
+<ul>
+<li>已有的账户信息：wiener:peter</li>
+<li>受害者账号信息：carlos</li>
+</ul>
+</li>
+<li><p>尝试爆破carlos</p>
+<ul>
+<li>1.正常爆破三次 - ‘You have made too many incorrect login attempts. Please try again in 1 minute(s).’</li>
+<li>2.添加XFF头(或其他) - ‘You have made too many incorrect login attempts. Please try again in 1 minute(s).’</li>
+</ul>
+</li>
+</ul>
+<p><code>说明</code>：服务器不认 XFF，只认真实 IP；失败次数是按 IP 全局累计，不是按用户<br><code>发现</code>：如果在尝试爆破三次之后，正常登录一次<code>wiener</code>，又可以继续爆破<code>carlos</code><br><code>猜测</code>：后端维护一个变量：ip_failed_count[你的IP] &#x3D; 登录失败总次数。当成功登录时，服务器会立刻把 ip_failed_count 重置为 0</p>
+<p>设置宏与规则<br><img src="/images/%E8%AE%A4%E8%AF%81/image_28.png" alt="在这里插入图片描述"></p>
+<p>设置每发送两次包就执行一次宏<br><img src="/images/%E8%AE%A4%E8%AF%81/image_29.png" alt="在这里插入图片描述"><br>值得注意的使用，攻击时记得使用单线程</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_30.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x07-通过账户锁定进行用户名枚举"><a href="#0x07-通过账户锁定进行用户名枚举" class="headerlink" title="0x07.通过账户锁定进行用户名枚举"></a>0x07.通过账户锁定进行用户名枚举</h3><ul>
+<li>任务：先枚举一个有效的用户名，暴力破解该用户的密码，然后访问他们的账户页面</li>
+<li>提示：存在用户名枚举的风险（使用了账户锁定，但这存在逻辑缺陷）</li>
+</ul>
+<p>尝试之后发现<br><code>无效用户名</code>：当尝试登录一个不存在的用户名时，无论尝试多少次，服务器都只返回统一的 “Invalid username or password”。<br><code>有效用户名</code>：当使用有效用户名尝试登录，并在短时间内多次输入错误密码，触发了账户锁定阈值时，服务器返回的错误消息会变成 “You have made too many incorrect login attempts”</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_31.png" alt="在这里插入图片描述"><br>值得注意的是：在现在的burpsuite中，Null payloads 确实不再提供 Placeholder 选项。它只会生成空字符串。（即密码字段变成 password&#x3D; 后面什么都没有），所以 <code>password=dddfwssdwdd</code>+变量 就可以实现password非空的问题</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_32.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_33.png" alt="在这里插入图片描述"></p>
+<p>爆破<code>as</code>密码<br><img src="/images/%E8%AE%A4%E8%AF%81/image_34.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_35.png" alt="在这里插入图片描述"><br>登录即可</p>
+<p>思考：注意观察 <code>143</code> ，此时账号是被锁定的。这种逻辑就很抽象。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>服务器返回&#x2F;行为</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 用户名不存在 + 任意密码</td>
+<td><code>Invalid username or password</code></td>
+<td>基础错误</td>
+</tr>
+<tr>
+<td>2. 用户名存在 + 错误密码（未达锁定阈值）</td>
+<td><code>Invalid username or password</code></td>
+<td>与场景1相同</td>
+</tr>
+<tr>
+<td>3. 用户名存在 + 错误密码（达到锁定阈值，账户被锁定）</td>
+<td><code>You have made too many incorrect login attempts</code></td>
+<td><strong>锁定提示</strong></td>
+</tr>
+<tr>
+<td>4. 用户名存在  + 使用正确密码 （达到锁定阈值，账户被锁定）</td>
+<td>无错误回显</td>
+<td>登录成功</td>
+</tr>
+</tbody></table>
+<ul>
+<li>开发者的逻辑<ul>
+<li><p>锁定只针对错误密码”<br>开发者认为：锁定的目的是阻止连续的错误尝试，而不是阻止账户所有者本人。如果用户输入了正确的密码，说明他是合法用户，系统应该允许他登录，并且登录成功后自动清除失败计数，恢复正常状态。</p>
+</li>
+<li><p>“用户体验优先于安全”</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>开发者可能担心：如果合法用户因为忘记密码或其他原因触发了锁定，却连自己的正确密码都无法登录，会造成糟糕的用户体验（例如需要等待锁定时间结束或联系客服）。因此，他们设计了一条“后门”：正确密码可以绕过锁定。</p>
+<pre><code>- “错误消息统一太麻烦”
+</code></pre>
+<p>开发者没有意识到锁定提示与普通错误提示的差异会泄露信息。他们可能简单地认为：锁定状态返回专门提示是为了“告诉用户账户被锁了”，而正确密码登录成功是“正常流程”，不需要额外处理。</p>
+<pre><code>- “失败计数器重置时机错误”
+</code></pre>
+<p>开发者的代码逻辑可能是：</p>
+<hr>
+<h3 id="0x08-2FA逻辑漏洞"><a href="#0x08-2FA逻辑漏洞" class="headerlink" title="0x08.2FA逻辑漏洞"></a>0x08.2FA逻辑漏洞</h3><ul>
+<li>任务：访问<code>carlos</code>的账户页面</li>
+<li>提示：carlos不会自己尝试登录网站</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+<li>受害者信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p>正常登录wiener<br><img src="/images/%E8%AE%A4%E8%AF%81/image_36.png" alt="在这里插入图片描述"><br>输入邮箱code<br><img src="/images/%E8%AE%A4%E8%AF%81/image_37.png" alt="在这里插入图片描述"></p>
+<p>尝试登录carlos<br><img src="/images/%E8%AE%A4%E8%AF%81/image_38.png" alt="在这里插入图片描述"><br>根据正常的登录流程来看，很显然需要爆破密码，不然无法进行下一步 (此时的想法还是有点偏差)<br><img src="/images/%E8%AE%A4%E8%AF%81/image_39.png" alt="在这里插入图片描述"><br>这个数据包可以正常爆破出密码（密码：<code>master</code>）。<code>verify</code> 是 <code>wiener</code>，这就有点奇怪了。</p>
+<p>抓取code数据包<br><img src="/images/%E8%AE%A4%E8%AF%81/image_40.png" alt="在这里插入图片描述"></p>
+<p>修改之后，显示错误。如果同时修改code为之前登录的<code>wiener</code>时的code呢？<br><img src="/images/%E8%AE%A4%E8%AF%81/image_41.png" alt="在这里插入图片描述"><br>修改了<code>id</code>后直接跳回登录页面，不修改的话会登录到<code>wiener</code>（但是之前已经使用code登录过了）</p>
+<p>目前得到的信息是：邮箱的code可以再次利用，即没有使用次数的限制<br>疑问：这个<code>code</code>到底有没有使用时效性？这个问题对另一种解法有决定性作用,既然对code没有次数限制，大概率也不会有时效性</p>
+<p>carlos是正常登录的，时效性就不需要考虑了（必然满足），而code就4位数，那就先爆破一下吧<br><img src="/images/%E8%AE%A4%E8%AF%81/image_42.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_43.png" alt="在这里插入图片描述"><br>登录即可</p>
+<p>继续思考<br><img src="/images/%E8%AE%A4%E8%AF%81/image_44.png" alt="在这里插入图片描述"><br>显然<code>verify</code>这个参数与用户的身份相关。若<code>session</code>不是对用户身份其决定性作用，则session将毫无意义。正常情况下verify应该融合经session才对。又有邮箱code没有时效性与次数限制</p>
+<p>如果成立的话，那我们就不需要进行最现实中<code>艰难的一步</code> - 爆破carlos的密码</p>
+<p>正常登录wiener后<br><img src="/images/%E8%AE%A4%E8%AF%81/image_45.png" alt="在这里插入图片描述"><br>成功登录</p>
+<hr>
+<h3 id="0x09-暴力破解“保持登录”Cookie"><a href="#0x09-暴力破解“保持登录”Cookie" class="headerlink" title="0x09.暴力破解“保持登录”Cookie"></a>0x09.暴力破解“保持登录”Cookie</h3><ul>
+<li>任务：以通过暴力破解carlos的cookie，访问他的“我的账户”页面</li>
+<li>提示：允许用户即使关闭浏览器会话，也能保持登录状态</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+<li>受害者信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ob4y1Y7Ep/?spm_id_from=333.337.search-card.all.click&vd_source=2930edc0a0a5de758ae391419e05182b">Cookie&amp;&amp;Session&amp;&amp;Token</a></p>
+<p>在正常的认证逻辑中 <code>session</code>应是短期会话凭证，也是具备唯一身份认证功能。 <code>stay-logged-in</code>应是具备长期身份认证功能<br><img src="/images/%E8%AE%A4%E8%AF%81/image_46.png" alt="在这里插入图片描述"><br>可知，爆破cookie选择 <code>stay-logged-in</code>更加容易 <code>wiener:51dc30ddc473d43a6011e9ebba6ca770</code>，密位32个字符（hex），也就是128位，猜测是md5</p>
+<p>挺抽象的，居然是peter<br><img src="/images/%E8%AE%A4%E8%AF%81/image_47.png" alt="在这里插入图片描述"></p>
+<p>其cookie格式：<code>base64(username:md5(password))</code><br><img src="/images/%E8%AE%A4%E8%AF%81/image_48.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_49.png" alt="在这里插入图片描述"></p>
+<p>不知道为什么会有两个，补充一下<code>53</code>号回去查字典就可以知道carlos的密码的，虽然在这题没有什么作用 </p>
+<hr>
+<h3 id="0x0a-离线密码破解"><a href="#0x0a-离线密码破解" class="headerlink" title="0x0a.离线密码破解"></a>0x0a.离线密码破解</h3><ul>
+<li>任务：需获取carlos的 Cookie，并用它破解其密码。随后以他的身份登录，在「我的账户」页面删除他的账号</li>
+<li>提示：用户的密码哈希值存储在一个cookie中。实验室的注释功能中还包含一个XSS漏洞</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+<li>受害者信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p>思路：利用xss漏洞窃取carlos的cookie,然后离线爆破<br><img src="/images/%E8%AE%A4%E8%AF%81/image_50.png" alt="在这里插入图片描述"></p>
+<p>服务器的日志<br><img src="/images/%E8%AE%A4%E8%AF%81/image_51.png" alt="在这里插入图片描述"><br><code>d2llbmVyOjUxZGMzMGRkYzQ3M2Q0M2E2MDExZTllYmJhNmNhNzcw</code> - base64解码随后MD5爆破 - wiener:peter</p>
+<p>为了方便模拟，该环境直接返回carlos的cookie<br><img src="/images/%E8%AE%A4%E8%AF%81/image_52.png" alt="在这里插入图片描述"></p>
+<p>解密之后为：carlos:onceuponatime  登录删除即可</p>
+<hr>
+<h3 id="0x0b-通过中间件实现的密码重置投毒"><a href="#0x0b-通过中间件实现的密码重置投毒" class="headerlink" title="0x0b.通过中间件实现的密码重置投毒"></a>0x0b.通过中间件实现的密码重置投毒</h3><ul>
+<li>任务：登录carlos</li>
+<li>提示：存在密码重置投毒漏洞。用户carlos会毫无防备地点击收到的所有邮件里的链接</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+<li>受害者信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p>正常重置密码流程<br><img src="/images/%E8%AE%A4%E8%AF%81/image_53.png" alt="在这里插入图片描述"></p>
+<p>直接就给wiener的邮箱发链接了<br><img src="/images/%E8%AE%A4%E8%AF%81/image_54.png" alt="在这里插入图片描述">那也就说，用户名是与邮箱绑定的</p>
+<p>抓取邮件链接数据包<br><img src="/images/%E8%AE%A4%E8%AF%81/image_55.png" alt="在这里插入图片描述"><br>修改密码<br><img src="/images/%E8%AE%A4%E8%AF%81/image_56.png" alt="在这里插入图片描述"><br>修改密码的token只能使用一次，且进行了加密，无法爆破。要重置carlos的密码，就需要拿到carlos重置密码的token</p>
+<p><code>引入知识</code></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><strong>X-Forwarded-Host (XFH)</strong></th>
+<th><strong>X-Forwarded-For (XFF)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>全称</strong></td>
+<td>X-Forwarded-Host</td>
+<td>X-Forwarded-For</td>
+</tr>
+<tr>
+<td><strong>核心作用</strong></td>
+<td>记录客户端原始请求的<strong>主机名&#x2F;域名</strong></td>
+<td>记录请求经过的<strong>IP地址链</strong>，包含客户端真实IP</td>
+</tr>
+<tr>
+<td><strong>产生背景</strong></td>
+<td>代理&#x2F;负载均衡器常修改<code>Host</code>头，XFH保留原始目标域名</td>
+<td>代理&#x2F;负载均衡器转发后，后端只能看到最后一个代理IP，XFF保留完整IP链路</td>
+</tr>
+<tr>
+<td><strong>典型场景</strong></td>
+<td>帮助后端生成正确URL、重定向和Cookie域</td>
+<td>日志记录、访问控制、地理定位等需要真实客户端IP的场景</td>
+</tr>
+<tr>
+<td><strong>标准状态</strong></td>
+<td>非官方标准，事实上的行业规范</td>
+<td>非官方标准，被RFC 7239部分采纳</td>
+</tr>
+</tbody></table>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_57.png" alt="在这里插入图片描述"></p>
+<p><code>知识点的用途</code>是劫持用户的密码重置令牌，从而完全接管其账户。<br>其核心是利用中间件（Middleware）或应用对HTTP头部的信任，篡改密码重置邮件中的链接，当受害者点击该链接时，其密码重置令牌就会被发送到攻击者控制的服务器上<br><img src="/images/%E8%AE%A4%E8%AF%81/image_58.png" alt="在这里插入图片描述"></p>
+<p>具体实现<br><img src="/images/%E8%AE%A4%E8%AF%81/image_59.png" alt="在这里插入图片描述"></p>
+<p>再次发送<br><img src="/images/%E8%AE%A4%E8%AF%81/image_60.png" alt="在这里插入图片描述"></p>
+<p>但是日志里依然为没有观察到token，删除 <code>session</code> 试试？<br><img src="/images/%E8%AE%A4%E8%AF%81/image_61.png" alt="在这里插入图片描述"><br>还是没有观察到token,后来发现删不删出session是无影响的，是这个靶场的延迟而已</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_62.png" alt="在这里插入图片描述"></p>
+<p>修改密码登录即可<br><img src="/images/%E8%AE%A4%E8%AF%81/image_63.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x0c-通过修改密码功能进行密码暴力破解"><a href="#0x0c-通过修改密码功能进行密码暴力破解" class="headerlink" title="0x0c.通过修改密码功能进行密码暴力破解"></a>0x0c.通过修改密码功能进行密码暴力破解</h3><ul>
+<li>任务：利用候选密码列表暴力破解carlos的账户，进入他的“我的账户”页面</li>
+<li>提示：密码更改功能使其容易遭受暴力破解攻击</li>
+<li>信息<ul>
+<li>已有账号信息：wiener:peter</li>
+<li>受害者信息：carlos</li>
+</ul>
+</li>
+</ul>
+<p>修改密码<br><img src="/images/%E8%AE%A4%E8%AF%81/image_64.png" alt="在这里插入图片描述"></p>
+<p>探测其修改密码的验证逻辑</p>
+<p>当前密码正确，新密码与确认密码不一致<br><img src="/images/%E8%AE%A4%E8%AF%81/image_65.png" alt="在这里插入图片描述"></p>
+<p>当前密码错误，新密码与确认密码不一致<br><img src="/images/%E8%AE%A4%E8%AF%81/image_66.png" alt="在这里插入图片描述"></p>
+<p>当前密码错误，新密码与确认密码一致<br><img src="/images/%E8%AE%A4%E8%AF%81/image_67.png" alt="在这里插入图片描述"></p>
+<p>所以，可以利用第一种与第二种回显来对carlos的密码进行爆破</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_68.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_69.png" alt="在这里插入图片描述"></p>
+<p>登录即可</p>
+<p><code>补充</code>：这套密码重置的逻辑是没有问题的，只是忽略了修改密码的用户的身份认证。</p>
+<hr>
+<h3 id="0x0d-暴力破解保护失效（每个请求可提交多个密码）"><a href="#0x0d-暴力破解保护失效（每个请求可提交多个密码）" class="headerlink" title="0x0d.暴力破解保护失效（每个请求可提交多个密码）"></a>0x0d.暴力破解保护失效（每个请求可提交多个密码）</h3><ul>
+<li>任务：先暴力破解carlos的密码，然后访问他的账户页面</li>
+<li>提示：因其暴力破解防护中的逻辑缺陷而存在漏洞</li>
+<li>信息<ul>
+<li>受害者用户名：carlos</li>
+</ul>
+</li>
+</ul>
+<p>删除cookie或是使用XFF等均是无法绕过多次提交限制<br><img src="/images/%E8%AE%A4%E8%AF%81/image_70.png" alt="在这里插入图片描述"></p>
+<p>引入json相关知识：<code>{&quot;username&quot;: &quot;carlos&quot;, &quot;password&quot;: [&quot;123456&quot;, &quot;password&quot;, &quot;qwerty&quot;]}</code> 是完全合法的。JSON 规范允许一个字段的值是数组类型，数组内可以包含字符串、数字等</p>
+<p>这题的漏洞正是没有对password的值进行限制</p>
+<p>对应后端可能存在的处理情况：</p>
+<ol>
+<li>比对数组中的每个元素 </li>
+<li>只比对数组的第一个元素，即使错误也不进行封禁</li>
+<li>将传入数组的元素进行拼接 （少见）</li>
+</ol>
+<p>开头替换为引号<br><img src="/images/%E8%AE%A4%E8%AF%81/image_71.png" alt="在这里插入图片描述"></p>
+<p>末尾替换为引号<br><img src="/images/%E8%AE%A4%E8%AF%81/image_72.png" alt="在这里插入图片描述"></p>
+<p>换行符替换为逗号<br><img src="/images/%E8%AE%A4%E8%AF%81/image_73.png" alt="在这里插入图片描述"></p>
+<p>结果<br><img src="/images/%E8%AE%A4%E8%AF%81/image_74.png" alt="在这里插入图片描述"><br><code>注意</code>：Burp Repeater 只跟随 Location 头，但不会自动应用响应中返回的 Set-Cookie。所以点击 <code>Follow redirection</code> 没有作用</p>
+<p><img src="/images/%E8%AE%A4%E8%AF%81/image_75.png" alt="在这里插入图片描述"><br>然后<br><img src="/images/%E8%AE%A4%E8%AF%81/image_76.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="0x0e-利用暴力破解攻击绕过2FA"><a href="#0x0e-利用暴力破解攻击绕过2FA" class="headerlink" title="0x0e.利用暴力破解攻击绕过2FA"></a>0x0e.利用暴力破解攻击绕过2FA</h3><ul>
+<li>任务：访问Carlos的账户页面</li>
+<li>提示：双因素认证容易被暴力破解。你已经获得了有效的用户名和密码，但无法访问用户的双重身份验证码</li>
+<li>信息<ul>
+<li>受害者的信息：carlos:montoya</li>
+</ul>
+</li>
+</ul>
+<p>尝试爆破一下<br><img src="/images/%E8%AE%A4%E8%AF%81/image_77.png" alt="在这里插入图片描述"></p>
+<p>结果分析<br><img src="/images/%E8%AE%A4%E8%AF%81/image_78.png" alt="在这里插入图片描述"></p>
+<p>寻在csrf的踪迹-观察登录页面<br><img src="/images/%E8%AE%A4%E8%AF%81/image_79.png" alt="在这里插入图片描述"></p>
+<p>为了更加了解整个过程，还是要老老实实抓取每一部分的包</p>
+<p><code>login</code>界面<br><img src="/images/%E8%AE%A4%E8%AF%81/image_80.png" alt="在这里插入图片描述"></p>
+<p><code>login2</code>界面<br><img src="/images/%E8%AE%A4%E8%AF%81/image_81.png" alt="在这里插入图片描述"></p>
+<p>可以，攻击逻辑是：<code>刷新login登录界面（获取csrf1）</code> &#x3D;&gt; <code>login界面发送账号密码（携带csrf1）</code> &#x3D;&gt; <code>回包含有csrf2与session</code> &#x3D;&gt; <code>爆破code（携带csrf2与session）</code></p>
+<p>影响数据包范围尽可能小<br><img src="/images/%E8%AE%A4%E8%AF%81/image_82.png" alt="在这里插入图片描述"><br><img src="/images/%E8%AE%A4%E8%AF%81/image_83.png" alt="在这里插入图片描述"></p>
+<p>宏攻击链<br><img src="/images/%E8%AE%A4%E8%AF%81/image_84.png" alt="在这里插入图片描述"></p>
+<p>攻击，主要单线程以及code格式（0000-9999）<br><img src="/images/%E8%AE%A4%E8%AF%81/image_85.png" alt="在这里插入图片描述"></p>
+<p>从攻击结果来看，<code>宏的攻击链</code>是没有问题的。很折磨的是：单线程+10000次攻击，也就是50000次数据包发送，就当0.5s一次完整的请求响应，也要<code>7.8小时</code>，实在是没有这么多时间</p>
+<hr>
+<h2 id="补充知识"><a href="#补充知识" class="headerlink" title="补充知识"></a>补充知识</h2><h3 id="0x01-burpsuite-session-handling-rule"><a href="#0x01-burpsuite-session-handling-rule" class="headerlink" title="0x01.burpsuite- session handling rule"></a>0x01.burpsuite- session handling rule</h3><ul>
+<li><p><code>Use cookies from the session handling cookie jar</code><br>  这个动作会从 Burp 的“会话处理 Cookie 存储区”中取出所有可用的 Cookie，并自动添加到当前即将发出的请求里。通常配合宏使用：宏执行登录后，服务器返回的新 Cookie 会被存到 Cookie Jar 里，然后这个动作会把它们粘贴到后续的每一个请求中，实现会话保持。</p>
+</li>
+<li><p><code>Set a specific cookie or parameter value</code><br>  允许你手动指定一个固定的 Cookie 或请求参数（比如 token&#x3D;abc123），并强制将当前请求中的对应值替换成你设定的值。如果你知道某个参数必须是一个固定值（而不是动态获取），就可以用这个动作硬编码进去。</p>
+</li>
+<li><p><code>Check session is valid</code><br>  这是在配置的“会话有效性检查”。它会分析服务器返回的响应（例如检查响应体里有没有 login 字样，或者状态码是不是 302），判断当前会话是否仍然有效。如果判断为无效，就可以触发后续动作（比如重新运行宏登录）；如果有效，则跳过后续的动作，继续发送原请求。这个动作也可以设置“每 N 个请求只检查一次”的频率。</p>
+</li>
+<li><p><code>Prompt for in-browser session recovery</code><br>  当 Burp 检测到会话可能失效时，它会弹出一个对话框，让你手动在浏览器中完成登录（或其他操作），然后 Burp 捕获这次浏览器交互中产生的新会话信息，并用它来更新后续请求。适用于那些自动化宏很难处理的复杂登录流程（比如验证码、OAuth 跳转等）。</p>
+</li>
+<li><p><code>Run a macro</code><br>  直接执行一个事先录制好的宏（一系列 HTTP 请求的序列）。宏通常用于自动登录、获取 CSRF Token、提交表单等。执行宏之后，你可以选择用宏的最终响应来更新当前请求的参数、Header 或 Cookie。</p>
+</li>
+<li><p><code>Run a post-request macro</code><br>  与普通宏类似，区别在于它的执行时机：在当前请求发送完成并且收到响应之后才运行宏。适合那些需要根据当前请求的响应内容来决定下一步做什么的场景，比如先提交数据，再根据返回的页面提取某个值，然后自动执行另一个请求。</p>
+</li>
+<li><p><code>Invoke a Burp extension</code><br>  调用一个由 Burp 扩展（如你从 BApp Store 安装的插件）提供的自定义动作。这给了你无限的可能性，因为扩展可以用 Java&#x2F;Python 编写任何你需要的逻辑，比如根据请求内容动态生成签名、修改数据包等。如果内置动作不够用，就靠这个。</p>
+</li>
+<li><p><code>Set a specific header value</code><br>  强制为当前请求添加或修改某个 HTTP 头（例如 X-Custom-Header: myvalue）。与“Set a specific cookie or parameter value”类似，但专门针对 Header 字段。</p>
+</li>
+<li><p><code>Replace matching parts of the request</code><br>  使用正则表达式或字符串匹配，将当前请求的原始数据（包括请求行、Header、Body）中符合模式的部分替换成你指定的新内容。这是一个非常灵活但需要小心使用的动作，可以用来批量修改路径、参数名、甚至整个请求体格式。   可以的，最好不要太口语化</p>
+</li>
+</ul>
+<hr>
+<h3 id="0x02-🔑-2FA的认证形式"><a href="#0x02-🔑-2FA的认证形式" class="headerlink" title="0x02. 🔑 2FA的认证形式"></a>0x02. 🔑 2FA的认证形式</h3><p>双因素认证的核心是使用两种不同类型的验证因子来确认身份。这主要基于以下三大类因子：</p>
+<ul>
+<li><strong>你知道的（Knowledge Factor）</strong>：用户已知的信息，如密码、PIN码或安全问题的答案。</li>
+<li><strong>你拥有的（Possession Factor）</strong>：用户实际拥有的物品，如手机（接收验证码）、USB安全密钥、银行卡等。</li>
+<li><strong>你是什么（Inherence Factor）</strong>：用户的生物特征，如指纹、虹膜、面部识别或声纹。</li>
+</ul>
+<p>以下是基于这些因子的常见 2FA 具体形式：</p>
+<ul>
+<li><p><strong><code>短信验证码 (SMS OTP)</code></strong><br>认证因子：你知道的（密码）+ 你拥有的（手机）<br>说明：登录时，网站向用户注册手机发送一次性验证码，用户输入密码和验证码完成登录。这是最常见的 2FA 形式，但安全性相对较低（易被拦截或社会工程学攻击）。</p>
+</li>
+<li><p><strong><code>身份验证器应用 (TOTP)</code></strong><br>认证因子：你知道的（密码）+ 你拥有的（手机）<br>说明：使用 Google Authenticator、Microsoft Authenticator 等应用，基于时间生成6-8位数字的一次性密码（OTP）。比短信更安全，因为不依赖不安全的通信信道。</p>
+</li>
+<li><p><strong><code>推送通知 (Push Notification)</code></strong><br>认证因子：你知道的（密码）+ 你拥有的（手机）<br>说明：用户登录后，已认证的设备（如手机）会收到一个登录请求推送，用户只需点击“批准”即可完成二次验证。这种方式的用户体验极佳，安全性也较高。</p>
+</li>
+<li><p><strong><code>硬件安全密钥 (Hardware Security Key)</code></strong><br>认证因子：你知道的（密码）+ 你拥有的（物理密钥）<br>说明：物理设备，如YubiKey，通过USB或NFC连接到设备。登录时，用户需要按下密钥上的按钮来完成验证。这被认为是目前最安全的 2FA 形式之一，因为它基于公钥加密技术，能有效防御网络钓鱼和中间人攻击。</p>
+</li>
+<li><p><strong><code>生物识别 (Biometric 2FA)</code></strong><br>认证因子：你知道的（密码）+ 你是什么（生物特征）<br>说明：利用指纹、面部识别、虹膜扫描等唯一生物特征进行验证。这种方式使用方便，但生物特征数据一旦泄露则无法更改。</p>
+</li>
+<li><p><strong><code>基于位置的认证 (Location-based 2FA)</code></strong><br>认证因子：你知道的（密码）+ 你拥有的（地理位置）<br>说明：通过检测用户的 IP 地址或 GPS 数据来确认其地理位置是否在可信任的范围内（例如公司内部）。通常作为辅助的验证方式。</p>
+</li>
+<li><p><strong><code>备份码 (Backup Codes)</code></strong><br>认证因子：你拥有的（备份码）<br>说明：用户在启用 2FA 时获得的一组一次性备用码，用于在无法使用主要 2FA 方法（如丢失手机）时恢复账户访问。这是一种应急恢复机制，而非日常使用的 2FA 方法。</p>
+</li>
+</ul>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="认证">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/04/10/JWT/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/04/01/业务逻辑漏洞/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-04-06
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/认证/">认证<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-%E7%94%A8%E6%88%B7%E5%90%8D%E9%80%9A%E8%BF%87%E4%B8%8D%E5%90%8C%E5%9B%9E%E5%A4%8D%E6%9E%9A%E4%B8%BE"><span class="toc-article-text">0x01.用户名通过不同回复枚举</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-2FA%E7%AE%80%E5%8D%95%E7%BB%95%E8%BF%87"><span class="toc-article-text">0x02.2FA简单绕过</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E9%80%BB%E8%BE%91"><span class="toc-article-text">0x03.密码重置错误逻辑</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x04-%E9%80%9A%E8%BF%87%E7%BB%86%E5%BE%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E5%93%8D%E5%BA%94%E8%BF%9B%E8%A1%8C%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE"><span class="toc-article-text">0x04.通过细微不同的响应进行用户名枚举</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x05-%E7%94%A8%E6%88%B7%E5%90%8D%E9%80%9A%E8%BF%87%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E6%9E%9A%E4%B8%BE"><span class="toc-article-text">0x05.用户名通过响应时间枚举</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x06-%E5%AD%98%E5%9C%A8%E7%BC%BA%E9%99%B7%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E9%98%B2%E6%8A%A4%EF%BC%88IP-%E5%B0%81%E7%A6%81%E7%BB%95%E8%BF%87%EF%BC%89"><span class="toc-article-text">0x06.存在缺陷的暴力破解防护（IP 封禁绕过）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x07-%E9%80%9A%E8%BF%87%E8%B4%A6%E6%88%B7%E9%94%81%E5%AE%9A%E8%BF%9B%E8%A1%8C%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE"><span class="toc-article-text">0x07.通过账户锁定进行用户名枚举</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x08-2FA%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E"><span class="toc-article-text">0x08.2FA逻辑漏洞</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x09-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E2%80%9C%E4%BF%9D%E6%8C%81%E7%99%BB%E5%BD%95%E2%80%9DCookie"><span class="toc-article-text">0x09.暴力破解“保持登录”Cookie</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0a-%E7%A6%BB%E7%BA%BF%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3"><span class="toc-article-text">0x0a.离线密码破解</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0b-%E9%80%9A%E8%BF%87%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE%E6%8A%95%E6%AF%92"><span class="toc-article-text">0x0b.通过中间件实现的密码重置投毒</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0c-%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E5%8A%9F%E8%83%BD%E8%BF%9B%E8%A1%8C%E5%AF%86%E7%A0%81%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-article-text">0x0c.通过修改密码功能进行密码暴力破解</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0d-%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E4%BF%9D%E6%8A%A4%E5%A4%B1%E6%95%88%EF%BC%88%E6%AF%8F%E4%B8%AA%E8%AF%B7%E6%B1%82%E5%8F%AF%E6%8F%90%E4%BA%A4%E5%A4%9A%E4%B8%AA%E5%AF%86%E7%A0%81%EF%BC%89"><span class="toc-article-text">0x0d.暴力破解保护失效（每个请求可提交多个密码）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x0e-%E5%88%A9%E7%94%A8%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E6%94%BB%E5%87%BB%E7%BB%95%E8%BF%872FA"><span class="toc-article-text">0x0e.利用暴力破解攻击绕过2FA</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86"><span class="toc-article-text">补充知识</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-burpsuite-session-handling-rule"><span class="toc-article-text">0x01.burpsuite- session handling rule</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-%F0%9F%94%91-2FA%E7%9A%84%E8%AE%A4%E8%AF%81%E5%BD%A2%E5%BC%8F"><span class="toc-article-text">0x02. 🔑 2FA的认证形式</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

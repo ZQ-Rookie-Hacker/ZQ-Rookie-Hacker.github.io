@@ -1,0 +1,560 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>第 9 页 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ZQ-Rookie-Hacker&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		bi bi la~bu!
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/28/搜索指令大全/" >搜索指令大全</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="通用搜索指令"><a href="#通用搜索指令" class="headerlink" title="通用搜索指令"></a>通用搜索指令</h2><p><strong>基础操作符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
+
+<p><strong>位置限定符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">intitle:    # 标题中包含关键词</span><br><span class="line">allintitle: # 所有关键词都在标题中</span><br><span class="line">inurl:      # URL中包含关键词</span><br><span class="line">allinurl:   # 所有关键词都在URL中</span><br><span class="line">intext:     # 正文中包含关键词</span><br><span class="line">allintext:  # 所有关键词都在正文中</span><br></pre></td></tr></table></figure>
+
+<p><strong>站点与文件限定符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站（Google特有）</span><br><span class="line">link:       # 查找链接到指定页面的链接（Google特有）</span><br><span class="line">cache:      # 查看Google缓存（Google特有）</span><br><span class="line">info:       # 获取页面基本信息（Google特有）</span><br></pre></td></tr></table></figure>
+
+<p><strong>特殊符号</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义（Google特有）</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
+
+<p><strong>Bing 特有指令</strong></p>
+	
+	</div>
+  <a type="button" href="/2025/12/28/搜索指令大全/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/25/kali右键菜单添加/" >Kali右键菜单添加</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<blockquote>
+<blockquote>
+<hr>
+<h3 id="🔍-核心原理"><a href="#🔍-核心原理" class="headerlink" title="🔍 核心原理"></a>🔍 <strong>核心原理</strong></h3><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>正确做法</th>
+<th>错误做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>安装路径</strong></td>
+<td>通过官方脚本安装到 <code>/usr/bin/</code></td>
+<td>安装到 <code>~/.cargo/bin/</code>（需额外配置 PATH）</td>
+</tr>
+<tr>
+<td><strong>文件位置</strong></td>
+<td>移动到 <code>~/.local/share/applications/</code></td>
+<td>保留在桌面或 <code>/usr/share/</code></td>
+</tr>
+<tr>
+<td><strong>Categories 标签</strong></td>
+<td><code>kali-reconnaissance;kali-network-information;kali-network-service-discovery;</code></td>
+<td><code>Security;</code> 或 <code>kali-network-service-discovery;</code>（缺少 <code>kali-network-information</code>）</td>
+</tr>
+<tr>
+<td><strong>图标</strong></td>
+<td><code>Icon=system-run</code></td>
+<td><code>kali-rustscan</code>（不存在）</td>
+</tr>
+<tr>
+<td><strong>命令格式</strong></td>
+<td><code>Exec=xfce4-terminal -e &quot;bash -c &#39;read -p \&quot;IP: \&quot; ip; rustscan -a $ip -- -sV; read -p \&quot;按 Enter 键退出\&quot;&#39;&quot;</code></td>
+<td><code>rustscan --help</code>（只显示帮助）</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅ <strong>验证安装</strong>：</p>
+<pre><code class="language-bash">which rustscan
+# 预期输出：/usr/bin/rustscan
+
+rustscan --version
+# 预期输出：2.1.1（或最新版本）
+</code></pre>
+</blockquote>
+<blockquote>
+<p>💡 <strong>关键原理</strong>：  </p>
+<ul>
+<li>安装脚本会自动将二进制文件放到 <strong><code>/usr/bin/</code></strong>（Linux 标准 PATH 路径）  </li>
+<li><strong>无需手动配置 PATH</strong>，系统自动识别命令</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-2：在桌面创建启动器"><a href="#✅-步骤-2：在桌面创建启动器" class="headerlink" title="✅ 步骤 2：在桌面创建启动器"></a>✅ <strong>步骤 2：在桌面创建启动器</strong></h4><ol>
+<li><strong>右键桌面空白处</strong> → 选择 <strong>“创建启动器(L)…”</strong>  </li>
+<li><strong>填写信息</strong>：一般会自动填充</li>
+</ol>
+<hr>
+<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✅ <strong>验证目录</strong>：</p>
+<pre><code class="language-bash">ls -ld ~/.local/share/applications
+# 预期输出：drwxr-xr-x 2 ... /home/rookie-hacker/.local/share/applications
+</code></pre>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✏️ <strong>修改内容</strong>：</p>
+<pre><code class="language-ini"># 现在查看右键菜单中其他快捷方式的格式
+cat /usr/share/applications/xxx.desktop
+# 找到 Categories 行，替换为精准标签
+Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; 
+</code></pre>
+</blockquote>
+<blockquote>
+<p>✅ <strong>‘完整’配置示例</strong>：</p>
+<pre><code class="language-ini">[Desktop Entry]
+Version=1.0
+Type=Application
+Name=
+Comment=
+Exec=
+Icon=system-run
+Terminal=true
+Type=Application
+Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; # 主要修改这里，其他在创建启动器的时候会自动填充
+StartupNotify=false
+</code></pre>
+</blockquote>
+<blockquote>
+<p>✏️ <strong>保存并退出</strong>：  </p>
+<ul>
+<li>：wq</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="⚠️-常见错误解决方案"><a href="#⚠️-常见错误解决方案" class="headerlink" title="⚠️ 常见错误解决方案"></a>⚠️ <strong>常见错误解决方案</strong></h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>which rustscan</code> 无输出</strong></td>
+<td>安装失败</td>
+<td>重新执行安装脚本：<code>curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | sudo bash</code></td>
+</tr>
+<tr>
+<td><strong>移动时报错 “不是目录”</strong></td>
+<td><code>~/.local/share/applications</code> 是文件</td>
+<td>执行 <code>rm -f ~/.local/share/applications</code> 再重建目录</td>
+</tr>
+<tr>
+<td><strong>菜单只在”网络扫描”显示</strong></td>
+<td>缺少 <code>kali-network-information</code> 标签</td>
+<td>用 <code>sed</code> 修正 Categories 行：<code>sed -i &#39;s/Categories=.*/Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery;/&#39; ~/.local/share/applications/rustscan.desktop</code></td>
+</tr>
+<tr>
+<td><strong>终端报错 <code>rustscan: command not found</code></strong></td>
+<td>PATH 未包含 <code>/usr/bin/</code></td>
+<td>执行 <code>echo &#39;export PATH=&quot;$PATH:/usr/bin&quot;&#39; &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc</code></td>
+</tr>
+<tr>
+<td><strong>图标不显示</strong></td>
+<td>未使用 <code>system-run</code></td>
+<td>确保 <code>Icon=system-run</code>（不是 <code>kali-rustscan</code>）</td>
+</tr>
+</tbody></table>
+<hr>
+</blockquote>
+</blockquote>
+</blockquote>
+
+	
+	</div>
+  <a type="button" href="/2025/12/25/kali右键菜单添加/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/8/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/10/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3" id="sidebar">
+  
+    
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+  
+    
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+  
+    
+	<div class="widget">
+		<h4>标签云</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+		
+			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+		
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>59</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+  
+    
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+  </ul>
+</div>
+
+  
+    
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myExploitServer/tree/main" title="A simple SRC vulnerability mining and penetration testing auxiliary tool" target="_blank">myExploitServer</a></li>
+	
+		<li><i class="false"></i><a href="https://github.com/ZQ-Rookie-Hacker/myVulhub/tree/main" title="A simple web interface vulhub management tool" target="_blank">myVulhub</a></li>
+	
+	</ul>
+</div>
+
+
+  
+</div> <!-- sidebar -->
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

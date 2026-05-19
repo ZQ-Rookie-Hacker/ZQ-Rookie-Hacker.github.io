@@ -1,0 +1,1033 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>端口协议 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="一、端口基础概念1. 端口的作用
+一台拥有IP地址的主机可以提供多种网络服务（如Web、FTP、SMTP等）
+通过”IP地址+端口号”的组合来区分不同的网络服务
+解决了IP地址与网络服务之间”一对多”的关系问题
+
+2. 端口类型
+
+
+类型
+描述
+特点
+常见端口示例
+
+
+
+TCP端口
+传输控制协议端口
+需要在客户端和服务器之间建立连接，提供可靠的数据传输
+21(FTP)、23(Telnet)、25(SMTP)、80(HTTP)
+
+
+UDP端口
+用户数据包协议端口
+无需建立连接，传输速度快但安全性低
+53(DNS)、161(SNMP)、8000(QQ)
+
+
+
+重要提示：TCP和UDP端口号相互独立，例如TCP 235端口与UDP 235端口不冲突
+
+3. 端口范围划分
+
+
+范围
+类型
+描述
+用途
+
+
+
+0-1023
+预留端口
+由操作系统保留，仅超级用户特权应用可使用
+系统关键服务
+
+
+1024-49151
+登记端口
+一般服务器程序使用的端口范围
+自定义服务端口
+
+
+49152-65535
+临时端口
+客户端进程动态选择的端口
+临时通信使用
+
+
+二、TCP协议详解1. TCP三次握手建立连接"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="端口协议"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 端口协议</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="一、端口基础概念"><a href="#一、端口基础概念" class="headerlink" title="一、端口基础概念"></a>一、端口基础概念</h2><h3 id="1-端口的作用"><a href="#1-端口的作用" class="headerlink" title="1. 端口的作用"></a>1. 端口的作用</h3><ul>
+<li>一台拥有IP地址的主机可以提供多种网络服务（如Web、FTP、SMTP等）</li>
+<li>通过”IP地址+端口号”的组合来区分不同的网络服务</li>
+<li>解决了IP地址与网络服务之间”一对多”的关系问题</li>
+</ul>
+<h3 id="2-端口类型"><a href="#2-端口类型" class="headerlink" title="2. 端口类型"></a>2. 端口类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+<th>特点</th>
+<th>常见端口示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TCP端口</strong></td>
+<td>传输控制协议端口</td>
+<td>需要在客户端和服务器之间建立连接，提供可靠的数据传输</td>
+<td>21(FTP)、23(Telnet)、25(SMTP)、80(HTTP)</td>
+</tr>
+<tr>
+<td><strong>UDP端口</strong></td>
+<td>用户数据包协议端口</td>
+<td>无需建立连接，传输速度快但安全性低</td>
+<td>53(DNS)、161(SNMP)、8000(QQ)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>重要提示</strong>：TCP和UDP端口号相互独立，例如TCP 235端口与UDP 235端口不冲突</p>
+</blockquote>
+<h3 id="3-端口范围划分"><a href="#3-端口范围划分" class="headerlink" title="3. 端口范围划分"></a>3. 端口范围划分</h3><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>类型</th>
+<th>描述</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-1023</td>
+<td>预留端口</td>
+<td>由操作系统保留，仅超级用户特权应用可使用</td>
+<td>系统关键服务</td>
+</tr>
+<tr>
+<td>1024-49151</td>
+<td>登记端口</td>
+<td>一般服务器程序使用的端口范围</td>
+<td>自定义服务端口</td>
+</tr>
+<tr>
+<td>49152-65535</td>
+<td>临时端口</td>
+<td>客户端进程动态选择的端口</td>
+<td>临时通信使用</td>
+</tr>
+</tbody></table>
+<h2 id="二、TCP协议详解"><a href="#二、TCP协议详解" class="headerlink" title="二、TCP协议详解"></a>二、TCP协议详解</h2><h3 id="1-TCP三次握手建立连接"><a href="#1-TCP三次握手建立连接" class="headerlink" title="1. TCP三次握手建立连接"></a>1. TCP三次握手建立连接</h3><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>方向</th>
+<th>数据包</th>
+<th>状态变化</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一次</td>
+<td>客户端→服务器</td>
+<td>[SYN], Seq &#x3D; x</td>
+<td>客户端: SYN_SEND</td>
+<td>客户端发送SYN包，初始化序列号</td>
+</tr>
+<tr>
+<td>第二次</td>
+<td>服务器→客户端</td>
+<td>[SYN,ACK], Seq &#x3D; y, ACK &#x3D; x+1</td>
+<td>服务器: SYN_RCVD</td>
+<td>服务器确认并发送SYN包</td>
+</tr>
+<tr>
+<td>第三次</td>
+<td>客户端→服务器</td>
+<td>[ACK], ACK &#x3D; y+1</td>
+<td>客户端: ESTABLISHED<br>服务器: ESTABLISHED</td>
+<td>客户端确认，连接建立</td>
+</tr>
+</tbody></table>
+<h3 id="2-TCP四次挥手断开连接"><a href="#2-TCP四次挥手断开连接" class="headerlink" title="2. TCP四次挥手断开连接"></a>2. TCP四次挥手断开连接</h3><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>方向</th>
+<th>数据包</th>
+<th>状态变化</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一次</td>
+<td>客户端→服务器</td>
+<td>[FIN]</td>
+<td>客户端: FIN_WAIT_1</td>
+<td>客户端请求断开连接</td>
+</tr>
+<tr>
+<td>第二次</td>
+<td>服务器→客户端</td>
+<td>[ACK]</td>
+<td>服务器: CLOSE_WAIT<br>客户端: FIN_WAIT_2</td>
+<td>服务器确认收到断开请求</td>
+</tr>
+<tr>
+<td>第三次</td>
+<td>服务器→客户端</td>
+<td>[FIN]</td>
+<td>服务器: LAST_ACK<br>客户端: TIME_WAIT</td>
+<td>服务器发送断开请求</td>
+</tr>
+<tr>
+<td>第四次</td>
+<td>客户端→服务器</td>
+<td>[ACK]</td>
+<td>服务器: CLOSED<br>客户端: TIME_WAIT</td>
+<td>客户端确认，进入等待期</td>
+</tr>
+</tbody></table>
+<h3 id="3-TCP关键状态解析"><a href="#3-TCP关键状态解析" class="headerlink" title="3. TCP关键状态解析"></a>3. TCP关键状态解析</h3><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LISTENING</strong></td>
+<td>服务正在监听连接请求</td>
+<td>FTP服务启动后首先处于此状态</td>
+</tr>
+<tr>
+<td><strong>ESTABLISHED</strong></td>
+<td>连接已建立，正在通信</td>
+<td>表示两台机器正在正常通信</td>
+</tr>
+<tr>
+<td><strong>CLOSE_WAIT</strong></td>
+<td>对方已关闭连接，等待本端关闭</td>
+<td>本端需调用close()关闭连接</td>
+</tr>
+<tr>
+<td><strong>TIME_WAIT</strong></td>
+<td>本端主动关闭连接，等待2MSL时间</td>
+<td>持续2倍最大分段生存期，防止旧连接影响新连接</td>
+</tr>
+</tbody></table>
+<h2 id="三、端口检测与管理"><a href="#三、端口检测与管理" class="headerlink" title="三、端口检测与管理"></a>三、端口检测与管理</h2><h3 id="1-常用端口检测命令"><a href="#1-常用端口检测命令" class="headerlink" title="1. 常用端口检测命令"></a>1. 常用端口检测命令</h3><h4 id="Windows系统"><a href="#Windows系统" class="headerlink" title="Windows系统"></a>Windows系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano</span><br><span class="line">netstat -ano | findstr <span class="string">&quot;80&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Linux系统"><a href="#Linux系统" class="headerlink" title="Linux系统"></a>Linux系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat -tuln</span><br><span class="line">lsof -i :80</span><br><span class="line">ss -tuln</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-netstat命令详解"><a href="#2-netstat命令详解" class="headerlink" title="2. netstat命令详解"></a>2. netstat命令详解</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-a</code></td>
+<td>显示所有连接和侦听端口</td>
+<td>包含已建立和等待连接</td>
+</tr>
+<tr>
+<td><code>-b</code></td>
+<td>显示创建连接的可执行程序</td>
+<td>可能需要管理员权限</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>以数字形式显示地址和端口</td>
+<td>避免DNS解析，显示更快</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>显示进程ID(PID)</td>
+<td>用于关联进程与端口</td>
+</tr>
+<tr>
+<td><code>-p proto</code></td>
+<td>指定协议</td>
+<td>proto: TCP, UDP, TCPv6, UDPv6</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>显示路由表</td>
+<td>显示网络路由信息</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>按协议统计</td>
+<td>显示各协议的统计信息</td>
+</tr>
+</tbody></table>
+<h2 id="四、常见端口参考表"><a href="#四、常见端口参考表" class="headerlink" title="四、常见端口参考表"></a>四、常见端口参考表</h2><h3 id="1-Web服务类端口"><a href="#1-Web服务类端口" class="headerlink" title="1. Web服务类端口"></a>1. Web服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>80</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>Web服务</td>
+<td>XSS、SQL注入等Web漏洞</td>
+</tr>
+<tr>
+<td>80-89</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>备用Web服务</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>443</td>
+<td>HTTPS</td>
+<td>TCP</td>
+<td>加密Web服务</td>
+<td>SSL&#x2F;TLS漏洞、心脏滴血</td>
+</tr>
+<tr>
+<td>8000-9090</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>备用Web服务</td>
+<td>管理后台常在此范围</td>
+</tr>
+<tr>
+<td>8080</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>Tomcat&#x2F;WDCP</td>
+<td>默认弱口令</td>
+</tr>
+<tr>
+<td>8089</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>JBOSS</td>
+<td>默认弱口令、反序列化</td>
+</tr>
+<tr>
+<td>8888</td>
+<td>HTTP</td>
+<td>TCP</td>
+<td>amh&#x2F;LuManager</td>
+<td>主机管理系统</td>
+</tr>
+</tbody></table>
+<h3 id="2-数据库服务类端口"><a href="#2-数据库服务类端口" class="headerlink" title="2. 数据库服务类端口"></a>2. 数据库服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1433</td>
+<td>MSSQL</td>
+<td>TCP</td>
+<td>Microsoft SQL Server</td>
+<td>弱口令、SQL注入</td>
+</tr>
+<tr>
+<td>1521</td>
+<td>Oracle</td>
+<td>TCP</td>
+<td>Oracle数据库</td>
+<td>弱口令、默认账户</td>
+</tr>
+<tr>
+<td>3306</td>
+<td>MySQL</td>
+<td>TCP</td>
+<td>MySQL数据库</td>
+<td>弱口令、未授权访问</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td>TCP</td>
+<td>PostgreSQL数据库</td>
+<td>弱口令、配置错误</td>
+</tr>
+<tr>
+<td>27017-27018</td>
+<td>MongoDB</td>
+<td>TCP</td>
+<td>MongoDB数据库</td>
+<td>未授权访问</td>
+</tr>
+</tbody></table>
+<h3 id="3-特殊服务类端口"><a href="#3-特殊服务类端口" class="headerlink" title="3. 特殊服务类端口"></a>3. 特殊服务类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>445</td>
+<td>SMB</td>
+<td>TCP</td>
+<td>Windows文件共享</td>
+<td>永恒之蓝等漏洞</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>TCP</td>
+<td>Redis缓存服务</td>
+<td>未授权访问、RCE</td>
+</tr>
+<tr>
+<td>873</td>
+<td>Rsync</td>
+<td>TCP</td>
+<td>文件同步服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>9200-9300</td>
+<td>Elasticsearch</td>
+<td>TCP</td>
+<td>搜索引擎服务</td>
+<td>命令执行漏洞</td>
+</tr>
+<tr>
+<td>11211</td>
+<td>Memcached</td>
+<td>TCP</td>
+<td>缓存服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>5984</td>
+<td>CouchDB</td>
+<td>TCP</td>
+<td>NoSQL数据库</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>7001-7002</td>
+<td>WebLogic</td>
+<td>TCP</td>
+<td>Java应用服务器</td>
+<td>默认弱口令、反序列化</td>
+</tr>
+</tbody></table>
+<h3 id="4-常用管理类端口"><a href="#4-常用管理类端口" class="headerlink" title="4. 常用管理类端口"></a>4. 常用管理类端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>21</td>
+<td>FTP</td>
+<td>TCP</td>
+<td>文件传输</td>
+<td>弱口令、匿名访问</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH</td>
+<td>TCP</td>
+<td>安全远程登录</td>
+<td>弱口令、暴力破解</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Telnet</td>
+<td>TCP</td>
+<td>远程登录</td>
+<td>明文传输、弱口令</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>RDP</td>
+<td>TCP</td>
+<td>Windows远程桌面</td>
+<td>弱口令、爆破</td>
+</tr>
+<tr>
+<td>5900</td>
+<td>VNC</td>
+<td>TCP</td>
+<td>远程桌面控制</td>
+<td>弱口令、未授权访问</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>Webmin</td>
+<td>TCP</td>
+<td>服务器管理</td>
+<td>默认弱口令</td>
+</tr>
+<tr>
+<td>50000</td>
+<td>SAP</td>
+<td>TCP</td>
+<td>企业资源计划</td>
+<td>命令执行漏洞</td>
+</tr>
+</tbody></table>
+<h3 id="5-其他重要端口"><a href="#5-其他重要端口" class="headerlink" title="5. 其他重要端口"></a>5. 其他重要端口</h3><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>协议</th>
+<th>用途</th>
+<th>安全风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>53</td>
+<td>DNS</td>
+<td>UDP&#x2F;TCP</td>
+<td>域名解析</td>
+<td>DNS劫持、缓存投毒</td>
+</tr>
+<tr>
+<td>161</td>
+<td>SNMP</td>
+<td>UDP</td>
+<td>网络管理</td>
+<td>信息泄露、未授权访问</td>
+</tr>
+<tr>
+<td>389</td>
+<td>LDAP</td>
+<td>TCP</td>
+<td>目录服务</td>
+<td>信息泄露</td>
+</tr>
+<tr>
+<td>4440</td>
+<td>Rundeck</td>
+<td>TCP</td>
+<td>任务调度</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>6082</td>
+<td>Varnish</td>
+<td>TCP</td>
+<td>Web加速</td>
+<td>未授权访问、网站篡改</td>
+</tr>
+<tr>
+<td>8649</td>
+<td>Ganglia</td>
+<td>TCP</td>
+<td>监控系统</td>
+<td>信息泄露</td>
+</tr>
+</tbody></table>
+<h2 id="五、端口安全建议"><a href="#五、端口安全建议" class="headerlink" title="五、端口安全建议"></a>五、端口安全建议</h2><ol>
+<li><p><strong>最小化原则</strong>：</p>
+<ul>
+<li>只开放必要的端口</li>
+<li>关闭非必要服务</li>
+</ul>
+</li>
+<li><p><strong>安全配置</strong>：</p>
+<ul>
+<li>为管理端口设置强密码</li>
+<li>限制访问IP范围</li>
+<li>使用防火墙规则控制访问</li>
+</ul>
+</li>
+<li><p><strong>定期检测</strong>：</p>
+<ul>
+<li>使用端口扫描工具定期检查开放端口</li>
+<li>及时修补已知漏洞</li>
+<li>监控异常连接</li>
+</ul>
+</li>
+<li><p><strong>特殊端口处理</strong>：</p>
+<ul>
+<li>Web管理后台避免使用默认端口</li>
+<li>敏感服务（如数据库）不应直接暴露在公网</li>
+<li>使用跳板机访问内部服务</li>
+</ul>
+</li>
+<li><p><strong>渗透测试注意事项</strong>：</p>
+<ul>
+<li>在授权范围内进行端口扫描</li>
+<li>避免对关键服务进行暴力测试</li>
+<li>遵守相关法律法规和道德规范</li>
+</ul>
+</li>
+</ol>
+<h2 id="六、端口扫描工具推荐"><a href="#六、端口扫描工具推荐" class="headerlink" title="六、端口扫描工具推荐"></a>六、端口扫描工具推荐</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>类型</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nmap</td>
+<td>命令行</td>
+<td>功能强大，支持多种扫描技术</td>
+<td>专业渗透测试</td>
+</tr>
+<tr>
+<td>Masscan</td>
+<td>命令行</td>
+<td>速度极快，可全网扫描</td>
+<td>大规模网络扫描</td>
+</tr>
+<tr>
+<td>Zenmap</td>
+<td>GUI</td>
+<td>Nmap的图形界面，易于使用</td>
+<td>初学者使用</td>
+</tr>
+<tr>
+<td>Angry IP Scanner</td>
+<td>GUI</td>
+<td>简单易用，跨平台</td>
+<td>快速网络扫描</td>
+</tr>
+<tr>
+<td>Netcat</td>
+<td>命令行</td>
+<td>“网络瑞士军刀”，多功能</td>
+<td>网络调试与测试</td>
+</tr>
+</tbody></table>
+<h2 id="七、端口安全加固示例"><a href="#七、端口安全加固示例" class="headerlink" title="七、端口安全加固示例"></a>七、端口安全加固示例</h2><h3 id="1-关闭不必要端口（Linux）"><a href="#1-关闭不必要端口（Linux）" class="headerlink" title="1. 关闭不必要端口（Linux）"></a>1. 关闭不必要端口（Linux）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看监听端口</span></span><br><span class="line"><span class="built_in">sudo</span> netstat -tuln</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭特定端口（例如111端口）</span></span><br><span class="line"><span class="built_in">sudo</span> ufw deny 111</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用iptables</span></span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 111 -j DROP</span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p udp --dport 111 -j DROP</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-限制访问IP（Windows）"><a href="#2-限制访问IP（Windows）" class="headerlink" title="2. 限制访问IP（Windows）"></a>2. 限制访问IP（Windows）</h3><ol>
+<li>打开”高级安全Windows防火墙”</li>
+<li>选择”入站规则”</li>
+<li>找到对应服务的规则</li>
+<li>右键选择”属性”</li>
+<li>在”作用域”选项卡中，添加允许的IP地址</li>
+</ol>
+<h3 id="3-服务安全配置"><a href="#3-服务安全配置" class="headerlink" title="3. 服务安全配置"></a>3. 服务安全配置</h3><ul>
+<li><p><strong>SSH服务</strong>：</p>
+<ul>
+<li>禁用root远程登录</li>
+<li>使用密钥认证代替密码</li>
+<li>限制访问IP范围</li>
+</ul>
+</li>
+<li><p><strong>Web服务</strong>：</p>
+<ul>
+<li>使用HTTPS代替HTTP</li>
+<li>配置安全头（如CSP、HSTS）</li>
+<li>限制管理后台访问IP</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="端口协议">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2025/12/13/kali的常用命令/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/12/08/任务导向计网学习/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2025-12-13
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>33</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E7%AB%AF%E5%8F%A3%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-article-text">一、端口基础概念</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E7%AB%AF%E5%8F%A3%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-article-text">1. 端口的作用</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E7%AB%AF%E5%8F%A3%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">2. 端口类型</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E7%AB%AF%E5%8F%A3%E8%8C%83%E5%9B%B4%E5%88%92%E5%88%86"><span class="toc-article-text">3. 端口范围划分</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81TCP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">二、TCP协议详解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="toc-article-text">1. TCP三次握手建立连接</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-article-text">2. TCP四次挥手断开连接</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-TCP%E5%85%B3%E9%94%AE%E7%8A%B6%E6%80%81%E8%A7%A3%E6%9E%90"><span class="toc-article-text">3. TCP关键状态解析</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81%E7%AB%AF%E5%8F%A3%E6%A3%80%E6%B5%8B%E4%B8%8E%E7%AE%A1%E7%90%86"><span class="toc-article-text">三、端口检测与管理</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%B8%B8%E7%94%A8%E7%AB%AF%E5%8F%A3%E6%A3%80%E6%B5%8B%E5%91%BD%E4%BB%A4"><span class="toc-article-text">1. 常用端口检测命令</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Windows%E7%B3%BB%E7%BB%9F"><span class="toc-article-text">Windows系统</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Linux%E7%B3%BB%E7%BB%9F"><span class="toc-article-text">Linux系统</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-netstat%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">2. netstat命令详解</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E7%AB%AF%E5%8F%A3%E5%8F%82%E8%80%83%E8%A1%A8"><span class="toc-article-text">四、常见端口参考表</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-Web%E6%9C%8D%E5%8A%A1%E7%B1%BB%E7%AB%AF%E5%8F%A3"><span class="toc-article-text">1. Web服务类端口</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E7%B1%BB%E7%AB%AF%E5%8F%A3"><span class="toc-article-text">2. 数据库服务类端口</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E7%89%B9%E6%AE%8A%E6%9C%8D%E5%8A%A1%E7%B1%BB%E7%AB%AF%E5%8F%A3"><span class="toc-article-text">3. 特殊服务类端口</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-%E5%B8%B8%E7%94%A8%E7%AE%A1%E7%90%86%E7%B1%BB%E7%AB%AF%E5%8F%A3"><span class="toc-article-text">4. 常用管理类端口</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#5-%E5%85%B6%E4%BB%96%E9%87%8D%E8%A6%81%E7%AB%AF%E5%8F%A3"><span class="toc-article-text">5. 其他重要端口</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%94%E3%80%81%E7%AB%AF%E5%8F%A3%E5%AE%89%E5%85%A8%E5%BB%BA%E8%AE%AE"><span class="toc-article-text">五、端口安全建议</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%AD%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="toc-article-text">六、端口扫描工具推荐</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%83%E3%80%81%E7%AB%AF%E5%8F%A3%E5%AE%89%E5%85%A8%E5%8A%A0%E5%9B%BA%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">七、端口安全加固示例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%85%B3%E9%97%AD%E4%B8%8D%E5%BF%85%E8%A6%81%E7%AB%AF%E5%8F%A3%EF%BC%88Linux%EF%BC%89"><span class="toc-article-text">1. 关闭不必要端口（Linux）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E9%99%90%E5%88%B6%E8%AE%BF%E9%97%AEIP%EF%BC%88Windows%EF%BC%89"><span class="toc-article-text">2. 限制访问IP（Windows）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E6%9C%8D%E5%8A%A1%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="toc-article-text">3. 服务安全配置</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

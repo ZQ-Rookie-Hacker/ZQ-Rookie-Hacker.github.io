@@ -131,19 +131,17 @@
   <div class="row">
 	
 	
-		<h2 id="通用搜索指令"><a href="#通用搜索指令" class="headerlink" title="通用搜索指令"></a>通用搜索指令</h2><p><strong>基础操作符</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;          # 精确匹配短语</span><br><span class="line">-           # 排除关键词</span><br><span class="line">*           # 通配符</span><br><span class="line">OR          # 逻辑或（必须大写）</span><br><span class="line">AND         # 逻辑与（通常空格即可）</span><br><span class="line">()          # 逻辑分组</span><br></pre></td></tr></table></figure>
+		<h2 id="Google-Dork-实战速查"><a href="#Google-Dork-实战速查" class="headerlink" title="Google Dork 实战速查"></a>Google Dork 实战速查</h2><h3 id="资产发现"><a href="#资产发现" class="headerlink" title="资产发现"></a>资产发现</h3><p><strong>查找后台地址：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">site:域名 inurl:login|admin|manage|member|admin_login|login_admin|system|login|user|main|cms</span><br><span class="line">site:target.com intext:管理 | 后台 | 后台管理 | 登陆 | 登录 | 用户名 | 密码 | 系统 | 账号 | login | system</span><br><span class="line">site:target.com inurl:login | inurl:admin | inurl:manage | inurl:manager | inurl:admin_login | inurl:system | inurl:backend</span><br><span class="line">site:target.com intitle:管理 | 后台 | 后台管理 | 登陆 | 登录</span><br></pre></td></tr></table></figure>
 
-<p><strong>位置限定符</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">intitle:    # 标题中包含关键词</span><br><span class="line">allintitle: # 所有关键词都在标题中</span><br><span class="line">inurl:      # URL中包含关键词</span><br><span class="line">allinurl:   # 所有关键词都在URL中</span><br><span class="line">intext:     # 正文中包含关键词</span><br><span class="line">allintext:  # 所有关键词都在正文中</span><br></pre></td></tr></table></figure>
+<p><strong>特定系统&#x2F;设备指纹：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">inurl:&quot;cgi-bin/koha&quot;</span><br><span class="line">intitle:&quot;SSL Network Extender Login&quot; -checkpoint.com</span><br><span class="line">intext:&quot;siemens&quot; &amp; inurl:&quot;/portal/portal.mwsl&quot;</span><br><span class="line">intext:GlobalProtect Portal</span><br></pre></td></tr></table></figure>
 
-<p><strong>站点与文件限定符</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">site:       # 限定特定网站或域名</span><br><span class="line">filetype:   # 限定文件类型</span><br><span class="line">related:    # 查找相关网站（Google特有）</span><br><span class="line">link:       # 查找链接到指定页面的链接（Google特有）</span><br><span class="line">cache:      # 查看Google缓存（Google特有）</span><br><span class="line">info:       # 获取页面基本信息（Google特有）</span><br></pre></td></tr></table></figure>
+<p><strong>目录遍历：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">site:target.com intitle:”index of”</span><br></pre></td></tr></table></figure>
 
-<p><strong>特殊符号</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@           # 搜索社交媒体用户名</span><br><span class="line">#           # 搜索话题标签</span><br><span class="line">$           # 搜索价格</span><br><span class="line">..          # 数值范围</span><br><span class="line">define:     # 查找定义（Google特有）</span><br><span class="line">weather:    # 查询天气</span><br><span class="line">stocks:     # 查询股票</span><br></pre></td></tr></table></figure>
-
-<p><strong>Bing 特有指令</strong></p>
+<p><strong>迂回策略入侵（目录结构探测）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">site:域名 inurl:cms|data|templates|images|index</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2025/12/28/搜索指令大全/#more" class="btn btn-default more">阅读此文</a>
@@ -415,45 +413,45 @@ StartupNotify=false
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
 			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
-		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
 			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
 		
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+		
+			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+		
 			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
 		
 			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
 		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
 			<li><a href="/tags/Next/">Next<span>1</span></a></li>
 		
-			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
 		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>59</span></a></li>

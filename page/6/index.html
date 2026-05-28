@@ -117,44 +117,6 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/02/03/crawlers基础/" >crawlers基础</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2026-02-03  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、爬取基础"><a href="#一、爬取基础" class="headerlink" title="一、爬取基础"></a>一、爬取基础</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">检查网页源代码的目的是：查看所要爬取的内容是由那个url加载的，之后的代码实现就是围绕这个url</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-简单网页抓取"><a href="#1-简单网页抓取" class="headerlink" title="1.简单网页抓取"></a>1.简单网页抓取</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request import urlopen <span class="comment"># urllib中的一个叫request模块中的urlopen函数</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://www.baidu.com&quot;</span></span><br><span class="line">response = <span class="title function_ invoke__">urlopen</span>(url) <span class="comment"># urlopen函数是访问这个网址，返回一个http.client.HTTPResponse对象</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(response.<span class="title function_ invoke__">read</span>().<span class="title function_ invoke__">decode</span>(<span class="string">&quot;utf-8&quot;</span>)) <span class="comment"># read()函数是读取响应体，返回字节类型的内容  # ctrl+f charset: 得知网页是由那个字符集编码的</span></span><br><span class="line"><span class="comment"># 字符解码之后，就可看到正常的html代码了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将html代码写入到test.html文件中</span></span><br><span class="line"></span><br><span class="line">with <span class="title function_ invoke__">open</span>(<span class="string">&quot;./test.html&quot;</span>, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:  <span class="comment">#  with: 上下文管理器 open()函数: 打开一个文件，&quot;w&quot;表示写入模式，encoding指定编码格式 as f: 表示将文件对象赋值给f</span></span><br><span class="line">    f.<span class="title function_ invoke__">write</span>(response.<span class="title function_ invoke__">read</span>().<span class="title function_ invoke__">decode</span>(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">上述脚本是无法实现要求的：</span><br><span class="line">HTTP响应体只能被读取一次。当你第一次调用response.<span class="title function_ invoke__">read</span>()后，响应内容已经被消耗了，第二次调用会返回空字节，所以文件写入的是空内容</span><br><span class="line"></span><br><span class="line">也就是说，要使用变量存储一下网页内容</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen <span class="comment"># urllib中的一个叫request模块中的urlopen函数</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://www.baidu.com&quot;</span></span><br><span class="line">response = urlopen(url) <span class="comment"># urlopen函数是访问这个网址，返回一个http.client.HTTPResponse对象</span></span><br><span class="line"></span><br><span class="line">html_content = response.read().decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(html_content) <span class="comment"># read()函数是读取响应体，返回字节类型的内容  # ctrl+f charset: 得知网页是由那个字符集编码的</span></span><br><span class="line"><span class="comment"># 字符解码之后，就可看到正常的html代码了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将html代码写入到test.html文件中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./test.html&quot;</span>, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:  <span class="comment">#  with: 上下文管理器 open()函数: 打开一个文件，&quot;w&quot;表示写入模式，encoding指定编码格式 as f: 表示将文件对象赋值给f</span></span><br><span class="line">    f.write(html_content)  <span class="comment"># write()函数: 将内容写入文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># w 覆盖 a 追加</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="2-requests库-get"><a href="#2-requests库-get" class="headerlink" title="2.requests库-get"></a>2.requests库-get</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">一些基本框架</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爬取百度的页面源代码</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://www.baidu.com&quot;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(url) <span class="comment"># get()函数: 发送一个GET请求，返回一个Response对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.status_code) <span class="comment"># 获取状态码</span></span><br><span class="line"></span><br><span class="line">resp.encoding = <span class="string">&quot;utf-8&quot;</span> <span class="comment"># 手动指定编码格式</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.text) <span class="comment"># 拿到页面源代码</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爬取百度的页面源代码</span></span><br><span class="line"></span><br><span class="line">query = <span class="built_in">input</span>(<span class="string">&quot;请输入要搜索的内容: &quot;</span>)</span><br><span class="line">url = <span class="string">f&quot;https://www.sogou.com/web?query=<span class="subst">&#123;query&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(url) <span class="comment"># get()函数: 发送一个GET请求，返回一个Response对象  这种简单的搜索几乎都是get请求</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(resp.text) <span class="comment"># 拿到页面源代码</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/crawlers%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
-	
-	</div>
-  <a type="button" href="/2026/02/03/crawlers基础/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2026/02/02/Linux包管理&网络传输工具/" >Linux包管理&amp;网络传输工具</a>
 		</h3>
 		</div>
@@ -222,6 +184,38 @@
 	
 	</div>
   <a type="button" href="/2026/02/02/Linux包管理&网络传输工具/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2026/01/23/记自己的第一个低危/" >记自己的第一个低危</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2026-01-23  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>抓取请假申请的数据包</p>
+<p><img src="/images/%E8%AE%B0%E8%87%AA%E5%B7%B1%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BD%8E%E5%8D%B1/image_1.png" alt="在这里插入图片描述"></p>
+<p>发现一个敏感点<br><img src="/images/%E8%AE%B0%E8%87%AA%E5%B7%B1%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BD%8E%E5%8D%B1/image_2.png" alt="在这里插入图片描述"></p>
+<p>修改id<br><img src="/images/%E8%AE%B0%E8%87%AA%E5%B7%B1%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BD%8E%E5%8D%B1/image_3.png" alt="在这里插入图片描述"></p>
+<p>成功获取其他学生的请假数据，实现水平越权</p>
+
+	
+	</div>
+  <a type="button" href="/2026/01/23/记自己的第一个低危/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -321,45 +315,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/代理/">代理<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
-		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
 		
 			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
 		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
 		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
 		
 			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
 		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
 		
 			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
 		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
 		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
-			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>59</span></a></li>
@@ -375,10 +369,6 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
-      </li>
-    
-      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
@@ -392,6 +382,10 @@
     
       <li>
         <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>

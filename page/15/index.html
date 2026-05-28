@@ -117,7 +117,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/05/物理层/" >物理层</a>
+			<a href="/2025/12/05/数据链路层/" >数据链路层</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -131,370 +131,179 @@
   <div class="row">
 	
 	
-		<h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
-<li>①. 数据、信号与码元<ul>
-<li>通信目的：传输信息（文字、图像、视频等）</li>
-<li>数据：传送信息的实体</li>
-<li>信号：数据的电气或电磁表现</li>
-<li>分类：<ul>
-<li>模拟数据&#x2F;信号：取值连续</li>
-<li>数字数据&#x2F;信号：取值离散</li>
+		<h2 id="3-1-数据链路层的功能"><a href="#3-1-数据链路层的功能" class="headerlink" title="3.1   数据链路层的功能"></a>3.1   数据链路层的功能</h2><h3 id="3-1-1-数据链路层"><a href="#3-1-1-数据链路层" class="headerlink" title="3.1.1   数据链路层"></a>3.1.1   数据链路层</h3><ul>
+<li>通信示例<ul>
+<li>主机H1 → 路由器R1 → 广域网 → 路由器R2 → 主机H2</li>
+<li>主机使用完整五层协议栈</li>
+<li>路由器仅使用下三层协议栈</li>
 </ul>
 </li>
-<li>码元：<ul>
-<li>定义：固定时长的信号波形表示k进制数</li>
-<li>码元宽度：信号周期</li>
-<li>信息量：1码元可携带若干比特</li>
+<li>数据流动特点<ul>
+<li>数据在路径节点协议栈中多次上下流动</li>
+<li>学习时通常只关心水平方向数据链路层</li>
 </ul>
 </li>
+<li>基本概念<ul>
+<li><ol>
+<li>链路</li>
+</ol>
+<ul>
+<li>定义：节点到相邻节点的一段物理线路</li>
+<li>特点：通信路径的组成部分</li>
 </ul>
 </li>
-<li>②. 信源、信道与信宿<ul>
-<li>通信系统模型：<ul>
-<li>信源：产生和发送数据的源头</li>
-<li>信道：信号的传输介质<ul>
-<li>分类：<ul>
-<li>按信号形式：模拟信道、数字信道</li>
-<li>按传输介质：无线信道、有线信道</li>
+<li><ol start="2">
+<li>数据链路</li>
+</ol>
+<ul>
+<li>组成：物理链路 + 通信协议（硬件和软件）</li>
+<li>别名：物理链路 vs 逻辑链路</li>
 </ul>
 </li>
-<li>信号类型：<ul>
-<li>基带信号：未调制的原始电信号</li>
-<li>宽带信号：调制后的频分复用模拟信号</li>
+<li><ol start="3">
+<li>帧</li>
+</ol>
+<ul>
+<li>定义：数据链路层协议数据单元</li>
+<li>功能：封装网络层数据&#x2F;向上交付数据</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>信宿：接收数据的终点</li>
+<li>3.1.2 链路管理<ul>
+<li>定义：连接的建立、维持和释放过程</li>
+<li>应用：主要用于面向连接的服务</li>
+<li>过程<ul>
+<li>确认对方就绪状态</li>
+<li>交换必要信息</li>
+<li>初始化帧序号</li>
+<li>建立连接 → 维持连接 → 释放连接</li>
 </ul>
 </li>
-<li>数据传输方式：<ul>
-<li>串行传输：逐比特按序传输（长距离）</li>
-<li>并行传输：多比特同时传输（近距离）</li>
 </ul>
 </li>
-<li>通信交互方式：<ul>
-<li>单向通信：单方向（广播）</li>
-<li>半双工通信：双向但不能同时</li>
-<li>全双工通信：双向同时</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>③. 速率、波特与带宽<ul>
-<li>速率：<ul>
-<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
-<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
-<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
-</ul>
-</li>
-<li>带宽：<ul>
-<li>模拟系统：频率范围（Hz）</li>
-<li>计算机网络：最高数据率（b&#x2F;s）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
-<li>信道失真影响<ul>
-<li>失真不影响通信质量的条件</li>
-<li>导致严重失真的因素<ul>
-<li>码元传输速率高</li>
-<li>信号传输距离远</li>
-<li>噪声干扰大</li>
-<li>传输介质质量差</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>奈奎斯特定理(奈氏准则)<ul>
-<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
-<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
-<li>关键参数<ul>
-<li>W: 信道频率带宽(Hz)</li>
-<li>V: 码元离散电平数量</li>
-</ul>
-</li>
-<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
-<li>提高数据速率的方法: 多元制调制</li>
-</ul>
-</li>
-<li>香农定理<ul>
-<li>适用场景: 带宽受限且有高斯噪声的信道</li>
-<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
-<li>关键参数<ul>
-<li>W: 信道频率带宽(Hz)</li>
-<li>S: 信号平均功率</li>
-<li>N: 高斯噪声功率</li>
-</ul>
-</li>
-<li>信噪比表示方法<ul>
-<li>无单位记法: S&#x2F;N</li>
-<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
-</ul>
-</li>
-<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
-</ul>
-</li>
-<li>奈氏准则 vs 香农定理<ul>
-<li>奈氏准则: 仅考虑带宽与码元速率</li>
-<li>香农定理: 同时考虑带宽和信噪比</li>
-<li>共同结论: 单个码元携带比特数有限</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
-<li>信号与数据转换<ul>
-<li>编码: 数据→数字信号</li>
-<li>调制: 数据→模拟信号</li>
-</ul>
-</li>
-<li>数字数据转换方式<ul>
-<li>数字发送器→数字信号</li>
-<li>调制器→模拟信号</li>
-</ul>
-</li>
-<li>模拟数据转换方式<ul>
-<li>PCM编码器→数字信号</li>
-<li>放大器调制器→模拟信号</li>
-</ul>
-</li>
-<li>四种编码与调制方式<ul>
-<li>数字数据编码为数字信号<ul>
-<li>常用编码方式<ul>
-<li>归零(RZ)编码<ul>
-<li>特点: 码元中间跳变到零电平</li>
-<li>优点: 提供自同步机制</li>
-<li>缺点: 占用带宽</li>
-</ul>
-</li>
-<li>非归零(NRZ)编码<ul>
-<li>特点: 不归零</li>
-<li>优点: 编码效率最高</li>
-<li>缺点: 需要时钟线同步</li>
-</ul>
-</li>
-<li>反向非归零(NRZI)编码<ul>
-<li>特点: 电平跳变表示0,不变表示1</li>
-<li>应用: USB 2.0</li>
-</ul>
-</li>
-<li>曼彻斯特编码<ul>
-<li>特点: 码元中间电平跳变</li>
-<li>应用: 标准以太网</li>
-</ul>
-</li>
-<li>差分曼彻斯特编码<ul>
-<li>特点: 码元开始处跳变表示0</li>
-<li>优点: 抗干扰能力强</li>
-<li>应用: 宽带高速网</li>
+<h3 id="3-1-4-封装成帧与透明传输"><a href="#3-1-4-封装成帧与透明传输" class="headerlink" title="3.1.4   封装成帧与透明传输"></a>3.1.4   封装成帧与透明传输</h3><ul>
+<li>定义<ul>
+<li>限制发送方的发送速率，使之不超过接收方的接收能力</li>
+<li>防止帧丢失和错误</li>
 </ul>
 </li>
+<li>原因<ul>
+<li>链路两端节点的工作速率和缓存空间存在差异</li>
+<li>发送能力可能大于接收能力</li>
 </ul>
 </li>
+<li>实现机制<ul>
+<li>通过反馈机制控制发送<ul>
+<li>可继续发送下一帧的情况</li>
+<li>必须暂停发送等待反馈的情况</li>
 </ul>
 </li>
-<li>模拟数据编码为数字信号<ul>
-<li>步骤<ul>
-<li>采样<ul>
-<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
 </ul>
 </li>
-<li>量化<ul>
-<li>电平幅值→离散数字量</li>
+<li>体系结构差异<ul>
+<li>OSI体系结构<ul>
+<li>数据链路层实现流量控制</li>
+<li>控制相邻节点间数据链路上的流量</li>
 </ul>
 </li>
-<li>编码<ul>
-<li>离散整数→二进制编码</li>
+<li>TCP&#x2F;IP体系结构<ul>
+<li>传输层实现流量控制</li>
+<li>控制源端到目的端之间的流量</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>应用: PCM编码</li>
 </ul>
-</li>
-<li>数字数据调制为模拟信号<ul>
-<li>调制方式<ul>
-<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
-<li>特点: 改变振幅表示1和0</li>
-<li>缺点: 抗干扰能力差</li>
-</ul>
-</li>
-<li>调频(FM)&#x2F;频移键控(FSK)<ul>
-<li>特点: 改变频率表示1和0</li>
-<li>优点: 抗干扰能力强</li>
-</ul>
-</li>
-<li>调相(PM)&#x2F;相移键控(PSK)<ul>
-<li>特点: 改变相位表示1和0</li>
-<li>变种: DPSK(差分相移键控)</li>
-</ul>
-</li>
-<li>正交幅度调制(QAM)<ul>
-<li>特点: AM与PM结合</li>
-<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>模拟数据调制为模拟信号<ul>
-<li>应用<ul>
-<li>电话机和本地局交换机</li>
-</ul>
-</li>
-<li>技术: 频分复用(FDM)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
-<li>传输介质分类<ul>
-<li>导向传输介质<ul>
-<li>铜线或光纤</li>
-<li>电磁波沿固体介质传播</li>
+<h3 id="3-1-5-流量控制"><a href="#3-1-5-流量控制" class="headerlink" title="3.1.5   流量控制"></a>3.1.5   流量控制</h3><ul>
+<li>原因<ul>
+<li>链路两端节点工作速率和缓存空间存在差异。</li>
+<li>发送方发送能力可能大于接收方接收能力。</li>
+<li>若不限制发送方发送速率，来不及接收的帧会被后续帧“淹没”，造成帧丢失出错。</li>
 </ul>
 </li>
-<li>非导向传输介质<ul>
-<li>自由空间（空气、真空或海水）</li>
-<li>无线传输</li>
+<li>目的<ul>
+<li>限制发送方发送速率，不超过接收方接收能力。</li>
 </ul>
 </li>
+<li>实现方式<ul>
+<li>通过某种反馈机制。</li>
+<li>使发送方知晓何时可接着发送下一帧。</li>
+<li>使发送方知晓何时必须暂停发送，等待反馈信息后继续发送。</li>
 </ul>
 </li>
-<li>①. 双绞线<ul>
-<li>特点<ul>
-<li>最常用传输介质</li>
-<li>两根绝缘铜导线绞合</li>
-<li>减少电磁干扰</li>
+<li>不同体系结构中的情况<ul>
+<li>OSI体系结构<ul>
+<li>数据链路层具有流量控制功能。</li>
+<li>控制对象是相邻节点之间数据链路上的流量。</li>
 </ul>
 </li>
-<li>分类<ul>
-<li>屏蔽双绞线(STP)</li>
-<li>非屏蔽双绞线(UTP)</li>
+<li>TCP&#x2F;IP体系结构<ul>
+<li>流量控制功能移到传输层。</li>
+<li>控制对象是从源端到目的端之间的流量。</li>
 </ul>
 </li>
-<li>性能<ul>
-<li>价格便宜</li>
-<li>模拟&#x2F;数字传输</li>
-<li>通信距离：几千米到数十千米</li>
-<li>带宽取决于铜线粗细和传输距离</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>②. 同轴电缆<ul>
-<li>结构<ul>
-<li>内导体</li>
-<li>绝缘层</li>
-<li>外导体屏蔽层</li>
-<li>绝缘保护套层</li>
-</ul>
-</li>
-<li>分类<ul>
-<li>50Ω同轴电缆<ul>
-<li>传送基带数字信号</li>
-<li>早期局域网应用</li>
-</ul>
-</li>
-<li>75Ω同轴电缆<ul>
-<li>传送宽带信号</li>
-<li>有线电视系统应用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>特点<ul>
-<li>良好抗干扰特性</li>
-<li>传输较高速率数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>③. 光纤<ul>
-<li>原理<ul>
-<li>利用光脉冲通信</li>
-<li>1：有光脉冲</li>
-<li>0：无光脉冲</li>
-</ul>
-</li>
-<li>结构<ul>
-<li>纤芯（8-100μm）</li>
-<li>包层（较低折射率）</li>
-</ul>
-</li>
-<li>传输原理<ul>
-<li>全反射现象</li>
-</ul>
-</li>
-<li>分类<ul>
-<li>多模光纤<ul>
-<li>多条光线传输</li>
-<li>适合近距离</li>
-</ul>
-</li>
-<li>单模光纤<ul>
-<li>单波长传输</li>
-<li>适合远距离</li>
+<h3 id="3-1-6-差错检测"><a href="#3-1-6-差错检测" class="headerlink" title="3.1.6   差错检测"></a>3.1.6   差错检测</h3><ul>
+<li>传输错误原因<ul>
+<li>信道噪声导致帧传输错误</li>
 </ul>
 </li>
+<li>错误类型<ul>
+<li>位错<ul>
+<li>定义：帧中某些位出现差错</li>
+<li>检测方法：循环冗余检验(CRC)</li>
 </ul>
 </li>
-<li>优点<ul>
-<li>通信容量大</li>
-<li>传输损耗小</li>
-<li>抗干扰性能好</li>
-<li>无串音干扰</li>
-<li>体积小重量轻</li>
+<li>帧错<ul>
+<li>类型<ul>
+<li>帧丢失</li>
+<li>帧重复</li>
+<li>帧失序</li>
 </ul>
 </li>
+<li>性质：都属于传输差错</li>
 </ul>
 </li>
-<li>④. 无线传输介质<ul>
-<li>应用场景<ul>
-<li>蜂窝移动电话</li>
-<li>无线局域网(WLAN)</li>
-<li>特殊场合移动联网</li>
 </ul>
 </li>
-<li>(1) 无线电波<ul>
-<li>特点<ul>
-<li>穿透能力强</li>
-<li>传输距离长</li>
-<li>全向传播</li>
+<li>历史处理方式(OSI观点)<ul>
+<li>要求数据链路层提供可靠传输</li>
+<li>实现机制<ul>
+<li>在CRC检错基础上增加<ul>
+<li>帧编号</li>
+<li>确认机制</li>
+<li>重传机制</li>
 </ul>
 </li>
+<li>工作流程<ul>
+<li>接收方收到正确帧后发送确认</li>
+<li>发送方未收到确认时重传</li>
 </ul>
 </li>
-<li>(2) 微波、红外线和激光<ul>
-<li>共同特点<ul>
-<li>需要视线通路</li>
-<li>指向性强</li>
 </ul>
 </li>
-<li>微波通信<ul>
-<li>频率：2-40GHz</li>
-<li>容量大</li>
-<li>直线传播</li>
-<li>需中继站</li>
 </ul>
 </li>
-<li>卫星通信<ul>
-<li>地球同步卫星中继</li>
-<li>优点<ul>
-<li>容量大</li>
-<li>距离远</li>
-<li>覆盖广</li>
+<li>现代应用场景<ul>
+<li>无线传输(通信质量差)<ul>
+<li>仍使用确认和重传机制</li>
+<li>向上提供可靠传输服务</li>
 </ul>
 </li>
-<li>缺点<ul>
-<li>保密性差</li>
-<li>传播时延长</li>
+<li>有线链路(通信质量好)<ul>
+<li>不再使用确认和重传机制</li>
+<li>仅进行CRC检错<ul>
+<li>处理方式：丢弃有差错帧</li>
+<li>目的：保证上交帧都正确</li>
 </ul>
 </li>
+<li>重传任务转移<ul>
+<li>由高层协议完成</li>
+<li>例如：传输层TCP协议</li>
 </ul>
 </li>
 </ul>
@@ -502,9 +311,10 @@
 </ul>
 </li>
 </ul>
+<h2 id="3-2-组帧"><a href="#3-2-组帧" class="headerlink" title="3.2   组帧"></a>3.2   组帧</h2>
 	
 	</div>
-  <a type="button" href="/2025/12/05/物理层/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/05/数据链路层/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -514,7 +324,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/05/传输层/" >传输层</a>
+			<a href="/2025/12/05/计算机网络体系结构/" >计算机网络体系结构</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -528,45 +338,40 @@
   <div class="row">
 	
 	
-		<h2 id="5-1-传输层提供的服务"><a href="#5-1-传输层提供的服务" class="headerlink" title="5.1   传输层提供的服务"></a>5.1   传输层提供的服务</h2><h3 id="5-1-1-传输层的功能"><a href="#5-1-1-传输层的功能" class="headerlink" title="5.1.1   传输层的功能"></a>5.1.1   传输层的功能</h3><ul>
-<li>基本概念<ul>
-<li>位于网络层之上、应用层之下</li>
-<li>为运行在不同主机上的进程之间提供逻辑通信</li>
-<li>面向通信部分的最高层，用户功能中的最低层</li>
-<li>即使网络层协议不可靠，也能为应用程序提供可靠服务</li>
+		<h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
+<li>计算机网络的概念<ul>
+<li>定义<ul>
+<li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
+<li>由功能完善的软件实现资源共享和信息传递的系统</li>
 </ul>
 </li>
-<li>通信特点<ul>
-<li>只有主机协议栈才有传输层</li>
-<li>路由器转发分组只用到下三层功能</li>
-<li>传输层只存在于通信子网以外的主机中</li>
+<li>组成<ul>
+<li>节点(Node)<ul>
+<li>计算机</li>
+<li>集线器</li>
+<li>交换机</li>
+<li>路由器</li>
 </ul>
 </li>
-<li>主要功能<ul>
-<li>应用进程之间的逻辑通信<ul>
-<li>通信的真正端点是主机中的进程</li>
-<li>端到端的逻辑通信</li>
+<li>链路(Link)</li>
 </ul>
 </li>
-<li>复用和分用<ul>
-<li>复用：不同应用进程使用同一传输协议</li>
-<li>分用：正确交付数据到目的应用进程</li>
+<li>互连网(internet)<ul>
+<li>网络之间通过路由器互连</li>
+<li>构成覆盖范围更广的计算机网络</li>
 </ul>
 </li>
-<li>差错检测<ul>
-<li>检测报文首部和数据部分</li>
-<li>TCP：出错则要求重发</li>
-<li>UDP：出错则直接丢弃</li>
-<li>网络层只检验IP首部</li>
+<li>名词区分<ul>
+<li>internet(互连网)<ul>
+<li>通用名词</li>
+<li>多个计算机网络互连而成</li>
+<li>可使用任意通信协议</li>
 </ul>
 </li>
-<li>提供两种传输协议<ul>
-<li>面向连接的TCP<ul>
-<li>提供可靠的全双工信道</li>
-</ul>
-</li>
-<li>无连接的UDP<ul>
-<li>提供不可靠信道</li>
+<li>Internet(互联网&#x2F;因特网)<ul>
+<li>专用名词</li>
+<li>全球最大、开放的特定计算机网络</li>
+<li>采用TCP&#x2F;IP族作为通信规则</li>
 </ul>
 </li>
 </ul>
@@ -574,225 +379,239 @@
 </ul>
 </li>
 </ul>
-<h3 id="5-1-2-传输层的寻址与端口"><a href="#5-1-2-传输层的寻址与端口" class="headerlink" title="5.1.2   传输层的寻址与端口"></a>5.1.2   传输层的寻址与端口</h3><ul>
-<li>①. 端口的作用<ul>
-<li><p>端口能让应用层的各种进程将其数据通过端口向下交付给传输层</p>
-</li>
-<li><p>让传输层知道应当将其报文段中的数据向上通过端口交付给应用层相应的进程</p>
-</li>
-<li><p>端口在传输层的作用类似于IP地址在网络层的作用</p>
-<ul>
-<li>IP地址标识的是主机</li>
-<li>端口标识的是主机中的应用进程</li>
+<h3 id="1-1-2-计算机网络的组成"><a href="#1-1-2-计算机网络的组成" class="headerlink" title="1.1.2   计算机网络的组成"></a>1.1.2   计算机网络的组成</h3><ul>
+<li>从组成部分看<ul>
+<li>硬件<ul>
+<li>主机(端系统)</li>
+<li>通信链路<ul>
+<li>双绞线</li>
+<li>光纤</li>
 </ul>
 </li>
-<li><p>各层服务访问点：</p>
-<ul>
-<li>数据链路层：帧的”类型”字段</li>
-<li>网络层：IP数据报的”协议”字段</li>
-<li>传输层：”端口号”字段</li>
-<li>应用层：”用户界面”</li>
+<li>交换设备<ul>
+<li>路由器</li>
+<li>交换机</li>
 </ul>
 </li>
-<li><p>协议端口与硬件端口的区别</p>
-<ul>
-<li>协议端口是软件端口</li>
-<li>硬件端口是不同硬件设备交互的接口</li>
-<li>软件端口是应用层协议进程与传输实体交互的地址</li>
-<li>传输层使用软件端口</li>
-</ul>
-</li>
-<li><p>②. 端口号</p>
-<ul>
-<li>应用进程通过端口号进行标识</li>
-<li>端口号长度为16比特，可表示65536(2¹⁶)个不同端口号</li>
-<li>端口号只具有本地意义<ul>
-<li>只标识本计算机应用层中的各进程</li>
-<li>不同计算机的相同端口号没有联系</li>
-</ul>
-</li>
-<li>端口号分类：<ul>
-<li>服务器端使用的端口号<ul>
-<li>熟知端口号(0～1023)<ul>
-<li>IANA指派给TCP&#x2F;IP重要应用程序</li>
-<li>常用熟知端口号：<ul>
-<li>FTP: 21</li>
-<li>TELNET: 23</li>
-<li>SMTP: 25</li>
-<li>DNS: 53</li>
-<li>TFTP: 69</li>
-<li>HTTP: 80</li>
-<li>SNMP: 161</li>
+<li>通信处理机<ul>
+<li>网卡</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>登记端口号(1024～49151)<ul>
-<li>供没有熟知端口号的应用程序使用</li>
-<li>必须在IANA登记以防止重复</li>
+<li>软件<ul>
+<li>资源共享软件</li>
+<li>工具软件<ul>
+<li>E-mail程序</li>
+<li>FTP程序</li>
+<li>聊天程序</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>客户端使用的端口号(49152～65535)<ul>
-<li>也称短暂端口号</li>
-<li>仅在客户进程运行时动态选择</li>
-<li>通信结束后端口号可复用</li>
+<li>协议<ul>
+<li>网络传输数据规范</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从工作方式看(Internet)<ul>
+<li>边缘部分<ul>
+<li>用户直接使用的主机</li>
+<li>功能<ul>
+<li>通信<ul>
+<li>数据传输</li>
+<li>音频&#x2F;视频</li>
+</ul>
+</li>
+<li>资源共享</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>核心部分<ul>
+<li>网络和路由器</li>
+<li>功能<ul>
+<li>提供连通性</li>
+<li>交换服务</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>③. 套接字</p>
-<ul>
-<li>网络中通过IP地址标识不同主机</li>
-<li>通过端口号标识主机中的不同应用进程</li>
-<li>套接字(Socket) &#x3D; IP地址:端口号<ul>
-<li>唯一标识网络中的一台主机上的一个应用进程</li>
-<li>是一个通信端点</li>
+<li>从功能组成看<ul>
+<li>通信子网<ul>
+<li>组成<ul>
+<li>传输介质</li>
+<li>通信设备</li>
+<li>网络协议</li>
 </ul>
 </li>
-<li>通信过程：<ul>
-<li>主机A发给主机B的报文包含目的端口号和源端口号</li>
-<li>源端口号是”返回地址”的一部分</li>
-<li>B发回A的报文中的目的端口号是A到B报文的源端口号</li>
-<li>完整返回地址是A的IP地址和源端口号</li>
-</ul>
-</li>
+<li>功能<ul>
+<li>数据传输</li>
+<li>交换</li>
+<li>控制</li>
+<li>存储</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<h3 id="5-1-3-无连接服务与面向连接服务"><a href="#5-1-3-无连接服务与面向连接服务" class="headerlink" title="5.1.3   无连接服务与面向连接服务"></a>5.1.3   无连接服务与面向连接服务</h3><ul>
-<li>TCP&#x2F;IP传输协议<ul>
-<li>面向连接的传输控制协议 (TCP)<ul>
-<li>特点<ul>
-<li>全双工的可靠逻辑信道</li>
-<li>通信前需建立连接</li>
-<li>数据传输结束后释放连接</li>
-<li>不提供广播&#x2F;多播服务</li>
+<li>资源子网<ul>
+<li>组成<ul>
+<li>资源共享设备</li>
+<li>软件</li>
 </ul>
 </li>
-<li>可靠性措施<ul>
-<li>确认机制</li>
-<li>流量控制</li>
-<li>计时器</li>
-<li>连接管理</li>
-</ul>
-</li>
-<li>适用场景<ul>
-<li>文件传输协议(FTP)</li>
-<li>超文本传输协议(HTTP)</li>
-<li>远程登录(TELNET)</li>
+<li>功能<ul>
+<li>提供硬件资源共享服务</li>
+<li>提供软件资源共享服务</li>
+<li>提供数据资源共享服务</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>无连接的用户数据报协议 (UDP)<ul>
-<li>特点<ul>
-<li>不可靠的逻辑信道</li>
-<li>通信前无需建立连接</li>
-<li>无确认机制</li>
 </ul>
 </li>
-<li>附加服务<ul>
-<li>多路复用</li>
-<li>数据错误检查</li>
+</ul>
+<h3 id="1-1-3-计算机网络的功能"><a href="#1-1-3-计算机网络的功能" class="headerlink" title="1.1.3    计算机网络的功能"></a>1.1.3    计算机网络的功能</h3><ul>
+<li>数据通信<ul>
+<li>最基本和最重要的功能</li>
+<li>实现联网计算机之间各种信息的传输</li>
+<li>应用示例<ul>
+<li>文件传输</li>
+<li>电子邮件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源共享<ul>
+<li>共享类型<ul>
+<li>软件共享</li>
+<li>数据共享</li>
+<li>硬件共享</li>
 </ul>
 </li>
 <li>优势<ul>
-<li>协议简单</li>
-<li>执行速度快</li>
-<li>实时性好</li>
-</ul>
-</li>
-<li>适用场景<ul>
-<li>小文件传送协议(TFTP)</li>
-<li>DNS</li>
-<li>SNMP</li>
-<li>实时传输协议(RTP)</li>
+<li>互通有无、分工协作</li>
+<li>提高资源利用率</li>
 </ul>
 </li>
 </ul>
 </li>
+<li>分布式处理<ul>
+<li>定义<ul>
+<li>将复杂任务分配给网络中空闲计算机</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>提高系统利用率</li>
 </ul>
 </li>
 </ul>
-<h2 id="5-2-UDP-协议"><a href="#5-2-UDP-协议" class="headerlink" title="5.2   UDP 协议"></a>5.2   UDP 协议</h2><h3 id="5-2-1-UDP-数据报"><a href="#5-2-1-UDP-数据报" class="headerlink" title="5.2.1    UDP 数据报"></a>5.2.1    UDP 数据报</h3><ul>
-<li>UDP概述<ul>
-<li>UDP特点<ul>
-<li>仅在IP数据报服务上增加复用、分用和差错检测功能</li>
+</li>
+<li>提高可靠性<ul>
+<li>定义<ul>
+<li>各台计算机互为替代机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>负载均衡<ul>
+<li>定义<ul>
+<li>均衡分配工作任务给各台计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他功能<ul>
+<li>电子化办公与服务</li>
+<li>远程教育</li>
+<li>娱乐功能</li>
+<li>社会效益<ul>
+<li>满足社会需求</li>
+<li>方便学习、工作和生活</li>
+<li>巨大经济效益</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-4-电路交换、报文交换与分组交换"><a href="#1-1-4-电路交换、报文交换与分组交换" class="headerlink" title="1.1.4    电路交换、报文交换与分组交换"></a>1.1.4    电路交换、报文交换与分组交换</h3><ul>
+<li>电路交换<ul>
+<li>特点<ul>
+<li>建立连接、传输数据、释放连接</li>
+<li>物理通信路径独占</li>
+</ul>
+</li>
 <li>优点<ul>
-<li><ol>
-<li>无须建立连接</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>无连接状态</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>首部开销小(8B)</li>
-</ol>
-</li>
-<li><ol start="4">
-<li>没有拥塞控制</li>
-</ol>
-</li>
-<li><ol start="5">
-<li>支持多种交互通信方式</li>
-</ol>
-</li>
+<li>通信时延小</li>
+<li>有序传输</li>
+<li>没有冲突</li>
+<li>实时性强</li>
 </ul>
 </li>
-<li>应用场景<ul>
-<li>DNS、SNMP等一次性传输较少数据的应用</li>
-<li>多媒体应用(IP电话、视频会议、流媒体等)</li>
+<li>缺点<ul>
+<li>建立连接时间长</li>
+<li>线路利用率低</li>
+<li>灵活性差</li>
+<li>难以实现差错控制</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>UDP可靠性<ul>
-<li>不保证可靠交付</li>
-<li>可靠性可由应用层实现</li>
+<li>报文交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>报文为单位传输</li>
 </ul>
 </li>
-<li>UDP报文处理<ul>
-<li>面向报文</li>
-<li>保留报文边界</li>
-<li>报文不可分割</li>
+<li>优点<ul>
+<li>无建立连接时延</li>
+<li>灵活分配线路</li>
+<li>线路利用率高</li>
+<li>支持差错控制</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>UDP首部格式<ul>
-<li>组成<ul>
-<li>源端口(2B)</li>
-<li>目的端口(2B)</li>
-<li>长度(2B)</li>
-<li>检验和(2B)</li>
-</ul>
-</li>
-<li>字段说明<ul>
-<li>源端口：源端口号，可选</li>
-<li>目的端口：目的端口号，必须</li>
-<li>长度：UDP数据报总长度(最小8)</li>
-<li>检验和：可选，全0表示不计算</li>
-</ul>
-</li>
-<li>处理流程<ul>
-<li>根据目的端口交付应用进程</li>
-<li>端口错误处理：丢弃报文并发送ICMP差错报文</li>
+<li>缺点<ul>
+<li>转发时延高</li>
+<li>缓存开销大</li>
+<li>错误处理低效</li>
 </ul>
 </li>
 </ul>
 </li>
+<li>分组交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>将报文划分为分组</li>
 </ul>
+</li>
+<li>优点<ul>
+<li>方便存储管理</li>
+<li>传输效率高</li>
+<li>减少出错概率和重传代价</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>存在存储转发时延</li>
+<li>需要传输额外信息量</li>
+<li>可能出现失序、丢失或重复分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三种交换方式比较<ul>
+<li>电路交换适合连续大量数据传输</li>
+<li>报文交换和分组交换信道利用率更高</li>
+<li>分组交换更适合突发式数据传送</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-5-计算机网络的分类"><a href="#1-1-5-计算机网络的分类" class="headerlink" title="1.1.5    计算机网络的分类"></a>1.1.5    计算机网络的分类</h3>
 	
 	</div>
-  <a type="button" href="/2025/12/05/传输层/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/05/计算机网络体系结构/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -892,45 +711,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
-		
-			<li><a href="/tags/代理/">代理<span>1</span></a></li>
-		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
-		
-			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
-		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
 		
 			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
 		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
 			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>59</span></a></li>
@@ -946,10 +765,6 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
-      </li>
-    
-      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
@@ -963,6 +778,10 @@
     
       <li>
         <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>

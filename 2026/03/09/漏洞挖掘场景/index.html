@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -82,6 +83,13 @@
 			</a>
 		  </li>
 		  
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		  <li>
+		    <a href="#" id="nav-search-btn" title="Search (Ctrl+K)" style="font-size:16px; padding: 10px 15px;">
+		      <i class="fa fa-search"></i>
+		    </a>
+		  </li>
 		</ul>
       </div>
     </div> <!-- container -->
@@ -162,6 +170,9 @@
 <li>使用 JDumpSpider 工具对 <code>heapdump</code> 文件进行解密分析，最终提取出内网明文密码等高价值敏感数据</li>
 </ul>
 <p>整个过程充分体现了 SRC 漏洞挖掘的核心思路：常规测试无果后需精准识别技术栈、灵活切换工具探测与手工测试模式；针对 Spring Boot 这类特定框架，在工具被防护时手工探测其特有敏感路径是突破关键；同时对泄露的 <code>heapdump</code> 等文件进行深度解析，能进一步挖掘出可直接利用的敏感信息，大幅提升漏洞挖掘的成功率与价值。</p>
+<hr>
+<p> EDUSRC 漏洞挖掘以目标系统登录框为初始入口，先通过目录扫描工具对目标站点进行路径探测，成功发现暴露在外的 Nacos 服务接口；随后借助 Nacos 相关 Nday 漏洞利用方式，直接访问 Nacos 用户列表接口获取用户数据，再使用专用工具对 Nacos 服务进行批量探测，确认目标存在 Nacos 未授权访问等高危漏洞；为验证漏洞危害，先构造请求 Payload 执行未授权用户删除操作，确认可任意操作用户账号，还可进行未授权添加用户等类似操作；进一步挖掘发现该 Nacos 服务支持未授权导出全部配置信息，导出的配置文件中大量泄露 MongoDB 数据库账户密码与地址、即时通信 IM 服务地址及账号密码、Redis 缓存单机及集群的密码、邮箱账号密码以及各类第三方服务密钥等核心敏感数据；最后从泄露信息中定位到百度人脸识别服务的 APIKey 与 SecretKey，结合官方文档编写 Python 脚本调用该付费接口，验证漏洞可导致第三方付费资源被恶意滥用，以此完整证明该 Nacos 未授权漏洞从基础越权操作到核心数据泄露、再到高价值第三方资源滥用的全链条严重危害，整体挖掘思路遵循从基础入口探测到敏感组件发现、从漏洞初步验证到深层数据提取、再到高危害场景落地利用的递进逻辑，逐步放大漏洞影响范围与危害等级。</p>
+<p> <a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/428863.html">Nacos漏洞汇总复现</a></p>
 
 		  <div class="article-footer-copyright">
 
@@ -380,7 +391,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -389,7 +400,7 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -402,14 +413,10 @@ window.addEventListener('load', function() {
 
 
 
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
    </script>
+
 
 </body>
    </html>

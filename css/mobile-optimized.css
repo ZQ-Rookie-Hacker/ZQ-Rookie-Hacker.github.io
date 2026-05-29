@@ -1,251 +1,334 @@
-/* 全面的移动端适配CSS */
+/* ==============================================
+   Mobile-Optimized CSS — Freemind.bithack Theme
+   Reliability-first: targeted selectors, minimal
+   !important usage, no universal overrides.
+   ============================================== */
 
-/* 基础移动端优化 */
+/* ---------- Tablet & Phone (≤768px) ---------- */
 @media screen and (max-width: 768px) {
-  /* 页面布局调整 */
+
+  /* -- Body & Container -- */
   body {
-    padding-top: 15px !important;
+    padding-top: 50px !important;  /* navbar height + breathing room */
     padding-bottom: 60px !important;
-    font-size: 15px;
-    line-height: 1.6;
   }
-  
+
+  .container,
   .container-narrow {
     max-width: 100% !important;
-    padding: 0 10px !important;
-    margin: 0 auto !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
-  
+
   .content {
-    padding: 15px !important;
-    margin: 10px 0 !important;
+    padding: 12px !important;
+    margin: 8px 0 !important;
   }
-  
-  /* 导航栏适配 */
+
+  /* -- Typography: improve readability -- */
+  .post,
+  .page {
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+  }
+
+  .post h1, .page h1 { font-size: 1.55em !important; margin: 0.7em 0 0.35em !important; }
+  .post h2, .page h2 { font-size: 1.35em !important; margin: 0.8em 0 0.35em !important; padding-top: 20px !important; }
+  .post h3, .page h3 { font-size: 1.18em !important; margin: 0.85em 0 0.4em !important; }
+  .post h4, .page h4,
+  .post h5, .page h5,
+  .post h6, .page h6 { font-size: 1.05em !important; margin: 0.9em 0 0.4em !important; }
+
+  /* -- Navbar -- */
   .navbar {
     min-height: 44px !important;
   }
-  
+
   .navbar-brand {
     font-size: 16px !important;
-    padding: 8px 10px !important;
+    padding: 10px 12px !important;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  
-  .nav > li > a {
-    padding: 8px 10px !important;
+
+  .navbar-toggle {
+    padding: 6px 8px !important;
+    margin-right: 4px !important;
+  }
+
+  .nav-menu .nav > li > a {
+    padding: 10px 14px !important;
     font-size: 14px !important;
   }
-  
-  /* 文章内容适配 */
-  .post {
-    font-size: 15px !important;
-    line-height: 1.7 !important;
+
+  #nav-search-btn {
+    font-size: 18px !important;
+    padding: 6px 12px !important;
   }
-  
-  .post h1 {
-    font-size: 1.6em !important;
-    margin: 0.8em 0 0.4em 0 !important;
-  }
-  
-  .post h2 {
-    font-size: 1.4em !important;
-    margin: 0.9em 0 0.4em 0 !important;
-  }
-  
-  .post h3 {
-    font-size: 1.2em !important;
-    margin: 1em 0 0.5em 0 !important;
-  }
-  
-  .post h4, .post h5, .post h6 {
-    font-size: 1.1em !important;
-    margin: 1.1em 0 0.5em 0 !important;
-  }
-  
-  /* 图片适配 */
-  .post img, .page img {
+
+  /* -- Images: prevent overflow -- */
+  .post img,
+  .page img,
+  .content img {
     max-width: 100% !important;
     height: auto !important;
-    display: block !important;
-    margin: 10px auto !important;
+    display: block;
+    margin: 10px auto;
   }
-  
-  /* 代码块适配 */
-  pre, code {
-    font-size: 12px !important;
-    line-height: 1.4 !important;
-  }
-  
+
+  /* -- Code blocks: force scroll, keep readable -- */
   pre {
-    padding: 10px !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    padding: 12px !important;
     overflow-x: auto !important;
   }
-  
-  /* 表格适配 */
+
+  code {
+    font-size: 12px !important;
+    word-break: break-word;
+  }
+
+  figure.highlight {
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  figure.highlight table {
+    display: table;
+    width: 100%;
+  }
+
+  /* -- Tables: wrappable container -- */
   table {
     font-size: 13px !important;
     display: block !important;
     overflow-x: auto !important;
+    max-width: 100%;
   }
-  
-  /* 列表适配 */
-  ul, ol {
-    padding-left: 20px !important;
+
+  th, td {
+    padding: 6px 8px !important;
+    white-space: nowrap;
   }
-  
-  /* 侧边栏适配 */
+
+  /* -- Lists: comfortable spacing -- */
+  .post ul, .page ul,
+  .post ol, .page ol {
+    padding-left: 22px !important;
+  }
+
+  .post li, .page li {
+    margin-bottom: 4px;
+  }
+
+  /* -- Blockquote -- */
+  blockquote {
+    margin: 12px 0 !important;
+    padding: 8px 12px !important;
+    font-size: 0.92em !important;
+  }
+
+  /* -- Sidebar -- */
   #sidebar {
-    background: transparent !important;
-    border: none !important;
-    padding: 15px 0 !important;
-    margin: 20px 0 !important;
+    margin-top: 24px !important;
+    padding: 0 !important;
+    border-top: 1px solid #333;
   }
-  
-  .widget {
-    margin-bottom: 20px !important;
-    padding: 10px !important;
+
+  #sidebar .widget {
+    padding: 14px 0 !important;
+    margin: 0 !important;
   }
-  
-  /* 按钮适配 */
-  .btn {
-    padding: 8px 15px !important;
-    font-size: 14px !important;
-    margin-bottom: 5px !important;
+
+  /* Sidebar search trigger — full-width tap target */
+  .search-trigger {
+    padding: 12px 14px !important;
+    font-size: 15px !important;
   }
-  
-  /* 文章元数据适配 */
-  .article-meta {
-    font-size: 13px !important;
-    margin-bottom: 15px !important;
+
+  .search-trigger-kbd {
+    display: none;  /* hide Ctrl+K hint on mobile */
   }
-  
-  /* 日期和分类适配 */
+
+  /* -- Post meta / top card / article stats -- */
+  .top-card {
+    margin-bottom: 12px !important;
+  }
+
+  .article-stats {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
   .post .date {
     font-size: 13px !important;
+    line-height: 2em;
   }
-  
-  .post .category {
-    font-size: 12px !important;
+
+  /* -- Page header -- */
+  .page-header {
+    margin: 0 0 16px 0 !important;
+    padding: 8px 12px !important;
+    font-size: 1.1em !important;
   }
-  
-  /* TOC 目录适配 */
+
+  /* -- Pagination -- */
+  .pagination {
+    font-size: 13px;
+  }
+
+  .pagination a {
+    padding: 6px 10px;
+  }
+
+  /* -- Buttons -- */
+  .btn {
+    padding: 8px 14px !important;
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* -- TOC: hide on mobile (too cramped) -- */
   .toc {
     display: none !important;
   }
-  
-  /* 顶部卡片适配 */
-  .top-card {
-    margin-bottom: 15px !important;
-  }
-  
-  /* 评论区域适配 */
-  .comments {
-    margin-top: 20px !important;
-  }
-  
-  /* 搜索框适配 */
-  .search {
-    font-size: 14px !important;
-    margin-bottom: 15px !important;
-  }
-}
 
-/* 小屏手机适配 */
-@media screen and (max-width: 480px) {
-  body {
-    padding-top: 10px !important;
-    padding-bottom: 50px !important;
-    font-size: 14px !important;
+  /* -- Reading progress bar: thinner -- */
+  .reading-progress-bar {
+    height: 2px !important;
   }
-  
-  .container-narrow {
-    padding: 0 8px !important;
-  }
-  
-  .content {
-    padding: 12px !important;
-  }
-  
-  .post {
-    font-size: 14px !important;
-  }
-  
-  .post h1 {
-    font-size: 1.5em !important;
-  }
-  
-  .post h2 {
-    font-size: 1.3em !important;
-  }
-  
-  .post h3 {
-    font-size: 1.1em !important;
-  }
-  
-  /* 更小的按钮 */
-  .btn {
-    padding: 6px 12px !important;
-    font-size: 13px !important;
-  }
-  
-  /* 更小的字体 */
-  .article-meta {
-    font-size: 12px !important;
-  }
-  
-  .post .date {
-    font-size: 12px !important;
-  }
-}
 
-/* 触摸友好的交互元素 */
-@media screen and (max-width: 768px) {
-  /* 确保触摸目标足够大 */
-  a, button, input, textarea, select {
-    min-height: 44px !important;
-    min-width: 44px !important;
-  }
-  
-  .nav > li > a {
-    min-height: 44px !important;
+  /* -- Back to top: tighter corner -- */
+  #gotop {
+    width: 44px !important;
+    height: 44px !important;
+    bottom: 16px !important;
+    right: 12px !important;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid #333;
     display: flex !important;
-    align-items: center !important;
+    align-items: center;
+    justify-content: center;
   }
-  
-  /* 触摸反馈 */
-  a, button {
-    -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
+
+  #gotop span {
+    font-size: 18px !important;
+    line-height: 1;
   }
-  
-  /* 禁用不必要的文本选择 */
-  button {
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
+
+  /* -- Search overlay: full-width -- */
+  #search-overlay-inner {
+    width: 96% !important;
+    max-height: 85vh !important;
+    border-radius: 4px !important;
+  }
+
+  #search-overlay-input {
+    font-size: 16px !important;
+  }
+
+  .search-result-item {
+    padding: 10px 12px !important;
+  }
+
+  #search-footer {
+    gap: 10px !important;
+    font-size: 10px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* -- Comments area -- */
+  .comments {
+    margin: 20px 0 !important;
+    padding: 8px !important;
+  }
+
+  /* -- Archive listing -- */
+  .listing-item {
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .listing-item .date_class {
+    display: block;
+    font-size: 11px;
+    color: #666;
+  }
+
+  /* -- Category tree -- */
+  .category-stick .widget-title {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  .category-tree .category-list {
+    padding-left: 12px;
   }
 }
 
-/* 解决特定主题元素的移动端问题 */
-@media screen and (max-width: 768px) {
-  /* 修复可能的滚动问题 */
-  .page, .post {
-    overflow-x: hidden !important;
+/* ---------- Small Phones (≤480px) ---------- */
+@media screen and (max-width: 480px) {
+
+  body {
+    padding-top: 44px !important;
+    padding-bottom: 50px !important;
   }
-  
-  /* 修复图片容器 */
-  .entry {
-    overflow-x: auto !important;
+
+  .content {
+    padding: 10px !important;
+    margin: 4px 0 !important;
   }
-  
-  /* 调整间距 */
-  .page-header {
-    margin: 15px 0 !important;
-    padding-bottom: 10px !important;
+
+  .post,
+  .page {
+    font-size: 14px !important;
+    line-height: 1.7 !important;
   }
-  
-  /* 修复可能的宽度问题 */
-  * {
-    box-sizing: border-box !important;
+
+  .post h1, .page h1 { font-size: 1.4em !important; }
+  .post h2, .page h2 { font-size: 1.22em !important; padding-top: 14px !important; }
+  .post h3, .page h3 { font-size: 1.1em !important; }
+
+  .navbar-brand {
+    font-size: 15px !important;
+    padding: 8px 10px !important;
+  }
+
+  pre {
+    font-size: 11px !important;
+    padding: 8px !important;
+  }
+
+  code {
+    font-size: 11px !important;
+  }
+
+  table {
+    font-size: 12px !important;
+  }
+
+  /* Side-by-side tag/category pills: stack them */
+  .tag_box.inline li {
+    float: none;
+    display: inline-block;
+  }
+
+  #gotop {
+    width: 38px !important;
+    height: 38px !important;
+    bottom: 12px !important;
+    right: 8px !important;
+  }
+
+  #gotop span {
+    font-size: 16px !important;
+  }
+
+  .search-result-item {
+    padding: 8px 10px !important;
   }
 }

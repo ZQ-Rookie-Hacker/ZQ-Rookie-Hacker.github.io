@@ -50,6 +50,7 @@ GitHub Pages部署疑难杂症
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -98,6 +99,13 @@ GitHub Pages部署疑难杂症
 			</a>
 		  </li>
 		  
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		  <li>
+		    <a href="#" id="nav-search-btn" title="Search (Ctrl+K)" style="font-size:16px; padding: 10px 15px;">
+		      <i class="fa fa-search"></i>
+		    </a>
+		  </li>
 		</ul>
       </div>
     </div> <!-- container -->
@@ -311,9 +319,9 @@ GitHub Pages部署疑难杂症
 <hr>
 <h1 id="十三、博客协作更新"><a href="#十三、博客协作更新" class="headerlink" title="十三、博客协作更新"></a>十三、博客协作更新</h1><p>13.1 拉取myBlog + 配置git</p>
 <ul>
-<li>git clone <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#105;&#x74;&#104;&#117;&#98;&#46;&#x63;&#111;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
+<li>git clone <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git</li>
 <li>git init (初始化刚拉取的myBlog)</li>
-<li>git remote add origin <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#x62;&#46;&#99;&#x6f;&#x6d;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
+<li>git remote add origin <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#109;">git@github.com</a>:用户名&#x2F;myBlog.git (关联仓库)</li>
 </ul>
 <p>13.2 下载nodejs + hexo</p>
 <ul>
@@ -558,7 +566,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -567,7 +575,7 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -580,14 +588,10 @@ window.addEventListener('load', function() {
 
 
 
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
    </script>
+
 
 </body>
    </html>

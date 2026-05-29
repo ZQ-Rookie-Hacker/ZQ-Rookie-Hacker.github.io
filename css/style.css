@@ -945,3 +945,294 @@ border: 2px solid rgb(255, 255, 255) !important;
 .category-stick.expanded .category-tree {
     display: block;
 }
+
+/* ==============================================
+   Search Trigger Button (Sidebar Widget)
+   ============================================== */
+#site_search {
+    margin: 0;
+}
+
+.search-trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #000;
+    color: #bbb;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    border: 2px solid #2bbc8a;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 8px;
+}
+
+.search-trigger:hover {
+    border-color: #2bbc8a;
+    box-shadow: 0 0 12px rgba(43, 188, 138, 0.4);
+    color: #fff;
+    background-color: #0a0a0a;
+}
+
+.search-trigger:focus {
+    outline: none;
+    box-shadow: 0 0 14px rgba(43, 188, 138, 0.5);
+    border-color: #2bbc8a;
+}
+
+.search-trigger-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.search-trigger-label {
+    flex: 1;
+    text-align: left;
+}
+
+.search-trigger-kbd {
+    font-size: 11px;
+    padding: 2px 6px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    color: #888;
+    background: #111;
+    flex-shrink: 0;
+}
+
+/* ==============================================
+   Search Overlay (Modal)
+   ============================================== */
+#search-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.85);
+    animation: search-fade-in 0.15s ease;
+}
+
+#search-overlay.active {
+    display: flex;
+    justify-content: center;
+    padding-top: 10vh;
+}
+
+@keyframes search-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+#search-overlay-inner {
+    width: 90%;
+    max-width: 680px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+/* ---- Header: search input ---- */
+#search-overlay-header {
+    padding: 16px 16px 0;
+    flex-shrink: 0;
+}
+
+#search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px 4px 12px;
+    background: #000;
+    border: 2px solid #333;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+#search-input-wrap:focus-within {
+    border-color: #2bbc8a;
+    box-shadow: 0 0 10px rgba(43, 188, 138, 0.3);
+}
+
+#search-input-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+#search-overlay-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 18px;
+    padding: 8px 0;
+    caret-color: #2bbc8a;
+}
+
+#search-overlay-input::placeholder {
+    color: #555;
+}
+
+#search-hint {
+    font-size: 11px;
+    color: #555;
+    flex-shrink: 0;
+    padding-right: 4px;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ---- Status line ---- */
+#search-status {
+    padding: 8px 20px;
+    font-size: 12px;
+    color: #666;
+    min-height: 20px;
+    flex-shrink: 0;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ---- Results list ---- */
+#search-overlay-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px;
+    min-height: 100px;
+}
+
+#search-overlay-results::-webkit-scrollbar {
+    width: 5px;
+}
+
+#search-overlay-results::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#search-overlay-results::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+#search-overlay-results::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#search-result-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.search-result-item {
+    padding: 14px 16px;
+    margin: 2px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+    border-left: 3px solid transparent;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+    background: #1a1a1a;
+    border-left-color: #2bbc8a;
+}
+
+.search-result-item .search-result-title {
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    color: #2bbc8a;
+    text-decoration: none;
+    margin-bottom: 4px;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+.search-result-item .search-result-title:hover {
+    text-decoration: underline;
+}
+
+.search-result-snippet {
+    font-size: 13px;
+    color: #999;
+    margin: 4px 0;
+    line-height: 1.4em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+.search-result-url {
+    display: block;
+    font-size: 11px;
+    color: #555;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* Keyword highlight in results */
+em.search-keyword {
+    border-bottom: 1px dashed #2bbc8a;
+    font-weight: bold;
+    font-style: normal;
+    color: #fefe54;
+}
+
+/* ---- Footer shortcuts bar ---- */
+#search-footer {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: #444;
+    border-top: 1px solid #1a1a1a;
+    flex-shrink: 0;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+#search-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ---- No-results fallback ---- */
+#search-overlay-results:empty::after {
+    content: '';
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 767px) {
+    #search-overlay-inner {
+        width: 96%;
+        max-height: 85vh;
+        border-radius: 4px;
+    }
+
+    #search-overlay-input {
+        font-size: 16px;
+    }
+
+    .search-result-item {
+        padding: 10px 12px;
+    }
+
+    #search-footer {
+        gap: 12px;
+        font-size: 10px;
+    }
+}

@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -79,6 +80,13 @@
 			</a>
 		  </li>
 		  
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		  <li>
+		    <a href="#" id="nav-search-btn" title="Search (Ctrl+K)" style="font-size:16px; padding: 10px 15px;">
+		      <i class="fa fa-search"></i>
+		    </a>
+		  </li>
 		</ul>
       </div>
     </div> <!-- container -->
@@ -139,11 +147,12 @@
 <div class="col-md-3" id="sidebar">
   
     
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
+  <div id="site_search" class="widget">
+    <button type="button" id="search-trigger-btn" class="search-trigger" title="Search (Ctrl+K)">
+      <span class="search-trigger-icon">🔍</span>
+      <span class="search-trigger-label">Search</span>
+      <span class="search-trigger-kbd">Ctrl+K</span>
+    </button>
   </div>
 
 
@@ -203,45 +212,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
-		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
-		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
 			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
 		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
 		
 			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
 		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>
@@ -313,7 +322,7 @@
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -322,7 +331,7 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -335,14 +344,10 @@
 
 
 
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
    </script>
+
 
 </body>
    </html>

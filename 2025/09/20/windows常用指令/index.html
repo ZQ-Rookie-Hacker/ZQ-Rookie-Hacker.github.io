@@ -66,6 +66,7 @@ whoami /all - 查看当前用户的详细权限信息">
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -114,6 +115,13 @@ whoami /all - 查看当前用户的详细权限信息">
 			</a>
 		  </li>
 		  
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		  <li>
+		    <a href="#" id="nav-search-btn" title="Search (Ctrl+K)" style="font-size:16px; padding: 10px 15px;">
+		      <i class="fa fa-search"></i>
+		    </a>
+		  </li>
 		</ul>
       </div>
     </div> <!-- container -->
@@ -475,7 +483,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -484,7 +492,7 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -497,14 +505,10 @@ window.addEventListener('load', function() {
 
 
 
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
    </script>
+
 
 </body>
    </html>

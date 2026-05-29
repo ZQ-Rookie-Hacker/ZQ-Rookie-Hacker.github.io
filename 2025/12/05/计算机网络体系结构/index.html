@@ -303,6 +303,7 @@ FTP程序
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -351,6 +352,13 @@ FTP程序
 			</a>
 		  </li>
 		  
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		  <li>
+		    <a href="#" id="nav-search-btn" title="Search (Ctrl+K)" style="font-size:16px; padding: 10px 15px;">
+		      <i class="fa fa-search"></i>
+		    </a>
+		  </li>
 		</ul>
       </div>
     </div> <!-- container -->
@@ -1144,13 +1152,13 @@ FTP程序
 
     
     
-    <a href="/2025/12/05/网络层/" type="button" class="btn btn-default"><i
+    <a href="/2025/12/05/物理层/" type="button" class="btn btn-default"><i
                 class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2025/11/13/VPN代理与流量流向分析/" type="button" class="btn btn-default ">下一页<i
+    <a href="/2025/12/05/网络层/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -1321,7 +1329,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -1330,7 +1338,7 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -1343,14 +1351,10 @@ window.addEventListener('load', function() {
 
 
 
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
    </script>
+
 
 </body>
    </html>

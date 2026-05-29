@@ -63,11 +63,6 @@
     font-size: 14px !important;
   }
 
-  #nav-search-btn {
-    font-size: 18px !important;
-    padding: 6px 12px !important;
-  }
-
   /* -- Images: prevent overflow -- */
   .post img,
   .page img,

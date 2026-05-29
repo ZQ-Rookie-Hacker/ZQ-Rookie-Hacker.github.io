@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>漏洞挖掘场景 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：
+123456POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2Ho">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="漏洞挖掘场景"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 漏洞挖掘场景</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="0x01-小程序接口-type-参数-SQL-时间盲注——老老实实每个功能抓包"><a href="#0x01-小程序接口-type-参数-SQL-时间盲注——老老实实每个功能抓包" class="headerlink" title="0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包"></a>0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包</h2><p>现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2</span><br><span class="line">Host: xxxx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">type=1</span><br></pre></td></tr></table></figure>
+
+<p>很明显可以尝试 <code>type</code> 参数是否存在 SQL 注入漏洞：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type=if(1=1, sleep(2), 1)</span><br></pre></td></tr></table></figure>
+
+<p>成功延迟。总结一下，这就是一个 edu 小程序获取学校通知内容的数据包，还是要老老实实每个功能抓包查看啊。</p>
+<hr>
+<h2 id="0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息"><a href="#0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息" class="headerlink" title="0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息"></a>0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</h2><p>在平台更新新资产后，对目标站点进行常规打点探测，过程中发现关联的小程序入口。初步浏览小程序仅看到名片展示功能，看似无高价值测试点，但在抓包分析接口数据包时，意外发现接口会返回其他用户的个人邮箱和手机号等敏感信息，同时注意到请求参数中存在一个疑似用户标识的 <code>id</code> 参数，由此初步判断存在越权漏洞风险。</p>
+<p>随后尝试对该 <code>id</code> 参数进行常规 Base64 解密，结果解密内容无规律且无效，结合参数特征和经验进一步判断该 <code>id</code> 采用了 AES 加密方式。为获取加密密钥，直接对目标小程序进行反编译操作，拿到小程序源码后，通过搜索 “AES” 关键字定位到加密相关代码片段，从中提取出 AES 加密所需的 key、iv 向量、加密模式（CBC）及填充方式（Pkcs7）等核心信息，利用这些信息成功将加密的 <code>id</code> 参数解密为纯数字格式的原始用户 id。</p>
+<p>接着编写自动化脚本，批量生成连续的原始用户 id，再用获取到的 AES 密钥将每个原始 id 加密为接口可识别的格式，批量发送接口请求进行遍历探测，最终成功获取到约 10 万条用户名片信息，包含手机号、邮箱等敏感数据。最后整理漏洞细节提交报告，厂商确认该漏洞为高危越权漏洞并完成修复。</p>
+<hr>
+<h2 id="0x03-Oracle-报错注入-WAF-绕过——垃圾数据-注释干扰-手工脚本突破"><a href="#0x03-Oracle-报错注入-WAF-绕过——垃圾数据-注释干扰-手工脚本突破" class="headerlink" title="0x03 Oracle 报错注入 WAF 绕过——垃圾数据 /**/ 注释干扰 + 手工脚本突破"></a>0x03 Oracle 报错注入 WAF 绕过——垃圾数据 <code>/**/</code> 注释干扰 + 手工脚本突破</h2><p>处于未进入目标教育网站后台、准备开展漏洞探测的场景。思路是先拿到合法登录权限，才能访问内部接口并排查潜在漏洞。进行账号密码登录并抓取系统内接口请求数据包后，定位到 <code>queryActivityList.do</code> 可疑接口，重点核查接口参数是否直接拼接 SQL 语句，以此判断是否存在注入风险。</p>
+<p>解析数据包后发现 <code>sortField</code> 参数会直接插入 SQL 语句的 <code>ORDER BY</code> 子句，可利用 Oracle 报错注入获取数据。但注入行为会被 WAF 拦截，且 <code>ORDER BY</code> 后参数长度受限。</p>
+<p>核心绕过手法：在真实 SQL 注入语句前后，塞入超大量用 <code>/**/</code> 注释符包裹的无用字符，这些被注释的垃圾数据会被数据库忽略，不影响注入语句执行，还能干扰 WAF 特征检测、避开 <code>ORDER BY</code> 后的长度限制，成功突破防护。</p>
+<p>随后自动化注入工具 SQLMap 无法识别该漏洞，放弃工具依赖，自行编写 Python 脚本开展手动注入测试。逐步探测数据库结构后发现目标数据库存在一千多张数据表，且表名为汉字拼音首字母缩写，无法直观识别表内容。结合网站业务背景经验，人工推测表含义并逐个开展注入查询，排除空表后成功读取到有效业务数据。最后展示注入数据作为漏洞证明，向站点提出参数过滤、预编译查询等针对性安全优化建议。</p>
+<hr>
+<h2 id="0x04-水电费小程序未授权访问——若依（RuoYi）框架固定路径利用"><a href="#0x04-水电费小程序未授权访问——若依（RuoYi）框架固定路径利用" class="headerlink" title="0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用"></a>0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</h2><p>进入目标大学宿舍电费微信小程序，随意绑定一个房间并开启代理抓取所有请求数据包。将核心请求包放入 Repeater 模块，手动修改接口路径为 <code>/prod-api/system/user/list</code> 并发送请求，成功访问用户列表接口，发现普通用户信息泄露。</p>
+<p>继续修改接口路径为 <code>/prod-api/system/config/list</code>、<code>/prod-api/system/user/1</code> 并分别发送请求，探测到配置接口泄露管理员初始密码、用户详情接口泄露加密密码，确认接口存在严重未授权访问漏洞。</p>
+<blockquote>
+<p>国内最常用的若依（RuoYi）框架，这套框架有固定死的后台接口地址，所有人都能用，不用瞎猜：</p>
+<ul>
+<li>用户列表：<code>/system/user/list</code></li>
+<li>系统配置：<code>/system/config/list</code></li>
+<li>部门列表：<code>/system/dept/list</code></li>
+</ul>
+<p>你只需要把抓到的任意接口前缀（如 <code>/prod-api/</code>）保留，后面直接套这些通用地址就能测试。所谓的 “经验”，只是知道「大学 &#x2F; 企业后台最爱用若依框架」，知道这些固定地址而已，不是凭空乱改。</p>
+</blockquote>
+<hr>
+<h2 id="0x05-Spring-Boot-敏感端点探测——-env-与-heapdump-信息泄露利用"><a href="#0x05-Spring-Boot-敏感端点探测——-env-与-heapdump-信息泄露利用" class="headerlink" title="0x05 Spring Boot 敏感端点探测——/env 与 /heapdump 信息泄露利用"></a>0x05 Spring Boot 敏感端点探测——<code>/env</code> 与 <code>/heapdump</code> 信息泄露利用</h2><p>在 eduSRC 教育类站点的漏洞挖掘过程中，以目标系统登录页面为起点，首先开展弱口令、SQL 注入等常规 Web 漏洞测试。未发现明显漏洞后，转而分析前端 JS 文件以寻找潜在接口，但其暴露的接口均会重定向至登录页面，无法直接未授权访问。</p>
+<p>随后通过页面图标特征识别出目标采用 Spring Boot 框架，便尝试使用 SpringBoot 专用工具批量探测该框架常见的 <code>/actuator</code> 系列敏感端点，然而工具未返回任何有效结果，推测工具特征被目标安全防护机制检测并拦截。</p>
+<p>在此情况下放弃工具扫描，转为手工试探 Spring Boot 典型敏感路径：</p>
+<ul>
+<li>直接拼接访问 <code>/env</code> 端点，成功获取环境变量、内网地址等敏感信息</li>
+<li>结合经验判断存在 <code>/env</code> 端点通常会伴随 <code>/heapdump</code> 堆转储文件，进而访问并下载</li>
+<li>使用 JDumpSpider 工具对 <code>heapdump</code> 文件进行解密分析，最终提取出内网明文密码等高价值敏感数据</li>
+</ul>
+<p>整个过程充分体现了 SRC 漏洞挖掘的核心思路：常规测试无果后需精准识别技术栈、灵活切换工具探测与手工测试模式；针对 Spring Boot 这类特定框架，在工具被防护时手工探测其特有敏感路径是突破关键；同时对泄露的 <code>heapdump</code> 等文件进行深度解析，能进一步挖掘出可直接利用的敏感信息，大幅提升漏洞挖掘的成功率与价值。</p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="漏洞挖掘场景">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-03-09
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>38</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>10</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/SRC/">SRC<span>4</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/SRC/">SRC<span>4</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3-type-%E5%8F%82%E6%95%B0-SQL-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8%E2%80%94%E2%80%94%E8%80%81%E8%80%81%E5%AE%9E%E5%AE%9E%E6%AF%8F%E4%B8%AA%E5%8A%9F%E8%83%BD%E6%8A%93%E5%8C%85"><span class="toc-article-text">0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-%E5%B0%8F%E7%A8%8B%E5%BA%8F-AES-%E5%8A%A0%E5%AF%86-id-%E5%8F%82%E6%95%B0%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94%E9%80%86%E5%90%91%E5%8F%8D%E7%BC%96%E8%AF%91-%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86%E6%8B%BF%E4%B8%8B%E5%8D%81%E4%B8%87%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="toc-article-text">0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-Oracle-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%95%B0%E6%8D%AE-%E6%B3%A8%E9%87%8A%E5%B9%B2%E6%89%B0-%E6%89%8B%E5%B7%A5%E8%84%9A%E6%9C%AC%E7%AA%81%E7%A0%B4"><span class="toc-article-text">0x03 Oracle 报错注入 WAF 绕过——垃圾数据 &#x2F;**&#x2F; 注释干扰 + 手工脚本突破</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-%E6%B0%B4%E7%94%B5%E8%B4%B9%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E8%8B%A5%E4%BE%9D%EF%BC%88RuoYi%EF%BC%89%E6%A1%86%E6%9E%B6%E5%9B%BA%E5%AE%9A%E8%B7%AF%E5%BE%84%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-Spring-Boot-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%8E%A2%E6%B5%8B%E2%80%94%E2%80%94-env-%E4%B8%8E-heapdump-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x05 Spring Boot 敏感端点探测——&#x2F;env 与 &#x2F;heapdump 信息泄露利用</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

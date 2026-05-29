@@ -1,0 +1,610 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>框架接口 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x01 Spring Boot 敏感接口
+
+
+接口分类
+接口路径
+核心功能
+风险等级
+
+
+
+Actuator 极高危端点
+&amp;#x2F;actuator&amp;#x2F;heapdump
+下载Java堆内存转储文件
+★★★★★
+
+
+Actuator 极高危端点
+&amp;#x2F;actuator&amp;#x2F;en">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="框架接口"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 框架接口</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="0x01-Spring-Boot-敏感接口"><a href="#0x01-Spring-Boot-敏感接口" class="headerlink" title="0x01 Spring Boot 敏感接口"></a>0x01 Spring Boot 敏感接口</h2><table>
+<thead>
+<tr>
+<th>接口分类</th>
+<th>接口路径</th>
+<th>核心功能</th>
+<th>风险等级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Actuator 极高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;heapdump</td>
+<td>下载Java堆内存转储文件</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 极高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;env</td>
+<td>展示应用全量环境变量与配置参数</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 极高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;configprops</td>
+<td>展示所有Spring配置属性（含隐藏凭证）</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 极高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;beans</td>
+<td>展示全量Spring Bean实例与依赖关系</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td><strong>Actuator 极高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;dump</td>
+<td>生成Java线程全量转储记录</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;mappings</td>
+<td>展示应用所有URL接口映射关系</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;httpexchanges</td>
+<td>展示最近HTTP请求全量记录（含参数&#x2F;Token）</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;trace</td>
+<td>展示HTTP请求追踪记录（1.x版本核心）</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;loggers</td>
+<td>动态管理应用日志配置与输出级别</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;jolokia</td>
+<td>JMX远程监控与操作接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 高危端点</strong></td>
+<td>&#x2F;actuator&#x2F;shutdown</td>
+<td>远程优雅关闭Spring Boot应用</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 中危端点</strong></td>
+<td>&#x2F;actuator&#x2F;info</td>
+<td>展示应用版本、构建、环境等基础信息</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 中危端点</strong></td>
+<td>&#x2F;actuator&#x2F;health</td>
+<td>展示应用与依赖组件的健康状态</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 中危端点</strong></td>
+<td>&#x2F;actuator&#x2F;metrics</td>
+<td>展示系统性能、业务指标全量数据</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 中危端点</strong></td>
+<td>&#x2F;actuator&#x2F;conditions</td>
+<td>展示Spring自动配置条件评估结果</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 中危端点</strong></td>
+<td>&#x2F;actuator&#x2F;scheduledtasks</td>
+<td>展示应用所有定时任务配置与执行规则</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;auditevents</td>
+<td>展示应用审计事件全量记录</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;caches</td>
+<td>管理应用缓存实例与缓存数据</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;flyway</td>
+<td>展示数据库Flyway迁移执行记录</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;liquibase</td>
+<td>展示Liquibase数据库变更执行记录</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;threaddump</td>
+<td>生成Java线程转储快照</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>Actuator 低危端点</strong></td>
+<td>&#x2F;actuator&#x2F;sessions</td>
+<td>管理Spring Session用户会话</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-认证类</strong></td>
+<td>&#x2F;login、&#x2F;api&#x2F;auth&#x2F;login</td>
+<td>应用用户登录认证接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-认证类</strong></td>
+<td>&#x2F;resetPassword、&#x2F;api&#x2F;user&#x2F;reset</td>
+<td>密码重置&#x2F;找回接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-认证类</strong></td>
+<td>&#x2F;admin&#x2F;role、&#x2F;api&#x2F;permissions</td>
+<td>角色与权限管理接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-认证类</strong></td>
+<td>&#x2F;user&#x2F;profile、&#x2F;api&#x2F;user&#x2F;info</td>
+<td>用户个人信息查询接口</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-数据操作类</strong></td>
+<td>&#x2F;upload、&#x2F;api&#x2F;file&#x2F;upload</td>
+<td>文件上传接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-数据操作类</strong></td>
+<td>&#x2F;download、&#x2F;api&#x2F;file&#x2F;download</td>
+<td>文件下载&#x2F;读取接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-数据操作类</strong></td>
+<td>&#x2F;api&#x2F;data&#x2F;query、&#x2F;admin&#x2F;backup</td>
+<td>数据库查询&#x2F;备份接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-数据操作类</strong></td>
+<td>&#x2F;api&#x2F;system&#x2F;exec、&#x2F;admin&#x2F;cmd</td>
+<td>系统命令执行接口</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-配置管理类</strong></td>
+<td>&#x2F;api&#x2F;config、&#x2F;admin&#x2F;settings</td>
+<td>系统全局配置管理接口</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-配置管理类</strong></td>
+<td>&#x2F;api&#x2F;cache&#x2F;clear、&#x2F;admin&#x2F;cache</td>
+<td>缓存管理与清空接口</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-配置管理类</strong></td>
+<td>&#x2F;api&#x2F;logs、&#x2F;admin&#x2F;log</td>
+<td>系统日志查询与管理接口</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>业务敏感接口-配置管理类</strong></td>
+<td>&#x2F;debug、&#x2F;api&#x2F;test</td>
+<td>开发调试&#x2F;测试接口</td>
+<td>★★★★</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>补充说明：Spring Boot 1.x 版本Actuator端点默认无<code>/actuator</code>前缀，可直接访问<code>/env</code>、<code>/heapdump</code>等根路径；2.x+版本默认统一前缀为<code>/actuator</code>。</p>
+</blockquote>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="框架接口">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-05-29
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>38</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>10</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/框架/">框架<span>1</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/框架/">框架<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-Spring-Boot-%E6%95%8F%E6%84%9F%E6%8E%A5%E5%8F%A3"><span class="toc-article-text">0x01 Spring Boot 敏感接口</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

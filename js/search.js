@@ -1,110 +1,142 @@
 /**
- * Improved Local Search for Freemind.bithack Theme
- * Features:
- * - Modal overlay with full-width search input
- * - Instant keyword matching with relevance ranking
- * - Keyboard navigation (↑↓ Enter Esc)
- * - Click-outside-to-close
- * - Debounced input for performance
- * - Content snippet with highlighted matches
- * - Ctrl+K shortcut to open
- * - Hidden posts excluded at index generation time
+ * Local Search for Freemind.bithack Theme
+ * Regex-based XML parsing — no DOMParser dependency, works everywhere.
  */
 (function () {
   'use strict';
 
-  var searchData = null;       // cached search entries
-  var overlay = null;          // overlay DOM
-  var inputEl = null;          // search input
-  var resultEl = null;         // results container
-  var selectedIdx = -1;        // current keyboard selection
-  var visibleResults = [];     // currently filtered/matching entries
+  var searchData = null;
+  var overlay = null;
+  var inputEl = null;
+  var resultEl = null;
+  var statusEl = null;
+  var selectedIdx = -1;
+  var visibleResults = [];
   var debounceTimer = null;
 
-  // ---------- DOM Builder ----------
+  // ---------- Parse search.xml text → array of {title,content,url} ----------
+
+  function parseXML(text) {
+    var list = [];
+    // Match each <entry>...</entry> block
+    var entryRe = /<entry>([\s\S]*?)<\/entry>/g;
+    var m;
+    while ((m = entryRe.exec(text)) !== null) {
+      var block = m[1];
+      var title = extractTag(block, 'title');
+      var url = extractTag(block, 'url');
+      var content = extractTag(block, 'content');
+      if (!title || !url) continue;
+      // content might be wrapped in CDATA — strip it
+      content = content.replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '');
+      // Strip HTML tags
+      var plain = content.replace(/<[^>]*>/g, ' ').replace(/[\s\r\n]+/g, ' ').trim();
+      list.push({ title: title, content: plain, url: url });
+    }
+    return list;
+  }
+
+  function extractTag(block, tag) {
+    var re = new RegExp('<' + tag + '>([\\s\\S]*?)</' + tag + '>', 'i');
+    var m = block.match(re);
+    return m ? m[1] : '';
+  }
+
+  // ---------- Preload ----------
+
+  function preloadData() {
+    var url = (typeof searchPath !== 'undefined' && searchPath) ? searchPath : '/search.xml';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status !== 200 && xhr.status !== 304 && xhr.status !== 0) {
+        searchData = []; return;
+      }
+      try {
+        searchData = parseXML(xhr.responseText);
+      } catch (e) {
+        searchData = [];
+      }
+    };
+
+    xhr.send();
+  }
+
+  // ---------- DOM ----------
 
   function buildOverlay() {
     var wrap = document.createElement('div');
     wrap.id = 'search-overlay';
-    wrap.setAttribute('role', 'dialog');
-    wrap.setAttribute('aria-label', 'Search');
+    wrap.onclick = function (e) { if (e.target === wrap) closeOverlay(); };
 
-    // Backdrop click → close
-    wrap.addEventListener('click', function (e) {
-      if (e.target === wrap) closeOverlay();
-    });
-
-    // Inner container
     var inner = document.createElement('div');
     inner.id = 'search-overlay-inner';
 
-    // Header: input + hint
-    var header = document.createElement('div');
-    header.id = 'search-overlay-header';
-
-    var inputWrap = document.createElement('div');
-    inputWrap.id = 'search-input-wrap';
+    var hdr = document.createElement('div');
+    hdr.id = 'search-overlay-header';
+    var iw = document.createElement('div');
+    iw.id = 'search-input-wrap';
 
     var icon = document.createElement('span');
     icon.id = 'search-input-icon';
-    icon.innerHTML = '&#x1F50D;'; // magnifying glass
-    inputWrap.appendChild(icon);
+    icon.appendChild(document.createTextNode('🔍'));
+    iw.appendChild(icon);
 
-    var input = document.createElement('input');
-    input.type = 'text';
-    input.id = 'search-overlay-input';
-    input.setAttribute('placeholder', 'Search articles...');
-    input.setAttribute('autocomplete', 'off');
-    input.setAttribute('spellcheck', 'false');
-    inputWrap.appendChild(input);
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'search-overlay-input';
+    inp.placeholder = 'Search articles...';
+    inp.autocomplete = 'off';
+    inp.spellcheck = false;
+    iw.appendChild(inp);
 
     var hint = document.createElement('span');
     hint.id = 'search-hint';
-    hint.textContent = 'ESC to close';
-    inputWrap.appendChild(hint);
+    hint.appendChild(document.createTextNode('ESC to close'));
+    iw.appendChild(hint);
 
-    header.appendChild(inputWrap);
-    inner.appendChild(header);
+    hdr.appendChild(iw);
+    inner.appendChild(hdr);
 
-    // Status line
-    var status = document.createElement('div');
-    status.id = 'search-status';
-    inner.appendChild(status);
+    var st = document.createElement('div');
+    st.id = 'search-status';
+    inner.appendChild(st);
 
-    // Results list
-    var results = document.createElement('div');
-    results.id = 'search-overlay-results';
-    inner.appendChild(results);
+    var res = document.createElement('div');
+    res.id = 'search-overlay-results';
+    inner.appendChild(res);
 
-    // Footer
-    var footer = document.createElement('div');
-    footer.id = 'search-footer';
-    footer.innerHTML = '<span>↑↓ Navigate</span><span>⏎ Open</span><span>Esc Close</span>';
-    inner.appendChild(footer);
+    var foot = document.createElement('div');
+    foot.id = 'search-footer';
+    foot.appendChild(document.createTextNode('↑↓ Navigate    ⏎ Open    Esc Close'));
+    inner.appendChild(foot);
 
     wrap.appendChild(inner);
     document.body.appendChild(wrap);
 
     overlay = wrap;
-    inputEl = input;
-    resultEl = results;
+    inputEl = inp;
+    resultEl = res;
+    statusEl = st;
 
-    // Input events
-    input.addEventListener('input', onInput);
-    input.addEventListener('keydown', onKeydown);
-    // ESC on document
-    document.addEventListener('keydown', onGlobalKeydown);
+    inp.addEventListener('input', onInput);
+    inp.addEventListener('keydown', onKeydown);
   }
 
-  // ---------- Overlay Show/Hide ----------
+  // ---------- Open / Close ----------
 
   function openOverlay() {
+    if (!document.body) return;
     if (!overlay) buildOverlay();
+
     overlay.classList.add('active');
     inputEl.value = '';
     inputEl.focus();
     resultEl.innerHTML = '';
-    document.getElementById('search-status').textContent = '';
+    if (statusEl) statusEl.textContent = '';
     selectedIdx = -1;
     visibleResults = [];
     document.body.style.overflow = 'hidden';
@@ -119,55 +151,7 @@
     if (debounceTimer) { clearTimeout(debounceTimer); debounceTimer = null; }
   }
 
-  // ---------- Data Loading ----------
-
-  function loadData(callback) {
-    if (searchData) return callback();
-
-    // Use global path set by after_footer.ejs
-    var url = (typeof searchPath !== 'undefined' && searchPath) ? searchPath : '/search.xml';
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          var xml = xhr.responseXML;
-          if (!xml) {
-            // Fallback: parse as text
-            var parser = new DOMParser();
-            xml = parser.parseFromString(xhr.responseText, 'text/xml');
-          }
-          var entries = xml.getElementsByTagName('entry');
-          searchData = [];
-          for (var i = 0; i < entries.length; i++) {
-            var entry = entries[i];
-            var title = getText(entry, 'title');
-            var content = getText(entry, 'content');
-            var url = getText(entry, 'url');
-            // Strip HTML tags from content for clean matching and snippet extraction
-            var plainContent = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-            searchData.push({
-              title: title,
-              content: plainContent,
-              url: url
-            });
-          }
-          callback();
-        } else {
-          document.getElementById('search-status').textContent = 'Search index failed to load.';
-        }
-      }
-    };
-    xhr.send();
-  }
-
-  function getText(parent, tagName) {
-    var el = parent.getElementsByTagName(tagName)[0];
-    return el ? (el.textContent || el.innerText || '') : '';
-  }
-
-  // ---------- Search Logic ----------
+  // ---------- Search ----------
 
   function onInput() {
     if (debounceTimer) clearTimeout(debounceTimer);
@@ -176,279 +160,166 @@
 
   function performSearch() {
     var query = inputEl.value.trim();
-    var statusEl = document.getElementById('search-status');
     selectedIdx = -1;
     visibleResults = [];
 
     if (!query) {
       resultEl.innerHTML = '';
-      statusEl.textContent = '';
+      if (statusEl) statusEl.textContent = '';
       return;
     }
 
-    if (!searchData) {
-      statusEl.textContent = 'Loading...';
-      loadData(function () {
-        performSearch();
-      });
+    if (searchData === null) {
+      if (statusEl) statusEl.textContent = 'Loading…';
+      return;
+    }
+    if (!searchData.length) {
+      if (statusEl) statusEl.textContent = 'Search unavailable.';
       return;
     }
 
     var keywords = query.toLowerCase().split(/[\s\-]+/).filter(Boolean);
+    if (!keywords.length) { resultEl.innerHTML = ''; if (statusEl) statusEl.textContent = ''; return; }
 
-    // Score each entry
     var scored = [];
-    searchData.forEach(function (entry, idx) {
-      var titleLower = entry.title.toLowerCase();
-      var contentLower = entry.content.toLowerCase();
+    for (var i = 0; i < searchData.length; i++) {
+      var e = searchData[i];
+      var tl = e.title.toLowerCase();
+      var cl = e.content.toLowerCase();
       var score = 0;
-      var titleMatches = [];
-      var contentMatches = [];
+      var matched = [];
+      var fp = -1;
 
-      keywords.forEach(function (kw) {
-        var ti = titleLower.indexOf(kw);
-        if (ti !== -1) {
-          score += 10; // title match is heavily weighted
-          titleMatches.push(kw);
-        }
-        var ci = contentLower.indexOf(kw);
-        if (ci !== -1) {
-          score += 1; // content match has lower weight
-          contentMatches.push(kw);
-        }
-      });
-
-      if (score > 0) {
-        var firstContentPos = -1;
-        keywords.forEach(function (kw) {
-          var pos = contentLower.indexOf(kw);
-          if (pos !== -1 && (firstContentPos === -1 || pos < firstContentPos)) {
-            firstContentPos = pos;
-          }
-        });
-
-        scored.push({
-          entry: entry,
-          score: score,
-          titleMatches: titleMatches,
-          contentMatches: contentMatches,
-          firstContentPos: firstContentPos,
-          idx: idx
-        });
+      for (var k = 0; k < keywords.length; k++) {
+        var kw = keywords[k];
+        if (tl.indexOf(kw) !== -1) { score += 10; if (matched.indexOf(kw) === -1) matched.push(kw); }
+        var cp = cl.indexOf(kw);
+        if (cp !== -1) { score += 1; if (matched.indexOf(kw) === -1) matched.push(kw); if (fp === -1 || cp < fp) fp = cp; }
       }
-    });
-
-    // Sort: higher score first, then title matches as tiebreaker
-    scored.sort(function (a, b) {
-      if (b.score !== a.score) return b.score - a.score;
-      // Prefer title matches
-      if (a.titleMatches.length > 0 && b.titleMatches.length === 0) return -1;
-      if (b.titleMatches.length > 0 && a.titleMatches.length === 0) return 1;
-      return 0;
-    });
-
-    visibleResults = scored;
+      if (score > 0) scored.push({ entry: e, score: score, matchedKeywords: matched, firstContentPos: fp });
+    }
 
     if (!scored.length) {
-      statusEl.textContent = 'No results found for "' + query + '"';
+      if (statusEl) statusEl.textContent = 'No results for "' + query + '"';
       resultEl.innerHTML = '';
       return;
     }
 
-    statusEl.textContent = scored.length + ' result' + (scored.length > 1 ? 's' : '') + ' found';
+    scored.sort(function (a, b) { return b.score - a.score; });
+    visibleResults = scored;
+    if (statusEl) statusEl.textContent = scored.length + ' result' + (scored.length > 1 ? 's' : '');
     renderResults(scored);
   }
 
-  // ---------- Rendering ----------
+  // ---------- Render ----------
 
   function renderResults(scored) {
-    var html = '<ul id="search-result-list">';
-    scored.forEach(function (item, listIdx) {
-      var entry = item.entry;
-      var snippet = buildSnippet(entry.content, item.firstContentPos, item.contentMatches.concat(item.titleMatches));
+    var p = ['<ul id="search-result-list">'];
+    for (var i = 0; i < scored.length; i++) {
+      var item = scored[i];
+      var e = item.entry;
+      var snippet = buildSnippet(e.content, item.firstContentPos);
+      var th = escapeHtml(e.title);
+      for (var k = 0; k < item.matchedKeywords.length; k++) { th = highlightText(th, item.matchedKeywords[k]); }
 
-      // Highlight title
-      var titleHtml = escapeHtml(entry.title);
-      item.titleMatches.forEach(function (kw) {
-        titleHtml = highlightText(titleHtml, kw);
-      });
-
-      html += '<li class="search-result-item' + (listIdx === 0 ? ' selected' : '') + '" data-url="' + escapeAttr(entry.url) + '" data-idx="' + listIdx + '">';
-      html += '<a class="search-result-title" href="' + escapeAttr(entry.url) + '">' + titleHtml + '</a>';
+      p.push('<li class="search-result-item' + (i === 0 ? ' selected' : '') + '" data-url="' + escapeAttr(e.url) + '" data-idx="' + i + '">');
+      p.push('<a class="search-result-title" href="' + escapeAttr(e.url) + '">' + th + '</a>');
       if (snippet) {
-        // Highlight keywords in snippet
-        var snippetHtml = escapeHtml(snippet);
-        item.contentMatches.forEach(function (kw) {
-          snippetHtml = highlightText(snippetHtml, kw);
-        });
-        html += '<p class="search-result-snippet">' + snippetHtml + '</p>';
+        var sh = escapeHtml(snippet);
+        for (var j = 0; j < item.matchedKeywords.length; j++) { sh = highlightText(sh, item.matchedKeywords[j]); }
+        p.push('<p class="search-result-snippet">' + sh + '</p>');
       }
-      html += '<span class="search-result-url">' + escapeHtml(entry.url) + '</span>';
-      html += '</li>';
-    });
-    html += '</ul>';
-    resultEl.innerHTML = html;
+      p.push('<span class="search-result-url">' + escapeHtml(e.url) + '</span>');
+      p.push('</li>');
+    }
+    p.push('</ul>');
+    resultEl.innerHTML = p.join('');
     selectedIdx = 0;
+    bindResultItems();
+  }
 
-    // Bind click/hover on result items
+  function bindResultItems() {
     var items = resultEl.querySelectorAll('.search-result-item');
     for (var i = 0; i < items.length; i++) {
-      (function (item) {
-        item.addEventListener('mouseenter', function () {
-          setSelection(parseInt(item.getAttribute('data-idx')));
-        });
-        item.addEventListener('click', function (e) {
-          // Let the <a> handle navigation naturally if it was clicked
-          if (e.target.tagName === 'A') return;
-          var a = item.querySelector('a');
-          if (a) window.location.href = a.getAttribute('href');
-        });
+      (function (el) {
+        el.addEventListener('mouseenter', function () { setSelection(parseInt(el.getAttribute('data-idx'), 10)); });
+        el.addEventListener('click', function (e) { if (e.target.tagName === 'A') return; var a = el.querySelector('a'); if (a) window.location.href = a.getAttribute('href'); });
       })(items[i]);
     }
   }
 
-  function buildSnippet(content, firstPos, keywords) {
-    if (firstPos < 0) {
-      // Use title match only — show beginning of content
-      return content.substring(0, 150);
-    }
-    var start = Math.max(0, firstPos - 40);
-    var end = Math.min(content.length, firstPos + 120);
-    var snippet = content.substring(start, end);
-    if (start > 0) snippet = '...' + snippet;
-    if (end < content.length) snippet = snippet + '...';
-    return snippet;
+  function buildSnippet(content, firstPos) {
+    if (firstPos < 0) return content.substring(0, 150);
+    var s = Math.max(0, firstPos - 40);
+    var e = Math.min(content.length, firstPos + 120);
+    var snip = content.substring(s, e);
+    if (s > 0) snip = '…' + snip;
+    if (e < content.length) snip = snip + '…';
+    return snip;
   }
 
   function highlightText(text, keyword) {
-    var re = new RegExp('(' + escapeRegex(keyword) + ')', 'gi');
-    return text.replace(re, '<em class="search-keyword">$1</em>');
+    return text.replace(new RegExp('(' + escapeRegex(keyword) + ')', 'gi'), '<em class="search-keyword">$1</em>');
   }
 
-  // ---------- Keyboard Navigation ----------
+  // ---------- Keyboard ----------
 
   function onKeydown(e) {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeOverlay();
-      return;
-    }
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (visibleResults.length === 0) return;
-      setSelection(Math.min(selectedIdx + 1, visibleResults.length - 1));
-      return;
-    }
-
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (visibleResults.length === 0) return;
-      setSelection(Math.max(selectedIdx - 1, 0));
-      return;
-    }
-
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (selectedIdx >= 0 && selectedIdx < visibleResults.length) {
-        var url = visibleResults[selectedIdx].entry.url;
-        window.location.href = url;
-      }
-      return;
-    }
+    var key = e.key || '';
+    if (key === 'Escape')     { e.preventDefault(); closeOverlay(); }
+    else if (key === 'ArrowDown') { e.preventDefault(); if (visibleResults.length) setSelection(Math.min(selectedIdx + 1, visibleResults.length - 1)); }
+    else if (key === 'ArrowUp')   { e.preventDefault(); if (visibleResults.length) setSelection(Math.max(selectedIdx - 1, 0)); }
+    else if (key === 'Enter')     { e.preventDefault(); if (selectedIdx >= 0 && selectedIdx < visibleResults.length) window.location.href = visibleResults[selectedIdx].entry.url; }
   }
 
   function onGlobalKeydown(e) {
-    // Ctrl+K or Cmd+K to open search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      openOverlay();
-      return;
-    }
-
-    // Slash "/" to open search (when not in an input/textarea)
-    if (e.key === '/' && !isEditingElement(e.target)) {
-      e.preventDefault();
-      openOverlay();
-      return;
-    }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openOverlay(); return; }
+    if (e.key === '/' && !isEditingElement(e.target)) { e.preventDefault(); openOverlay(); }
   }
 
   function isEditingElement(el) {
     if (!el) return false;
-    var tag = el.tagName || '';
-    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' ||
-      el.isContentEditable || el.getAttribute('contenteditable') === 'true';
+    var t = el.tagName || '';
+    return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || el.isContentEditable || el.getAttribute('contenteditable') === 'true';
   }
 
   function setSelection(idx) {
     selectedIdx = idx;
     var items = resultEl.querySelectorAll('.search-result-item');
     for (var i = 0; i < items.length; i++) {
-      if (i === idx) {
-        items[i].classList.add('selected');
-        items[i].scrollIntoView({ block: 'nearest' });
-      } else {
-        items[i].classList.remove('selected');
-      }
+      items[i].classList[i === idx ? 'add' : 'remove']('selected');
+      if (i === idx) items[i].scrollIntoView({ block: 'nearest' });
     }
   }
 
-  // ---------- Helpers ----------
+  // ---------- Utilities ----------
 
   function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(str));
+    return d.innerHTML;
   }
-
   function escapeAttr(str) {
     return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
-
   function escapeRegex(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  // ---------- Init: wire up trigger button ----------
-
-  function openSearch() {
-    loadData(function () {
-      openOverlay();
-    });
-  }
+  // ---------- Init ----------
 
   function init() {
-    // Attach click handler to sidebar search trigger button
-    var trigger = document.getElementById('search-trigger-btn');
-    if (trigger) {
-      trigger.addEventListener('click', function (e) {
-        e.preventDefault();
-        openSearch();
-      });
-    }
+    // Preload — searchPath already defined (script order fixed in after_footer.ejs)
+    preloadData();
 
-    // Attach click handler to navbar search button
-    var navBtn = document.getElementById('nav-search-btn');
-    if (navBtn) {
-      navBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        openSearch();
-      });
-    }
+    // Trigger button
+    var btn = document.getElementById('search-trigger-btn');
+    if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); openOverlay(); });
 
-    // Also attach to old inline input if it exists (fallback for old layout)
-    var oldInput = document.getElementById('local-search-input');
-    if (oldInput) {
-      oldInput.addEventListener('focus', function (e) {
-        e.preventDefault();
-        oldInput.blur();
-        openSearch();
-      });
-    }
+    // Global shortcut
+    document.addEventListener('keydown', onGlobalKeydown);
   }
 
-  // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

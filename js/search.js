@@ -37,7 +37,8 @@
   }
 
   function extractTag(block, tag) {
-    var re = new RegExp('<' + tag + '>([\\s\\S]*?)</' + tag + '>', 'i');
+    // Match <tag> or <tag attr="..."> — content tag has type="html"
+    var re = new RegExp('<' + tag + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + tag + '>', 'i');
     var m = block.match(re);
     return m ? m[1] : '';
   }

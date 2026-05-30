@@ -358,6 +358,631 @@ Actuator 极高危端点
 <blockquote>
 <p>补充说明：Spring Boot 1.x 版本Actuator端点默认无<code>/actuator</code>前缀，可直接访问<code>/env</code>、<code>/heapdump</code>等根路径；2.x+版本默认统一前缀为<code>/actuator</code>。</p>
 </blockquote>
+<hr>
+<h2 id="0x02-Nacos-服务管理平台"><a href="#0x02-Nacos-服务管理平台" class="headerlink" title="0x02 Nacos 服务管理平台"></a>0x02 Nacos 服务管理平台</h2><table>
+<thead>
+<tr>
+<th>接口分类</th>
+<th>接口路径</th>
+<th>核心功能</th>
+<th>风险等级</th>
+<th>备注（版本&#x2F;授权&#x2F;漏洞关联）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>配置中心（Config）- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs</code></td>
+<td>配置项增删改查（获取&#x2F;发布&#x2F;删除配置）</td>
+<td>★★★★★</td>
+<td>1.x默认未授权，2.x+需认证；可直接读取含数据库、AK&#x2F;SK的配置明文</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs/list</code></td>
+<td>批量获取所有配置列表</td>
+<td>★★★★★</td>
+<td>1.x默认未授权，可配合模糊查询批量遍历所有配置</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs/export</code></td>
+<td>导出全量配置为备份文件</td>
+<td>★★★★★</td>
+<td>未授权可直接下载所有配置明文，完整泄露业务敏感信息</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs/import</code></td>
+<td>导入外部配置文件</td>
+<td>★★★★★</td>
+<td>未授权可批量写入恶意配置，篡改应用逻辑或植入后门</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs/publish</code></td>
+<td>发布&#x2F;覆盖配置项</td>
+<td>★★★★★</td>
+<td>未授权可修改应用配置，导致RCE、权限提升或业务劫持</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 高危</strong></td>
+<td><code>/nacos/v1/cs/configs?search=blur</code></td>
+<td>模糊查询配置</td>
+<td>★★★★★</td>
+<td>1.4.1及以下版本存在Derby SQL注入漏洞（CVE-2021-29441）</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 高危</strong></td>
+<td><code>/nacos/v1/cs/configs/history</code></td>
+<td>获取配置历史版本与变更记录</td>
+<td>★★★★</td>
+<td>未授权可查看敏感配置修改记录，辅助渗透</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 高危</strong></td>
+<td><code>/nacos/v1/cs/tenant/list</code></td>
+<td>获取所有命名空间（租户）列表</td>
+<td>★★★★</td>
+<td>未授权可查看dev&#x2F;test&#x2F;prod等多环境配置，扩大攻击面</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 中危</strong></td>
+<td><code>/nacos/v1/cs/configs?search=accurate</code></td>
+<td>精确查询指定配置项</td>
+<td>★★★★</td>
+<td>需dataId&#x2F;group参数，未授权可读取目标配置</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 中危</strong></td>
+<td><code>/nacos/v1/cs/configs/delete</code></td>
+<td>删除指定配置项</td>
+<td>★★★★</td>
+<td>未授权可删除关键配置，导致应用服务异常</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 中危</strong></td>
+<td><code>/nacos/v1/cs/tenant</code></td>
+<td>创建&#x2F;删除命名空间</td>
+<td>★★★★</td>
+<td>未授权可新增恶意环境或删除现有业务环境</td>
+</tr>
+<tr>
+<td><strong>配置中心（Config）- 低危</strong></td>
+<td><code>/nacos/v1/cs/configs/listener</code></td>
+<td>获取配置监听器列表</td>
+<td>★★★</td>
+<td>未授权可查看应用订阅的配置，辅助资产测绘</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 极高危</strong></td>
+<td><code>/nacos/v1/ns/instance</code></td>
+<td>服务实例注册&#x2F;修改&#x2F;删除</td>
+<td>★★★★★</td>
+<td>未授权可篡改服务地址，劫持微服务流量</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 高危</strong></td>
+<td><code>/nacos/v1/ns/instance/list</code></td>
+<td>获取所有服务实例列表</td>
+<td>★★★★</td>
+<td>未授权可查看所有服务IP&#x2F;端口，收集内网资产信息</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 高危</strong></td>
+<td><code>/nacos/v1/ns/service/list</code></td>
+<td>获取所有微服务列表</td>
+<td>★★★</td>
+<td>未授权可查看业务服务名称，辅助资产测绘</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 中危</strong></td>
+<td><code>/nacos/v1/ns/service</code></td>
+<td>微服务注册&#x2F;修改&#x2F;删除</td>
+<td>★★★★</td>
+<td>未授权可创建恶意服务，诱导应用调用</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 中危</strong></td>
+<td><code>/nacos/v1/ns/operator/switches</code></td>
+<td>查看&#x2F;修改集群开关配置</td>
+<td>★★★★</td>
+<td>未授权可关闭安全检查、开启调试模式</td>
+</tr>
+<tr>
+<td><strong>服务发现（Naming）- 低危</strong></td>
+<td><code>/nacos/v1/ns/operator/servers</code></td>
+<td>获取集群节点信息</td>
+<td>★★★</td>
+<td>未授权可查看所有Nacos节点地址，辅助内网渗透</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 极高危</strong></td>
+<td><code>/nacos/v1/auth/users/add</code></td>
+<td>新增用户账号</td>
+<td>★★★★★</td>
+<td>未授权可创建管理员账号，接管Nacos控制台</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 极高危</strong></td>
+<td><code>/nacos/v1/auth/users/update</code></td>
+<td>修改用户信息&#x2F;密码</td>
+<td>★★★★★</td>
+<td>未授权可直接篡改admin管理员账号密码</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 高危</strong></td>
+<td><code>/nacos/v1/auth/users</code></td>
+<td>获取所有用户列表</td>
+<td>★★★★</td>
+<td>1.x默认未授权，可查看所有账号信息（含管理员）</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 高危</strong></td>
+<td><code>/nacos/v1/auth/token</code></td>
+<td>获取&#x2F;刷新认证令牌</td>
+<td>★★★★★</td>
+<td>配合默认<code>token.secret.key</code>漏洞，可伪造任意用户token</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 中危</strong></td>
+<td><code>/nacos/v1/auth/users/delete</code></td>
+<td>删除用户账号</td>
+<td>★★★★</td>
+<td>未授权可删除管理员账号，导致服务管理异常</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 中危</strong></td>
+<td><code>/nacos/v1/auth/roles/add</code></td>
+<td>新增角色权限</td>
+<td>★★★★</td>
+<td>未授权可创建高权限角色，提升权限</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 中危</strong></td>
+<td><code>/nacos/v1/auth/login</code></td>
+<td>用户登录接口</td>
+<td>★★★★</td>
+<td>无验证码时可暴力破解admin账号</td>
+</tr>
+<tr>
+<td><strong>用户与权限管理- 低危</strong></td>
+<td><code>/nacos/v1/auth/roles</code></td>
+<td>获取所有角色列表</td>
+<td>★★★</td>
+<td>未授权可查看权限配置，辅助安全分析</td>
+</tr>
+<tr>
+<td><strong>集群与元数据- 中危</strong></td>
+<td><code>/nacos/v1/core/cluster/nodes</code></td>
+<td>获取集群所有节点信息</td>
+<td>★★★</td>
+<td>未授权可查看节点IP&#x2F;端口&#x2F;状态，辅助内网测绘</td>
+</tr>
+<tr>
+<td><strong>集群与元数据- 低危</strong></td>
+<td><code>/nacos/v1/core/cluster/self</code></td>
+<td>获取当前节点信息</td>
+<td>★★★</td>
+<td>未授权可查看节点角色、启动参数等配置</td>
+</tr>
+<tr>
+<td><strong>集群与元数据- 低危</strong></td>
+<td><code>/nacos/v1/console/info</code></td>
+<td>获取Nacos版本与环境信息</td>
+<td>★★</td>
+<td>未授权可查看版本号，辅助匹配对应漏洞</td>
+</tr>
+<tr>
+<td><strong>控制台与系统管理- 高危</strong></td>
+<td><code>/nacos/v1/console/logs</code></td>
+<td>查看Nacos运行日志</td>
+<td>★★★★</td>
+<td>未授权可读取日志文件，获取敏感操作记录</td>
+</tr>
+<tr>
+<td><strong>控制台与系统管理- 中危</strong></td>
+<td><code>/nacos/v1/console/config</code></td>
+<td>获取控制台系统配置</td>
+<td>★★★</td>
+<td>未授权可查看认证开关、安全配置等敏感信息</td>
+</tr>
+<tr>
+<td><strong>控制台与系统管理- 低危</strong></td>
+<td><code>/nacos/v1/console/metrics</code></td>
+<td>获取Nacos监控指标</td>
+<td>★★</td>
+<td>未授权可查看性能数据，辅助分析服务状态</td>
+</tr>
+<tr>
+<td><strong>认证绕过&#x2F;漏洞关联- 极高危</strong></td>
+<td>所有接口（带<code>User-Agent: Nacos-Server</code>）</td>
+<td>认证绕过漏洞</td>
+<td>★★★★★</td>
+<td>1.4.1及以下版本，默认User-Agent可绕过认证访问所有接口</td>
+</tr>
+<tr>
+<td><strong>认证绕过&#x2F;漏洞关联- 极高危</strong></td>
+<td>所有接口（默认<code>token.secret.key</code>）</td>
+<td>默认密钥伪造token</td>
+<td>★★★★★</td>
+<td><code>token.secret.key</code>为默认值时，可生成任意用户的有效token</td>
+</tr>
+<tr>
+<td><strong>认证绕过&#x2F;漏洞关联- 极高危</strong></td>
+<td><code>/nacos/v1/cs/configs?search=blur</code></td>
+<td>Derby SQL注入</td>
+<td>★★★★★</td>
+<td>1.4.1及以下版本，可执行任意SQL操作</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="0x03-RuoYi-框架接口"><a href="#0x03-RuoYi-框架接口" class="headerlink" title="0x03 RuoYi 框架接口"></a>0x03 RuoYi 框架接口</h2><table>
+<thead>
+<tr>
+<th>接口分类</th>
+<th>接口路径</th>
+<th>核心功能</th>
+<th>风险等级</th>
+<th>备注（版本&#x2F;授权&#x2F;漏洞关联）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>系统管理（用户）- 极高危</strong></td>
+<td><code>/system/user/list</code></td>
+<td>获取所有用户列表（含管理员）</td>
+<td>★★★★★</td>
+<td>&lt;4.6.2版本存在SQL注入；未授权&#x2F;越权可泄露账号密码哈希、手机号等敏感信息</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 极高危</strong></td>
+<td><code>/system/user/add</code></td>
+<td>新增系统用户</td>
+<td>★★★★★</td>
+<td>未授权可创建管理员账号，接管系统；常见越权点（普通用户可添加管理员）</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 极高危</strong></td>
+<td><code>/system/user/edit</code></td>
+<td>修改用户信息（含密码）</td>
+<td>★★★★★</td>
+<td>水平越权可修改其他用户密码；垂直越权可提升普通用户为管理员</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 极高危</strong></td>
+<td><code>/system/user/delete</code></td>
+<td>删除用户账号</td>
+<td>★★★★★</td>
+<td>未授权可删除管理员账号，导致系统管理异常</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 高危</strong></td>
+<td><code>/system/user/getInfo</code></td>
+<td>获取用户详细信息</td>
+<td>★★★★</td>
+<td>未校验用户ID归属，存在水平越权；可获取用户密码哈希、角色权限等</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 高危</strong></td>
+<td><code>/system/user/resetPwd</code></td>
+<td>重置用户密码</td>
+<td>★★★★</td>
+<td>未授权可重置管理员密码，直接登录系统</td>
+</tr>
+<tr>
+<td><strong>系统管理（用户）- 中危</strong></td>
+<td><code>/system/user/export</code></td>
+<td>导出用户数据为Excel</td>
+<td>★★★</td>
+<td>可批量泄露用户敏感信息；&lt;4.6.2版本存在SQL注入</td>
+</tr>
+<tr>
+<td><strong>系统管理（角色）- 极高危</strong></td>
+<td><code>/system/role/list</code></td>
+<td>获取所有角色列表及权限</td>
+<td>★★★★★</td>
+<td>&lt;4.6.2版本通过<code>params[dataScope]</code>参数存在SQL注入；未授权可查看权限配置</td>
+</tr>
+<tr>
+<td><strong>系统管理（角色）- 极高危</strong></td>
+<td><code>/system/role/add</code></td>
+<td>新增角色并分配权限</td>
+<td>★★★★★</td>
+<td>未授权可创建高权限角色，提升自身权限</td>
+</tr>
+<tr>
+<td><strong>系统管理（角色）- 极高危</strong></td>
+<td><code>/system/role/edit</code></td>
+<td>修改角色权限</td>
+<td>★★★★★</td>
+<td>越权可给普通角色添加管理员权限</td>
+</tr>
+<tr>
+<td><strong>系统管理（角色）- 高危</strong></td>
+<td><code>/system/role/authUser/allocatedList</code></td>
+<td>角色分配用户列表</td>
+<td>★★★★</td>
+<td>存在SQL注入漏洞；可查看角色与用户关联关系</td>
+</tr>
+<tr>
+<td><strong>系统管理（角色）- 中危</strong></td>
+<td><code>/system/role/export</code></td>
+<td>导出角色数据</td>
+<td>★★★</td>
+<td>&lt;4.6.2版本存在SQL注入；可泄露权限配置信息</td>
+</tr>
+<tr>
+<td><strong>系统管理（部门）- 高危</strong></td>
+<td><code>/system/dept/list</code></td>
+<td>获取所有部门列表</td>
+<td>★★★</td>
+<td>未授权可查看组织架构，辅助渗透</td>
+</tr>
+<tr>
+<td><strong>系统管理（部门）- 高危</strong></td>
+<td><code>/system/dept/add</code></td>
+<td>新增部门</td>
+<td>★★★★</td>
+<td>未授权可创建恶意部门，扰乱组织架构</td>
+</tr>
+<tr>
+<td><strong>系统管理（部门）- 中危</strong></td>
+<td><code>/system/dept/edit</code></td>
+<td>修改部门信息</td>
+<td>★★★</td>
+<td>越权可修改关键部门信息</td>
+</tr>
+<tr>
+<td><strong>系统管理（菜单）- 极高危</strong></td>
+<td><code>/system/menu/list</code></td>
+<td>获取所有菜单及权限标识</td>
+<td>★★★★</td>
+<td>未授权可查看系统所有功能入口，辅助权限绕过</td>
+</tr>
+<tr>
+<td><strong>系统管理（菜单）- 极高危</strong></td>
+<td><code>/system/menu/add</code></td>
+<td>新增菜单&#x2F;接口权限</td>
+<td>★★★★★</td>
+<td>未授权可添加恶意接口，植入后门</td>
+</tr>
+<tr>
+<td><strong>系统管理（参数）- 极高危</strong></td>
+<td><code>/system/config/list</code></td>
+<td>获取所有系统参数</td>
+<td>★★★★★</td>
+<td>可泄露数据库连接、第三方API密钥等敏感配置</td>
+</tr>
+<tr>
+<td><strong>系统管理（参数）- 极高危</strong></td>
+<td><code>/system/config/edit</code></td>
+<td>修改系统参数</td>
+<td>★★★★★</td>
+<td>可篡改系统配置，导致RCE、权限提升或业务异常</td>
+</tr>
+<tr>
+<td><strong>系统管理（字典）- 中危</strong></td>
+<td><code>/system/dict/data/list</code></td>
+<td>获取数据字典列表</td>
+<td>★★★</td>
+<td>可泄露业务敏感数据分类信息</td>
+</tr>
+<tr>
+<td><strong>权限认证 - 极高危</strong></td>
+<td><code>/login</code></td>
+<td>用户登录接口</td>
+<td>★★★★★</td>
+<td>无验证码时可暴力破解admin账号；默认口令<code>admin/admin123</code></td>
+</tr>
+<tr>
+<td><strong>权限认证 - 极高危</strong></td>
+<td><code>/getInfo</code></td>
+<td>获取当前用户权限信息</td>
+<td>★★★★</td>
+<td>未授权访问可获取用户角色、权限列表，辅助越权</td>
+</tr>
+<tr>
+<td><strong>权限认证 - 高危</strong></td>
+<td><code>/logout</code></td>
+<td>用户登出接口</td>
+<td>★★★</td>
+<td>可强制登出其他用户，导致拒绝服务</td>
+</tr>
+<tr>
+<td><strong>权限认证 - 极高危</strong></td>
+<td><code>/system/auth/role/perms</code></td>
+<td>获取角色权限</td>
+<td>★★★★</td>
+<td>未授权可查看所有角色权限配置</td>
+</tr>
+<tr>
+<td><strong>文件操作 - 极高危</strong></td>
+<td><code>/common/download/resource</code></td>
+<td>下载系统资源文件</td>
+<td>★★★★★</td>
+<td>CNVD-2021-01931，&lt;4.5.1版本存在任意文件下载；可通过<code>../</code>遍历读取<code>/etc/passwd</code>、数据库配置等</td>
+</tr>
+<tr>
+<td><strong>文件操作 - 极高危</strong></td>
+<td><code>/common/upload</code></td>
+<td>文件上传接口</td>
+<td>★★★★★</td>
+<td>未校验文件类型可上传恶意脚本，导致RCE</td>
+</tr>
+<tr>
+<td><strong>文件操作 - 极高危</strong></td>
+<td><code>/demo/mail/sendMessageWithAttachment</code></td>
+<td>发送带附件邮件</td>
+<td>★★★★★</td>
+<td>存在任意文件读取漏洞；通过<code>filePath</code>参数读取服务器任意文件</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 极高危</strong></td>
+<td><code>/monitor/cache/getNames</code></td>
+<td>获取缓存名称</td>
+<td>★★★★★</td>
+<td>存在Thymeleaf模板注入（SSTI）漏洞；可执行任意代码</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 极高危</strong></td>
+<td><code>/monitor/cache/getKeys</code></td>
+<td>获取缓存键值</td>
+<td>★★★★★</td>
+<td>同上，存在SSTI漏洞</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 极高危</strong></td>
+<td><code>/monitor/cache/getValue</code></td>
+<td>获取缓存值</td>
+<td>★★★★★</td>
+<td>同上，存在SSTI漏洞</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 高危</strong></td>
+<td><code>/monitor/log/list</code></td>
+<td>查看系统操作日志</td>
+<td>★★★★</td>
+<td>未授权可查看敏感操作记录，获取账号、IP等信息</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 高危</strong></td>
+<td><code>/monitor/operlog/list</code></td>
+<td>查看操作日志</td>
+<td>★★★★</td>
+<td>可获取用户操作轨迹，辅助渗透</td>
+</tr>
+<tr>
+<td><strong>监控管理 - 中危</strong></td>
+<td><code>/monitor/server</code></td>
+<td>获取服务器信息</td>
+<td>★★★</td>
+<td>未授权可查看服务器CPU、内存、磁盘等敏感信息</td>
+</tr>
+<tr>
+<td><strong>工具接口 - 极高危</strong></td>
+<td><code>/tool/gen/list</code></td>
+<td>代码生成器列表</td>
+<td>★★★★</td>
+<td>可查看数据库表结构，辅助SQL注入</td>
+</tr>
+<tr>
+<td><strong>工具接口 - 极高危</strong></td>
+<td><code>/tool/gen/preview</code></td>
+<td>预览生成代码</td>
+<td>★★★★</td>
+<td>可获取数据库敏感字段信息</td>
+</tr>
+<tr>
+<td><strong>工具接口 - 高危</strong></td>
+<td><code>/tool/swagger/index</code></td>
+<td>Swagger接口文档</td>
+<td>★★★</td>
+<td>未授权可查看所有接口信息，扩大攻击面</td>
+</tr>
+<tr>
+<td><strong>定时任务 - 极高危</strong></td>
+<td><code>/monitor/job/list</code></td>
+<td>定时任务列表</td>
+<td>★★★★★</td>
+<td>未授权可查看所有定时任务，可修改任务触发恶意代码执行</td>
+</tr>
+<tr>
+<td><strong>定时任务 - 极高危</strong></td>
+<td><code>/monitor/job/add</code></td>
+<td>新增定时任务</td>
+<td>★★★★★</td>
+<td>可添加恶意定时任务，执行系统命令</td>
+</tr>
+<tr>
+<td><strong>定时任务 - 极高危</strong></td>
+<td><code>/monitor/job/edit</code></td>
+<td>修改定时任务</td>
+<td>★★★★★</td>
+<td>可篡改现有任务，植入后门</td>
+</tr>
+<tr>
+<td><strong>定时任务 - 极高危</strong></td>
+<td><code>/monitor/job/run</code></td>
+<td>立即执行定时任务</td>
+<td>★★★★★</td>
+<td>可触发恶意任务执行，导致RCE</td>
+</tr>
+<tr>
+<td><strong>Druid监控 - 高危</strong></td>
+<td><code>/druid/login.html</code></td>
+<td>Druid监控登录</td>
+<td>★★★★</td>
+<td>默认账号密码<code>admin/admin</code>；可查看数据库连接、SQL执行记录</td>
+</tr>
+<tr>
+<td><strong>Druid监控 - 高危</strong></td>
+<td><code>/druid/index.html</code></td>
+<td>Druid监控主页</td>
+<td>★★★★</td>
+<td>未授权可查看系统性能、SQL执行情况等敏感信息</td>
+</tr>
+<tr>
+<td><strong>接口文档 - 中危</strong></td>
+<td><code>/swagger-ui.html</code></td>
+<td>Swagger接口文档</td>
+<td>★★★</td>
+<td>未授权可查看所有接口路径和参数，辅助漏洞挖掘</td>
+</tr>
+<tr>
+<td><strong>接口文档 - 中危</strong></td>
+<td><code>/doc.html</code></td>
+<td>Knife4j接口文档</td>
+<td>★★★</td>
+<td>同上，未授权可获取接口信息</td>
+</tr>
+<tr>
+<td><strong>认证绕过 - 极高危</strong></td>
+<td>所有接口（路径含<code>;/</code>或<code>../</code>）</td>
+<td>Shiro权限绕过</td>
+<td>★★★★★</td>
+<td>RuoYi &lt;&#x3D; v4.3.0，Shiro &lt; 1.5.2版本；通过构造特殊URL绕过权限校验</td>
+</tr>
+<tr>
+<td><strong>认证绕过 - 极高危</strong></td>
+<td>所有接口（未添加<code>@PreAuthorize</code>）</td>
+<td>权限控制失效</td>
+<td>★★★★★</td>
+<td>开发者配置错误，导致接口无需权限即可访问</td>
+</tr>
+<tr>
+<td><strong>SQL注入 - 极高危</strong></td>
+<td><code>/system/role/list</code></td>
+<td>角色列表查询</td>
+<td>★★★★★</td>
+<td>&lt;4.6.2版本，通过<code>params[dataScope]</code>参数注入</td>
+</tr>
+<tr>
+<td><strong>SQL注入 - 极高危</strong></td>
+<td><code>/system/role/export</code></td>
+<td>角色数据导出</td>
+<td>★★★★★</td>
+<td>&lt;4.6.2版本，通过<code>params[dataScope]</code>参数注入</td>
+</tr>
+<tr>
+<td><strong>SQL注入 - 高危</strong></td>
+<td><code>/system/user/list?orderBy=xxx</code></td>
+<td>用户列表排序</td>
+<td>★★★★</td>
+<td>存在时间盲注；通过排序参数注入</td>
+</tr>
+</tbody></table>
+<hr>
+<ol>
+<li><strong>默认路径前缀</strong>：若依前后端分离版本通常使用<code>/prod-api</code>或<code>/dev-api</code>作为接口前缀，完整路径如<code>/prod-api/system/user/list</code></li>
+<li><strong>未授权访问检测</strong>：优先检查<code>/login</code>、<code>/getInfo</code>、<code>/system/user/list</code>等核心接口是否无需Token即可访问</li>
+<li><strong>历史漏洞重点</strong>：<ul>
+<li>Shiro反序列化漏洞（RuoYi &lt;&#x3D; v4.6.2）</li>
+<li>Thymeleaf模板注入（RuoYi &lt;&#x3D; v4.7.1）</li>
+<li>任意文件下载（CNVD-2021-01931，RuoYi &lt; 4.5.1）</li>
+</ul>
+</li>
+<li><strong>默认口令</strong>：<code>admin/admin123</code>、<code>ry/admin123</code>、<code>ruoyi/admin123</code></li>
+</ol>
+<hr>
 
 		  <div class="article-footer-copyright">
 
@@ -546,7 +1171,7 @@ window.addEventListener('load', function() {
 		
 			 <div class="toc">
 				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
-				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-Spring-Boot-%E6%95%8F%E6%84%9F%E6%8E%A5%E5%8F%A3"><span class="toc-article-text">0x01 Spring Boot 敏感接口</span></a></li></ol>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-Spring-Boot-%E6%95%8F%E6%84%9F%E6%8E%A5%E5%8F%A3"><span class="toc-article-text">0x01 Spring Boot 敏感接口</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-Nacos-%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0"><span class="toc-article-text">0x02 Nacos 服务管理平台</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-RuoYi-%E6%A1%86%E6%9E%B6%E6%8E%A5%E5%8F%A3"><span class="toc-article-text">0x03 RuoYi 框架接口</span></a></li></ol>
 			</div>
 		
 		</div>

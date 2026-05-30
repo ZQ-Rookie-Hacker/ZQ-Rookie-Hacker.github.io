@@ -9,8 +9,8 @@
   <title>漏洞挖掘场景 | ZQ-Rookie-Hacker&#39;s Blog</title>
   <meta name="author" content="ZQ-Rookie-Hacker">
   
-  <meta name="description" content="0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：
-123456POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2Ho">
+  <meta name="description" content="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：
+123456POST /guolian/wxmini/wx_information/wx_contact/getContact">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -125,7 +125,7 @@
 		  
 		  
 
-		  <h2 id="0x01-小程序接口-type-参数-SQL-时间盲注——老老实实每个功能抓包"><a href="#0x01-小程序接口-type-参数-SQL-时间盲注——老老实实每个功能抓包" class="headerlink" title="0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包"></a>0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包</h2><p>现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：</p>
+		  <h2 id="0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入"><a href="#0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入" class="headerlink" title="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入"></a>0x01 小程序接口 <code>type</code> 参数 SQL 时间盲注——<code>if(1=1,sleep(2),1)</code> 延时注入</h2><p>现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2</span><br><span class="line">Host: xxxx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">type=1</span><br></pre></td></tr></table></figure>
 
 <p>很明显可以尝试 <code>type</code> 参数是否存在 SQL 注入漏洞：</p>
@@ -133,7 +133,7 @@
 
 <p>成功延迟。总结一下，这就是一个 edu 小程序获取学校通知内容的数据包，还是要老老实实每个功能抓包查看啊。</p>
 <hr>
-<h2 id="0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息"><a href="#0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息" class="headerlink" title="0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息"></a>0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</h2><p>在平台更新新资产后，对目标站点进行常规打点探测，过程中发现关联的小程序入口。初步浏览小程序仅看到名片展示功能，看似无高价值测试点，但在抓包分析接口数据包时，意外发现接口会返回其他用户的个人邮箱和手机号等敏感信息，同时注意到请求参数中存在一个疑似用户标识的 <code>id</code> 参数，由此初步判断存在越权漏洞风险。</p>
+<h2 id="0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息"><a href="#0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息" class="headerlink" title="0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息"></a>0x02 小程序 AES 加密 <code>id</code> 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</h2><p>在平台更新新资产后，对目标站点进行常规打点探测，过程中发现关联的小程序入口。初步浏览小程序仅看到名片展示功能，看似无高价值测试点，但在抓包分析接口数据包时，意外发现接口会返回其他用户的个人邮箱和手机号等敏感信息，同时注意到请求参数中存在一个疑似用户标识的 <code>id</code> 参数，由此初步判断存在越权漏洞风险。</p>
 <p>随后尝试对该 <code>id</code> 参数进行常规 Base64 解密，结果解密内容无规律且无效，结合参数特征和经验进一步判断该 <code>id</code> 采用了 AES 加密方式。为获取加密密钥，直接对目标小程序进行反编译操作，拿到小程序源码后，通过搜索 “AES” 关键字定位到加密相关代码片段，从中提取出 AES 加密所需的 key、iv 向量、加密模式（CBC）及填充方式（Pkcs7）等核心信息，利用这些信息成功将加密的 <code>id</code> 参数解密为纯数字格式的原始用户 id。</p>
 <p>接着编写自动化脚本，批量生成连续的原始用户 id，再用获取到的 AES 密钥将每个原始 id 加密为接口可识别的格式，批量发送接口请求进行遍历探测，最终成功获取到约 10 万条用户名片信息，包含手机号、邮箱等敏感数据。最后整理漏洞细节提交报告，厂商确认该漏洞为高危越权漏洞并完成修复。</p>
 <hr>
@@ -164,8 +164,43 @@
 </ul>
 <p>整个过程充分体现了 SRC 漏洞挖掘的核心思路：常规测试无果后需精准识别技术栈、灵活切换工具探测与手工测试模式；针对 Spring Boot 这类特定框架，在工具被防护时手工探测其特有敏感路径是突破关键；同时对泄露的 <code>heapdump</code> 等文件进行深度解析，能进一步挖掘出可直接利用的敏感信息，大幅提升漏洞挖掘的成功率与价值。</p>
 <hr>
-<p> EDUSRC 漏洞挖掘以目标系统登录框为初始入口，先通过目录扫描工具对目标站点进行路径探测，成功发现暴露在外的 Nacos 服务接口；随后借助 Nacos 相关 Nday 漏洞利用方式，直接访问 Nacos 用户列表接口获取用户数据，再使用专用工具对 Nacos 服务进行批量探测，确认目标存在 Nacos 未授权访问等高危漏洞；为验证漏洞危害，先构造请求 Payload 执行未授权用户删除操作，确认可任意操作用户账号，还可进行未授权添加用户等类似操作；进一步挖掘发现该 Nacos 服务支持未授权导出全部配置信息，导出的配置文件中大量泄露 MongoDB 数据库账户密码与地址、即时通信 IM 服务地址及账号密码、Redis 缓存单机及集群的密码、邮箱账号密码以及各类第三方服务密钥等核心敏感数据；最后从泄露信息中定位到百度人脸识别服务的 APIKey 与 SecretKey，结合官方文档编写 Python 脚本调用该付费接口，验证漏洞可导致第三方付费资源被恶意滥用，以此完整证明该 Nacos 未授权漏洞从基础越权操作到核心数据泄露、再到高价值第三方资源滥用的全链条严重危害，整体挖掘思路遵循从基础入口探测到敏感组件发现、从漏洞初步验证到深层数据提取、再到高危害场景落地利用的递进逻辑，逐步放大漏洞影响范围与危害等级。</p>
-<p> <a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/428863.html">Nacos漏洞汇总复现</a></p>
+<h2 id="0x06-Nacos-未授权访问——配置泄露链式利用与第三方付费服务滥用"><a href="#0x06-Nacos-未授权访问——配置泄露链式利用与第三方付费服务滥用" class="headerlink" title="0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用"></a>0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用</h2><p>EDUSRC 漏洞挖掘以目标系统登录框为初始入口，先通过目录扫描工具对目标站点进行路径探测，成功发现暴露在外的 Nacos 服务接口。</p>
+<p>随后借助 Nacos 相关 Nday 漏洞利用方式，直接访问 Nacos 用户列表接口获取用户数据，再使用专用工具对 Nacos 服务进行批量探测，确认目标存在 Nacos 未授权访问等高危漏洞。</p>
+<p>为验证漏洞危害，先构造请求 Payload 执行未授权用户删除操作，确认可任意操作用户账号，还可进行未授权添加用户等类似操作。</p>
+<p>进一步挖掘发现该 Nacos 服务支持未授权导出全部配置信息，导出的配置文件中大量泄露 MongoDB 数据库账户密码与地址、即时通信 IM 服务地址及账号密码、Redis 缓存单机及集群的密码、邮箱账号密码以及各类第三方服务密钥等核心敏感数据。</p>
+<p>最后从泄露信息中定位到百度人脸识别服务的 APIKey 与 SecretKey，结合官方文档编写 Python 脚本调用该付费接口，验证漏洞可导致第三方付费资源被恶意滥用，以此完整证明该 Nacos 未授权漏洞从基础越权操作到核心数据泄露、再到高价值第三方资源滥用的全链条严重危害。</p>
+<p>整体挖掘思路遵循从基础入口探测到敏感组件发现、从漏洞初步验证到深层数据提取、再到高危害场景落地利用的递进逻辑，逐步放大漏洞影响范围与危害等级。</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/428863.html">Nacos漏洞汇总复现</a></p>
+<hr>
+<h2 id="0x07-微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历"><a href="#0x07-微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历" class="headerlink" title="0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历"></a>0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历</h2><p>在教育机构（EDU）场景下挖掘微信小程序漏洞，核心是瞄准学校微信小程序这一优质目标——这类小程序无需对接复杂的校园统一认证系统、功能模块高度集中（多围绕学生信息、教务管理、证书查询、校园服务等核心场景），且开发团队为快速上线往往存在大量安全疏漏，是漏洞挖掘的高价值阵地。</p>
+<p>挖掘时首先通过微信搜索定位目标学校小程序，借助 Burp Suite 等工具抓取小程序与后端交互的所有请求流量，第一步先通过请求包路径、响应特征精准识别后端开发框架：</p>
+<ul>
+<li>若请求中出现 <code>/prod-api</code>、<code>/xxx-api</code> 前缀，可判定为若依（RuoYi）框架；</li>
+<li>若存在 <code>/jeecg-boot/</code>、<code>/xxxx-boot/</code> 路径，则为 Jeecg 框架；</li>
+<li><code>/api/sysxxxxxx</code> 类接口多对应 Admin.net 框架；</li>
+<li>SpringBoot 框架则可通过经典报错页面、<code>/heapdump</code> 敏感端点暴露或 <code>/swagger</code> 接口文档存在来识别。</li>
+</ul>
+<p>识别框架后随即开展针对性漏洞挖掘：</p>
+<p><strong>若依（RuoYi）框架：</strong> 优先尝试 <code>ruoyi/admin123</code>、<code>ry/admin123</code> 等默认弱口令，若登录成功则进入后台利用定时任务功能构造恶意命令实现 RCE；同时在前台流量中检测 Shiro 框架特征（如 <code>rememberMe</code> Cookie），用 Burp 的 Shiro 插件爆破默认密钥——密钥成功则构造恶意 Cookie 触发反序列化 RCE，密钥失败则放弃该点；此外还要探测 Druid 监控接口是否存在弱口令，尝试登录获取数据库连接信息与 SQL 执行记录。</p>
+<p><strong>Jeecg 框架：</strong> 先通过微信一键登录获取 JWT 令牌，用令牌批量遍历各类敏感接口；同时尝试 <code>Jeecg/123456</code> 弱口令登录后台，测试积木报表功能是否存在 SQL 注入；还可查找普通用户提权至管理员权限的接口，无需管理员权限也能通过 JWT 越权获取敏感数据。</p>
+<p><strong>Admin.net 框架：</strong> 直接抓取小程序接口请求，批量梭哈 <code>/api/sysxxxxxx</code> 类接口，尝试越权获取学生证书、隐私信息等敏感数据。</p>
+<p><strong>SpringBoot 框架：</strong> 重点检测 <code>/heapdump</code> 端点是否开放，若开放则用 JDumpSpider 工具提取数据库密码、云服务密钥等敏感信息；同时遍历 <code>/swagger</code> 接口文档，逐个测试接口未授权访问漏洞，避免误删类高危接口。</p>
+<p>完成框架专项挖掘后，再聚焦微信小程序特有漏洞场景深度挖掘：</p>
+<ul>
+<li>抓包分析微信一键登录流量，若发现 <code>sessionkey</code>、<code>iv</code>、加密数据泄露，可通过解密工具还原敏感信息，伪造目标用户手机号加密后发包，实现任意用户账号登录；</li>
+<li>检查接口请求参数，若 <code>id</code>、<code>openid</code>、<code>unionid</code>、<code>phone</code> 等参数可控，通过遍历 1-200 等数字区间，越权获取全校用户手机号、身份证、openid 等敏感信息，再利用部分小程序登录逻辑仅校验这三个参数的漏洞，直接接管全站用户账号；</li>
+<li>测试头像上传、文件提交等功能，检查是否未校验文件类型与后缀，尝试上传恶意脚本获取服务器权限；</li>
+<li>分析验证码验证逻辑：若验证码手机号明文写在数据包中，可修改为自己手机号接收验证码绕过校验；若为四位纯数字验证码则直接爆破 1000-9999 区间；</li>
+<li>爆破 <code>13888888888</code> 等常见测试手机号，往往能发现开发遗留的测试账号，进一步扩大漏洞范围。</li>
+</ul>
+<p>最后遍历所有接口参数，修改 <code>id</code>、<code>phone</code> 等参数值，全面测试水平越权（访问同权限其他用户数据）与垂直越权（提升至管理员权限）。若能批量获取大量学生身份证、手机号等敏感数据，即可判定为高危漏洞。整套流程从框架识别、专项漏洞突破到小程序特有风险挖掘，形成完整的 EDU 场景微信小程序漏洞挖掘闭环。</p>
+<hr>
+<h2 id="0x08-教育系统组合拳——弱口令爆破-SQL-注入-WAF-绕过-接口越权通杀"><a href="#0x08-教育系统组合拳——弱口令爆破-SQL-注入-WAF-绕过-接口越权通杀" class="headerlink" title="0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀"></a>0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀</h2><p>在教育机构SRC漏洞挖掘场景中，整个过程从前期信息搜集开始：先通过谷歌语法精准搜索目标学校域名下的默认密码、系统操作手册等公开信息，这类信息对应的老旧系统往往存在默认密码未修改的情况；同时利用谷歌语法、QQ群、各类社交平台搜集在读学生的学号信息，也可根据官网规则自编学号，而学生密码大多与身份证信息相关，为缩小数据范围可选取稀有姓名在电报平台筛选。凭借这些信息尝试登录系统，成功后便进入后续漏洞测试环节。</p>
+<p>接着开展 XSS 漏洞测试，重点瞄准学校官网、二级学院网站中的投诉建议、留言反馈等存在输入框的功能点——只要有输入位置就插入测试字符，这类公开交互点大概率存在 XSS 漏洞，可作为基础漏洞提交获取分数。</p>
+<p>随后聚焦 SQL 注入漏洞挖掘。第一个场景是学校教务一体化系统：先从贴吧等平台获取系统账号格式，再通过社群了解到默认密码规则为 <code>账号+!qwer</code>，据此构造弱口令字典进行爆破；成功登录后进入教室借用申请功能，前端直接输入测试字符无异常反应，于是抓包修改请求体数据，发现输入单引号后系统报错，再通过构造 <code>1=1</code> 返回数据、<code>1=2</code> 无数据的测试语句，确认存在 SQL 注入。针对 Oracle 数据库环境，使用 <code>1&#39;and 1=(case when ASCII(SUBSTRC(USER,1,1))=1 then 1 else 5 end) or &#39;1&#39;=&#39;2&#39;</code> 这类 payload 逐位爆破出当前数据库用户信息，同时发现该教务系统为多校通用平台，不同学校仅界面不同、接口逻辑完全一致，可实现漏洞通杀。</p>
+<p>第二个场景是学校缴费平台的详情功能点：抓包后发现输入单引号系统报错、输入双引号则恢复正常，起初尝试参数污染、高并发请求、分段传输等多种 WAF 绕过手段均未成功；耗费大量时间后发现特殊逻辑——构造 <code>1 in 1</code> 请求会返回海量数据导致回显延迟，构造 <code>1 in 5</code> 请求则返回空数据。利用该特性先爆破出数据库用户名长度为 7 位，再通过 <code>&#39;OR+1+in+instr(user,&#39;u&#39;)+and+&#39;a&#39;+in+&#39;a</code> 这类借助 <code>instr</code> 函数的 payload，逐位确认用户名的每一个字符，最终完成注入利用。</p>
+<p>最后开展越权漏洞测试：在系统公告模块仅拥有普通查询权限、无删除新增权限，于是抓取搜索功能的请求包，分析接口命名规律，构造包含 <code>delete</code>、<code>del</code> 等关键词的接口路径字典，复用原有请求的完整数据发送测试，最终成功触发数据删除操作；同理也可通过构造对应接口测试越权新增等高危操作，完成整个教育机构系统的 SRC 漏洞挖掘流程。</p>
+<hr>
 
 		  <div class="article-footer-copyright">
 
@@ -354,7 +389,7 @@ window.addEventListener('load', function() {
 		
 			 <div class="toc">
 				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
-				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3-type-%E5%8F%82%E6%95%B0-SQL-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8%E2%80%94%E2%80%94%E8%80%81%E8%80%81%E5%AE%9E%E5%AE%9E%E6%AF%8F%E4%B8%AA%E5%8A%9F%E8%83%BD%E6%8A%93%E5%8C%85"><span class="toc-article-text">0x01 小程序接口 type 参数 SQL 时间盲注——老老实实每个功能抓包</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-%E5%B0%8F%E7%A8%8B%E5%BA%8F-AES-%E5%8A%A0%E5%AF%86-id-%E5%8F%82%E6%95%B0%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94%E9%80%86%E5%90%91%E5%8F%8D%E7%BC%96%E8%AF%91-%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86%E6%8B%BF%E4%B8%8B%E5%8D%81%E4%B8%87%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="toc-article-text">0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-Oracle-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%95%B0%E6%8D%AE-%E6%B3%A8%E9%87%8A%E5%B9%B2%E6%89%B0-%E6%89%8B%E5%B7%A5%E8%84%9A%E6%9C%AC%E7%AA%81%E7%A0%B4"><span class="toc-article-text">0x03 Oracle 报错注入 WAF 绕过——垃圾数据 &#x2F;**&#x2F; 注释干扰 + 手工脚本突破</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-%E6%B0%B4%E7%94%B5%E8%B4%B9%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E8%8B%A5%E4%BE%9D%EF%BC%88RuoYi%EF%BC%89%E6%A1%86%E6%9E%B6%E5%9B%BA%E5%AE%9A%E8%B7%AF%E5%BE%84%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-Spring-Boot-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%8E%A2%E6%B5%8B%E2%80%94%E2%80%94-env-%E4%B8%8E-heapdump-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x05 Spring Boot 敏感端点探测——&#x2F;env 与 &#x2F;heapdump 信息泄露利用</span></a></li></ol>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3-type-%E5%8F%82%E6%95%B0-SQL-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8%E2%80%94%E2%80%94if-1-1-sleep-2-1-%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5"><span class="toc-article-text">0x01 小程序接口 type 参数 SQL 时间盲注——if(1&#x3D;1,sleep(2),1) 延时注入</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-%E5%B0%8F%E7%A8%8B%E5%BA%8F-AES-%E5%8A%A0%E5%AF%86-id-%E5%8F%82%E6%95%B0%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94%E9%80%86%E5%90%91%E5%8F%8D%E7%BC%96%E8%AF%91-%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86%E6%8B%BF%E4%B8%8B%E5%8D%81%E4%B8%87%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="toc-article-text">0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-Oracle-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%95%B0%E6%8D%AE-%E6%B3%A8%E9%87%8A%E5%B9%B2%E6%89%B0-%E6%89%8B%E5%B7%A5%E8%84%9A%E6%9C%AC%E7%AA%81%E7%A0%B4"><span class="toc-article-text">0x03 Oracle 报错注入 WAF 绕过——垃圾数据 &#x2F;**&#x2F; 注释干扰 + 手工脚本突破</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-%E6%B0%B4%E7%94%B5%E8%B4%B9%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E8%8B%A5%E4%BE%9D%EF%BC%88RuoYi%EF%BC%89%E6%A1%86%E6%9E%B6%E5%9B%BA%E5%AE%9A%E8%B7%AF%E5%BE%84%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-Spring-Boot-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%8E%A2%E6%B5%8B%E2%80%94%E2%80%94-env-%E4%B8%8E-heapdump-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x05 Spring Boot 敏感端点探测——&#x2F;env 与 &#x2F;heapdump 信息泄露利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x06-Nacos-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E9%85%8D%E7%BD%AE%E6%B3%84%E9%9C%B2%E9%93%BE%E5%BC%8F%E5%88%A9%E7%94%A8%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BB%98%E8%B4%B9%E6%9C%8D%E5%8A%A1%E6%BB%A5%E7%94%A8"><span class="toc-article-text">0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x07-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%85%A8%E9%93%BE%E8%B7%AF%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E6%A1%86%E6%9E%B6%E8%AF%86%E5%88%AB%E9%A9%B1%E5%8A%A8%E4%B8%93%E9%A1%B9%E7%AA%81%E7%A0%B4%E4%B8%8E%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86"><span class="toc-article-text">0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x08-%E6%95%99%E8%82%B2%E7%B3%BB%E7%BB%9F%E7%BB%84%E5%90%88%E6%8B%B3%E2%80%94%E2%80%94%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4-SQL-%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87-%E6%8E%A5%E5%8F%A3%E8%B6%8A%E6%9D%83%E9%80%9A%E6%9D%80"><span class="toc-article-text">0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀</span></a></li></ol>
 			</div>
 		
 		</div>

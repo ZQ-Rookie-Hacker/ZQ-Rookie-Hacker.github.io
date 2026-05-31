@@ -1,0 +1,459 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>ClawGod 安装踩坑记录 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="背景ClawGod 是 Claude Code 的 runtime patch，对官方二进制进行运行时修补，解锁隐藏功能、移除各类限制。项目地址：github.com&amp;#x2F;0Chencc&amp;#x2F;clawgod。
+核心能力：
+
+Internal User Mode — 解锁 24+ 隐藏命令">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ClawGod 安装踩坑记录"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> ClawGod 安装踩坑记录</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>ClawGod 是 Claude Code 的 runtime patch，对官方二进制进行运行时修补，解锁隐藏功能、移除各类限制。项目地址：<a target="_blank" rel="noopener" href="https://github.com/0Chencc/clawgod">github.com&#x2F;0Chencc&#x2F;clawgod</a>。</p>
+<p>核心能力：</p>
+<ul>
+<li><strong>Internal User Mode</strong> — 解锁 24+ 隐藏命令（<code>/share</code>, <code>/teleport</code>, <code>/issue</code>, <code>/bughunter</code> 等）</li>
+<li><strong>GrowthBook Overrides</strong> — 通过配置文件覆盖任意 feature flag</li>
+<li><strong>Agent Teams &#x2F; Computer Use &#x2F; Ultraplan &#x2F; Ultrareview</strong> — 无需订阅</li>
+<li><strong>移除安全限制</strong> — CYBER_RISK_INSTRUCTION、URL 生成限制、谨慎操作确认</li>
+<li><strong>绿色主题</strong> — 一眼可知已 patched</li>
+</ul>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><table>
+<thead>
+<tr>
+<th>项</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系统</td>
+<td>Windows 11 (MINGW64 &#x2F; Git Bash)</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>v2.1.153 → v2.1.158</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>v24.15.0</td>
+</tr>
+<tr>
+<td>Bun</td>
+<td>1.3.14</td>
+</tr>
+<tr>
+<td>ripgrep</td>
+<td>15.0.0</td>
+</tr>
+<tr>
+<td>代理</td>
+<td>127.0.0.1:7897</td>
+</tr>
+</tbody></table>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="1-克隆仓库"><a href="#1-克隆仓库" class="headerlink" title="1. 克隆仓库"></a>1. 克隆仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth 1 https://github.com/0Chencc/clawgod.git /tmp/clawgod</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-运行安装脚本"><a href="#2-运行安装脚本" class="headerlink" title="2. 运行安装脚本"></a>2. 运行安装脚本</h3><p>Windows 下 ClawGod 提供 <code>install.ps1</code> 和 <code>install.sh</code> 两个安装脚本。<code>install.sh</code> 仅支持 macOS&#x2F;Linux，Git Bash 下会直接拒绝：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">✗ Unsupported platform: MINGW64_NT-10.0-26200 x86_64</span><br></pre></td></tr></table></figure>
+
+<p>所以必须走 PowerShell 路径。但直接跑也不行——前后踩了三个坑。</p>
+<h2 id="踩坑与解决"><a href="#踩坑与解决" class="headerlink" title="踩坑与解决"></a>踩坑与解决</h2><h3 id="坑-1：ripgrep-不在-PATH"><a href="#坑-1：ripgrep-不在-PATH" class="headerlink" title="坑 1：ripgrep 不在 PATH"></a>坑 1：ripgrep 不在 PATH</h3><p>现象：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">✗ ripgrep (rg) is required but not found in PATH.</span><br></pre></td></tr></table></figure>
+
+<p>系统中 rg.exe 是存在的，但在 VS Code 和 Codex 的私有 vendor 目录下，不在 PATH 中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/c/Users/ZQ/AppData/Roaming/npm/node_modules/@openai/codex/.../rg.exe</span><br><span class="line">/d/software/Microsoft VS Code/.../vscode-ripgrep/bin/win32-x64/rg.exe</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决：</strong> 将 VS Code 自带的 rg.exe 复制到 <code>~/bin</code>（已在 PATH 中）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/bin</span><br><span class="line"><span class="built_in">cp</span> <span class="string">&quot;/d/software/Microsoft VS Code/.../vscode-ripgrep/bin/win32-x64/rg.exe&quot;</span> ~/bin/rg.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="坑-2：MSYS2-tar-与-Windows-路径不兼容"><a href="#坑-2：MSYS2-tar-与-Windows-路径不兼容" class="headerlink" title="坑 2：MSYS2 tar 与 Windows 路径不兼容"></a>坑 2：MSYS2 tar 与 Windows 路径不兼容</h3><p>这是最麻烦的一个坑。设置代理后，安装脚本走 <code>npm pack</code> 路径下载完成，但 tar 解压时报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar (child): Cannot connect to C: resolve failed</span><br></pre></td></tr></table></figure>
+
+<p><strong>根因：</strong> Git Bash 的 MSYS2 <code>tar</code>（<code>/usr/bin/tar</code>）把 <code>C:\...</code> 路径解释为远程主机名。PowerShell 脚本调用 <code>tar</code> 时，PATH 中 Git Bash 的 tar 优先级高于 Windows 系统 tar。</p>
+<p><strong>解决：</strong> 调整 PATH 顺序，让 <code>C:\Windows\System32\tar.exe</code> 优先于 <code>/usr/bin/tar</code>。最终使用的完整命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HTTPS_PROXY=http://127.0.0.1:7897</span><br><span class="line"><span class="built_in">export</span> HTTP_PROXY=http://127.0.0.1:7897</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/c/myEnv/nodejs:/c/Users/ZQ/.bun/bin:/c/Windows/System32:/c/Windows:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Users/ZQ/bin&quot;</span></span><br><span class="line"></span><br><span class="line">powershell.exe -ExecutionPolicy Bypass -File \</span><br><span class="line">  <span class="string">&quot;C:\\Users\\ZQ\\AppData\\Local\\Temp\\clawgod\\install.ps1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>关键点：</p>
+<ol>
+<li><strong>Windows System32 必须在 MSYS2 <code>/usr/bin</code> 之前</strong>，确保 <code>tar</code> 走 Windows 原生版本</li>
+<li><strong>Node.js &#x2F; npm 目录</strong>（<code>/c/myEnv/nodejs</code>）必须在 PATH 中</li>
+<li><strong>代理变量</strong>通过 <code>HTTPS_PROXY</code> &#x2F; <code>HTTP_PROXY</code> 传入，用于 npm 下载</li>
+</ol>
+<h3 id="坑-3：Git-Bash-环境变量传递"><a href="#坑-3：Git-Bash-环境变量传递" class="headerlink" title="坑 3：Git Bash 环境变量传递"></a>坑 3：Git Bash 环境变量传递</h3><p>从 Git Bash 调用 PowerShell 时，<code>HTTPS_PROXY</code> 和 <code>HTTP_PROXY</code> 需要 export 后由 PowerShell 继承。如果代理没传进去，npm 下载会超时或失败。</p>
+<p>另外 <code>install.sh</code> 会检查 <code>$OSTYPE</code> 或 <code>uname -s</code>，在 MINGW64 下直接退出，所以不能在 Git Bash 中运行 bash 版本。</p>
+<h2 id="安装结果"><a href="#安装结果" class="headerlink" title="安装结果"></a>安装结果</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">ClawGod (universal)</span><br><span class="line">Target: cli.original.cjs (v2.1.158)</span><br><span class="line">Mode: APPLY</span><br><span class="line">=======================================================</span><br><span class="line">  OK USER_TYPE → ant (1)</span><br><span class="line">  OK GrowthBook env overrides (1)</span><br><span class="line">  OK GrowthBook config overrides (1)</span><br><span class="line">  OK Agent Teams always enabled (1)</span><br><span class="line">  OK Computer Use subscription bypass (1)</span><br><span class="line">  OK Computer Use default enabled (1)</span><br><span class="line">  OK Ultraplan enable (1)</span><br><span class="line">  OK Ultrareview enable (1)</span><br><span class="line">  OK Logo + brand color → green (RGB dark) (4)</span><br><span class="line">  OK Logo + brand color → green (ANSI) (2)</span><br><span class="line">  OK Theme claude color → green (dark) (2)</span><br><span class="line">  OK Theme claude color → green (light) (2)</span><br><span class="line">  OK Shimmer → green (2)</span><br><span class="line">  OK Shimmer light → green (2)</span><br><span class="line">  OK Computer Use gate bypass (1)</span><br><span class="line">  !! Voice Mode enable (0 matches, no sentinel)</span><br><span class="line">  OK Auto-mode unlock for third-party API (1)</span><br><span class="line">  OK Redirect `claude update` to clawgod self-update (1)</span><br><span class="line">  OK Hex brand color → green (1)</span><br><span class="line">  OK Remove CYBER_RISK_INSTRUCTION (1)</span><br><span class="line">  OK Remove URL generation restriction (1)</span><br><span class="line">  OK Remove cautious actions section (1)</span><br><span class="line">  OK Remove &quot;Not logged in&quot; notice (1)</span><br><span class="line">  OK Attachment filter bypass (1)</span><br><span class="line">  &gt;&gt; Message list filter bypass (legacy ternary) (not in this version)</span><br><span class="line">  OK Message list filter bypass (s_8 form) (1)</span><br><span class="line">  OK Shell integration → claude.orig (multitool dispatch fix) (1)</span><br><span class="line"></span><br><span class="line">Result: 25 applied, 2 skipped, 0 failed</span><br></pre></td></tr></table></figure>
+
+<p>25 个补丁全部应用成功，2 个跳过（Voice Mode 在当前版本无匹配、legacy filter 已不存在），0 失败。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">claude           <span class="comment"># patched 版本（绿色 logo）</span></span><br><span class="line">clawgod          <span class="comment"># 同上，显式入口，不会和 claude.exe 冲突</span></span><br><span class="line">claude.orig      <span class="comment"># 原始未 patched 版本</span></span><br></pre></td></tr></table></figure>
+
+<p>配置文件：</p>
+<ul>
+<li><code>~/.clawgod/provider.json</code> — API key &#x2F; baseURL 配置</li>
+<li><code>~/.clawgod/features.json</code> — 功能开关</li>
+</ul>
+<p>更新命令 <code>claude update</code> 已被 patch 重定向至 ClawGod 自更新流程，正常使用即可。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>整个过程的核心问题是 <strong>Windows 下 MSYS2 环境与原生 Windows 工具的 PATH 污染</strong>。调整 PATH 优先级，确保 <code>System32</code> 在 MSYS2 bin 之前即可解决。ClawGod 的安装脚本本身质量不错，自动完成二进制解析、cli.js 提取、native 模块提取、补丁应用，全程无需手动干预。</p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="ClawGod 安装踩坑记录">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-05-31
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/工具折腾/">工具折腾<span>1</span></a></li> <li><a href="/categories/工具折腾/AI/">AI<span>1</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/ClawGod/">ClawGod<span>1</span></a></li> <li><a href="/tags/Claude-Code/">Claude Code<span>1</span></a></li> <li><a href="/tags/Patch/">Patch<span>1</span></a></li> <li><a href="/tags/Windows/">Windows<span>1</span></a></li> <li><a href="/tags/代理/">代理<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-article-text">背景</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-article-text">环境</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-article-text">安装步骤</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%85%8B%E9%9A%86%E4%BB%93%E5%BA%93"><span class="toc-article-text">1. 克隆仓库</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="toc-article-text">2. 运行安装脚本</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%B8%A9%E5%9D%91%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="toc-article-text">踩坑与解决</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9D%91-1%EF%BC%9Aripgrep-%E4%B8%8D%E5%9C%A8-PATH"><span class="toc-article-text">坑 1：ripgrep 不在 PATH</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9D%91-2%EF%BC%9AMSYS2-tar-%E4%B8%8E-Windows-%E8%B7%AF%E5%BE%84%E4%B8%8D%E5%85%BC%E5%AE%B9"><span class="toc-article-text">坑 2：MSYS2 tar 与 Windows 路径不兼容</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9D%91-3%EF%BC%9AGit-Bash-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%BC%A0%E9%80%92"><span class="toc-article-text">坑 3：Git Bash 环境变量传递</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E7%BB%93%E6%9E%9C"><span class="toc-article-text">安装结果</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-article-text">使用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-article-text">小结</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

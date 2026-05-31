@@ -1,0 +1,904 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Claude Code 配置体系完全指南 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="一份文档讲清楚：配置文件地图 → MCP 联动机制 → Skill 双轨体系 → 新增&amp;#x2F;排错流程
+
+
+一、概述：你的 Claude Code 定制全貌
+
+
+序号
+能力
+实现方式
+
+
+
+1
+免拒绝
+Rules 层声明白帽身份
+
+
+2
+场景识别
+Hook 1 (security-context">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Claude Code 配置体系完全指南"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Claude Code 配置体系完全指南</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <blockquote>
+<p>一份文档讲清楚：配置文件地图 → MCP 联动机制 → Skill 双轨体系 → 新增&#x2F;排错流程</p>
+</blockquote>
+<hr>
+<h2 id="一、概述：你的-Claude-Code-定制全貌"><a href="#一、概述：你的-Claude-Code-定制全貌" class="headerlink" title="一、概述：你的 Claude Code 定制全貌"></a>一、概述：你的 Claude Code 定制全貌</h2><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>能力</th>
+<th>实现方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>免拒绝</strong></td>
+<td>Rules 层声明白帽身份</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>场景识别</strong></td>
+<td>Hook 1 (<code>security-context-hook.py</code>) 智能分类</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>技能推荐</strong></td>
+<td>Hook 2 (<code>skill-router-hook.py</code>) 关键词匹配</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>专业输出</strong></td>
+<td>Hook 注入场景标签，按安全研究报告格式输出</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>102 安全技能</strong></td>
+<td>CC Switch 统一管理 + <code>/skills</code> 原生调用 + Hook 自动推荐</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>MCP 工具联动</strong></td>
+<td>Burp Suite &#x2F; Exploit Server &#x2F; 记忆图谱 &#x2F; 文档查询等 7 个 MCP Server</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>状态回显</strong></td>
+<td>Status Line 实时显示 Hook 匹配结果</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Provider 切换</strong></td>
+<td>CC Switch 管理 DeepSeek &#x2F; MiMo &#x2F; Official 等多个 API 后端</td>
+</tr>
+</tbody></table>
+<p><strong>一句话总结</strong>：Claude Code 通过 3 层架构（Rules → Hooks → Skills&#x2F;MCP）实现深度定制。CC Switch 管静态资产管理（技能安装&#x2F;MCP注册&#x2F;Provider切换），自定义 Hook 管动态智能路由。</p>
+<hr>
+<h2 id="二、配置文件地图"><a href="#二、配置文件地图" class="headerlink" title="二、配置文件地图"></a>二、配置文件地图</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\ZQ\</span><br><span class="line">├── .claude.json                     ← ★ MCP Server 配置（Claude Code 直接读取）</span><br><span class="line">├── .claude\</span><br><span class="line">│   ├── settings.json                ← 通用设置（hooks/env/permissions/provider）</span><br><span class="line">│   ├── CLAUDE.md                    ← 全局 AI 指令（身份/工作流/技术栈）</span><br><span class="line">│   ├── skills\                      ← 102 个 Skill（CC Switch 同步的目标目录）</span><br><span class="line">│   │   ├── sqli-sql-injection\</span><br><span class="line">│   │   │   └── SKILL.md</span><br><span class="line">│   │   ├── xss-cross-site-scripting\</span><br><span class="line">│   │   │   └── SKILL.md</span><br><span class="line">│   │   └── ... (共 104 个)</span><br><span class="line">│   ├── hooks\                       ← 自定义 Hook 脚本</span><br><span class="line">│   │   ├── security-context-hook.py ← Hook 1: LLM 场景分类 + 标签注入</span><br><span class="line">│   │   ├── skill-router-hook.py     ← Hook 2: 关键词匹配 + 技能推荐</span><br><span class="line">│   │   ├── build-skill-index.py     ← 技能索引构建器</span><br><span class="line">│   │   ├── keyword-aliases.json     ← 中英双语关键词别名库</span><br><span class="line">│   │   └── status-line.py           ← 终端状态栏回显</span><br><span class="line">│   └── memory\                      ← Claude Code 持久记忆</span><br><span class="line">├── .cc-switch\</span><br><span class="line">│   ├── settings.json                ← CC Switch 自身 UI 设置</span><br><span class="line">│   ├── cc-switch.db                 ← CC Switch 核心数据库 (SQLite)</span><br><span class="line">│   └── skills\                      ← CC Switch 管理的技能主目录 (102 个)</span><br><span class="line">└── .claude\</span><br><span class="line">    └── rules\                       ← 身份授权规则</span><br></pre></td></tr></table></figure>
+
+<h3 id="各文件职责速查"><a href="#各文件职责速查" class="headerlink" title="各文件职责速查"></a>各文件职责速查</h3><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>读取方</th>
+<th>作用</th>
+<th>修改方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>.claude.json</code></strong></td>
+<td>Claude Code</td>
+<td><strong>User MCP Server 列表</strong>（Claude Code 直接读取）</td>
+<td>手动编辑 &#x2F; CC Switch 同步</td>
+</tr>
+<tr>
+<td><code>.claude/settings.json</code></td>
+<td>Claude Code</td>
+<td>hooks、env、permissions、provider MCP</td>
+<td>CC Switch 同步</td>
+</tr>
+<tr>
+<td><code>.claude/skills/</code></td>
+<td>Claude Code</td>
+<td>原生 Skill 目录（<code>/skills</code> 命令识别）</td>
+<td>CC Switch 同步</td>
+</tr>
+<tr>
+<td><code>.claude/CLAUDE.md</code></td>
+<td>Claude Code</td>
+<td>AI 行为指令（身份&#x2F;输出格式&#x2F;技术栈）</td>
+<td>手动编辑</td>
+</tr>
+<tr>
+<td><code>.cc-switch/cc-switch.db</code></td>
+<td>CC Switch</td>
+<td>全局数据源（Provider&#x2F;MCP&#x2F;Skill&#x2F;设置）</td>
+<td>CC Switch UI</td>
+</tr>
+<tr>
+<td><code>.cc-switch/skills/</code></td>
+<td>Hook 脚本</td>
+<td>Skill 源目录（Hook 从此扫描推荐）</td>
+<td>CC Switch UI</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、MCP-Server-配置体系"><a href="#三、MCP-Server-配置体系" class="headerlink" title="三、MCP Server 配置体系"></a>三、MCP Server 配置体系</h2><h3 id="3-1-核心结论"><a href="#3-1-核心结论" class="headerlink" title="3.1 核心结论"></a>3.1 核心结论</h3><p><strong>Claude Code 的 User MCP 只从 <code>.claude.json</code> 读取</strong>，不是从 <code>settings.json</code>。</p>
+<p>在 Claude Code 中输入 <code>/mcp</code>，看到的 <strong>“User MCPs (C:\Users\ZQ.claude.json)”</strong> 就是来自这个文件。</p>
+<h3 id="3-2-两个文件的-MCP-字段区别"><a href="#3-2-两个文件的-MCP-字段区别" class="headerlink" title="3.2 两个文件的 MCP 字段区别"></a>3.2 两个文件的 MCP 字段区别</h3><table>
+<thead>
+<tr>
+<th></th>
+<th><code>.claude.json</code> <code>mcpServers</code></th>
+<th><code>.claude/settings.json</code> <code>mcpServers</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>作用</strong></td>
+<td>User 级全局 MCP，Claude Code 直接读取</td>
+<td>Provider 绑定型 MCP，CC Switch 写入</td>
+</tr>
+<tr>
+<td><strong>包含内容</strong></td>
+<td>所有 MCP Server（time&#x2F;memory&#x2F;context7&#x2F;…）</td>
+<td>仅 provider 专属的（如 exploit-server 带 token）</td>
+</tr>
+<tr>
+<td><strong>修改方</strong></td>
+<td>CC Switch 同步 &#x2F; 手动编辑</td>
+<td>CC Switch 从 provider 的 <code>settings_config</code> 生成</td>
+</tr>
+<tr>
+<td><strong>Claude Code 读取</strong></td>
+<td>✅ 是（User MCPs 来源）</td>
+<td>❌ 否（仅作 provider 配置）</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-数据流：CC-Switch-→-磁盘文件"><a href="#3-3-数据流：CC-Switch-→-磁盘文件" class="headerlink" title="3.3 数据流：CC Switch → 磁盘文件"></a>3.3 数据流：CC Switch → 磁盘文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────────┐</span><br><span class="line">│                    CC Switch (SQLite)                     │</span><br><span class="line">│                                                          │</span><br><span class="line">│  providers 表                 mcp_servers 表 (全局)       │</span><br><span class="line">│  ┌──────────────────┐       ┌──────────────────────┐     │</span><br><span class="line">│  │ env vars          │       │ time                 │     │</span><br><span class="line">│  │ provider 专属 MCP  │       │ memory               │     │</span><br><span class="line">│  └───────┬──────────┘       │ context7             │     │</span><br><span class="line">│          │                  │ sequential-thinking   │     │</span><br><span class="line">│  settings 表                 │ fetch                 │     │</span><br><span class="line">│  ┌──────────────────┐       │ exploit-server       │     │</span><br><span class="line">│  │ common_config     │       │ burp                 │     │</span><br><span class="line">│  │ (hooks/perms)     │       └──────────┬───────────┘     │</span><br><span class="line">│  └───────┬──────────┘                  │                 │</span><br><span class="line">└──────────┼─────────────────────────────┼─────────────────┘</span><br><span class="line">           │         同步方向（单向）       │</span><br><span class="line">           │     CC Switch → 磁盘文件       │</span><br><span class="line">           │                              │</span><br><span class="line">           ▼                              ▼</span><br><span class="line">    ┌──────────────┐        ┌───────────────────────┐</span><br><span class="line">    │ settings.json │        │    .claude.json        │</span><br><span class="line">    │              │        │                        │</span><br><span class="line">    │ env vars     │        │ mcpServers:            │</span><br><span class="line">    │ hooks        │        │   所有 User MCP         │</span><br><span class="line">    │ permissions  │        │   (7 个 MCP Server)     │</span><br><span class="line">    │ theme        │        │                        │</span><br><span class="line">    │ provider MCP  │        │                        │</span><br><span class="line">    └──────────────┘        └───────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>同步方向是单向的</strong>：CC Switch DB → 磁盘文件。CC Switch 是数据源（source of truth），直接改磁盘文件可能被 CC Switch 下次同步覆盖。</p>
+</blockquote>
+<h3 id="3-4-CC-Switch-数据库内部结构"><a href="#3-4-CC-Switch-数据库内部结构" class="headerlink" title="3.4 CC Switch 数据库内部结构"></a>3.4 CC Switch 数据库内部结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cc-switch.db</span><br><span class="line">├── providers                    ← API Provider 配置</span><br><span class="line">│   ├── settings_config          ← &#123;env, mcpServers, autoCompactEnabled&#125;</span><br><span class="line">│   ├── app_type                 ← claude / codex / gemini / claude-desktop</span><br><span class="line">│   └── is_current               ← 当前激活的 provider</span><br><span class="line">│</span><br><span class="line">├── mcp_servers                  ← 全局 MCP Server 注册表</span><br><span class="line">│   ├── server_config            ← MCP 启动配置 (JSON)</span><br><span class="line">│   ├── enabled_claude           ← 对 Claude Code 启用</span><br><span class="line">│   ├── enabled_codex            ← 对 Codex 启用</span><br><span class="line">│   └── enabled_gemini           ← 对 Gemini 启用</span><br><span class="line">│</span><br><span class="line">├── settings                     ← 各应用公共配置</span><br><span class="line">│   ├── common_config_claude     ← hooks/permissions/theme 等</span><br><span class="line">│   └── common_config_codex      ← Codex 的 MCP 配置 (TOML)</span><br><span class="line">│</span><br><span class="line">└── proxy_config                 ← CC Switch 本地代理设置</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键区分</strong>：</p>
+<ul>
+<li><code>providers.settings_config.mcpServers</code> → 写入 <code>settings.json</code>（provider 专属 MCP，如带 API Token 的）</li>
+<li><code>mcp_servers</code> 表（全局） → 写入 <code>.claude.json</code>（所有 User MCP）</li>
+<li><code>settings.common_config_claude</code> → 写入 <code>settings.json</code>（hooks 等公共配置）</li>
+</ul>
+<h3 id="3-5-当前-7-个-MCP-Server-一览"><a href="#3-5-当前-7-个-MCP-Server-一览" class="headerlink" title="3.5 当前 7 个 MCP Server 一览"></a>3.5 当前 7 个 MCP Server 一览</h3><table>
+<thead>
+<tr>
+<th>MCP Server</th>
+<th>类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>time</strong></td>
+<td>stdio (uvx)</td>
+<td>时间查询 &#x2F; 时区转换</td>
+</tr>
+<tr>
+<td><strong>memory</strong></td>
+<td>stdio (npx)</td>
+<td>知识图谱记忆系统</td>
+</tr>
+<tr>
+<td><strong>context7</strong></td>
+<td>stdio (npx)</td>
+<td>实时文档查询</td>
+</tr>
+<tr>
+<td><strong>sequential-thinking</strong></td>
+<td>stdio (npx)</td>
+<td>链式思维推理</td>
+</tr>
+<tr>
+<td><strong>fetch</strong></td>
+<td>stdio (uvx)</td>
+<td>HTTP 请求抓取</td>
+</tr>
+<tr>
+<td><strong>exploit-server</strong></td>
+<td>stdio (python)</td>
+<td>Exploit Server Pro（Payload&#x2F;日志&#x2F;OOB&#x2F;Repeater）</td>
+</tr>
+<tr>
+<td><strong>burp</strong></td>
+<td>stdio (java proxy)</td>
+<td>Burp Suite 联动（SSE 代理）</td>
+</tr>
+</tbody></table>
+<h3 id="3-6-各类型-MCP-配置模板"><a href="#3-6-各类型-MCP-配置模板" class="headerlink" title="3.6 各类型 MCP 配置模板"></a>3.6 各类型 MCP 配置模板</h3><h4 id="Stdio-型（本地进程，最常用）"><a href="#Stdio-型（本地进程，最常用）" class="headerlink" title="Stdio 型（本地进程，最常用）"></a>Stdio 型（本地进程，最常用）</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stdio&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;python&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;C:/path/to/server.py&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;API_KEY&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxx&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="SSE-代理型（Burp-Suite-联动）"><a href="#SSE-代理型（Burp-Suite-联动）" class="headerlink" title="SSE 代理型（Burp Suite 联动）"></a>SSE 代理型（Burp Suite 联动）</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:/Program Files/Common Files/Oracle/Java/javapath/java.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;-jar&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;D:/SRC/tools/burpsuite-windows-2026/myPlugins/MCP/mcp-proxy.jar&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;--sse-url&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;http://127.0.0.1:9876&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Proxy JAR 在本地作为子进程启动，内部连接远程 SSE 端点（Burp 插件），通过 stdio 与 Claude Code 通信。</p>
+</blockquote>
+<h4 id="NPM-包型"><a href="#NPM-包型" class="headerlink" title="NPM 包型"></a>NPM 包型</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stdio&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cmd&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;/c&quot;</span><span class="punctuation">,</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span> <span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@scope/package-name&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-7-新增-MCP-Server-操作流程"><a href="#3-7-新增-MCP-Server-操作流程" class="headerlink" title="3.7 新增 MCP Server 操作流程"></a>3.7 新增 MCP Server 操作流程</h3><p><strong>方法 A（推荐）：CC Switch UI 添加</strong></p>
+<ol>
+<li>打开 CC Switch → MCP Servers 管理</li>
+<li>点击 “Add MCP Server”，填写配置</li>
+<li>勾选 <code>enabled_claude = true</code></li>
+<li>CC Switch 自动写入 DB + 同步到 <code>.claude.json</code></li>
+<li>重启 Claude Code 或 <code>/mcp</code> reload</li>
+</ol>
+<p><strong>方法 B：手动编辑 <code>.claude.json</code></strong></p>
+<ol>
+<li>编辑 <code>C:\Users\ZQ\.claude.json</code>，在 <code>mcpServers</code> 中添加条目</li>
+<li>重启 Claude Code</li>
+<li>⚠️ 注意：下次 CC Switch 同步可能覆盖手动修改（需要在 CC Switch DB 中也插入对应记录）</li>
+</ol>
+<p><strong>方法 C：同时写入两处（最稳妥）</strong></p>
+<ol>
+<li>编辑 <code>.claude.json</code> 添加 MCP</li>
+<li>在 CC Switch DB 的 <code>mcp_servers</code> 表中也插入一条</li>
+<li>两边数据一致，互不覆盖</li>
+</ol>
+<hr>
+<h2 id="四、Skill-技能体系"><a href="#四、Skill-技能体系" class="headerlink" title="四、Skill 技能体系"></a>四、Skill 技能体系</h2><h3 id="4-1-技能的双轨识别机制"><a href="#4-1-技能的双轨识别机制" class="headerlink" title="4.1 技能的双轨识别机制"></a>4.1 技能的双轨识别机制</h3><p>你的 102 个安全技能通过<strong>两条独立的路径</strong>被 Claude Code 识别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">                 ┌─────────────────────┐</span><br><span class="line">                 │   CC Switch (SQLite) │</span><br><span class="line">                 │   技能安装 / 更新     │</span><br><span class="line">                 └──────────┬──────────┘</span><br><span class="line">                            │ 同步</span><br><span class="line">            ┌───────────────┼───────────────┐</span><br><span class="line">            ▼                               ▼</span><br><span class="line">┌──────────────────────┐      ┌──────────────────────┐</span><br><span class="line">│ ~/.claude/skills/    │      │ ~/.cc-switch/skills/ │</span><br><span class="line">│ (Claude Code 原生)    │      │ (Hook 路由源)         │</span><br><span class="line">│ 104 个 SKILL.md       │      │ 102 个 SKILL.md       │</span><br><span class="line">└──────────┬───────────┘      └──────────┬───────────┘</span><br><span class="line">           │                             │</span><br><span class="line">           ▼                             ▼</span><br><span class="line">┌──────────────────────┐      ┌──────────────────────┐</span><br><span class="line">│ 轨道 1：原生 Skill     │      │ 轨道 2：Hook 智能路由  │</span><br><span class="line">│                      │      │                      │</span><br><span class="line">│ /skill-name 调用      │      │ 自然语言输入           │</span><br><span class="line">│ Skill tool 自动触发   │      │ → 关键词匹配          │</span><br><span class="line">│ 一次一个技能          │      │ → 推荐 Top 3 技能      │</span><br><span class="line">│ 走子 Agent 执行       │      │ → 文本注入当前上下文    │</span><br><span class="line">└──────────────────────┘      └──────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-两种识别方式对比"><a href="#4-2-两种识别方式对比" class="headerlink" title="4.2 两种识别方式对比"></a>4.2 两种识别方式对比</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>轨道 1：原生 Skill 机制</th>
+<th>轨道 2：自定义 Hook 路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>触发方式</strong></td>
+<td><code>/skill-name</code> 命令 或 Skill tool 自动触发</td>
+<td>自然语言输入 → 关键词自动匹配</td>
+</tr>
+<tr>
+<td><strong>执行方式</strong></td>
+<td>子 Agent 独立执行</td>
+<td>文本注入当前上下文（内联）</td>
+</tr>
+<tr>
+<td><strong>多技能</strong></td>
+<td>一次一个</td>
+<td>一次推荐最多 3 个，标注互补关系</td>
+</tr>
+<tr>
+<td><strong>中文支持</strong></td>
+<td>有限</td>
+<td>✅ 50+ 组中英双语别名</td>
+</tr>
+<tr>
+<td><strong>匹配策略</strong></td>
+<td>静态规则（文件名&#x2F;frontmatter）</td>
+<td>两相打分：Phase 1 精确别名 + Phase 2 模糊关键词</td>
+</tr>
+<tr>
+<td><strong>优先级调节</strong></td>
+<td>无</td>
+<td>基于使用频次&#x2F;时间的动态权重</td>
+</tr>
+<tr>
+<td><strong>CC Switch 管理</strong></td>
+<td>✅ 通过同步</td>
+<td>✅ 直接管理源目录</td>
+</tr>
+<tr>
+<td><strong>维护成本</strong></td>
+<td>低（放目录即可）</td>
+<td>需维护脚本 + 别名库 + 索引</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-Hook-架构详解"><a href="#4-3-Hook-架构详解" class="headerlink" title="4.3 Hook 架构详解"></a>4.3 Hook 架构详解</h3><p>你的 Hook 体系在 <code>UserPromptSubmit</code> 事件上挂载了两个脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">用户输入</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│ Hook 1: security-context-hook.py            │</span><br><span class="line">│                                              │</span><br><span class="line">│ 功能：LLM + 关键字 → 场景分类                │</span><br><span class="line">│ 输出：注入标签 [security:ctf/vuln/pentest/...] │</span><br><span class="line">│ 注入方式：additionalContext                   │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│ Hook 2: skill-router-hook.py                │</span><br><span class="line">│                                              │</span><br><span class="line">│ 功能：关键词匹配 → 推荐技能                   │</span><br><span class="line">│ 输入：keyword-aliases.json (别名库)           │</span><br><span class="line">│       .skill-index.json (技能索引)            │</span><br><span class="line">│       .skill-usage.json (使用统计)            │</span><br><span class="line">│ 输出：推荐 Top 3 技能 + 文件路径              │</span><br><span class="line">│ 注入方式：additionalContext                   │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">Claude Code 看到推荐 → Read 对应 SKILL.md</span><br></pre></td></tr></table></figure>
+
+<p><strong>Hook 脚本位置</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>~/.claude/hooks/security-context-hook.py</code></td>
+<td>LLM 场景分类，注入 <code>[security:xxx]</code> 标签</td>
+</tr>
+<tr>
+<td><code>~/.claude/hooks/skill-router-hook.py</code></td>
+<td>关键词匹配 + 技能推荐，注入文件路径</td>
+</tr>
+<tr>
+<td><code>~/.claude/hooks/build-skill-index.py</code></td>
+<td>扫描 SKILL.md → 构建 <code>.skill-index.json</code></td>
+</tr>
+<tr>
+<td><code>~/.claude/hooks/keyword-aliases.json</code></td>
+<td>中英双语关键词别名库（50+ 组）</td>
+</tr>
+<tr>
+<td><code>~/.claude/hooks/status-line.py</code></td>
+<td>终端状态栏回显 Hook 匹配结果</td>
+</tr>
+</tbody></table>
+<p><strong>Hook 关键约束</strong>：</p>
+<ul>
+<li>Hook 只能通过 <code>additionalContext</code> 注入文本，<strong>不能直接调用 Skill tool</strong></li>
+<li>推荐是”建议”而非”强制执行”——Claude 看到推荐后手动 Read</li>
+<li>可以在 <code>additionalContext</code> 中用更强指令（如 “你必须立即使用 Read tool 读取以下文件”）模拟自动调用</li>
+</ul>
+<h3 id="4-4-CC-Switch-与-Skill-的关系"><a href="#4-4-CC-Switch-与-Skill-的关系" class="headerlink" title="4.4 CC Switch 与 Skill 的关系"></a>4.4 CC Switch 与 Skill 的关系</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>CC Switch 作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>安装技能</strong></td>
+<td>CC Switch UI 一键安装，写入 <code>~/.cc-switch/skills/</code></td>
+</tr>
+<tr>
+<td><strong>更新技能</strong></td>
+<td>CC Switch 检测上游更新并同步</td>
+</tr>
+<tr>
+<td><strong>同步到 Claude Code</strong></td>
+<td>CC Switch 将技能复制到 <code>~/.claude/skills/</code>，使 <code>/skills</code> 命令可见</td>
+</tr>
+<tr>
+<td><strong>Hook 路由源</strong></td>
+<td>Hook 从 <code>~/.cc-switch/skills/</code> 扫描技能，做关键词匹配推荐</td>
+</tr>
+</tbody></table>
+<p><strong>当前状态</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~/.cc-switch/skills/ → 102 个技能（CC Switch 管理 + Hook 路由源）</span><br><span class="line">~/.claude/skills/    → 104 个技能（Claude Code 原生 /skills 识别）</span><br></pre></td></tr></table></figure>
+
+<p>两者基本一致（CC Switch 同步后）。Hook 的 <code>skill-router-hook.py</code> 和 <code>build-skill-index.py</code> 已修改为指向 <code>~/.cc-switch/skills/</code>。</p>
+<h3 id="4-5-技能同步机制"><a href="#4-5-技能同步机制" class="headerlink" title="4.5 技能同步机制"></a>4.5 技能同步机制</h3><p>CC Switch 中的 <code>skillSyncMethod</code> 设为 <code>auto</code> 时：</p>
+<ol>
+<li>CC Switch 维护 <code>~/.cc-switch/skills/</code> 作为<strong>源目录</strong></li>
+<li>同步时复制到 <code>~/.claude/skills/</code>（Claude Code 原生目录）</li>
+<li>每个技能是 <code>目录名/SKILL.md</code> 格式，带 YAML frontmatter</li>
+</ol>
+<blockquote>
+<p>⚠️ 遇到过同步不完整的情况：<code>auto</code> 模式下只同步了 1 个。解决方案：在 CC Switch GUI 中手动触发一次全量同步。</p>
+</blockquote>
+<hr>
+<h2 id="五、CC-Switch-全局架构"><a href="#五、CC-Switch-全局架构" class="headerlink" title="五、CC Switch 全局架构"></a>五、CC Switch 全局架构</h2><h3 id="5-1-CC-Switch-管理什么"><a href="#5-1-CC-Switch-管理什么" class="headerlink" title="5.1 CC Switch 管理什么"></a>5.1 CC Switch 管理什么</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│                      CC Switch                           │</span><br><span class="line">│                                                         │</span><br><span class="line">│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────────┐ │</span><br><span class="line">│  │ Provider  │  │   MCP    │  │  Skills  │  │  Hooks  │ │</span><br><span class="line">│  │ 管理      │  │  Server  │  │  管理    │  │  配置   │ │</span><br><span class="line">│  │          │  │  注册     │  │          │  │         │ │</span><br><span class="line">│  │ DeepSeek │  │ 全局注册表│  │ 安装/更新 │  │ 注入到  │ │</span><br><span class="line">│  │ MiMo     │  │ 按App启用 │  │ 源目录维护│  │settings │ │</span><br><span class="line">│  │ Official │  │          │  │ 同步到   │  │.json    │ │</span><br><span class="line">│  │ ...      │  │          │  │ ~/.claude│  │         │ │</span><br><span class="line">│  └──────────┘  └──────────┘  └──────────┘  └─────────┘ │</span><br><span class="line">│                                                         │</span><br><span class="line">│  数据存储：~/.cc-switch/cc-switch.db (SQLite)            │</span><br><span class="line">│  同步输出：~/.claude/settings.json + ~/.claude.json      │</span><br><span class="line">│                       + ~/.claude/skills/                │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-Provider-是什么"><a href="#5-2-Provider-是什么" class="headerlink" title="5.2 Provider 是什么"></a>5.2 Provider 是什么</h3><p>Provider 即 API 后端服务商。你当前有：</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>App</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek</td>
+<td>Claude Code</td>
+<td>✅ 当前使用</td>
+</tr>
+<tr>
+<td>Xiaomi MiMo</td>
+<td>Claude Code</td>
+<td>备用</td>
+</tr>
+<tr>
+<td>Claude Official</td>
+<td>Claude Code</td>
+<td>备用</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>Claude Desktop</td>
+<td>✅ 当前使用</td>
+</tr>
+</tbody></table>
+<p>切换 Provider &#x3D; 切换 API 端点和密钥，CC Switch 会自动更新 <code>settings.json</code> 中的 <code>env</code> 字段。</p>
+<h3 id="5-3-CC-Switch-的同步触发"><a href="#5-3-CC-Switch-的同步触发" class="headerlink" title="5.3 CC Switch 的同步触发"></a>5.3 CC Switch 的同步触发</h3><ul>
+<li><strong>自动</strong>：CC Switch 启动时、技能&#x2F;MCP 变更时</li>
+<li><strong>手动</strong>：在 CC Switch GUI 中点击同步按钮</li>
+<li><strong>注意</strong>：同步是<strong>覆盖式</strong>写入磁盘文件，磁盘上的手动修改会丢失</li>
+</ul>
+<hr>
+<h2 id="六、完整操作流程"><a href="#六、完整操作流程" class="headerlink" title="六、完整操作流程"></a>六、完整操作流程</h2><h3 id="6-1-新增-MCP-Server"><a href="#6-1-新增-MCP-Server" class="headerlink" title="6.1 新增 MCP Server"></a>6.1 新增 MCP Server</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 打开 CC Switch → MCP 管理</span><br><span class="line">2. 添加 MCP Server，填写配置 JSON</span><br><span class="line">   （或手动编辑 C:\Users\ZQ\.claude.json）</span><br><span class="line">3. 勾选 enabled_claude = true</span><br><span class="line">4. 触发同步（CC Switch 自动或手动）</span><br><span class="line">5. 在 Claude Code 中 /mcp → reload</span><br><span class="line">6. 验证：/mcp 面板显示 &quot;√ connected · N tools&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-新增-Skill"><a href="#6-2-新增-Skill" class="headerlink" title="6.2 新增 Skill"></a>6.2 新增 Skill</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 在 CC Switch 中安装/导入技能</span><br><span class="line">   或手动放到 ~/.cc-switch/skills/&lt;skill-name&gt;/SKILL.md</span><br><span class="line">2. 确保 YAML frontmatter 格式正确（name, description）</span><br><span class="line">3. 运行 build-skill-index.py 重建索引</span><br><span class="line">4. CC Switch 同步到 ~/.claude/skills/（使 /skills 可见）</span><br><span class="line">5. 验证：</span><br><span class="line">   - /skills 列表可见（原生轨道）</span><br><span class="line">   - 发相关消息触发 Hook 推荐（Hook 轨道）</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-排错流程"><a href="#6-3-排错流程" class="headerlink" title="6.3 排错流程"></a>6.3 排错流程</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>检查点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MCP 不出来</td>
+<td>① <code>.claude.json</code> 中是否有该条目 ② <code>/mcp</code> reload ③ CC Switch 是否覆盖了手动修改</td>
+</tr>
+<tr>
+<td>Skill 不被识别</td>
+<td>① <code>~/.claude/skills/</code> 是否存在 ② <code>SKILL.md</code> frontmatter 格式 ③ CC Switch 是否同步</td>
+</tr>
+<tr>
+<td>Hook 不推荐</td>
+<td>① <code>keyword-aliases.json</code> 是否有对应关键词 ② <code>.skill-index.json</code> 是否最新 ③ 脚本路径是否正确</td>
+</tr>
+<tr>
+<td>CC Switch 覆盖手动修改</td>
+<td>手动修改 <code>.claude.json</code> 后，需同步到 CC Switch DB，否则下次同步丢失</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、常见误区"><a href="#七、常见误区" class="headerlink" title="七、常见误区"></a>七、常见误区</h2><table>
+<thead>
+<tr>
+<th>误区</th>
+<th>真相</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“改 <code>settings.json</code> 就能加 MCP”</td>
+<td>❌ Claude Code 的 User MCP 读 <code>.claude.json</code>，不是 <code>settings.json</code></td>
+</tr>
+<tr>
+<td>“CC Switch DB 改了就能直接生效”</td>
+<td>❌ 需要同步到 <code>.claude.json</code>（CC Switch 自动或手动触发）</td>
+</tr>
+<tr>
+<td>“<code>.claude.json</code> 是 CC Switch 的输入”</td>
+<td>❌ 它是 CC Switch 的<strong>输出目标</strong>，会被覆盖</td>
+</tr>
+<tr>
+<td>“<code>settings.json</code> 的 mcpServers 是 User MCP”</td>
+<td>❌ 那是 provider 专属 MCP，User MCP 在 <code>.claude.json</code></td>
+</tr>
+<tr>
+<td>“所有 MCP 都在一个文件”</td>
+<td>❌ provider 绑定型在 <code>settings.json</code>，全局共享型在 <code>.claude.json</code></td>
+</tr>
+<tr>
+<td>“Skill 只能通过 <code>/</code> 调用”</td>
+<td>❌ 你有双轨：原生 <code>/skills</code> + Hook 自动推荐</td>
+</tr>
+<tr>
+<td>“Hook 可以自动调用 Skill”</td>
+<td>❌ Hook 只能注入文本推荐，Claude 需要手动 Read</td>
+</tr>
+<tr>
+<td>“CC Switch 同步是双向的”</td>
+<td>❌ 单向：CC Switch DB → 磁盘文件</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、本次实践记录"><a href="#八、本次实践记录" class="headerlink" title="八、本次实践记录"></a>八、本次实践记录</h2><h3 id="Burp-MCP-添加过程（2026-05-31）"><a href="#Burp-MCP-添加过程（2026-05-31）" class="headerlink" title="Burp MCP 添加过程（2026-05-31）"></a>Burp MCP 添加过程（2026-05-31）</h3><p><strong>教训</strong>：最初改了 <code>settings.json</code>（无效），又改了 <code>cc-switch.db</code>（间接），最终发现正确目标是 <code>.claude.json</code>。</p>
+<p><strong>最终配置</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;burp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:/Program Files/Common Files/Oracle/Java/javapath/java.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;-jar&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;D:/SRC/tools/burpsuite-windows-2026/myPlugins/MCP/mcp-proxy.jar&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;--sse-url&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;http://127.0.0.1:9876&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用前提</strong>：Burp Suite 中的 MCP 插件必须启动并监听 <code>127.0.0.1:9876</code>。</p>
+<h3 id="Skill-体系演进"><a href="#Skill-体系演进" class="headerlink" title="Skill 体系演进"></a>Skill 体系演进</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Phase 1: 技能放在 ~/.claude/hack-skills-library/</span><br><span class="line">         → 仅 Hook 路由可用</span><br><span class="line"></span><br><span class="line">Phase 2: 迁移到 ~/.cc-switch/skills/</span><br><span class="line">         → CC Switch 管理 + Hook 路由</span><br><span class="line"></span><br><span class="line">Phase 3: CC Switch 同步到 ~/.claude/skills/</span><br><span class="line">         → 双轨完整：原生 /skills + Hook 推荐</span><br></pre></td></tr></table></figure>
+
+<h3 id="当前完整状态（2026-05-31）"><a href="#当前完整状态（2026-05-31）" class="headerlink" title="当前完整状态（2026-05-31）"></a>当前完整状态（2026-05-31）</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>数量</th>
+<th>管理方式</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MCP Server</td>
+<td>7 个</td>
+<td>CC Switch + <code>.claude.json</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Provider</td>
+<td>4 个</td>
+<td>CC Switch</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Skills（CC Switch 源）</td>
+<td>102 个</td>
+<td>CC Switch</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Skills（Claude Code 原生）</td>
+<td>104 个</td>
+<td>CC Switch 同步</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Hook 脚本</td>
+<td>5 个</td>
+<td>手动管理</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>安全 Rules</td>
+<td>2 个</td>
+<td>手动管理</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="Claude Code 配置体系完全指南">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-05-31
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/AI/">AI<span>2</span></a></li> <li><a href="/categories/AI/claude-code/">claude code<span>2</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/AI/">AI<span>2</span></a></li> <li><a href="/tags/claude-code/">claude code<span>2</span></a></li> <li><a href="/tags/MCP/">MCP<span>1</span></a></li> <li><a href="/tags/skills/">skills<span>1</span></a></li> <li><a href="/tags/cc-switch/">cc-switch<span>1</span></a></li> <li><a href="/tags/配置/">配置<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0%EF%BC%9A%E4%BD%A0%E7%9A%84-Claude-Code-%E5%AE%9A%E5%88%B6%E5%85%A8%E8%B2%8C"><span class="toc-article-text">一、概述：你的 Claude Code 定制全貌</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9B%BE"><span class="toc-article-text">二、配置文件地图</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%84%E6%96%87%E4%BB%B6%E8%81%8C%E8%B4%A3%E9%80%9F%E6%9F%A5"><span class="toc-article-text">各文件职责速查</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81MCP-Server-%E9%85%8D%E7%BD%AE%E4%BD%93%E7%B3%BB"><span class="toc-article-text">三、MCP Server 配置体系</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-%E6%A0%B8%E5%BF%83%E7%BB%93%E8%AE%BA"><span class="toc-article-text">3.1 核心结论</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-2-%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84-MCP-%E5%AD%97%E6%AE%B5%E5%8C%BA%E5%88%AB"><span class="toc-article-text">3.2 两个文件的 MCP 字段区别</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-%E6%95%B0%E6%8D%AE%E6%B5%81%EF%BC%9ACC-Switch-%E2%86%92-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6"><span class="toc-article-text">3.3 数据流：CC Switch → 磁盘文件</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-CC-Switch-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="toc-article-text">3.4 CC Switch 数据库内部结构</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-5-%E5%BD%93%E5%89%8D-7-%E4%B8%AA-MCP-Server-%E4%B8%80%E8%A7%88"><span class="toc-article-text">3.5 当前 7 个 MCP Server 一览</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-6-%E5%90%84%E7%B1%BB%E5%9E%8B-MCP-%E9%85%8D%E7%BD%AE%E6%A8%A1%E6%9D%BF"><span class="toc-article-text">3.6 各类型 MCP 配置模板</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Stdio-%E5%9E%8B%EF%BC%88%E6%9C%AC%E5%9C%B0%E8%BF%9B%E7%A8%8B%EF%BC%8C%E6%9C%80%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-article-text">Stdio 型（本地进程，最常用）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#SSE-%E4%BB%A3%E7%90%86%E5%9E%8B%EF%BC%88Burp-Suite-%E8%81%94%E5%8A%A8%EF%BC%89"><span class="toc-article-text">SSE 代理型（Burp Suite 联动）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#NPM-%E5%8C%85%E5%9E%8B"><span class="toc-article-text">NPM 包型</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-7-%E6%96%B0%E5%A2%9E-MCP-Server-%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">3.7 新增 MCP Server 操作流程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81Skill-%E6%8A%80%E8%83%BD%E4%BD%93%E7%B3%BB"><span class="toc-article-text">四、Skill 技能体系</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-1-%E6%8A%80%E8%83%BD%E7%9A%84%E5%8F%8C%E8%BD%A8%E8%AF%86%E5%88%AB%E6%9C%BA%E5%88%B6"><span class="toc-article-text">4.1 技能的双轨识别机制</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-2-%E4%B8%A4%E7%A7%8D%E8%AF%86%E5%88%AB%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="toc-article-text">4.2 两种识别方式对比</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-3-Hook-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="toc-article-text">4.3 Hook 架构详解</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-4-CC-Switch-%E4%B8%8E-Skill-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-article-text">4.4 CC Switch 与 Skill 的关系</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#4-5-%E6%8A%80%E8%83%BD%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-article-text">4.5 技能同步机制</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%94%E3%80%81CC-Switch-%E5%85%A8%E5%B1%80%E6%9E%B6%E6%9E%84"><span class="toc-article-text">五、CC Switch 全局架构</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#5-1-CC-Switch-%E7%AE%A1%E7%90%86%E4%BB%80%E4%B9%88"><span class="toc-article-text">5.1 CC Switch 管理什么</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#5-2-Provider-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-article-text">5.2 Provider 是什么</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#5-3-CC-Switch-%E7%9A%84%E5%90%8C%E6%AD%A5%E8%A7%A6%E5%8F%91"><span class="toc-article-text">5.3 CC Switch 的同步触发</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%AD%E3%80%81%E5%AE%8C%E6%95%B4%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">六、完整操作流程</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-1-%E6%96%B0%E5%A2%9E-MCP-Server"><span class="toc-article-text">6.1 新增 MCP Server</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-2-%E6%96%B0%E5%A2%9E-Skill"><span class="toc-article-text">6.2 新增 Skill</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-3-%E6%8E%92%E9%94%99%E6%B5%81%E7%A8%8B"><span class="toc-article-text">6.3 排错流程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-article-text">七、常见误区</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%AB%E3%80%81%E6%9C%AC%E6%AC%A1%E5%AE%9E%E8%B7%B5%E8%AE%B0%E5%BD%95"><span class="toc-article-text">八、本次实践记录</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Burp-MCP-%E6%B7%BB%E5%8A%A0%E8%BF%87%E7%A8%8B%EF%BC%882026-05-31%EF%BC%89"><span class="toc-article-text">Burp MCP 添加过程（2026-05-31）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Skill-%E4%BD%93%E7%B3%BB%E6%BC%94%E8%BF%9B"><span class="toc-article-text">Skill 体系演进</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BD%93%E5%89%8D%E5%AE%8C%E6%95%B4%E7%8A%B6%E6%80%81%EF%BC%882026-05-31%EF%BC%89"><span class="toc-article-text">当前完整状态（2026-05-31）</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

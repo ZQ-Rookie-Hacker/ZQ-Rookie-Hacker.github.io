@@ -118,6 +118,213 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/12/05/数据链路层/" >数据链路层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="3-1-数据链路层的功能"><a href="#3-1-数据链路层的功能" class="headerlink" title="3.1   数据链路层的功能"></a>3.1   数据链路层的功能</h2><h3 id="3-1-1-数据链路层"><a href="#3-1-1-数据链路层" class="headerlink" title="3.1.1   数据链路层"></a>3.1.1   数据链路层</h3><ul>
+<li>通信示例<ul>
+<li>主机H1 → 路由器R1 → 广域网 → 路由器R2 → 主机H2</li>
+<li>主机使用完整五层协议栈</li>
+<li>路由器仅使用下三层协议栈</li>
+</ul>
+</li>
+<li>数据流动特点<ul>
+<li>数据在路径节点协议栈中多次上下流动</li>
+<li>学习时通常只关心水平方向数据链路层</li>
+</ul>
+</li>
+<li>基本概念<ul>
+<li><ol>
+<li>链路</li>
+</ol>
+<ul>
+<li>定义：节点到相邻节点的一段物理线路</li>
+<li>特点：通信路径的组成部分</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>数据链路</li>
+</ol>
+<ul>
+<li>组成：物理链路 + 通信协议（硬件和软件）</li>
+<li>别名：物理链路 vs 逻辑链路</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>帧</li>
+</ol>
+<ul>
+<li>定义：数据链路层协议数据单元</li>
+<li>功能：封装网络层数据&#x2F;向上交付数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>3.1.2 链路管理<ul>
+<li>定义：连接的建立、维持和释放过程</li>
+<li>应用：主要用于面向连接的服务</li>
+<li>过程<ul>
+<li>确认对方就绪状态</li>
+<li>交换必要信息</li>
+<li>初始化帧序号</li>
+<li>建立连接 → 维持连接 → 释放连接</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-4-封装成帧与透明传输"><a href="#3-1-4-封装成帧与透明传输" class="headerlink" title="3.1.4   封装成帧与透明传输"></a>3.1.4   封装成帧与透明传输</h3><ul>
+<li>定义<ul>
+<li>限制发送方的发送速率，使之不超过接收方的接收能力</li>
+<li>防止帧丢失和错误</li>
+</ul>
+</li>
+<li>原因<ul>
+<li>链路两端节点的工作速率和缓存空间存在差异</li>
+<li>发送能力可能大于接收能力</li>
+</ul>
+</li>
+<li>实现机制<ul>
+<li>通过反馈机制控制发送<ul>
+<li>可继续发送下一帧的情况</li>
+<li>必须暂停发送等待反馈的情况</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>体系结构差异<ul>
+<li>OSI体系结构<ul>
+<li>数据链路层实现流量控制</li>
+<li>控制相邻节点间数据链路上的流量</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP体系结构<ul>
+<li>传输层实现流量控制</li>
+<li>控制源端到目的端之间的流量</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-5-流量控制"><a href="#3-1-5-流量控制" class="headerlink" title="3.1.5   流量控制"></a>3.1.5   流量控制</h3><ul>
+<li>原因<ul>
+<li>链路两端节点工作速率和缓存空间存在差异。</li>
+<li>发送方发送能力可能大于接收方接收能力。</li>
+<li>若不限制发送方发送速率，来不及接收的帧会被后续帧“淹没”，造成帧丢失出错。</li>
+</ul>
+</li>
+<li>目的<ul>
+<li>限制发送方发送速率，不超过接收方接收能力。</li>
+</ul>
+</li>
+<li>实现方式<ul>
+<li>通过某种反馈机制。</li>
+<li>使发送方知晓何时可接着发送下一帧。</li>
+<li>使发送方知晓何时必须暂停发送，等待反馈信息后继续发送。</li>
+</ul>
+</li>
+<li>不同体系结构中的情况<ul>
+<li>OSI体系结构<ul>
+<li>数据链路层具有流量控制功能。</li>
+<li>控制对象是相邻节点之间数据链路上的流量。</li>
+</ul>
+</li>
+<li>TCP&#x2F;IP体系结构<ul>
+<li>流量控制功能移到传输层。</li>
+<li>控制对象是从源端到目的端之间的流量。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-6-差错检测"><a href="#3-1-6-差错检测" class="headerlink" title="3.1.6   差错检测"></a>3.1.6   差错检测</h3><ul>
+<li>传输错误原因<ul>
+<li>信道噪声导致帧传输错误</li>
+</ul>
+</li>
+<li>错误类型<ul>
+<li>位错<ul>
+<li>定义：帧中某些位出现差错</li>
+<li>检测方法：循环冗余检验(CRC)</li>
+</ul>
+</li>
+<li>帧错<ul>
+<li>类型<ul>
+<li>帧丢失</li>
+<li>帧重复</li>
+<li>帧失序</li>
+</ul>
+</li>
+<li>性质：都属于传输差错</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>历史处理方式(OSI观点)<ul>
+<li>要求数据链路层提供可靠传输</li>
+<li>实现机制<ul>
+<li>在CRC检错基础上增加<ul>
+<li>帧编号</li>
+<li>确认机制</li>
+<li>重传机制</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>接收方收到正确帧后发送确认</li>
+<li>发送方未收到确认时重传</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>现代应用场景<ul>
+<li>无线传输(通信质量差)<ul>
+<li>仍使用确认和重传机制</li>
+<li>向上提供可靠传输服务</li>
+</ul>
+</li>
+<li>有线链路(通信质量好)<ul>
+<li>不再使用确认和重传机制</li>
+<li>仅进行CRC检错<ul>
+<li>处理方式：丢弃有差错帧</li>
+<li>目的：保证上交帧都正确</li>
+</ul>
+</li>
+<li>重传任务转移<ul>
+<li>由高层协议完成</li>
+<li>例如：传输层TCP协议</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-2-组帧"><a href="#3-2-组帧" class="headerlink" title="3.2   组帧"></a>3.2   组帧</h2>
+	
+	</div>
+  <a type="button" href="/2025/12/05/数据链路层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2025/12/05/物理层/" >物理层</a>
 		</h3>
 		</div>
@@ -509,213 +716,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/12/05/数据链路层/" >数据链路层</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-05  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="3-1-数据链路层的功能"><a href="#3-1-数据链路层的功能" class="headerlink" title="3.1   数据链路层的功能"></a>3.1   数据链路层的功能</h2><h3 id="3-1-1-数据链路层"><a href="#3-1-1-数据链路层" class="headerlink" title="3.1.1   数据链路层"></a>3.1.1   数据链路层</h3><ul>
-<li>通信示例<ul>
-<li>主机H1 → 路由器R1 → 广域网 → 路由器R2 → 主机H2</li>
-<li>主机使用完整五层协议栈</li>
-<li>路由器仅使用下三层协议栈</li>
-</ul>
-</li>
-<li>数据流动特点<ul>
-<li>数据在路径节点协议栈中多次上下流动</li>
-<li>学习时通常只关心水平方向数据链路层</li>
-</ul>
-</li>
-<li>基本概念<ul>
-<li><ol>
-<li>链路</li>
-</ol>
-<ul>
-<li>定义：节点到相邻节点的一段物理线路</li>
-<li>特点：通信路径的组成部分</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>数据链路</li>
-</ol>
-<ul>
-<li>组成：物理链路 + 通信协议（硬件和软件）</li>
-<li>别名：物理链路 vs 逻辑链路</li>
-</ul>
-</li>
-<li><ol start="3">
-<li>帧</li>
-</ol>
-<ul>
-<li>定义：数据链路层协议数据单元</li>
-<li>功能：封装网络层数据&#x2F;向上交付数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>3.1.2 链路管理<ul>
-<li>定义：连接的建立、维持和释放过程</li>
-<li>应用：主要用于面向连接的服务</li>
-<li>过程<ul>
-<li>确认对方就绪状态</li>
-<li>交换必要信息</li>
-<li>初始化帧序号</li>
-<li>建立连接 → 维持连接 → 释放连接</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-4-封装成帧与透明传输"><a href="#3-1-4-封装成帧与透明传输" class="headerlink" title="3.1.4   封装成帧与透明传输"></a>3.1.4   封装成帧与透明传输</h3><ul>
-<li>定义<ul>
-<li>限制发送方的发送速率，使之不超过接收方的接收能力</li>
-<li>防止帧丢失和错误</li>
-</ul>
-</li>
-<li>原因<ul>
-<li>链路两端节点的工作速率和缓存空间存在差异</li>
-<li>发送能力可能大于接收能力</li>
-</ul>
-</li>
-<li>实现机制<ul>
-<li>通过反馈机制控制发送<ul>
-<li>可继续发送下一帧的情况</li>
-<li>必须暂停发送等待反馈的情况</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>体系结构差异<ul>
-<li>OSI体系结构<ul>
-<li>数据链路层实现流量控制</li>
-<li>控制相邻节点间数据链路上的流量</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP体系结构<ul>
-<li>传输层实现流量控制</li>
-<li>控制源端到目的端之间的流量</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-5-流量控制"><a href="#3-1-5-流量控制" class="headerlink" title="3.1.5   流量控制"></a>3.1.5   流量控制</h3><ul>
-<li>原因<ul>
-<li>链路两端节点工作速率和缓存空间存在差异。</li>
-<li>发送方发送能力可能大于接收方接收能力。</li>
-<li>若不限制发送方发送速率，来不及接收的帧会被后续帧“淹没”，造成帧丢失出错。</li>
-</ul>
-</li>
-<li>目的<ul>
-<li>限制发送方发送速率，不超过接收方接收能力。</li>
-</ul>
-</li>
-<li>实现方式<ul>
-<li>通过某种反馈机制。</li>
-<li>使发送方知晓何时可接着发送下一帧。</li>
-<li>使发送方知晓何时必须暂停发送，等待反馈信息后继续发送。</li>
-</ul>
-</li>
-<li>不同体系结构中的情况<ul>
-<li>OSI体系结构<ul>
-<li>数据链路层具有流量控制功能。</li>
-<li>控制对象是相邻节点之间数据链路上的流量。</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP体系结构<ul>
-<li>流量控制功能移到传输层。</li>
-<li>控制对象是从源端到目的端之间的流量。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-6-差错检测"><a href="#3-1-6-差错检测" class="headerlink" title="3.1.6   差错检测"></a>3.1.6   差错检测</h3><ul>
-<li>传输错误原因<ul>
-<li>信道噪声导致帧传输错误</li>
-</ul>
-</li>
-<li>错误类型<ul>
-<li>位错<ul>
-<li>定义：帧中某些位出现差错</li>
-<li>检测方法：循环冗余检验(CRC)</li>
-</ul>
-</li>
-<li>帧错<ul>
-<li>类型<ul>
-<li>帧丢失</li>
-<li>帧重复</li>
-<li>帧失序</li>
-</ul>
-</li>
-<li>性质：都属于传输差错</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>历史处理方式(OSI观点)<ul>
-<li>要求数据链路层提供可靠传输</li>
-<li>实现机制<ul>
-<li>在CRC检错基础上增加<ul>
-<li>帧编号</li>
-<li>确认机制</li>
-<li>重传机制</li>
-</ul>
-</li>
-<li>工作流程<ul>
-<li>接收方收到正确帧后发送确认</li>
-<li>发送方未收到确认时重传</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>现代应用场景<ul>
-<li>无线传输(通信质量差)<ul>
-<li>仍使用确认和重传机制</li>
-<li>向上提供可靠传输服务</li>
-</ul>
-</li>
-<li>有线链路(通信质量好)<ul>
-<li>不再使用确认和重传机制</li>
-<li>仅进行CRC检错<ul>
-<li>处理方式：丢弃有差错帧</li>
-<li>目的：保证上交帧都正确</li>
-</ul>
-</li>
-<li>重传任务转移<ul>
-<li>由高层协议完成</li>
-<li>例如：传输层TCP协议</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-2-组帧"><a href="#3-2-组帧" class="headerlink" title="3.2   组帧"></a>3.2   组帧</h2>
-	
-	</div>
-  <a type="button" href="/2025/12/05/数据链路层/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -815,43 +815,43 @@
 		
 			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
 		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
 		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
-		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
 			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+		
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
 		
 			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
-		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
 		
 			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
-		
-			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
 			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

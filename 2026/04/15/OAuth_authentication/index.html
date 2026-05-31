@@ -285,7 +285,7 @@ OAuth 1.0 存在的问题">
 <blockquote>
 <ol>
 <li>窃取令牌<br>由于 access_token 直接出现在回调 URL 的 # 片段中（例如 <a target="_blank" rel="noopener" href="https://app.com/callback#access_token=xyz%EF%BC%89%EF%BC%8C%E6%94%BB%E5%87%BB%E8%80%85%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E8%8E%B7%E5%8F%96%EF%BC%9A">https://app.com/callback#access_token=xyz），攻击者可以通过以下方式获取：</a><blockquote>
-<p>读取浏览器历史记录<br>通过 HTTP Referer 头泄露（如果页面有跳转）<br>利用 XSS 漏洞：document.location.hash<br>恶意浏览器插件<br>2. 令牌替换 &#x2F; 重放<br>攻击者拿到令牌后，直接用它冒充受害者调用资源服务器的 API。<br>如果客户端应用只验证令牌是否有效，但不检查令牌与当前用户的绑定关系（常见错误），攻击者用自己的令牌就能访问受害者的数据。<br>3. 篡改回调参数<br>有些客户端会从回调 URL 中直接读取 email 等参数，而不验证这些参数是否与令牌真正关联。<br>攻击者可以手动修改回调 URL 中的 email 为 <a href="mailto:&#118;&#105;&#99;&#116;&#x69;&#109;&#64;&#101;&#120;&#x61;&#109;&#x70;&#x6c;&#101;&#46;&#x63;&#111;&#x6d;">victim@example.com</a>，然后让客户端用这个伪造的身份建立会话。</p>
+<p>读取浏览器历史记录<br>通过 HTTP Referer 头泄露（如果页面有跳转）<br>利用 XSS 漏洞：document.location.hash<br>恶意浏览器插件<br>2. 令牌替换 &#x2F; 重放<br>攻击者拿到令牌后，直接用它冒充受害者调用资源服务器的 API。<br>如果客户端应用只验证令牌是否有效，但不检查令牌与当前用户的绑定关系（常见错误），攻击者用自己的令牌就能访问受害者的数据。<br>3. 篡改回调参数<br>有些客户端会从回调 URL 中直接读取 email 等参数，而不验证这些参数是否与令牌真正关联。<br>攻击者可以手动修改回调 URL 中的 email 为 <a href="mailto:&#x76;&#x69;&#x63;&#x74;&#x69;&#x6d;&#x40;&#101;&#120;&#97;&#109;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;">victim@example.com</a>，然后让客户端用这个伪造的身份建立会话。</p>
 </blockquote>
 </li>
 </ol>
@@ -346,7 +346,7 @@ OAuth 1.0 存在的问题">
 </tbody></table>
 <p>补充微信小程序标准的登录流程（<code>OAuth 2.0</code>）<br><img src="/images/OAuth_authentication/image_5.png" alt="在这里插入图片描述"></p>
 <hr>
-<h3 id="0x01-通过-OAuth-隐式流程绕过身份验证"><a href="#0x01-通过-OAuth-隐式流程绕过身份验证" class="headerlink" title="0x01.通过 OAuth 隐式流程绕过身份验证"></a>0x01.通过 OAuth 隐式流程绕过身份验证</h3><p>该实验使用 OAuth 服务，允许用户通过社交媒体账户登录。客户端应用程序的验证存在缺陷，使得攻击者无需知道其他用户的密码即可登录其账户。<br>要解决该实验，请登录 Carlos 的账户。他的邮箱地址是 <a href="mailto:&#99;&#97;&#114;&#108;&#111;&#x73;&#x40;&#99;&#97;&#x72;&#x6c;&#111;&#x73;&#x2d;&#109;&#111;&#110;&#116;&#111;&#x79;&#x61;&#x2e;&#x6e;&#x65;&#x74;">carlos@carlos-montoya.net</a>。<br>您可以使用以下凭证登录自己的社交媒体账户：wiener:peter</p>
+<h3 id="0x01-通过-OAuth-隐式流程绕过身份验证"><a href="#0x01-通过-OAuth-隐式流程绕过身份验证" class="headerlink" title="0x01.通过 OAuth 隐式流程绕过身份验证"></a>0x01.通过 OAuth 隐式流程绕过身份验证</h3><p>该实验使用 OAuth 服务，允许用户通过社交媒体账户登录。客户端应用程序的验证存在缺陷，使得攻击者无需知道其他用户的密码即可登录其账户。<br>要解决该实验，请登录 Carlos 的账户。他的邮箱地址是 <a href="mailto:&#x63;&#97;&#x72;&#108;&#111;&#115;&#x40;&#x63;&#97;&#114;&#x6c;&#x6f;&#x73;&#x2d;&#x6d;&#x6f;&#x6e;&#x74;&#x6f;&#121;&#x61;&#46;&#x6e;&#101;&#x74;">carlos@carlos-montoya.net</a>。<br>您可以使用以下凭证登录自己的社交媒体账户：wiener:peter</p>
 <p>主页面点击 <code>my account</code><br><img src="/images/OAuth_authentication/image_6.png" alt="在这里插入图片描述"></p>
 <p>点击之后，没有放行，然后抓取了响应包，不知道为什么这样？ 是要重定向到 <code> /social-login</code><br><img src="/images/OAuth_authentication/image_7.png" alt="在这里插入图片描述"></p>
 <p>继续放行，得到以下信息<br><img src="/images/OAuth_authentication/image_8.png" alt="在这里插入图片描述"></p>

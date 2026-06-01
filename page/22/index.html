@@ -152,7 +152,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/10/Git/" >Git</a>
+			<a href="/2024/12/10/git/" >Git 常用操作手册</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -166,70 +166,64 @@
   <div class="row">
 	
 	
-		<h2 id="一、基础命令"><a href="#一、基础命令" class="headerlink" title="一、基础命令"></a>一、基础命令</h2><table>
+		<h2 id="基础命令速查"><a href="#基础命令速查" class="headerlink" title="基础命令速查"></a>基础命令速查</h2><table>
 <thead>
 <tr>
 <th>命令</th>
-<th>功能说明</th>
+<th>功能</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>git init</code></td>
-<td>初始化一个新的 Git 仓库</td>
+<td>初始化仓库</td>
 </tr>
 <tr>
-<td><code>git log</code></td>
-<td>查看提交历史</td>
+<td><code>git add .</code></td>
+<td>添加所有修改到暂存区</td>
 </tr>
 <tr>
-<td><code>git add [文件名]</code></td>
-<td>将文件添加到暂存区（<code>git add .</code> 添加所有修改）</td>
-</tr>
-<tr>
-<td><code>git commit -m &quot;提交信息&quot;</code></td>
-<td>提交暂存区的更改到本地仓库</td>
+<td><code>git commit -m &quot;msg&quot;</code></td>
+<td>提交到本地仓库</td>
 </tr>
 <tr>
 <td><code>git status</code></td>
-<td>查看当前仓库状态（修改、暂存、提交情况）</td>
+<td>查看状态</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>简洁查看提交历史</td>
 </tr>
 <tr>
 <td><code>git branch</code></td>
-<td>查看本地所有分支（<code>git branch -a</code> 查看本地+远程所有分支）</td>
+<td>查看本地分支</td>
 </tr>
 <tr>
-<td><code>git branch [分支名]</code></td>
-<td>创建本地新分支（基于当前分支）</td>
+<td><code>git branch -a</code></td>
+<td>查看所有分支（含远程）</td>
 </tr>
 <tr>
-<td><code>git checkout [分支名]</code></td>
-<td>切换到指定本地分支</td>
+<td><code>git checkout -b &lt;branch&gt;</code></td>
+<td>创建并切换分支</td>
 </tr>
 <tr>
-<td><code>git checkout -b [分支名]</code></td>
-<td>创建并切换到新分支（等价于 <code>git branch + git checkout</code>）</td>
+<td><code>git branch -d &lt;branch&gt;</code></td>
+<td>删除已合并分支</td>
 </tr>
 <tr>
-<td><code>git checkout -b [本地分支名] origin/[远程分支名]</code></td>
-<td>基于远程分支创建并切换本地分支</td>
-</tr>
-<tr>
-<td><code>git branch -d [分支名]</code></td>
-<td>安全删除本地分支（已合并）</td>
-</tr>
-<tr>
-<td><code>git branch -D [分支名]</code></td>
-<td>强制删除本地分支（未合并）</td>
+<td><code>git branch -D &lt;branch&gt;</code></td>
+<td>强制删除分支</td>
 </tr>
 </tbody></table>
-<h2 id="二、远程仓库管理"><a href="#二、远程仓库管理" class="headerlink" title="二、远程仓库管理"></a>二、远程仓库管理</h2><h3 id="1-添加-管理远程仓库"><a href="#1-添加-管理远程仓库" class="headerlink" title="1. 添加&#x2F;管理远程仓库"></a>1. 添加&#x2F;管理远程仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin [仓库地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 方式</span></span><br><span class="line">git remote add origin https://github.com/用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 方式</span></span><br><span class="line">git remote add origin git@github.com:用户名/仓库.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程仓库地址</span></span><br><span class="line">git remote set-url origin [新地址]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已配置的远程仓库</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程仓库</span></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程地址</span></span><br><span class="line">git remote set-url origin &lt;新地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定分支</span></span><br><span class="line">git <span class="built_in">clone</span> -b &lt;分支名&gt; --single-branch &lt;仓库地址&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-克隆仓库（含指定非主分支）"><a href="#2-克隆仓库（含指定非主分支）" class="headerlink" title="2. 克隆仓库（含指定非主分支）"></a>2. 克隆仓库（含指定非主分支）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆默认分支（通常是main/master）</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/你的GitHub用户名/仓库名.git  <span class="comment"># HTTPS</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:你的GitHub用户名/仓库名.git       <span class="comment"># SSH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定非主分支（方式1：先克隆仓库，再切换分支）</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:用户名/仓库.git</span><br><span class="line"><span class="built_in">cd</span> 仓库名</span><br><span class="line">git checkout -b 目标分支名 origin/目标分支名  <span class="comment"># 基于远程非主分支创建本地分支</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定非主分支（方式2：直接克隆指定分支）</span></span><br><span class="line">git <span class="built_in">clone</span> -b 目标分支名 --single-branch git@github.com:用户名/仓库.git</span><br><span class="line"><span class="comment"># -b：指定分支；--single-branch：仅克隆该分支（减少体积）</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h2><h3 id="推送与拉取"><a href="#推送与拉取" class="headerlink" title="推送与拉取"></a>推送与拉取</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首次推送并关联远程</span></span><br><span class="line">git push -u origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后续推送</span></span><br><span class="line">git push origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取远程分支</span></span><br><span class="line">git pull origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取远程所有分支信息</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于远程分支创建本地分支</span></span><br><span class="line">git checkout -b &lt;本地分支&gt; origin/&lt;远程分支&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="三、分支核心操作（非主分支专属）"><a href="#三、分支核心操作（非主分支专属）" class="headerlink" title="三、分支核心操作（非主分支专属）"></a>三、分支核心操作（非主分支专属）</h2><h3 id="1-非主分支的本地-远程同步"><a href="#1-非主分支的本地-远程同步" class="headerlink" title="1. 非主分支的本地-远程同步"></a>1. 非主分支的本地-远程同步</h3><h4 id="（1）非主分支的提交与推送"><a href="#（1）非主分支的提交与推送" class="headerlink" title="（1）非主分支的提交与推送"></a>（1）非主分支的提交与推送</h4>
+<h3 id="分支切换问题处理"><a href="#分支切换问题处理" class="headerlink" title="分支切换问题处理"></a>分支切换问题处理</h3>
 	
 	</div>
-  <a type="button" href="/2024/12/10/Git/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2024/12/10/git/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -330,45 +324,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
 		
-			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
 		
 			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
 			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
 		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
 		
 			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+		
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+		
 			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/代理/">代理<span>1</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
-		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

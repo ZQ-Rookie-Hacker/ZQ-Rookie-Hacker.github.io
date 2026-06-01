@@ -1,6 +1,6 @@
 /**
  * Local Search for Freemind.bithack Theme
- * Regex-based XML parsing — no DOMParser dependency, works everywhere.
+ * Click-to-open section menu per result.
  */
 (function () {
   'use strict';
@@ -13,60 +13,76 @@
   var selectedIdx = -1;
   var visibleResults = [];
   var debounceTimer = null;
+  var sectionKeywords = [];
+  var activePopup = null;   // currently open popup element
+  var activeBtn = null;     // button that opened it
 
-  // ---------- Parse search.xml text → array of {title,content,url} ----------
+  // ============================================================
+  // XML Parsing
+  // ============================================================
 
   function parseXML(text) {
     var list = [];
-    // Match each <entry>...</entry> block
     var entryRe = /<entry>([\s\S]*?)<\/entry>/g;
     var m;
     while ((m = entryRe.exec(text)) !== null) {
       var block = m[1];
       var title = extractTag(block, 'title');
       var url = extractTag(block, 'url');
-      var content = extractTag(block, 'content');
+      var raw = extractTag(block, 'content');
       if (!title || !url) continue;
-      // content might be wrapped in CDATA — strip it
-      content = content.replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '');
-      // Strip HTML tags
-      var plain = content.replace(/<[^>]*>/g, ' ').replace(/[\s\r\n]+/g, ' ').trim();
-      list.push({ title: title, content: plain, url: url });
+      raw = raw.replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '');
+      var headings = extractHeadings(raw);
+      var plain = raw.replace(/<[^>]*>/g, ' ').replace(/[\s\r\n]+/g, ' ').trim();
+      list.push({ title: title, content: plain, url: url, headings: headings });
     }
     return list;
   }
 
   function extractTag(block, tag) {
-    // Match <tag> or <tag attr="..."> — content tag has type="html"
     var re = new RegExp('<' + tag + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + tag + '>', 'i');
     var m = block.match(re);
     return m ? m[1] : '';
   }
 
-  // ---------- Preload ----------
+  function extractHeadings(html) {
+    var headings = [];
+    var re = /<h([23])\s[^>]*id="([^"]*)"[^>]*>([\s\S]*?)<\/h[23]>/gi;
+    var m;
+    while ((m = re.exec(html)) !== null) {
+      var text = m[3].replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+      text = decodeEntities(text);
+      if (text && m[2]) headings.push({ text: text, id: m[2] });
+    }
+    return headings;
+  }
+
+  function decodeEntities(s) {
+    return s.replace(/&#x2F;/g, '/').replace(/&#39;/g, "'").replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+      .replace(/&#(\d+);/g, function (_, n) { return String.fromCharCode(parseInt(n, 10)); })
+      .replace(/&#x([0-9a-fA-F]+);/g, function (_, h) { return String.fromCharCode(parseInt(h, 16)); });
+  }
+
+  // ============================================================
+  // Preload
+  // ============================================================
 
   function preloadData() {
     var url = (typeof searchPath !== 'undefined' && searchPath) ? searchPath : '/search.xml';
-
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
-
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
-      if (xhr.status !== 200 && xhr.status !== 304 && xhr.status !== 0) {
-        searchData = []; return;
-      }
-      try {
-        searchData = parseXML(xhr.responseText);
-      } catch (e) {
-        searchData = [];
-      }
+      if (xhr.status !== 200 && xhr.status !== 304 && xhr.status !== 0) { searchData = []; return; }
+      try { searchData = parseXML(xhr.responseText); } catch (e) { searchData = []; }
     };
-
     xhr.send();
   }
 
-  // ---------- DOM ----------
+  // ============================================================
+  // Overlay DOM
+  // ============================================================
 
   function buildOverlay() {
     var wrap = document.createElement('div');
@@ -127,12 +143,80 @@
     inp.addEventListener('keydown', onKeydown);
   }
 
-  // ---------- Open / Close ----------
+  // ============================================================
+  // Section Popup (click-triggered)
+  // ============================================================
+
+  function closePopup() {
+    if (activePopup) {
+      activePopup.parentNode.removeChild(activePopup);
+      activePopup = null;
+      activeBtn = null;
+    }
+  }
+
+  function openPopup(btn, headings, url, keywords) {
+    closePopup();
+
+    var div = document.createElement('div');
+    div.className = 'search-ctx-menu';
+    for (var i = 0; i < headings.length; i++) {
+      var hd = headings[i];
+      var hdHtml = escapeHtml(hd.text);
+      for (var k = 0; k < keywords.length; k++) hdHtml = highlightText(hdHtml, keywords[k]);
+      var link = url.replace(/\/+$/, '') + '#' + hd.id;
+      var a = document.createElement('a');
+      a.className = 'search-ctx-link';
+      a.href = link;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = hdHtml;
+      div.appendChild(a);
+    }
+
+    document.body.appendChild(div);
+    activePopup = div;
+    activeBtn = btn;
+
+    // Position below the button
+    var btnRect = btn.getBoundingClientRect();
+    var popW = div.offsetWidth;
+    var popH = div.offsetHeight;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var M = 8;
+
+    var left = btnRect.left;
+    if (left + popW > vw - M) left = vw - popW - M;
+    if (left < M) left = M;
+
+    var top = btnRect.bottom + 4;
+    if (top + popH > vh - M) top = btnRect.top - popH - 4;
+    if (top < M) top = M;
+
+    div.style.left = left + 'px';
+    div.style.top = top + 'px';
+
+    // Close on click outside
+    setTimeout(function () {
+      document.addEventListener('click', onDocClick);
+    }, 0);
+  }
+
+  function onDocClick(e) {
+    document.removeEventListener('click', onDocClick);
+    if (activePopup && !activePopup.contains(e.target) && e.target !== activeBtn) {
+      closePopup();
+    }
+  }
+
+  // ============================================================
+  // Open / Close Overlay
+  // ============================================================
 
   function openOverlay() {
     if (!document.body) return;
     if (!overlay) buildOverlay();
-
     overlay.classList.add('active');
     inputEl.value = '';
     inputEl.focus();
@@ -145,6 +229,7 @@
 
   function closeOverlay() {
     if (!overlay) return;
+    closePopup();
     overlay.classList.remove('active');
     document.body.style.overflow = '';
     selectedIdx = -1;
@@ -152,7 +237,9 @@
     if (debounceTimer) { clearTimeout(debounceTimer); debounceTimer = null; }
   }
 
-  // ---------- Search ----------
+  // ============================================================
+  // Search
+  // ============================================================
 
   function onInput() {
     if (debounceTimer) clearTimeout(debounceTimer);
@@ -163,24 +250,15 @@
     var query = inputEl.value.trim();
     selectedIdx = -1;
     visibleResults = [];
+    closePopup();
 
-    if (!query) {
-      resultEl.innerHTML = '';
-      if (statusEl) statusEl.textContent = '';
-      return;
-    }
-
-    if (searchData === null) {
-      if (statusEl) statusEl.textContent = 'Loading…';
-      return;
-    }
-    if (!searchData.length) {
-      if (statusEl) statusEl.textContent = 'Search unavailable.';
-      return;
-    }
+    if (!query) { resultEl.innerHTML = ''; if (statusEl) statusEl.textContent = ''; return; }
+    if (searchData === null) { if (statusEl) statusEl.textContent = 'Loading…'; return; }
+    if (!searchData.length) { if (statusEl) statusEl.textContent = 'Search unavailable.'; return; }
 
     var keywords = query.toLowerCase().split(/[\s\-]+/).filter(Boolean);
     if (!keywords.length) { resultEl.innerHTML = ''; if (statusEl) statusEl.textContent = ''; return; }
+    sectionKeywords = keywords;
 
     var scored = [];
     for (var i = 0; i < searchData.length; i++) {
@@ -197,14 +275,20 @@
         var cp = cl.indexOf(kw);
         if (cp !== -1) { score += 1; if (matched.indexOf(kw) === -1) matched.push(kw); if (fp === -1 || cp < fp) fp = cp; }
       }
-      if (score > 0) scored.push({ entry: e, score: score, matchedKeywords: matched, firstContentPos: fp });
+
+      if (score > 0) {
+        var mhd = [];
+        for (var h = 0; h < e.headings.length; h++) {
+          var ht = e.headings[h].text.toLowerCase();
+          for (var kk = 0; kk < keywords.length; kk++) {
+            if (ht.indexOf(keywords[kk]) !== -1) { mhd.push(e.headings[h]); break; }
+          }
+        }
+        scored.push({ entry: e, score: score, matchedKeywords: matched, firstContentPos: fp, matchedHeadings: mhd });
+      }
     }
 
-    if (!scored.length) {
-      if (statusEl) statusEl.textContent = 'No results for "' + query + '"';
-      resultEl.innerHTML = '';
-      return;
-    }
+    if (!scored.length) { if (statusEl) statusEl.textContent = 'No results for "' + query + '"'; resultEl.innerHTML = ''; return; }
 
     scored.sort(function (a, b) { return b.score - a.score; });
     visibleResults = scored;
@@ -212,40 +296,76 @@
     renderResults(scored);
   }
 
-  // ---------- Render ----------
+  // ============================================================
+  // Render
+  // ============================================================
 
   function renderResults(scored) {
     var p = ['<ul id="search-result-list">'];
+
     for (var i = 0; i < scored.length; i++) {
       var item = scored[i];
       var e = item.entry;
       var snippet = buildSnippet(e.content, item.firstContentPos);
-      var th = escapeHtml(e.title);
-      for (var k = 0; k < item.matchedKeywords.length; k++) { th = highlightText(th, item.matchedKeywords[k]); }
 
+      var th = escapeHtml(e.title);
+      for (var k = 0; k < item.matchedKeywords.length; k++) th = highlightText(th, item.matchedKeywords[k]);
+
+      var hasSec = item.matchedHeadings.length > 0;
       p.push('<li class="search-result-item' + (i === 0 ? ' selected' : '') + '" data-url="' + escapeAttr(e.url) + '" data-idx="' + i + '">');
+
+      // Title row
+      p.push('<div class="search-result-row">');
       p.push('<a class="search-result-title" href="' + escapeAttr(e.url) + '">' + th + '</a>');
+      if (hasSec) {
+        p.push('<button type="button" class="search-sec-btn" data-idx="' + i + '" title="Show sections">' + item.matchedHeadings.length + '</button>');
+      }
+      p.push('</div>');
+
+      // Snippet
       if (snippet) {
         var sh = escapeHtml(snippet);
-        for (var j = 0; j < item.matchedKeywords.length; j++) { sh = highlightText(sh, item.matchedKeywords[j]); }
+        for (var j = 0; j < item.matchedKeywords.length; j++) sh = highlightText(sh, item.matchedKeywords[j]);
         p.push('<p class="search-result-snippet">' + sh + '</p>');
       }
-      p.push('<span class="search-result-url">' + escapeHtml(e.url) + '</span>');
+
       p.push('</li>');
     }
+
     p.push('</ul>');
     resultEl.innerHTML = p.join('');
     selectedIdx = 0;
-    bindResultItems();
+    bindResultItems(scored);
   }
 
-  function bindResultItems() {
+  function bindResultItems(scored) {
+    // Result item click / hover
     var items = resultEl.querySelectorAll('.search-result-item');
     for (var i = 0; i < items.length; i++) {
-      (function (el) {
-        el.addEventListener('mouseenter', function () { setSelection(parseInt(el.getAttribute('data-idx'), 10)); });
-        el.addEventListener('click', function (e) { if (e.target.tagName === 'A') return; var a = el.querySelector('a'); if (a) window.location.href = a.getAttribute('href'); });
-      })(items[i]);
+      (function (el, idx) {
+        el.addEventListener('mouseenter', function () { setSelection(idx); });
+        el.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+          var a = el.querySelector('.search-result-title');
+          if (a) window.location.href = a.getAttribute('href');
+        });
+      })(items[i], i);
+    }
+
+    // Section buttons
+    var btns = resultEl.querySelectorAll('.search-sec-btn');
+    for (var b = 0; b < btns.length; b++) {
+      (function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var idx = parseInt(btn.getAttribute('data-idx'), 10);
+          var item = scored[idx];
+          if (item && item.matchedHeadings.length > 0) {
+            openPopup(btn, item.matchedHeadings, item.entry.url, sectionKeywords);
+          }
+        });
+      })(btns[b]);
     }
   }
 
@@ -263,11 +383,13 @@
     return text.replace(new RegExp('(' + escapeRegex(keyword) + ')', 'gi'), '<em class="search-keyword">$1</em>');
   }
 
-  // ---------- Keyboard ----------
+  // ============================================================
+  // Keyboard
+  // ============================================================
 
   function onKeydown(e) {
     var key = e.key || '';
-    if (key === 'Escape')     { e.preventDefault(); closeOverlay(); }
+    if (key === 'Escape')       { e.preventDefault(); closePopup(); closeOverlay(); }
     else if (key === 'ArrowDown') { e.preventDefault(); if (visibleResults.length) setSelection(Math.min(selectedIdx + 1, visibleResults.length - 1)); }
     else if (key === 'ArrowUp')   { e.preventDefault(); if (visibleResults.length) setSelection(Math.max(selectedIdx - 1, 0)); }
     else if (key === 'Enter')     { e.preventDefault(); if (selectedIdx >= 0 && selectedIdx < visibleResults.length) window.location.href = visibleResults[selectedIdx].entry.url; }
@@ -293,7 +415,9 @@
     }
   }
 
-  // ---------- Utilities ----------
+  // ============================================================
+  // Utilities
+  // ============================================================
 
   function escapeHtml(str) {
     var d = document.createElement('div');
@@ -307,17 +431,14 @@
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  // ---------- Init ----------
+  // ============================================================
+  // Init
+  // ============================================================
 
   function init() {
-    // Preload — searchPath already defined (script order fixed in after_footer.ejs)
     preloadData();
-
-    // Trigger button
     var btn = document.getElementById('search-trigger-btn');
     if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); openOverlay(); });
-
-    // Global shortcut
     document.addEventListener('keydown', onGlobalKeydown);
   }
 

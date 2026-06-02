@@ -149,26 +149,38 @@
     var scrollWrap = document.createElement('div');
     scrollWrap.className = 'code-scroll';
 
+    // 右侧渐变遮罩（真实 DOM，兼容所有浏览器）
+    var fade = document.createElement('div');
+    fade.className = 'code-fade';
+    fade.setAttribute('aria-hidden', 'true');
+
     figure.insertBefore(scrollWrap, table);
     scrollWrap.appendChild(table);
+    scrollWrap.appendChild(fade);
     figure.insertBefore(header, scrollWrap);
     figure.classList.add('code-enhanced');
 
-    // 初始检测溢出
-    checkOverflow(scrollWrap);
+    // 溢出检测 + 渐变显隐
+    function updateFade() {
+      var overflow = scrollWrap.scrollWidth > scrollWrap.clientWidth;
+      if (!overflow) {
+        fade.style.display = 'none';
+        return;
+      }
+      fade.style.display = '';
+      var atEnd = scrollWrap.scrollLeft + scrollWrap.clientWidth >= scrollWrap.scrollWidth - 2;
+      fade.style.opacity = atEnd ? '0' : '1';
+    }
 
-    // 监听窗口 resize 重新检测
+    updateFade();
+
     var resizeTimer;
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () { checkOverflow(scrollWrap); }, 200);
+      resizeTimer = setTimeout(updateFade, 200);
     });
 
-    // 滚动时更新右侧渐变可见性
-    scrollWrap.addEventListener('scroll', function () {
-      var atEnd = scrollWrap.scrollLeft + scrollWrap.clientWidth >= scrollWrap.scrollWidth - 2;
-      scrollWrap.classList.toggle('code-scroll-end', atEnd);
-    });
+    scrollWrap.addEventListener('scroll', updateFade);
 
     return btn;
   }

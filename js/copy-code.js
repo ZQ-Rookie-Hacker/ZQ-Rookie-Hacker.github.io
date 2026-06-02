@@ -149,7 +149,7 @@
     var scrollWrap = document.createElement('div');
     scrollWrap.className = 'code-scroll';
 
-    // 右侧渐变遮罩（真实 DOM，兼容所有浏览器）
+    // 右侧渐变遮罩 — 放在 scroll 内，用 position: sticky 固定在右侧
     var fade = document.createElement('div');
     fade.className = 'code-fade';
     fade.setAttribute('aria-hidden', 'true');

@@ -1375,9 +1375,11 @@ mark.search-hl-mark {
    Code Block Enhancement: Header + Scroll
    ============================================== */
 
-/* Reset figure when enhanced — remove old padding/background */
+/* Reset figure when enhanced — remove old padding/background/overflow */
 figure.highlight.code-enhanced {
+    position: relative;
     padding: 0 !important;
+    overflow: hidden !important;
     display: flex;
     flex-direction: column;
 }
@@ -1440,17 +1442,19 @@ figure.highlight.code-enhanced {
     background: #555;
 }
 
-/* Right-side scroll fade indicator */
+/* Right-side scroll fade indicator — sticky inside scroll container */
 .code-fade {
-    position: absolute;
-    top: 0;
+    position: sticky;
     right: 0;
+    display: block;
     width: 40px;
-    height: 100%;
+    min-width: 40px;
+    height: 0;
     pointer-events: none;
     background: linear-gradient(to right, transparent, #252525 85%);
     transition: opacity 0.3s ease;
     z-index: 2;
+    flex-shrink: 0;
 }
 
 /* Line number separator — visible border between gutter and code */
@@ -1514,5 +1518,6 @@ figure.highlight.code-enhanced .gutter pre {
 
     .code-fade {
         width: 24px;
+        min-width: 24px;
     }
 }

@@ -9,38 +9,7 @@
   <title>tools | ZQ-Rookie-Hacker&#39;s Blog</title>
   <meta name="author" content="ZQ-Rookie-Hacker">
   
-  <meta name="description" content="0x01 dirsearch优先级说明
-
-
-优先级
-标记
-含义
-
-
-
-P0
-🔴
-每次必跑，高收益低耗时
-
-
-P1
-🟡
-重要补充，针对性场景
-
-
-P2
-🟢
-深度挖掘，时间充裕时使用
-
-
-P3
-🔵
-特殊场景，按需使用
-
-
-
-🔴 P0 — 每次必跑1. 万能快速扫描
-1dirsearch -u ">
+  <meta name="description" content="0x01 dirsearch执行说明123456789101112131415161718192021🔴 P0 (每次必跑，~5分钟)  ├── 1. 万能快速扫描  ├── 2. 敏感文件/备份泄露  └── 3. Git/SVN 源码泄露🟡 P1 (重要补充，~10分钟)  ├── 4. 递">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -155,35 +124,8 @@ P3
 		  
 		  
 
-		  <h1 id="0x01-dirsearch"><a href="#0x01-dirsearch" class="headerlink" title="0x01 dirsearch"></a>0x01 dirsearch</h1><h2 id="优先级说明"><a href="#优先级说明" class="headerlink" title="优先级说明"></a>优先级说明</h2><table>
-<thead>
-<tr>
-<th>优先级</th>
-<th>标记</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>P0</td>
-<td>🔴</td>
-<td>每次必跑，高收益低耗时</td>
-</tr>
-<tr>
-<td>P1</td>
-<td>🟡</td>
-<td>重要补充，针对性场景</td>
-</tr>
-<tr>
-<td>P2</td>
-<td>🟢</td>
-<td>深度挖掘，时间充裕时使用</td>
-</tr>
-<tr>
-<td>P3</td>
-<td>🔵</td>
-<td>特殊场景，按需使用</td>
-</tr>
-</tbody></table>
+		  <h1 id="0x01-dirsearch"><a href="#0x01-dirsearch" class="headerlink" title="0x01 dirsearch"></a>0x01 dirsearch</h1><h2 id="执行说明"><a href="#执行说明" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">🔴 P0 (每次必跑，~5分钟)</span><br><span class="line">  ├── 1. 万能快速扫描</span><br><span class="line">  ├── 2. 敏感文件/备份泄露</span><br><span class="line">  └── 3. Git/SVN 源码泄露</span><br><span class="line"></span><br><span class="line">🟡 P1 (重要补充，~10分钟)</span><br><span class="line">  ├── 4. 递归深度扫描</span><br><span class="line">  ├── 5. 带认证扫描</span><br><span class="line">  ├── 6. JS/API 端点发现</span><br><span class="line">  └── 7. 后台/管理路径</span><br><span class="line"></span><br><span class="line">🟢 P2 (深度挖掘，~20分钟)</span><br><span class="line">  ├── 8. 自定义大字典</span><br><span class="line">  ├── 9. 多方法扫描 (PUT/OPTIONS)</span><br><span class="line">  └── 10. 状态码精细过滤 (403绕过)</span><br><span class="line"></span><br><span class="line">🔵 P3 (特殊场景，按需)</span><br><span class="line">  ├── 11. WAF 绕过</span><br><span class="line">  ├── 12. 批量目标扫描</span><br><span class="line">  ├── 13. CMS/框架专项</span><br><span class="line">  └── 14. 输出报告</span><br></pre></td></tr></table></figure>
+
 <hr>
 <h2 id="🔴-P0-—-每次必跑"><a href="#🔴-P0-—-每次必跑" class="headerlink" title="🔴 P0 — 每次必跑"></a>🔴 P0 — 每次必跑</h2><p><strong>1. 万能快速扫描</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx,jsp,html,js,json,bak,zip,sql,<span class="built_in">env</span>,<span class="built_in">log</span>,conf,txt -t 80 --<span class="built_in">timeout</span> 10 --exclude-status 404 -o dirsearch_quick.txt</span><br></pre></td></tr></table></figure>
@@ -311,14 +253,6 @@ P3
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx --plain-text result.txt --suppress-empty</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="自定义-SRC-专用字典"><a href="#自定义-SRC-专用字典" class="headerlink" title="自定义 SRC 专用字典"></a>自定义 SRC 专用字典</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; ~/wordlists/src-sensitive.txt &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">.<span class="built_in">env</span></span><br><span class="line">.env.local</span><br><span class="line">.env.production</span><br><span class="line">.env.development</span><br><span class="line">.env.bak</span><br><span class="line">.git/HEAD</span><br><span class="line">.git/config</span><br><span class="line">.svn/entries</span><br><span class="line">.htaccess</span><br><span class="line">.htpasswd</span><br><span class="line">wp-config.php</span><br><span class="line">config.php</span><br><span class="line">database.yml</span><br><span class="line">settings.py</span><br><span class="line">application.properties</span><br><span class="line">application.yml</span><br><span class="line">web.config</span><br><span class="line">server.xml</span><br><span class="line">db.sql</span><br><span class="line">backup.sql</span><br><span class="line">dump.sql</span><br><span class="line">database.sql</span><br><span class="line">admin/</span><br><span class="line">manager/</span><br><span class="line">console/</span><br><span class="line">debug/</span><br><span class="line"><span class="built_in">test</span>/</span><br><span class="line">staging/</span><br><span class="line">internal/</span><br><span class="line">api/</span><br><span class="line">swagger-ui.html</span><br><span class="line">swagger.json</span><br><span class="line">openapi.json</span><br><span class="line">graphql</span><br><span class="line">actuator</span><br><span class="line">actuator/env</span><br><span class="line">actuator/health</span><br><span class="line">actuator/beans</span><br><span class="line">robots.txt</span><br><span class="line">sitemap.xml</span><br><span class="line">crossdomain.xml</span><br><span class="line">info.php</span><br><span class="line">phpinfo.php</span><br><span class="line">test.php</span><br><span class="line">debug.php</span><br><span class="line">shell.php</span><br><span class="line">cmd.php</span><br><span class="line">backup.zip</span><br><span class="line">backup.tar.gz</span><br><span class="line">www.zip</span><br><span class="line">web.zip</span><br><span class="line">site.zip</span><br><span class="line">src.zip</span><br><span class="line">code.zip</span><br><span class="line">db.zip</span><br><span class="line">1.sql</span><br><span class="line">2.sql</span><br><span class="line">users.sql</span><br><span class="line">admin.sql</span><br><span class="line">access.log</span><br><span class="line">error.log</span><br><span class="line">debug.log</span><br><span class="line">application.log</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-<h2 id="一键自动化脚本"><a href="#一键自动化脚本" class="headerlink" title="一键自动化脚本"></a>一键自动化脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">TARGET=<span class="variable">$1</span></span><br><span class="line">OUTDIR=<span class="string">&quot;./dirsearch_<span class="subst">$(echo $TARGET | sed &#x27;s/https\?:\/\///&#x27; | tr &#x27;/&#x27; &#x27;_&#x27;)</span>&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$OUTDIR</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[*] Phase 1: 快速扫描&quot;</span> &amp;&amp; dirsearch -u <span class="variable">$TARGET</span> -e php,asp,aspx,jsp,html,js,json,bak,zip,sql,<span class="built_in">env</span>,<span class="built_in">log</span>,conf,txt,git,svn -t 80 --<span class="built_in">timeout</span> 10 --exclude-status 404 -o <span class="string">&quot;<span class="variable">$OUTDIR</span>/phase1_quick.txt&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[*] Phase 2: 敏感文件/备份&quot;</span> &amp;&amp; dirsearch -u <span class="variable">$TARGET</span> -e bak,zip,tar,tar.gz,sql,<span class="built_in">env</span>,<span class="built_in">log</span>,conf,swp,old,orig,backup,git,svn -t 60 --<span class="built_in">timeout</span> 10 --exclude-status 404 -o <span class="string">&quot;<span class="variable">$OUTDIR</span>/phase2_sensitive.txt&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[*] Phase 3: 递归深度扫描&quot;</span> &amp;&amp; dirsearch -u <span class="variable">$TARGET</span> -e php,asp,aspx,jsp -r --recursion-depth 3 -t 50 --<span class="built_in">timeout</span> 10 --exclude-status 404,403 -o <span class="string">&quot;<span class="variable">$OUTDIR</span>/phase3_recursive.txt&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[*] Phase 4: JS/API 端点&quot;</span> &amp;&amp; dirsearch -u <span class="variable">$TARGET</span> -e js,map,json,xml -t 80 --<span class="built_in">timeout</span> 10 --exclude-status 404 -o <span class="string">&quot;<span class="variable">$OUTDIR</span>/phase4_api.txt&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[*] Phase 5: 403 绕过探测&quot;</span> &amp;&amp; dirsearch -u <span class="variable">$TARGET</span> -e php,asp,aspx --include-status 403 -t 80 --<span class="built_in">timeout</span> 10 -o <span class="string">&quot;<span class="variable">$OUTDIR</span>/phase5_403bypass.txt&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[+] 扫描完成，结果在 <span class="variable">$OUTDIR</span>/&quot;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x dirsearch_auto.sh &amp;&amp; ./dirsearch_auto.sh https://target.com</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="执行顺序总结"><a href="#执行顺序总结" class="headerlink" title="执行顺序总结"></a>执行顺序总结</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">🔴 P0 (每次必跑，~5分钟)</span><br><span class="line">  ├── 1. 万能快速扫描</span><br><span class="line">  ├── 2. 敏感文件/备份泄露</span><br><span class="line">  └── 3. Git/SVN 源码泄露</span><br><span class="line"></span><br><span class="line">🟡 P1 (重要补充，~10分钟)</span><br><span class="line">  ├── 4. 递归深度扫描</span><br><span class="line">  ├── 5. 带认证扫描</span><br><span class="line">  ├── 6. JS/API 端点发现</span><br><span class="line">  └── 7. 后台/管理路径</span><br><span class="line"></span><br><span class="line">🟢 P2 (深度挖掘，~20分钟)</span><br><span class="line">  ├── 8. 自定义大字典</span><br><span class="line">  ├── 9. 多方法扫描 (PUT/OPTIONS)</span><br><span class="line">  └── 10. 状态码精细过滤 (403绕过)</span><br><span class="line"></span><br><span class="line">🔵 P3 (特殊场景，按需)</span><br><span class="line">  ├── 11. WAF 绕过</span><br><span class="line">  ├── 12. 批量目标扫描</span><br><span class="line">  ├── 13. CMS/框架专项</span><br><span class="line">  └── 14. 输出报告</span><br></pre></td></tr></table></figure>
 
 		  <div class="article-footer-copyright">
 
@@ -507,7 +441,7 @@ window.addEventListener('load', function() {
 		
 			 <div class="toc">
 				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
-				<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x01-dirsearch"><span class="toc-article-text">0x01 dirsearch</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E8%AF%B4%E6%98%8E"><span class="toc-article-text">优先级说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-SRC-%E4%B8%93%E7%94%A8%E5%AD%97%E5%85%B8"><span class="toc-article-text">自定义 SRC 专用字典</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E9%94%AE%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC"><span class="toc-article-text">一键自动化脚本</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E6%80%BB%E7%BB%93"><span class="toc-article-text">执行顺序总结</span></a></li></ol></li></ol>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x01-dirsearch"><span class="toc-article-text">0x01 dirsearch</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E"><span class="toc-article-text">执行说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li></ol></li></ol>
 			</div>
 		
 		</div>

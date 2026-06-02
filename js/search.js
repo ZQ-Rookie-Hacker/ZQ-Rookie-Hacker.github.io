@@ -158,13 +158,18 @@
   function openPopup(btn, headings, url, keywords) {
     closePopup();
 
+    // Primary keyword for in-page highlight
+    var hlWord = keywords.length > 0 ? keywords[0] : '';
+
     var div = document.createElement('div');
     div.className = 'search-ctx-menu';
     for (var i = 0; i < headings.length; i++) {
       var hd = headings[i];
       var hdHtml = escapeHtml(hd.text);
       for (var k = 0; k < keywords.length; k++) hdHtml = highlightText(hdHtml, keywords[k]);
-      var link = url.replace(/\/+$/, '') + '#' + hd.id;
+      var base = url.replace(/\/+$/, '');
+      var hlParam = hlWord ? '?hl=' + encodeURIComponent(hlWord) : '';
+      var link = base + hlParam + '#' + hd.id;
       var a = document.createElement('a');
       a.className = 'search-ctx-link';
       a.href = link;
@@ -319,6 +324,8 @@
       p.push('<a class="search-result-title" href="' + escapeAttr(e.url) + '">' + th + '</a>');
       if (hasSec) {
         p.push('<button type="button" class="search-sec-btn" data-idx="' + i + '" title="Show sections">' + item.matchedHeadings.length + '</button>');
+      } else {
+        p.push('<a class="search-sec-btn search-sec-goto" href="' + escapeAttr(e.url) + '" title="Go to article">&rarr;</a>');
       }
       p.push('</div>');
 
@@ -442,9 +449,117 @@
     document.addEventListener('keydown', onGlobalKeydown);
   }
 
+  // ============================================================
+  // Auto-highlight keyword from ?hl= parameter
+  // Runs on every page load — if URL has ?hl=keyword,
+  // find the keyword in the article content, scroll to it,
+  // highlight it with a pulsing animation, then clean up.
+  // ============================================================
+
+  function autoHighlight() {
+    var params = window.location.search;
+    if (!params || params.indexOf('hl=') === -1) return;
+
+    var match = params.match(/[?&]hl=([^&#]*)/);
+    if (!match) return;
+
+    var keyword;
+    try { keyword = decodeURIComponent(match[1]); } catch (e) { return; }
+    if (!keyword) return;
+
+    // Clean URL (remove ?hl=... without page reload)
+    var cleanUrl = window.location.pathname + window.location.hash;
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', cleanUrl);
+    }
+
+    // Determine search scope:
+    // If URL has #anchor, search within that section only (up to next h2/h3).
+    // Otherwise, search the whole article content.
+    var anchorId = window.location.hash ? window.location.hash.substring(1) : null;
+    var scope = null;
+
+    if (anchorId) {
+      // Find the heading with this ID
+      var heading = document.getElementById(anchorId);
+      if (heading) {
+        // Collect all text nodes from this heading until the next h2/h3
+        scope = [];
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        var n = heading.firstChild; // start from inside the heading
+        var started = false;
+        while (n) {
+          if (n === heading || heading.contains(n)) { started = true; }
+          if (started) {
+            // Stop if we hit a sibling h2/h3 (next section)
+            if (n.nodeType === 1 && /^H[23]$/i.test(n.tagName) && n !== heading) break;
+            if (n.nodeType === 3) scope.push(n);
+          }
+          // Tree traversal: depth-first
+          if (n.firstChild) { n = n.firstChild; }
+          else if (n.nextSibling) { n = n.nextSibling; }
+          else {
+            while (n && !n.nextSibling) { n = n.parentNode; }
+            if (n) n = n.nextSibling;
+          }
+        }
+      }
+    }
+
+    // Fallback: search whole article
+    if (!scope || !scope.length) {
+      var contentArea = document.querySelector('.mypage') || document.querySelector('.content') || document.body;
+      if (!contentArea) return;
+      var w = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
+      scope = [];
+      while (w.nextNode()) scope.push(w.currentNode);
+    }
+
+    // Find first text node containing the keyword
+    var re = new RegExp(escapeRegex(keyword), 'i');
+    var found = null;
+    for (var i = 0; i < scope.length; i++) {
+      if (scope[i].nodeValue && re.test(scope[i].nodeValue)) { found = scope[i]; break; }
+    }
+    if (!found) return;
+
+    // Wrap keyword in <mark>
+    var idx = found.nodeValue.toLowerCase().indexOf(keyword.toLowerCase());
+    if (idx === -1) return;
+
+    var before = found.nodeValue.substring(0, idx);
+    var matchText = found.nodeValue.substring(idx, idx + keyword.length);
+    var after = found.nodeValue.substring(idx + keyword.length);
+
+    var mark = document.createElement('mark');
+    mark.className = 'search-hl-mark';
+    mark.appendChild(document.createTextNode(matchText));
+
+    var parent = found.parentNode;
+    if (before) parent.insertBefore(document.createTextNode(before), found);
+    parent.insertBefore(mark, found);
+    if (after) parent.insertBefore(document.createTextNode(after), found);
+    parent.removeChild(found);
+
+    // Scroll to the keyword
+    setTimeout(function () {
+      mark.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 100);
+
+    // Remove highlight after 5 seconds
+    setTimeout(function () {
+      if (mark.parentNode) {
+        var text = document.createTextNode(mark.textContent);
+        mark.parentNode.replaceChild(text, mark);
+        if (text.parentNode) text.parentNode.normalize();
+      }
+    }, 5000);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () { init(); autoHighlight(); });
   } else {
     init();
+    autoHighlight();
   }
 })();

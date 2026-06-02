@@ -1253,9 +1253,23 @@ button.search-sec-btn {
     line-height: 1;
 }
 
-button.search-sec-btn:hover {
+button.search-sec-btn:hover,
+a.search-sec-btn:hover {
     background: #2bbc8a;
     color: #000;
+}
+
+/* Arrow button (no sections — just go to article) */
+a.search-sec-goto {
+    text-decoration: none;
+    border-color: #444;
+    color: #666;
+}
+
+a.search-sec-goto:hover {
+    background: #555;
+    border-color: #666;
+    color: #fff;
 }
 
 /* ---- Context menu (click-triggered popup) ---- */
@@ -1312,6 +1326,21 @@ a.search-ctx-link em.search-keyword {
     padding: 4px 10px;
     font-size: 11px;
     color: #555;
+}
+
+/* ---- Keyword highlight on target page ---- */
+mark.search-hl-mark {
+    background: rgba(43, 188, 138, 0.35);
+    color: #fff;
+    padding: 1px 3px;
+    border-radius: 3px;
+    border: 1px solid #2bbc8a;
+    animation: search-hl-pulse 1s ease-in-out 3;
+}
+
+@keyframes search-hl-pulse {
+    0%, 100% { background: rgba(43, 188, 138, 0.35); }
+    50%      { background: rgba(43, 188, 138, 0.65); }
 }
 
 /* ---- Responsive ---- */

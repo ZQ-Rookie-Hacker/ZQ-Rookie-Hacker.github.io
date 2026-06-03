@@ -14,7 +14,7 @@
 本笔记将按照 “问题 → 解决方案 → 细节机制 → 安全风险” 的逻辑，为你彻底讲清同源策略与 CORS。
 
 1. 同源策略：浏览器安全的基石问题由来如果没有同源策略，当你登录银行网站 https://bank.com 后，再打开一个恶意网站 https://evil.com，恶意网站可以这样攻击：
-1234// 恶意网站中的脚本fetch(&amp;#x27;https://bank.com/api/account&amp;#x27;)  .then(res =&amp;gt; res.json())  .then(data =&amp;gt; sendToAttacker(data));
+// 恶意网站中的脚本fetch(&amp;#x27;https://bank.com/api/account&amp;#x27;)  .then(res =&amp;gt; res.json())  .then(data =&amp;gt; sendToAttacker(data));
 由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。"> 
   
   
@@ -135,7 +135,7 @@
 <p>本笔记将按照 <strong>“问题 → 解决方案 → 细节机制 → 安全风险”</strong> 的逻辑，为你彻底讲清同源策略与 CORS。</p>
 <hr>
 <h2 id="1-同源策略：浏览器安全的基石"><a href="#1-同源策略：浏览器安全的基石" class="headerlink" title="1. 同源策略：浏览器安全的基石"></a>1. 同源策略：浏览器安全的基石</h2><h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果没有同源策略，当你登录银行网站 <code>https://bank.com</code> 后，再打开一个恶意网站 <code>https://evil.com</code>，恶意网站可以这样攻击：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
 <p>由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。</p>
 <h3 id="解决方案：同源策略"><a href="#解决方案：同源策略" class="headerlink" title="解决方案：同源策略"></a>解决方案：同源策略</h3><p>浏览器规定：<strong>只有协议、域名、端口完全相同的两个页面，才能通过脚本互相读取数据</strong>。不同源的页面发起的请求，浏览器会发送请求，但<strong>拦截响应</strong>，不让 JavaScript 拿到数据。这样就阻止了恶意网站读取银行的数据。</p>
 <h3 id="同源判断规则"><a href="#同源判断规则" class="headerlink" title="同源判断规则"></a>同源判断规则</h3><p><img src="/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8ECORS%E8%A7%A3%E6%9E%90/image_1.png" alt="在这里插入图片描述"></p>
@@ -476,7 +476,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>18</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
   </li>
 
 			</ul>

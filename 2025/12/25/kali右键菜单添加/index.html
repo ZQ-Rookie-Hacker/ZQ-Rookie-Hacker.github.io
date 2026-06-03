@@ -182,7 +182,7 @@ Categori">
 </tr>
 </tbody></table>
 <hr>
-<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
+<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>✅ <strong>验证安装</strong>：</p>
@@ -206,7 +206,7 @@ rustscan --version
 <li><strong>填写信息</strong>：一般会自动填充</li>
 </ol>
 <hr>
-<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>✅ <strong>验证目录</strong>：</p>
 <pre><code class="language-bash">ls -ld ~/.local/share/applications
@@ -214,7 +214,7 @@ rustscan --version
 </code></pre>
 </blockquote>
 <hr>
-<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>✏️ <strong>修改内容</strong>：</p>
 <pre><code class="language-ini"># 现在查看右键菜单中其他快捷方式的格式
@@ -245,7 +245,7 @@ StartupNotify=false
 </ul>
 </blockquote>
 <hr>
-<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
+<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="⚠️-常见错误解决方案"><a href="#⚠️-常见错误解决方案" class="headerlink" title="⚠️ 常见错误解决方案"></a>⚠️ <strong>常见错误解决方案</strong></h3><table>
 <thead>
@@ -408,7 +408,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/Linux/">Linux<span>4</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>18</span></a></li> <li><a href="/categories/网络安全/基础知识/Linux/">Linux<span>4</span></a></li>
   </li>
 
 			</ul>

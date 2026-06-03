@@ -10,7 +10,7 @@
   <meta name="author" content="ZQ-Rookie-Hacker">
   
   <meta name="description" content="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：
-123456POST /guolian/wxmini/wx_information/wx_contact/getContact">
+POST /guolian/wxmini/wx_information/wx_contact/getContactList H">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -126,10 +126,10 @@
 		  
 
 		  <h2 id="0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入"><a href="#0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入" class="headerlink" title="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入"></a>0x01 小程序接口 <code>type</code> 参数 SQL 时间盲注——<code>if(1=1,sleep(2),1)</code> 延时注入</h2><p>现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2</span><br><span class="line">Host: xxxx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">type=1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2</span><br><span class="line">Host: xxxx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">type=1</span><br></pre></td></tr></table></figure>
 
 <p>很明显可以尝试 <code>type</code> 参数是否存在 SQL 注入漏洞：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type=if(1=1, sleep(2), 1)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type=if(1=1, sleep(2), 1)</span><br></pre></td></tr></table></figure>
 
 <p>成功延迟。总结一下，这就是一个 edu 小程序获取学校通知内容的数据包，还是要老老实实每个功能抓包查看啊。</p>
 <hr>
@@ -314,7 +314,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/SRC/">SRC<span>4</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/SRC/">SRC<span>4</span></a></li>
   </li>
 
 			</ul>

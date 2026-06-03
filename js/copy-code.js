@@ -1,5 +1,5 @@
 /**
- * 代码块增强：复制按钮 + 滚动提示 + 语言标签 + 行号分隔
+ * 代码块增强：macOS 窗口风格 + 复制按钮 + 滚动提示 + 语言标签
  */
 (function () {
   'use strict';
@@ -15,7 +15,6 @@
     '<polyline points="20 6 9 17 4 12"/>' +
     '</svg>';
 
-  // 语言 → 颜色映射
   var LANG_COLORS = {
     javascript: '#f7df1e', js: '#f7df1e', typescript: '#3178c6', ts: '#3178c6',
     python: '#3572a5', py: '#3572a5',
@@ -63,8 +62,12 @@
   }
 
   function getCodeText(figure) {
+    // 有 table 的结构（旧版带行号）
     var codeCol = figure.querySelector('td.code');
     if (codeCol) return codeCol.textContent;
+    // 无行号结构：直接取 pre 或 code
+    var code = figure.querySelector('code');
+    if (code) return code.textContent;
     var pre = figure.querySelector('pre');
     return pre ? pre.textContent : '';
   }
@@ -97,24 +100,7 @@
     }, 2000);
   }
 
-  /**
-   * 检测代码是否溢出，添加/移除滚动提示
-   */
-  function checkOverflow(scrollWrap) {
-    if (scrollWrap.scrollWidth > scrollWrap.clientWidth) {
-      scrollWrap.classList.add('code-overflow');
-    } else {
-      scrollWrap.classList.remove('code-overflow');
-    }
-  }
-
-  /**
-   * 重构代码块 DOM
-   */
   function restructure(figure) {
-    var table = figure.querySelector('table');
-    if (!table) return null;
-
     var lang = getLanguage(figure);
     var color = LANG_COLORS[lang] || '';
 
@@ -122,19 +108,14 @@
     var header = document.createElement('div');
     header.className = 'code-header';
 
+    // macOS 红黄绿三圆点
+    var dots = document.createElement('div');
+    dots.className = 'code-dots';
+    dots.innerHTML = '<span></span><span></span><span></span>';
+
     var langLabel = document.createElement('span');
     langLabel.className = 'code-lang';
-
-    if (color) {
-      var dot = document.createElement('span');
-      dot.className = 'code-lang-dot';
-      dot.style.backgroundColor = color;
-      langLabel.appendChild(dot);
-    }
-
-    var langText = document.createElement('span');
-    langText.textContent = lang || 'code';
-    langLabel.appendChild(langText);
+    langLabel.textContent = lang || 'code';
 
     var btn = document.createElement('button');
     btn.className = 'code-copy-btn';
@@ -142,25 +123,34 @@
     btn.setAttribute('aria-label', 'Copy code');
     btn.setAttribute('title', 'Copy code');
 
+    header.appendChild(dots);
     header.appendChild(langLabel);
     header.appendChild(btn);
 
-    // 创建滚动容器
+    // 创建滚动容器，把代码内容包进去
     var scrollWrap = document.createElement('div');
     scrollWrap.className = 'code-scroll';
 
-    // 右侧渐变遮罩 — 放在 scroll 内，用 position: sticky 固定在右侧
+    // 右侧渐变遮罩
     var fade = document.createElement('div');
     fade.className = 'code-fade';
     fade.setAttribute('aria-hidden', 'true');
 
-    figure.insertBefore(scrollWrap, table);
-    scrollWrap.appendChild(table);
+    // 把 figure 里的所有内容（table 或 pre）移入 scrollWrap
+    var children = [];
+    for (var i = 0; i < figure.childNodes.length; i++) {
+      children.push(figure.childNodes[i]);
+    }
+    for (var j = 0; j < children.length; j++) {
+      scrollWrap.appendChild(children[j]);
+    }
     scrollWrap.appendChild(fade);
-    figure.insertBefore(header, scrollWrap);
+
+    figure.appendChild(header);
+    figure.appendChild(scrollWrap);
     figure.classList.add('code-enhanced');
 
-    // 溢出检测 + 渐变显隐
+    // 溢出检测
     function updateFade() {
       var overflow = scrollWrap.scrollWidth > scrollWrap.clientWidth;
       if (!overflow) {

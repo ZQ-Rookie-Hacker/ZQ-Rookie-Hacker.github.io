@@ -340,9 +340,9 @@ UDP端口
 <td>持续2倍最大分段生存期，防止旧连接影响新连接</td>
 </tr>
 </tbody></table>
-<h2 id="三、端口检测与管理"><a href="#三、端口检测与管理" class="headerlink" title="三、端口检测与管理"></a>三、端口检测与管理</h2><h3 id="1-常用端口检测命令"><a href="#1-常用端口检测命令" class="headerlink" title="1. 常用端口检测命令"></a>1. 常用端口检测命令</h3><h4 id="Windows系统"><a href="#Windows系统" class="headerlink" title="Windows系统"></a>Windows系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano</span><br><span class="line">netstat -ano | findstr <span class="string">&quot;80&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="三、端口检测与管理"><a href="#三、端口检测与管理" class="headerlink" title="三、端口检测与管理"></a>三、端口检测与管理</h2><h3 id="1-常用端口检测命令"><a href="#1-常用端口检测命令" class="headerlink" title="1. 常用端口检测命令"></a>1. 常用端口检测命令</h3><h4 id="Windows系统"><a href="#Windows系统" class="headerlink" title="Windows系统"></a>Windows系统</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano</span><br><span class="line">netstat -ano | findstr <span class="string">&quot;80&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="Linux系统"><a href="#Linux系统" class="headerlink" title="Linux系统"></a>Linux系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netstat -tuln</span><br><span class="line">lsof -i :80</span><br><span class="line">ss -tuln</span><br></pre></td></tr></table></figure>
+<h4 id="Linux系统"><a href="#Linux系统" class="headerlink" title="Linux系统"></a>Linux系统</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -tuln</span><br><span class="line">lsof -i :80</span><br><span class="line">ss -tuln</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-netstat命令详解"><a href="#2-netstat命令详解" class="headerlink" title="2. netstat命令详解"></a>2. netstat命令详解</h3><table>
 <thead>
@@ -743,7 +743,7 @@ UDP端口
 <td>网络调试与测试</td>
 </tr>
 </tbody></table>
-<h2 id="七、端口安全加固示例"><a href="#七、端口安全加固示例" class="headerlink" title="七、端口安全加固示例"></a>七、端口安全加固示例</h2><h3 id="1-关闭不必要端口（Linux）"><a href="#1-关闭不必要端口（Linux）" class="headerlink" title="1. 关闭不必要端口（Linux）"></a>1. 关闭不必要端口（Linux）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看监听端口</span></span><br><span class="line"><span class="built_in">sudo</span> netstat -tuln</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭特定端口（例如111端口）</span></span><br><span class="line"><span class="built_in">sudo</span> ufw deny 111</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用iptables</span></span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 111 -j DROP</span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p udp --dport 111 -j DROP</span><br></pre></td></tr></table></figure>
+<h2 id="七、端口安全加固示例"><a href="#七、端口安全加固示例" class="headerlink" title="七、端口安全加固示例"></a>七、端口安全加固示例</h2><h3 id="1-关闭不必要端口（Linux）"><a href="#1-关闭不必要端口（Linux）" class="headerlink" title="1. 关闭不必要端口（Linux）"></a>1. 关闭不必要端口（Linux）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看监听端口</span></span><br><span class="line"><span class="built_in">sudo</span> netstat -tuln</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭特定端口（例如111端口）</span></span><br><span class="line"><span class="built_in">sudo</span> ufw deny 111</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者使用iptables</span></span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p tcp --dport 111 -j DROP</span><br><span class="line"><span class="built_in">sudo</span> iptables -A INPUT -p udp --dport 111 -j DROP</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-限制访问IP（Windows）"><a href="#2-限制访问IP（Windows）" class="headerlink" title="2. 限制访问IP（Windows）"></a>2. 限制访问IP（Windows）</h3><ol>
 <li>打开”高级安全Windows防火墙”</li>
@@ -892,7 +892,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>18</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
   </li>
 
 			</ul>

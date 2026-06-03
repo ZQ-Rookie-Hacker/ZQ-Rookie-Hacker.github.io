@@ -142,10 +142,10 @@
 </li>
 </ul>
 <p><strong><code>正常情况下</code></strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 你想告诉 Jenkins “我是 Alice”</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i Alice</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 你想告诉 Jenkins “我是 Alice”</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i Alice</span><br></pre></td></tr></table></figure>
 <p>参数是 Alice → 正常输出。</p>
 <p><strong><code>漏洞利用（用 @ 读文件）</code></strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 想让 Jenkins 读自己的 /etc/passwd</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i @/etc/passwd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 想让 Jenkins 读自己的 /etc/passwd</span></span><br><span class="line">java -jar jenkins-cli.jar who-am-i @/etc/passwd</span><br></pre></td></tr></table></figure>
 <p>因为 @ 语法：Jenkins 把 &#x2F;etc&#x2F;passwd 文件内容当作参数传给 who-am-i 命令 → 文件内容被返回给你</p>
 <p><strong><code>@ 的初衷</code></strong>：避免命令行参数太长或太复杂。<br>比如你有一个程序需要接收 100 个参数，手打一遍很痛苦，也容易超过命令行的长度限制。于是设计者让你把参数写进一个文本文件（比如 args.txt），然后在命令行只写 @args.txt，程序就会自动读取文件内容，把它当作你手打的那些参数</p>
 <p><strong><code>Jenkins 敏感文件结构图</code>（具体版本具体分析）</strong></p>
@@ -322,45 +322,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
-		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
 			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
 		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
 			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
 		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

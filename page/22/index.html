@@ -134,7 +134,7 @@
 	
 		<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本人是个网安菜鸡，这是写的第一篇完成有关网安top10漏洞的学习博客，请多多指教。2025.5.18</p>
 <p>1.由于csdn不可以在非代码区书写完整的html标签 用   [ ]  代替 &lt;  &gt;</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sript</span>&gt;</span>   --&gt;   [script]  </span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sript</span>&gt;</span>   --&gt;   [script]  </span><br></pre></td></tr></table></figure>
 <p>2.作者用的是chrome浏览器，不同的浏览器回显的网页代码颜色或是容错规则方面有差异</p>
 <hr>
 <h1 id="一、xss漏洞是什么？"><a href="#一、xss漏洞是什么？" class="headerlink" title="一、xss漏洞是什么？"></a>一、xss漏洞是什么？</h1><p>XSS（跨站脚本攻击，Cross-Site Scripting）是一种常见的Web安全漏洞，攻击者通过向网页中注入恶意脚本代码，当其他用户访问该页面时，这些脚本会在其浏览器中执行，从而导致数据泄露、会话劫持、钓鱼攻击等安全问题</p>
@@ -215,10 +215,10 @@
 </tr>
 </tbody></table>
 <hr>
-<h2 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程仓库</span></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程地址</span></span><br><span class="line">git remote set-url origin &lt;新地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定分支</span></span><br><span class="line">git <span class="built_in">clone</span> -b &lt;分支名&gt; --single-branch &lt;仓库地址&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程仓库</span></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改远程地址</span></span><br><span class="line">git remote set-url origin &lt;新地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆指定分支</span></span><br><span class="line">git <span class="built_in">clone</span> -b &lt;分支名&gt; --single-branch &lt;仓库地址&gt;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h2><h3 id="推送与拉取"><a href="#推送与拉取" class="headerlink" title="推送与拉取"></a>推送与拉取</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首次推送并关联远程</span></span><br><span class="line">git push -u origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后续推送</span></span><br><span class="line">git push origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取远程分支</span></span><br><span class="line">git pull origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取远程所有分支信息</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于远程分支创建本地分支</span></span><br><span class="line">git checkout -b &lt;本地分支&gt; origin/&lt;远程分支&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h2><h3 id="推送与拉取"><a href="#推送与拉取" class="headerlink" title="推送与拉取"></a>推送与拉取</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 首次推送并关联远程</span></span><br><span class="line">git push -u origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后续推送</span></span><br><span class="line">git push origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取远程分支</span></span><br><span class="line">git pull origin &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取远程所有分支信息</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于远程分支创建本地分支</span></span><br><span class="line">git checkout -b &lt;本地分支&gt; origin/&lt;远程分支&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="分支切换问题处理"><a href="#分支切换问题处理" class="headerlink" title="分支切换问题处理"></a>分支切换问题处理</h3>
 	
@@ -324,45 +324,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
 		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
-		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
 		
 			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
 		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
 			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
 		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
 		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>1</span></a></li>
+		
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+		
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

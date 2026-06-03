@@ -134,12 +134,12 @@
 	
 		<h2 id="0x01-部署前环境准备"><a href="#0x01-部署前环境准备" class="headerlink" title="0x01.部署前环境准备"></a>0x01.部署前环境准备</h2><ol>
 <li><p><strong>核心依赖：Docker + Docker Compose（插件版）</strong><br>Kali 2025 默认预装 Docker，但需确认 <strong>Docker Compose 插件版</strong> 可用（避免独立包冲突）：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Docker Compose 安装冲突（独立包 vs 插件版）</strong></p>
 <ul>
 <li>现象：执行 <code>sudo apt install docker-compose</code> 时提示“trying to overwrite…”</li>
-<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
+<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ol>
@@ -147,21 +147,21 @@
 <h2 id="0x02-配置-Docker-国内加速器"><a href="#0x02-配置-Docker-国内加速器" class="headerlink" title="0x02.配置 Docker 国内加速器"></a>0x02.配置 Docker 国内加速器</h2><p>Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。</p>
 <ol>
 <li><p><strong>编辑 Docker 配置文件</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>写入正确格式的加速源</strong><br><strong>正确配置（含国内稳定源）</strong>：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 </li>
 <li><p><strong>使加速配置生效</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
 <ul>
 <li>生效标志：输出中显示配置的所有加速源。</li>
 </ul>
 </li>
 </ol>
 <hr>
-<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
 
 <hr>
 	
@@ -227,8 +227,8 @@
 <li>包含：常量池、字段表、方法表、属性表</li>
 </ul>
 </li>
-<li><strong>JVM执行过程</strong>：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>编译后字节码（<code>javap -c Test.class</code>）：  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  Code:</span><br><span class="line">     0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     3: ldc           #3  // String Hello</span><br><span class="line">     5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     8: return</span><br></pre></td></tr></table></figure></li>
+<li><strong>JVM执行过程</strong>：<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>编译后字节码（<code>javap -c Test.class</code>）：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  Code:</span><br><span class="line">     0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     3: ldc           #3  // String Hello</span><br><span class="line">     5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     8: return</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="二、基础语法与数据类型"><a href="#二、基础语法与数据类型" class="headerlink" title="二、基础语法与数据类型"></a>二、基础语法与数据类型</h2><h3 id="1-基本数据类型解析"><a href="#1-基本数据类型解析" class="headerlink" title="1. 基本数据类型解析"></a>1. 基本数据类型解析</h3><table>
 <thead>
@@ -414,45 +414,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
 		
 			<li><a href="/tags/python/">python<span>1</span></a></li>
 		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
 		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
 		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
 			<li><a href="/tags/指令/">指令<span>3</span></a></li>
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
-			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
 		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
 		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
 		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
 		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
 		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

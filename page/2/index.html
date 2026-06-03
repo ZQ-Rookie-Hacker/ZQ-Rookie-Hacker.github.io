@@ -188,7 +188,7 @@
 <p>本笔记将按照 <strong>“问题 → 解决方案 → 细节机制 → 安全风险”</strong> 的逻辑，为你彻底讲清同源策略与 CORS。</p>
 <hr>
 <h2 id="1-同源策略：浏览器安全的基石"><a href="#1-同源策略：浏览器安全的基石" class="headerlink" title="1. 同源策略：浏览器安全的基石"></a>1. 同源策略：浏览器安全的基石</h2><h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果没有同源策略，当你登录银行网站 <code>https://bank.com</code> 后，再打开一个恶意网站 <code>https://evil.com</code>，恶意网站可以这样攻击：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
 <p>由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。</p>
 	
 	</div>
@@ -293,45 +293,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
 		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
 		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
-		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
-		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
 		
 			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
 		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+		
+			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
+		
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
 			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
 		
 			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
 		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

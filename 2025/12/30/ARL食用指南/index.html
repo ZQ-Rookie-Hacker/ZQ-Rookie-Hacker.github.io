@@ -11,12 +11,12 @@
   
   <meta name="description" content="0x01.部署前环境准备
 核心依赖：Docker + Docker Compose（插件版）Kali 2025 默认预装 Docker，但需确认 Docker Compose 插件版 可用（避免独立包冲突）：
- 1234# 验证 Docker 是否运行sudo systemctl status docker# 验证 Docker Compose 插件版（无横杠，官方推荐）docker compose version
+ # 验证 Docker 是否运行sudo systemctl status docker# 验证 Docker Compose 插件版（无横杠，官方推荐）docker compose version
 
 Docker Compose 安装冲突（独立包 vs 插件版）
 
 现象：执行 sudo apt install docker-compose 时提示“trying to overwrite…”
-解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：1234# 卸载冲突的独立包sudo apt remove -y docker-compose# 确保插件版可用sudo apt install -y docker-compose-plugin
+解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：# 卸载冲突的独立包sudo apt remove -y docker-compose# 确保插件版可用sudo apt install -y docker-compose-plugin
 
 
 
@@ -24,21 +24,21 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 0x02.配置 Docker 国内加速器Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。
 
 编辑 Docker 配置文件
-12# 打开配置文件（若不存在则自动创建）sudo vim /etc/docker/daemon.json
+# 打开配置文件（若不存在则自动创建）sudo vim /etc/docker/daemon.json
 
 写入正确格式的加速源正确配置（含国内稳定源）：
-123456789&amp;#123;  &amp;quot;registry-mirrors&amp;quot;: [    &amp;quot;https://docker.m.daocloud.io&amp;quot;,    &amp;quot;https://docker.1panel.live&amp;quot;,    &amp;quot;https://hub.rat.dev&amp;quot;,    &amp;quot;https://docker.xuanyuan.me&amp;quot;,    &amp;quot;https://registry.cn-hangzhou.aliyuncs.com&amp;quot;    ]&amp;#125;
+&amp;#123;  &amp;quot;registry-mirrors&amp;quot;: [    &amp;quot;https://docker.m.daocloud.io&amp;quot;,    &amp;quot;https://docker.1panel.live&amp;quot;,    &amp;quot;https://hub.rat.dev&amp;quot;,    &amp;quot;https://docker.xuanyuan.me&amp;quot;,    &amp;quot;https://registry.cn-hangzhou.aliyuncs.com&amp;quot;    ]&amp;#125;
 
 
 使加速配置生效
-123456# 重新加载配置sudo systemctl daemon-reload# 重启 Docker 服务sudo systemctl restart docker# 验证加速源是否生效docker info | grep &amp;quot;Registry Mirrors&amp;quot; -A 5
+# 重新加载配置sudo systemctl daemon-reload# 重启 Docker 服务sudo systemctl restart docker# 验证加速源是否生效docker info | grep &amp;quot;Registry Mirrors&amp;quot; -A 5
 
 生效标志：输出中显示配置的所有加速源。
 
 
 
 
-0x03.拉取 ARL 代码12git clone https://github.com/ki9mu/ARL-plus-docker.git ./ARLcd ARL"> 
+0x03.拉取 ARL 代码git clone https://github.com/ki9mu/ARL-plus-docker.git ./ARLcd ARL"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -155,12 +155,12 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 
 		  <h2 id="0x01-部署前环境准备"><a href="#0x01-部署前环境准备" class="headerlink" title="0x01.部署前环境准备"></a>0x01.部署前环境准备</h2><ol>
 <li><p><strong>核心依赖：Docker + Docker Compose（插件版）</strong><br>Kali 2025 默认预装 Docker，但需确认 <strong>Docker Compose 插件版</strong> 可用（避免独立包冲突）：</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 验证 Docker 是否运行</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br><span class="line"><span class="comment"># 验证 Docker Compose 插件版（无横杠，官方推荐）</span></span><br><span class="line">docker compose version</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Docker Compose 安装冲突（独立包 vs 插件版）</strong></p>
 <ul>
 <li>现象：执行 <code>sudo apt install docker-compose</code> 时提示“trying to overwrite…”</li>
-<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
+<li>解决：使用系统预装的插件版，无需安装独立包；若已安装独立包，先卸载冲突组件：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 卸载冲突的独立包</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove -y docker-compose</span><br><span class="line"><span class="comment"># 确保插件版可用</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ol>
@@ -168,38 +168,38 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 <h2 id="0x02-配置-Docker-国内加速器"><a href="#0x02-配置-Docker-国内加速器" class="headerlink" title="0x02.配置 Docker 国内加速器"></a>0x02.配置 Docker 国内加速器</h2><p>Docker 默认拉取国外镜像源，必须配置国内加速器（你遇到过格式错误、源不稳定问题）。</p>
 <ol>
 <li><p><strong>编辑 Docker 配置文件</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件（若不存在则自动创建）</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>写入正确格式的加速源</strong><br><strong>正确配置（含国内稳定源）</strong>：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.1panel.live&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://hub.rat.dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.xuanyuan.me&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.cn-hangzhou.aliyuncs.com&quot;</span>  </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 </li>
 <li><p><strong>使加速配置生效</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br><span class="line"><span class="comment"># 验证加速源是否生效</span></span><br><span class="line">docker info | grep <span class="string">&quot;Registry Mirrors&quot;</span> -A 5</span><br></pre></td></tr></table></figure>
 <ul>
 <li>生效标志：输出中显示配置的所有加速源。</li>
 </ul>
 </li>
 </ol>
 <hr>
-<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-拉取-ARL-代码"><a href="#0x03-拉取-ARL-代码" class="headerlink" title="0x03.拉取 ARL 代码"></a>0x03.拉取 ARL 代码</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ki9mu/ARL-plus-docker.git ./ARL</span><br><span class="line"><span class="built_in">cd</span> ARL</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="0x04-拉取-ARL-依赖镜像"><a href="#0x04-拉取-ARL-依赖镜像" class="headerlink" title="0x04.拉取 ARL 依赖镜像"></a>0x04.拉取 ARL 依赖镜像</h2><p>ARL 依赖 3 个核心镜像：<code>mongo:4.0.27</code>、<code>ki9mu/shadow-rabbitmq:latest</code>、<code>ki9mu/arl-ki9mu:v3.0.1</code>。</p>
 <ol>
 <li><strong>优先创建数据卷（持久化数据库数据）</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create arl_db</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker volume create arl_db</span><br></pre></td></tr></table></figure>
 
 <ol start="2">
 <li><p><strong>拉取镜像（避免批量拉取中断，可逐个拉取）</strong></p>
 <ul>
 <li>方法1：批量拉取</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose pull</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose pull</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>方法2：逐个拉取（解决批量拉取反复中断） <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取 MongoDB 镜像</span></span><br><span class="line">docker pull mongo:4.0.27</span><br><span class="line"><span class="comment"># 拉取 RabbitMQ 镜像</span></span><br><span class="line">docker pull ki9mu/shadow-rabbitmq:latest</span><br><span class="line"><span class="comment"># 拉取 ARL 核心镜像</span></span><br><span class="line">docker pull ki9mu/arl-ki9mu:v3.0.1</span><br></pre></td></tr></table></figure></li>
+<li>方法2：逐个拉取（解决批量拉取反复中断） <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取 MongoDB 镜像</span></span><br><span class="line">docker pull mongo:4.0.27</span><br><span class="line"><span class="comment"># 拉取 RabbitMQ 镜像</span></span><br><span class="line">docker pull ki9mu/shadow-rabbitmq:latest</span><br><span class="line"><span class="comment"># 拉取 ARL 核心镜像</span></span><br><span class="line">docker pull ki9mu/arl-ki9mu:v3.0.1</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p><strong>镜像拉取反复中断</strong></p>
@@ -214,7 +214,7 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 </ul>
 </li>
 <li><p><strong>验证镜像是否拉取完成</strong></p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images | grep -E <span class="string">&quot;mongo:4.0.27|ki9mu/shadow-rabbitmq|ki9mu/arl-ki9mu&quot;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker images | grep -E <span class="string">&quot;mongo:4.0.27|ki9mu/shadow-rabbitmq|ki9mu/arl-ki9mu&quot;</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>成功标志：输出包含 3 个镜像的信息。</li>
 </ul>
@@ -225,16 +225,16 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 <ol>
 <li><strong>启动 ARL</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d <span class="comment"># 后台启动</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose up -d <span class="comment"># 后台启动</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>作用：启动所有依赖容器（MongoDB、RabbitMQ、ARL 核心服务），后台运行不占用终端。</li>
-<li>验证启动成功：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
+<li>验证启动成功：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
 成功标志：所有容器 <code>STATE</code> 为 <code>Up</code>。</li>
 </ul>
 <ol start="2">
 <li><strong>关闭 ARL</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose down</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose down</span><br></pre></td></tr></table></figure>
 <ul>
 <li>作用：停止并销毁所有容器（数据不会丢失，因为数据存在 <code>arl_db</code> 数据卷中）。</li>
 <li>场景：长时间不使用时关闭，节省系统资源。</li>
@@ -242,14 +242,14 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 <ol start="3">
 <li><strong>重启 ARL</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose restart</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose restart</span><br></pre></td></tr></table></figure>
 <ul>
 <li>作用：重启所有容器，适用于修改 ARL 配置后生效。</li>
 </ul>
 <ol start="4">
 <li><strong>查看 ARL 运行状态</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></figure>
 <ul>
 <li>输出说明：<ul>
 <li><code>NAME</code>：容器名称（如 <code>arl_web</code> 是 Web 界面容器）；</li>
@@ -261,13 +261,13 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 <ol start="5">
 <li><strong>查看 ARL 日志</strong></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有容器日志（实时输出）</span></span><br><span class="line">docker compose logs -f</span><br><span class="line"><span class="comment"># 查看单个容器日志（如 Web 容器，排查访问问题）</span></span><br><span class="line">docker compose logs -f web</span><br><span class="line"><span class="comment"># 查看 MongoDB 容器日志（排查数据库问题）</span></span><br><span class="line">docker compose logs -f mongodb</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看所有容器日志（实时输出）</span></span><br><span class="line">docker compose logs -f</span><br><span class="line"><span class="comment"># 查看单个容器日志（如 Web 容器，排查访问问题）</span></span><br><span class="line">docker compose logs -f web</span><br><span class="line"><span class="comment"># 查看 MongoDB 容器日志（排查数据库问题）</span></span><br><span class="line">docker compose logs -f mongodb</span><br></pre></td></tr></table></figure>
 <ul>
 <li>场景：容器启动失败（<code>STATE</code> 为 <code>Exited</code>）时，通过日志定位报错原因。</li>
 </ul>
 <h2 id="0x06-访问-ARL-系统"><a href="#0x06-访问-ARL-系统" class="headerlink" title="0x06.访问 ARL 系统"></a>0x06.访问 ARL 系统</h2><ol>
 <li><p><strong>正确访问地址</strong><br> 从容器端口映射可知：<code>arl_web</code> 将主机 <code>5003</code> 端口映射到容器 <code>443</code> 端口（HTTPS），因此必须用 <strong><code>https</code> 开头</strong>的地址：</p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://127.0.0.1:5003</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://127.0.0.1:5003</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>访问地址错误</strong></p>
 <ul>
@@ -442,8 +442,8 @@ Docker Compose 安装冲突（独立包 vs 插件版）
 <hr>
 <h2 id="0x0a-补充"><a href="#0x0a-补充" class="headerlink" title="0x0a.补充"></a>0x0a.补充</h2><ol>
 <li><strong>修改默认密码</strong>：登录后进入「个人中心」→「密码修改」，输入旧密码 <code>arlpass</code> 和新密码；</li>
-<li><strong>备份 ARL 数据</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份数据卷 arl_db 到本地目录（如 ~/arl_backup）</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -v arl_db:/source -v ~/arl_backup:/dest alpine <span class="built_in">cp</span> -r /source/* /dest/</span><br></pre></td></tr></table></figure></li>
-<li><strong>更新 ARL 镜像</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取最新镜像</span></span><br><span class="line">docker compose pull</span><br><span class="line"><span class="comment"># 重启容器</span></span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure></li>
+<li><strong>备份 ARL 数据</strong>：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 备份数据卷 arl_db 到本地目录（如 ~/arl_backup）</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -v arl_db:/source -v ~/arl_backup:/dest alpine <span class="built_in">cp</span> -r /source/* /dest/</span><br></pre></td></tr></table></figure></li>
+<li><strong>更新 ARL 镜像</strong>：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新镜像</span></span><br><span class="line">docker compose pull</span><br><span class="line"><span class="comment"># 重启容器</span></span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
 
@@ -569,7 +569,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>39</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/信息收集/">信息收集<span>3</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>40</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/信息收集/">信息收集<span>3</span></a></li>
   </li>
 
 			</ul>

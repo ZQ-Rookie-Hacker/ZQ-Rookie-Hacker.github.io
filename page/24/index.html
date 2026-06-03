@@ -132,7 +132,7 @@
   <div class="row">
 	
 	
-		<h2 id="一些话"><a href="#一些话" class="headerlink" title="一些话"></a>一些话</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">本人是一个网安菜鸡，请多多请教。</span><br><span class="line">本文是对作者在SQL注入学习过程中的笔记及经验总结，对于一些非常基础的SQL注入知识不会细细展开</span><br><span class="line">对于一些0基础的网安道友可能不太友好</span><br><span class="line">php版本：php.5.4.45nts （2024-10-12）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">最近复习一下sql，加强渗透测试的能力，随便把之前没做的题目做完（2025-12-13）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+		<h2 id="一些话"><a href="#一些话" class="headerlink" title="一些话"></a>一些话</h2><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">本人是一个网安菜鸡，请多多请教。</span><br><span class="line">本文是对作者在SQL注入学习过程中的笔记及经验总结，对于一些非常基础的SQL注入知识不会细细展开</span><br><span class="line">对于一些0基础的网安道友可能不太友好</span><br><span class="line">php版本：php.5.4.45nts （2024-10-12）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">最近复习一下sql，加强渗透测试的能力，随便把之前没做的题目做完（2025-12-13）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="什么是SQL注入"><a href="#什么是SQL注入" class="headerlink" title="什么是SQL注入?"></a>什么是SQL注入?</h2><h2 id="补充知识"><a href="#补充知识" class="headerlink" title="补充知识"></a>补充知识</h2><h3 id="关于information-schema库"><a href="#关于information-schema库" class="headerlink" title="关于information_schema库"></a>关于information_schema库</h3><p>MySQL 从 <strong>5.0.2 版本</strong>开始正式引入了 <code>INFORMATION_SCHEMA</code> 数据库。</p>
@@ -168,13 +168,13 @@
   <div class="row">
 	
 	
-		<h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>,<span class="keyword">show</span>,<span class="keyword">create</span>,<span class="keyword">drop</span>,<span class="keyword">alter</span>,<span class="keyword">as</span>（起别名）,<span class="keyword">grant</span>,<span class="keyword">revoke</span>,</span><br></pre></td></tr></table></figure>
+		<h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span>,<span class="keyword">show</span>,<span class="keyword">create</span>,<span class="keyword">drop</span>,<span class="keyword">alter</span>,<span class="keyword">as</span>（起别名）,<span class="keyword">grant</span>,<span class="keyword">revoke</span>,</span><br></pre></td></tr></table></figure>
 
-<h1 id="mysql用户操作"><a href="#mysql用户操作" class="headerlink" title="mysql用户操作"></a><code>mysql用户操作</code></h1><h2 id="一、用户存在查询"><a href="#一、用户存在查询" class="headerlink" title="一、用户存在查询"></a>一、用户存在查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>直接查询（查询mysql库）：</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">User</span>, Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;要查询的用户名&#x27;</span> <span class="keyword">and</span> Host <span class="operator">=</span> <span class="string">&#x27;对应的主机&#x27;</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>注意具体字段名字的大小写，要与mysql库中匹配</span><br><span class="line">示例：</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>;<span class="operator">/</span><span class="operator">/</span>查询为空则不存在</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查询所有用户</span><br><span class="line"><span class="comment">-- 查看所有用户（显示用户名和允许连接的主机）</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>, Host <span class="keyword">from</span> mysql.user; </span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>使用<span class="keyword">exists</span>函数</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exists</span>(<span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>); <span class="operator">/</span><span class="operator">/</span>用户存在返回<span class="number">1</span>，不存在返回<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>间接查询（权限查询）<span class="comment">--&gt;一下会提到，暂不解释</span></span><br></pre></td></tr></table></figure>
+<h1 id="mysql用户操作"><a href="#mysql用户操作" class="headerlink" title="mysql用户操作"></a><code>mysql用户操作</code></h1><h2 id="一、用户存在查询"><a href="#一、用户存在查询" class="headerlink" title="一、用户存在查询"></a>一、用户存在查询</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span>直接查询（查询mysql库）：</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">User</span>, Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">user</span> <span class="operator">=</span> <span class="string">&#x27;要查询的用户名&#x27;</span> <span class="keyword">and</span> Host <span class="operator">=</span> <span class="string">&#x27;对应的主机&#x27;</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>注意具体字段名字的大小写，要与mysql库中匹配</span><br><span class="line">示例：</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>;<span class="operator">/</span><span class="operator">/</span>查询为空则不存在</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>查询所有用户</span><br><span class="line"><span class="comment">-- 查看所有用户（显示用户名和允许连接的主机）</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>, Host <span class="keyword">from</span> mysql.user; </span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>使用<span class="keyword">exists</span>函数</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exists</span>(<span class="keyword">select</span> <span class="keyword">User</span>,Host <span class="keyword">from</span> mysql.user <span class="keyword">where</span> <span class="keyword">User</span><span class="operator">=</span><span class="string">&#x27;root&#x27;</span> <span class="keyword">and</span> Host<span class="operator">=</span><span class="string">&#x27;localhost&#x27;</span>); <span class="operator">/</span><span class="operator">/</span>用户存在返回<span class="number">1</span>，不存在返回<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>间接查询（权限查询）<span class="comment">--&gt;一下会提到，暂不解释</span></span><br></pre></td></tr></table></figure>
 
 
 <hr>
-<h2 id="二、用户创建与删除"><a href="#二、用户创建与删除" class="headerlink" title="二、用户创建与删除"></a>二、用户创建与删除</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>创建语法格式</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;密码&#x27;</span>;</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>：</span><br><span class="line"><span class="operator">&gt;</span>用户名 是自定义的账号</span><br><span class="line"><span class="operator">&gt;</span>主机 限制用户从哪里连接（localhost 仅本地、<span class="operator">%</span> 允许任意主机、固定ip地址、模糊网段、CIDR 子网）</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>删除语法</span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="二、用户创建与删除"><a href="#二、用户创建与删除" class="headerlink" title="二、用户创建与删除"></a>二、用户创建与删除</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>创建语法格式</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;密码&#x27;</span>;</span><br><span class="line"><span class="operator">&gt;&gt;</span><span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>：</span><br><span class="line"><span class="operator">&gt;</span>用户名 是自定义的账号</span><br><span class="line"><span class="operator">&gt;</span>主机 限制用户从哪里连接（localhost 仅本地、<span class="operator">%</span> 允许任意主机、固定ip地址、模糊网段、CIDR 子网）</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>删除语法</span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> <span class="string">&#x27;用户名&#x27;</span>@<span class="string">&#x27;主机&#x27;</span>;</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -323,45 +323,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
 			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
 		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
 		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+		
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
 		
 			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
 		
 			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
 		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
 		
 			<li><a href="/tags/Git/">Git<span>1</span></a></li>
 		
 			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
 		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+			<li><a href="/tags/python/">python<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

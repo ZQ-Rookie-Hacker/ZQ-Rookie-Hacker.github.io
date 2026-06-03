@@ -253,10 +253,16 @@ a.inline-ref:hover {
     border-bottom: solid 1px #000
 }
 
+/* Apple macOS 风格 blockquote */
 blockquote {
-    border-left: 5px solid #ccc;
-    font-size: .9em;
-    background-color: #3a3a3a
+    margin: 1.2em 0;
+    padding: 16px 20px;
+    border-left: 4px solid #2bbc8a;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(135deg, rgba(43, 188, 138, 0.08), rgba(43, 188, 138, 0.02));
+    font-size: 0.95em;
+    color: #c8c8c8;
+    position: relative;
 }
 
 blockquote p,
@@ -265,6 +271,42 @@ blockquote ul,
 blockquote li,
 .slogan {
     font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace
+}
+
+blockquote p {
+    margin: 0.5em 0;
+    line-height: 1.8;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* 嵌套 blockquote（>>） */
+blockquote blockquote {
+    border-left-color: #fefe54;
+    background: linear-gradient(135deg, rgba(254, 254, 84, 0.06), rgba(254, 254, 84, 0.01));
+    margin: 0.8em 0;
+    border-radius: 0 10px 10px 0;
+}
+
+/* 三层嵌套 */
+blockquote blockquote blockquote {
+    border-left-color: #ff7b72;
+    background: linear-gradient(135deg, rgba(255, 123, 114, 0.06), rgba(255, 123, 114, 0.01));
+}
+
+/* blockquote 内代码样式 */
+blockquote code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #fefe54;
 }
 
 img,

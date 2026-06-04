@@ -84,11 +84,14 @@ body {
     text-shadow: 0 0 25px rgba(43, 188, 138, 0.5);
 }
 
-/* 导航项 — 与标题垂直对齐 */
+/* 导航项 — 与标题字体统一 */
 .nav-menu .nav > li > a {
     padding: 15px;
     line-height: 20px;
-    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
     color: #a1a1a6;
     transition: color 0.15s ease;
 }
@@ -233,8 +236,8 @@ a {
 
 .post a:hover,
 .page a:hover {
-    color: #4fd6a2;
-    border-bottom-color: #4fd6a2;
+    color: #2bbc8a;
+    border-bottom-color: #2bbc8a;
     background: none;
 }
 
@@ -246,13 +249,13 @@ a:focus {
 }
 
 a:active {
-    color: #1fa76a;
+    color: #2bbc8a;
     background: none;
 }
 
 .post a:visited,
 .page a:visited {
-    color: #7b9e8e;
+    color: #2bbc8a;
 }
 
 a.label-anchor {

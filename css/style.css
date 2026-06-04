@@ -148,7 +148,7 @@ li i {
     padding: 2px 6px;
     margin: 2px;
     background: #e5e5e5;
-    color: #555;
+    color: #000;
     border-radius: 3px;
     text-decoration: none;
     border: 1px dashed #bbb
@@ -221,42 +221,73 @@ em.search-keyword {
     width: 100%
 }
 
-/* Apple 风格链接 */
+/* Apple 风格链接 — 仅文章内容 + TOC */
 a {
     color: #2bbc8a;
     text-decoration: none;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.post a,
-.page a {
+/* 正文链接绿色 — 排除按钮 */
+.post a:not(.btn),
+.page a:not(.btn) {
+    color: #2bbc8a !important;
     border-bottom: 1px solid rgba(43, 188, 138, 0.3);
     padding-bottom: 1px;
 }
 
-.post a:hover,
-.page a:hover {
-    color: #2bbc8a;
+.post a:not(.btn):hover,
+.page a:not(.btn):hover {
+    color: #2bbc8a !important;
     border-bottom-color: #2bbc8a;
-    background: none;
+    background: none !important;
 }
 
-a:focus {
+.post a:not(.btn):focus,
+.page a:not(.btn):focus {
+    color: #2bbc8a !important;
     outline: 2px solid rgba(43, 188, 138, 0.5);
     outline-offset: 2px;
     border-radius: 2px;
-    background: none;
+    background: none !important;
 }
 
-a:active {
-    color: #2bbc8a;
-    background: none;
+.post a:not(.btn):active,
+.page a:not(.btn):active {
+    color: #2bbc8a !important;
+    background: none !important;
 }
 
-.post a:visited,
-.page a:visited {
-    color: #2bbc8a;
+.post a:not(.btn):visited,
+.page a:not(.btn):visited {
+    color: #2bbc8a !important;
 }
+
+/* 标签云覆盖回黑色 */
+.tag_box a,
+.post .tag_box a,
+.page .tag_box a {
+    color: #000 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.tag_box a:hover {
+    color: #fff !important;
+}
+
+/* 按钮内文字黑色 — 所有 btn 变体 */
+.post .btn,
+.page .btn,
+.post .btn a,
+.page .btn a,
+.post a.btn,
+.page a.btn {
+    color: #000 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
 
 a.label-anchor {
     position: relative;
@@ -602,9 +633,9 @@ h2 {
     border-bottom: 1px solid #2c2c2e;
 }
 
-/* TOC 链接 — 重置 Apple 正文链接样式 */
+/* TOC 链接 — 统一绿色 */
 .toc-article a {
-    color: #a1a1a6;
+    color: #2bbc8a;
     text-decoration: none;
     border: none;
     border-bottom: none;
@@ -616,8 +647,8 @@ h2 {
 }
 
 .toc-article a:hover {
-    color: #f5f5f7;
-    background: rgba(255, 255, 255, 0.05);
+    color: #2bbc8a;
+    background: rgba(43, 188, 138, 0.08);
     padding-left: 8px;
     border: none;
     border-bottom: none;

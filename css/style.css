@@ -44,8 +44,11 @@ body {
 
 .page,
 .post {
-    line-height: 1.5em;
-    font-family: Fira code,SimHei,Monaco, Menlo, Consolas,DOS,  'Courier New', monospace
+    line-height: 1.8;
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', SimHei, sans-serif;
+    color: #d1d1d6;
+    letter-spacing: 0.2px;
 }
 
 .page .more {
@@ -62,16 +65,37 @@ body {
     border-bottom: 1px solid #fff
 }
 
+/* Blog title — Apple + Hacker 混合风格 */
 .navbar-brand {
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
-    -webkit-transition: all .2s linear;
-    -moz-transition: all .2s linear;
-    transition: all .2s linear
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    color: #f5f5f7;
+    text-shadow: 0 0 20px rgba(43, 188, 138, 0.3);
+    transition: all 0.25s ease;
+    padding: 15px;
+    line-height: 20px;
 }
 
 .navbar-brand:hover {
     text-decoration: none;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .4)
+    color: #2bbc8a;
+    text-shadow: 0 0 25px rgba(43, 188, 138, 0.5);
+}
+
+/* 导航项 — 与标题垂直对齐 */
+.nav-menu .nav > li > a {
+    padding: 15px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #a1a1a6;
+    transition: color 0.15s ease;
+}
+
+.nav-menu .nav > li > a:hover {
+    color: #2bbc8a;
+    background: none;
 }
 
 .pagination {
@@ -194,23 +218,41 @@ em.search-keyword {
     width: 100%
 }
 
+/* Apple 风格链接 */
 a {
-    color: #2bbc8a
+    color: #2bbc8a;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.post a,
+.page a {
+    border-bottom: 1px solid rgba(43, 188, 138, 0.3);
+    padding-bottom: 1px;
+}
+
+.post a:hover,
+.page a:hover {
+    color: #4fd6a2;
+    border-bottom-color: #4fd6a2;
+    background: none;
 }
 
 a:focus {
-    color: #fefe54;
-    background: #a50
-}
-
-a:hover {
-    color: #000000;
-    background: rgb(153, 153, 153)
+    outline: 2px solid rgba(43, 188, 138, 0.5);
+    outline-offset: 2px;
+    border-radius: 2px;
+    background: none;
 }
 
 a:active {
-    color: #fefe54;
-    background: #a50
+    color: #1fa76a;
+    background: none;
+}
+
+.post a:visited,
+.page a:visited {
+    color: #7b9e8e;
 }
 
 a.label-anchor {
@@ -253,16 +295,24 @@ a.inline-ref:hover {
     border-bottom: solid 1px #000
 }
 
-/* Apple macOS 风格 blockquote */
+/* ==============================================
+   Apple macOS 风格 blockquote
+   参考：macOS Notes + Apple Developer Docs
+   ============================================== */
+
+/* > 一级引用 — 绿色主题 */
 blockquote {
-    margin: 1.2em 0;
-    padding: 16px 20px;
-    border-left: 4px solid #2bbc8a;
-    border-radius: 0 12px 12px 0;
-    background: linear-gradient(135deg, rgba(43, 188, 138, 0.08), rgba(43, 188, 138, 0.02));
+    margin: 1.5em 0;
+    padding: 18px 24px 18px 24px;
+    border: none;
+    border-left: 3.5px solid #2bbc8a;
+    border-radius: 10px;
+    background: #1c1c1e;
     font-size: 0.95em;
-    color: #c8c8c8;
+    color: #d1d1d6;
     position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    line-height: 1.75;
 }
 
 blockquote p,
@@ -270,12 +320,11 @@ blockquote ol,
 blockquote ul,
 blockquote li,
 .slogan {
-    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
 }
 
 blockquote p {
-    margin: 0.5em 0;
-    line-height: 1.8;
+    margin: 0.4em 0;
 }
 
 blockquote p:first-child {
@@ -286,27 +335,43 @@ blockquote p:last-child {
     margin-bottom: 0;
 }
 
-/* 嵌套 blockquote（>>） */
+/* >> 二级嵌套引用 — 蓝灰色主题 */
 blockquote blockquote {
-    border-left-color: #fefe54;
-    background: linear-gradient(135deg, rgba(254, 254, 84, 0.06), rgba(254, 254, 84, 0.01));
-    margin: 0.8em 0;
-    border-radius: 0 10px 10px 0;
+    border-left-color: #64d2ff;
+    background: #1a1a1c;
+    margin: 1em 0;
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-/* 三层嵌套 */
+/* >>> 三级嵌套引用 — 紫色主题 */
 blockquote blockquote blockquote {
-    border-left-color: #ff7b72;
-    background: linear-gradient(135deg, rgba(255, 123, 114, 0.06), rgba(255, 123, 114, 0.01));
+    border-left-color: #bf5af2;
+    background: #18181a;
+    margin: 0.8em 0;
+    padding: 12px 18px;
+    border-radius: 6px;
 }
 
-/* blockquote 内代码样式 */
+/* blockquote 内代码 */
 blockquote code {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: #fefe54;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #f0f0f0;
+}
+
+/* blockquote 内 strong / em */
+blockquote strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+blockquote em {
+    color: #a1a1a6;
+    font-style: italic;
 }
 
 img,
@@ -418,6 +483,7 @@ h5 {
     font-size: 1.1em;
     margin-bottom: .6667em
 }
+/* Apple 风格标题 */
 h1,
 h2,
 h3,
@@ -425,16 +491,19 @@ h4,
 h5,
 h6 {
     text-rendering: optimizelegibility;
-    font-weight: bold;
-    line-height: 1.2em;
-    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
-    color: #fff
+    font-weight: 700;
+    line-height: 1.35;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', SimHei, sans-serif;
+    color: #f5f5f7;
+    letter-spacing: -0.2px;
 }
 
 h2 {
-    color: #fff;
+    color: #f5f5f7;
     padding-top: 40px;
-    margin: -25px 0 .83em
+    padding-bottom: 10px;
+    margin: -25px 0 1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .page-header {
@@ -447,8 +516,17 @@ h2 {
     border-radius: 6px 6px 0 0;
     font-size: 1.3em
 }
-em{
-    font-style:oblique;
+/* Apple 风格强调文本 */
+.post em,
+.page em {
+    font-style: italic;
+    color: #a1a1a6;
+}
+
+.post strong,
+.page strong {
+    font-weight: 600;
+    color: #f5f5f7;
 }
 .page .entry {
     padding-top: 10px;
@@ -497,46 +575,56 @@ em{
     opacity: 1
 }
 
+/* TOC — 隔离 Apple 风格，不影响 */
 .toc {
-    font-size: 10pt;
+    font-size: 13px;
     width: auto;
-    padding: 12px;
-    background: #1a1a1a;
-    border-left: 3px solid #2bbc8a;
+    padding: 14px 16px;
+    background: #1c1c1e;
+    border-radius: 10px;
+    border: 1px solid #2c2c2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
 }
 
-/* TOC 标题样式 */
+/* TOC 标题 */
 .toc .toc-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #2bbc8a;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8e8e93;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     display: block;
     margin-bottom: 10px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #2c2c2e;
 }
 
-/* TOC 链接样式 */
+/* TOC 链接 — 重置 Apple 正文链接样式 */
 .toc-article a {
-    color: #ccc;
+    color: #a1a1a6;
     text-decoration: none;
-    transition: all 0.2s;
+    border: none;
+    border-bottom: none;
+    padding: 3px 8px;
+    border-radius: 4px;
     display: block;
-    padding: 4px 8px;
-    border-radius: 3px;
+    transition: color 0.15s ease, background 0.15s ease;
+    line-height: 1.6;
 }
 
 .toc-article a:hover {
-    color: #2bbc8a;
-    background: rgba(43, 188, 138, 0.1);
-    padding-left: 12px;
+    color: #f5f5f7;
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 8px;
+    border: none;
+    border-bottom: none;
 }
 
-/* 当前激活的TOC项 */
+/* 当前激活项 */
 .toc-article a.toc-active {
     color: #2bbc8a;
-    font-weight: bold;
-    background: rgba(43, 188, 138, 0.15);
+    font-weight: 600;
+    background: rgba(43, 188, 138, 0.08);
 }
 
 /* make TOC scrollable within the sidebar so active item can move into view */
@@ -546,8 +634,8 @@ em{
 }
 
 .toc-article a.toc-active {
-    color: #fefe54;
-    font-weight: bold;
+    color: #2bbc8a;
+    font-weight: 600;
 }
 
 /* small card at page right-top showing date + categories/tags */
@@ -581,48 +669,103 @@ em{
     font-size: 125%
 }
 
+/* TOC 列表 */
 .toc-article {
-    list-style: circle;
-    line-height: 1em;
-    margin-bottom: 0;
-    padding: 10px 12px
+    list-style: none;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
 }
 
 .toc-article li {
-    margin-left: 5px !important;
-    padding: 0 !important
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .toc-article ol {
-    list-style: square;
-    padding: 5px 10px
+    list-style: none;
+    padding-left: 14px;
 }
 
 .toc-article ol ol {
-    list-style: circle;
-    padding: 5px 10px
+    padding-left: 14px;
 }
 
 .line {
     height: 20px
 }
 
+/* Apple macOS 风格表格 */
 table {
     border-collapse: separate;
     border-spacing: 0;
-    vertical-align: middle
+    vertical-align: middle;
+    width: 100%;
+    margin: 1.2em 0;
+    border-radius: 12px;
+    border: 1px solid #333;
+    overflow: hidden;
+    background: #1a1a1a;
+    font-size: 0.95em;
 }
 
 th {
-    padding: 12px 10px 12px 10px;
-    border-bottom: 1px dashed #4088b8
+    padding: 12px 16px;
+    background: #252525;
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    border-bottom: 1px solid #333;
 }
 
 td {
-    padding: 7px 10px 7px 10px;
+    padding: 10px 16px;
     text-align: left;
     font-weight: normal;
-    vertical-align: middle
+    vertical-align: middle;
+    border-bottom: 1px solid #262626;
+    color: #c8c8c8;
+}
+
+/* 去掉最后一行底部边框 */
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* 斑马纹 */
+tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* 行 hover 效果 */
+tbody tr:hover {
+    background: rgba(43, 188, 138, 0.06);
+    transition: background 0.15s ease;
+}
+
+/* 表格内代码 */
+td code,
+th code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #fefe54;
+}
+
+/* 表格内链接 */
+td a {
+    color: #2bbc8a;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+}
+
+td a:hover {
+    border-bottom-color: #2bbc8a;
 }
 
 .cf:before,
@@ -639,8 +782,216 @@ td {
     *zoom: 1
 }
 
+/* Apple 风格分隔线 */
 hr {
-    border-top: 2px solid #fff
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 2em 0;
+}
+
+/* Apple 风格段落 */
+.post p,
+.page p {
+    margin: 0.8em 0;
+    line-height: 1.8;
+}
+
+.post p:first-child,
+.page p:first-child {
+    margin-top: 0;
+}
+
+/* Apple 风格列表 */
+.post ul,
+.post ol,
+.page ul,
+.page ol {
+    margin: 0.8em 0;
+    padding-left: 1.6em;
+}
+
+.post li,
+.page li {
+    margin: 0.35em 0;
+    line-height: 1.7;
+}
+
+.post ul li,
+.page ul li {
+    list-style-type: '·  ';
+    padding-left: 0.3em;
+}
+
+.post ol li,
+.page ol li {
+    list-style-type: decimal;
+}
+
+/* 列表嵌套 */
+.post ul ul,
+.page ul ul {
+    list-style-type: '–  ';
+    margin: 0.2em 0;
+}
+
+/* 内联代码（非代码块） */
+.post p code,
+.post li code,
+.page p code,
+.page li code {
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #f0f0f0;
+    font-family: 'Fira Code', Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ==============================================
+   Apple 风格：图片、kbd、mark 等 MD 元素
+   ============================================== */
+
+/* 图片 — 圆角 + 微阴影 */
+.post img,
+.page img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    margin: 1.2em auto;
+    display: block;
+}
+
+/* 键盘按键 — Apple 键盘风格 */
+kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 0.82em;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    color: #e0e0e0;
+    background: linear-gradient(180deg, #3a3a3c, #2c2c2e);
+    border: 1px solid #48484a;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 #1c1c1e, inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* 高亮文本 */
+mark {
+    background: rgba(254, 254, 84, 0.2);
+    color: #f5f5f7;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+/* 上标 / 下标 */
+sup, sub {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* 缩写 */
+abbr[title] {
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+    cursor: help;
+}
+
+/* 定义列表 */
+.post dl,
+.page dl {
+    margin: 0.8em 0;
+}
+
+.post dt,
+.page dt {
+    font-weight: 600;
+    color: #f5f5f7;
+    margin-top: 0.6em;
+}
+
+.post dd,
+.page dd {
+    margin-left: 1.5em;
+    margin-top: 0.2em;
+    color: #a1a1a6;
+}
+
+/* 任务列表（- [ ] / - [x]） */
+.post ul.contains-task-list,
+.page ul.contains-task-list {
+    list-style: none;
+    padding-left: 0.5em;
+}
+
+.post .task-list-item,
+.page .task-list-item {
+    position: relative;
+    padding-left: 1.8em;
+    list-style-type: none !important;
+}
+
+.post .task-list-item input[type="checkbox"],
+.page .task-list-item input[type="checkbox"] {
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    width: 16px;
+    height: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1.5px solid #48484a;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.post .task-list-item input[type="checkbox"]:checked,
+.page .task-list-item input[type="checkbox"]:checked {
+    background: #2bbc8a;
+    border-color: #2bbc8a;
+}
+
+.post .task-list-item input[type="checkbox"]:checked::after,
+.page .task-list-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* 脚注 */
+.post sup a,
+.page sup a {
+    color: #2bbc8a;
+    border-bottom: none;
+    font-size: 0.85em;
+}
+
+.post .footnotes,
+.page .footnotes {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9em;
+    color: #a1a1a6;
 }
 
 /* Post sidebar — sticky behavior moved to .sticky-meta class */
@@ -717,15 +1068,32 @@ hr {
     font-size: .8em
 }
 
+/* 主页标题 — Apple + Hacker 风格 */
 .logo {
     background: url("../favicon.png") no-repeat left top;
-    background-size: 5em
+    background-size: 5em;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo>h1 {
     padding-left: 3em;
-    font-size: 1.5em;
-    line-height: 2.0em
+    font-size: 1.8em;
+    line-height: 2.0em;
+    font-family: 'Fira Code', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, monospace;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #f5f5f7 0%, #2bbc8a 50%, #fefe54 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+/* 光标颜色改为绿色 */
+.logo .blink-fast {
+    -webkit-text-fill-color: #2bbc8a;
+    text-shadow: 0 0 8px rgba(43, 188, 138, 0.6);
 }
 
 .fa-heart:before {

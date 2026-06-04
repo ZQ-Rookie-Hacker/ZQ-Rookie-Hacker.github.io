@@ -25,19 +25,28 @@
     margin: 8px 0 !important;
   }
 
-  /* -- Typography: improve readability -- */
+  /* -- Typography: Apple style -- */
   .post,
   .page {
     font-size: 15px !important;
-    line-height: 1.75 !important;
+    line-height: 1.8 !important;
   }
 
-  .post h1, .page h1 { font-size: 1.55em !important; margin: 0.7em 0 0.35em !important; }
-  .post h2, .page h2 { font-size: 1.35em !important; margin: 0.8em 0 0.35em !important; padding-top: 20px !important; }
-  .post h3, .page h3 { font-size: 1.18em !important; margin: 0.85em 0 0.4em !important; }
+  .post h1, .page h1 { font-size: 1.5em !important; margin: 0.8em 0 0.4em !important; }
+  .post h2, .page h2 { font-size: 1.35em !important; margin: 0.8em 0 0.4em !important; padding-top: 20px !important; padding-bottom: 8px !important; }
+  .post h3, .page h3 { font-size: 1.2em !important; margin: 0.85em 0 0.4em !important; }
   .post h4, .page h4,
   .post h5, .page h5,
   .post h6, .page h6 { font-size: 1.05em !important; margin: 0.9em 0 0.4em !important; }
+
+  .post p, .page p {
+    margin: 0.7em 0 !important;
+  }
+
+  .post li, .page li {
+    margin: 0.3em 0 !important;
+    line-height: 1.65 !important;
+  }
 
   /* -- Navbar -- */
   .navbar {
@@ -96,16 +105,21 @@
     width: 100%;
   }
 
-  /* -- Tables: wrappable container -- */
+  /* -- Tables: Apple style mobile -- */
   table {
     font-size: 13px !important;
     display: block !important;
     overflow-x: auto !important;
     max-width: 100%;
+    border-radius: 10px !important;
   }
 
-  th, td {
-    padding: 6px 8px !important;
+  th {
+    padding: 10px 12px !important;
+  }
+
+  td {
+    padding: 8px 12px !important;
     white-space: nowrap;
   }
 
@@ -122,9 +136,14 @@
   /* -- Blockquote -- */
   blockquote {
     margin: 10px 0 !important;
-    padding: 12px 14px !important;
+    padding: 14px 16px !important;
     font-size: 0.9em !important;
-    border-radius: 0 10px 10px 0 !important;
+    border-radius: 0 8px 8px 0 !important;
+    border-left-width: 3px !important;
+  }
+
+  blockquote blockquote {
+    padding: 10px 14px !important;
   }
 
   /* -- Sidebar -- */

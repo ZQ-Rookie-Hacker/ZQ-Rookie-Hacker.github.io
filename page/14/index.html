@@ -118,7 +118,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/06/PHP基础详解/" >PHP基础详解</a>
+			<a href="/2025/12/06/js基础/" >js基础</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -132,31 +132,25 @@
   <div class="row">
 	
 	
-		<h2 id="1-PHP简述"><a href="#1-PHP简述" class="headerlink" title="1. PHP简述"></a>1. PHP简述</h2><h3 id="详细解释"><a href="#详细解释" class="headerlink" title="详细解释"></a>详细解释</h3><p>PHP（Hypertext Preprocessor，超文本预处理器）是一种通用开源脚本语言，主要用于Web开发。它最初被设计为服务器端脚本语言，现在已发展成为一种通用编程语言。</p>
-<h3 id="核心特点："><a href="#核心特点：" class="headerlink" title="核心特点："></a>核心特点：</h3><ul>
-<li><strong>开源免费</strong>：PHP是完全开源的，可以自由使用和修改</li>
-<li><strong>跨平台</strong>：可以在Windows、Linux、macOS等操作系统上运行</li>
-<li><strong>嵌入HTML</strong>：PHP代码可以嵌入到HTML中，便于Web开发</li>
-<li><strong>服务器端执行</strong>：PHP代码在服务器上执行，结果以纯HTML形式返回给浏览器</li>
-<li><strong>丰富的库</strong>：PHP拥有超过1000个内置函数，支持各种功能</li>
+		<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>JavaScript是一种<strong>解释型</strong>、<strong>基于对象</strong>、<strong>动态类型</strong>的脚本语言，主要用于增强网页的交互性。它与Java没有关系，只是在诞生初期为了借助Java的热度而取了类似的名字。</p>
+<ul>
+<li><strong>解释型</strong>：不需要编译，由浏览器直接解释执行</li>
+<li><strong>基于对象</strong>：支持面向对象编程，但没有类的概念（ES6之前）</li>
+<li><strong>动态类型</strong>：变量类型在运行时确定，无需声明类型</li>
 </ul>
-<h3 id="PHP在Web开发中的角色："><a href="#PHP在Web开发中的角色：" class="headerlink" title="PHP在Web开发中的角色："></a>PHP在Web开发中的角色：</h3><ul>
-<li>生成动态网页内容</li>
-<li>处理表单数据</li>
-<li>与数据库交互</li>
-<li>创建会话和Cookie</li>
-<li>生成图像和PDF</li>
-<li>与其他系统通信</li>
-</ul>
-<h3 id="PHP与Java-JavaScript的区别："><a href="#PHP与Java-JavaScript的区别：" class="headerlink" title="PHP与Java&#x2F;JavaScript的区别："></a>PHP与Java&#x2F;JavaScript的区别：</h3><ul>
-<li>PHP是服务器端语言，Java可以是客户端也可以是服务器端</li>
-<li>Java与JavaScript没有关系，只是名字相似</li>
-<li>PHP执行在服务器上，JavaScript执行在客户端</li>
-</ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3>
+<p>JavaScript主要运行在客户端浏览器中，但随着Node.js的发展，现在也可以在服务器端运行。</p>
+<h3 id="为什么需要JavaScript？"><a href="#为什么需要JavaScript？" class="headerlink" title="为什么需要JavaScript？"></a>为什么需要JavaScript？</h3><ol>
+<li><strong>交互性</strong>：创建动态网页效果（如表单验证、动画效果）</li>
+<li><strong>异步通信</strong>：通过AJAX实现与服务器的异步通信</li>
+<li><strong>操作DOM</strong>：动态修改网页内容和结构</li>
+<li><strong>操作BOM</strong>：控制浏览器行为（如窗口、历史记录等）</li>
+</ol>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 简单的JavaScript代码示例</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello, JavaScript!&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 表单验证示例</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">validateForm</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> username = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;username&#x27;</span>).<span class="property">value</span>;</span><br><span class="line">    <span class="keyword">if</span> (username.<span class="property">length</span> &lt; <span class="number">5</span>) &#123;</span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&quot;用户名至少需要5个字符&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-嵌入方法"><a href="#2-嵌入方法" class="headerlink" title="2. 嵌入方法"></a>2. 嵌入方法</h2><h3 id="2-1-内嵌式"><a href="#2-1-内嵌式" class="headerlink" title="2.1 内嵌式"></a>2.1 内嵌式</h3>
 	
 	</div>
-  <a type="button" href="/2025/12/06/PHP基础详解/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/06/js基础/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -298,45 +292,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
 		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
-		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
-		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
-		
-			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+			<li><a href="/tags/堆/">堆<span>1</span></a></li>
 		
 			<li><a href="/tags/Next/">Next<span>1</span></a></li>
 		
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
+		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+		
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
 			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

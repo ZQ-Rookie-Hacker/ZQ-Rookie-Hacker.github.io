@@ -703,26 +703,41 @@ h2 {
     font-size: 125%
 }
 
-/* TOC 列表 */
-.toc-article {
-    list-style: none;
-    line-height: 1;
+/* TOC 列表 — 强制去掉数字 */
+.toc-article,
+.toc-article ol,
+.toc-article ul,
+.toc-article ol ol,
+.toc-article ul ul {
+    list-style: none !important;
+    list-style-type: none !important;
+    counter-reset: none !important;
     margin: 0;
     padding: 0;
 }
 
-.toc-article li {
+.toc-article li,
+.toc-article ol li,
+.toc-article ul li {
     margin: 0 !important;
     padding: 0 !important;
+    list-style: none !important;
+    list-style-type: none !important;
 }
 
-.toc-article ol {
-    list-style: none;
+.toc-article ol,
+.toc-article ul {
     padding-left: 14px;
 }
 
-.toc-article ol ol {
+.toc-article ol ol,
+.toc-article ul ul {
     padding-left: 14px;
+}
+
+/* 去掉 toc 生成的数字前缀 */
+.toc-article .toc-number {
+    display: none !important;
 }
 
 .line {

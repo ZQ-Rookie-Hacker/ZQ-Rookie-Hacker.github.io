@@ -118,7 +118,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/05/数据链路层/" >数据链路层</a>
+			<a href="/2025/12/05/应用层/" >应用层</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -132,179 +132,105 @@
   <div class="row">
 	
 	
-		<h2 id="3-1-数据链路层的功能"><a href="#3-1-数据链路层的功能" class="headerlink" title="3.1   数据链路层的功能"></a>3.1   数据链路层的功能</h2><h3 id="3-1-1-数据链路层"><a href="#3-1-1-数据链路层" class="headerlink" title="3.1.1   数据链路层"></a>3.1.1   数据链路层</h3><ul>
-<li>通信示例<ul>
-<li>主机H1 → 路由器R1 → 广域网 → 路由器R2 → 主机H2</li>
-<li>主机使用完整五层协议栈</li>
-<li>路由器仅使用下三层协议栈</li>
-</ul>
-</li>
-<li>数据流动特点<ul>
-<li>数据在路径节点协议栈中多次上下流动</li>
-<li>学习时通常只关心水平方向数据链路层</li>
-</ul>
-</li>
+		<h2 id="6-1-网络应用模型"><a href="#6-1-网络应用模型" class="headerlink" title="6.1   网络应用模型"></a>6.1   网络应用模型</h2><h3 id="6-1-1-客户-服务器模型"><a href="#6-1-1-客户-服务器模型" class="headerlink" title="6.1.1    客户&#x2F;服务器模型"></a>6.1.1    客户&#x2F;服务器模型</h3><ul>
 <li>基本概念<ul>
-<li><ol>
-<li>链路</li>
-</ol>
-<ul>
-<li>定义：节点到相邻节点的一段物理线路</li>
-<li>特点：通信路径的组成部分</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>数据链路</li>
-</ol>
-<ul>
-<li>组成：物理链路 + 通信协议（硬件和软件）</li>
-<li>别名：物理链路 vs 逻辑链路</li>
-</ul>
-</li>
-<li><ol start="3">
-<li>帧</li>
-</ol>
-<ul>
-<li>定义：数据链路层协议数据单元</li>
-<li>功能：封装网络层数据&#x2F;向上交付数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>3.1.2 链路管理<ul>
-<li>定义：连接的建立、维持和释放过程</li>
-<li>应用：主要用于面向连接的服务</li>
-<li>过程<ul>
-<li>确认对方就绪状态</li>
-<li>交换必要信息</li>
-<li>初始化帧序号</li>
-<li>建立连接 → 维持连接 → 释放连接</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-4-封装成帧与透明传输"><a href="#3-1-4-封装成帧与透明传输" class="headerlink" title="3.1.4   封装成帧与透明传输"></a>3.1.4   封装成帧与透明传输</h3><ul>
-<li>定义<ul>
-<li>限制发送方的发送速率，使之不超过接收方的接收能力</li>
-<li>防止帧丢失和错误</li>
-</ul>
-</li>
-<li>原因<ul>
-<li>链路两端节点的工作速率和缓存空间存在差异</li>
-<li>发送能力可能大于接收能力</li>
-</ul>
-</li>
-<li>实现机制<ul>
-<li>通过反馈机制控制发送<ul>
-<li>可继续发送下一帧的情况</li>
-<li>必须暂停发送等待反馈的情况</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>体系结构差异<ul>
-<li>OSI体系结构<ul>
-<li>数据链路层实现流量控制</li>
-<li>控制相邻节点间数据链路上的流量</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP体系结构<ul>
-<li>传输层实现流量控制</li>
-<li>控制源端到目的端之间的流量</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-5-流量控制"><a href="#3-1-5-流量控制" class="headerlink" title="3.1.5   流量控制"></a>3.1.5   流量控制</h3><ul>
-<li>原因<ul>
-<li>链路两端节点工作速率和缓存空间存在差异。</li>
-<li>发送方发送能力可能大于接收方接收能力。</li>
-<li>若不限制发送方发送速率，来不及接收的帧会被后续帧“淹没”，造成帧丢失出错。</li>
-</ul>
-</li>
-<li>目的<ul>
-<li>限制发送方发送速率，不超过接收方接收能力。</li>
-</ul>
-</li>
-<li>实现方式<ul>
-<li>通过某种反馈机制。</li>
-<li>使发送方知晓何时可接着发送下一帧。</li>
-<li>使发送方知晓何时必须暂停发送，等待反馈信息后继续发送。</li>
-</ul>
-</li>
-<li>不同体系结构中的情况<ul>
-<li>OSI体系结构<ul>
-<li>数据链路层具有流量控制功能。</li>
-<li>控制对象是相邻节点之间数据链路上的流量。</li>
-</ul>
-</li>
-<li>TCP&#x2F;IP体系结构<ul>
-<li>流量控制功能移到传输层。</li>
-<li>控制对象是从源端到目的端之间的流量。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-1-6-差错检测"><a href="#3-1-6-差错检测" class="headerlink" title="3.1.6   差错检测"></a>3.1.6   差错检测</h3><ul>
-<li>传输错误原因<ul>
-<li>信道噪声导致帧传输错误</li>
-</ul>
-</li>
-<li>错误类型<ul>
-<li>位错<ul>
-<li>定义：帧中某些位出现差错</li>
-<li>检测方法：循环冗余检验(CRC)</li>
-</ul>
-</li>
-<li>帧错<ul>
-<li>类型<ul>
-<li>帧丢失</li>
-<li>帧重复</li>
-<li>帧失序</li>
-</ul>
-</li>
-<li>性质：都属于传输差错</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>历史处理方式(OSI观点)<ul>
-<li>要求数据链路层提供可靠传输</li>
-<li>实现机制<ul>
-<li>在CRC检错基础上增加<ul>
-<li>帧编号</li>
-<li>确认机制</li>
-<li>重传机制</li>
+<li>有一个总是打开的主机称为服务器</li>
+<li>服务于许多来自其他称为客户机的主机请求</li>
 </ul>
 </li>
 <li>工作流程<ul>
-<li>接收方收到正确帧后发送确认</li>
-<li>发送方未收到确认时重传</li>
+<li><ol>
+<li>服务器处于接收请求的状态</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>客户机发出服务请求，并等待接收结果</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>服务器收到请求后</li>
+</ol>
+<ul>
+<li>分析请求</li>
+<li>进行必要的处理</li>
+<li>得到结果并发送给客户机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>服务器特点<ul>
+<li>运行专门提供服务的程序</li>
+<li>可以同时处理多个客户请求<ul>
+<li>包括远程或本地客户</li>
+</ul>
+</li>
+<li>不需要知道客户程序地址</li>
+</ul>
+</li>
+<li>客户机特点<ul>
+<li>必须知道服务器程序地址</li>
+</ul>
+</li>
+<li>主要特征<ul>
+<li>客户是服务请求方</li>
+<li>服务器是服务提供方</li>
+<li>举例<ul>
+<li>Web应用程序<ul>
+<li>Web服务器服务于浏览器请求</li>
+<li>处理流程<ul>
+<li>接收客户机请求</li>
+<li>发送所请求对象响应</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>现代应用场景<ul>
-<li>无线传输(通信质量差)<ul>
-<li>仍使用确认和重传机制</li>
-<li>向上提供可靠传输服务</li>
 </ul>
 </li>
-<li>有线链路(通信质量好)<ul>
-<li>不再使用确认和重传机制</li>
-<li>仅进行CRC检错<ul>
-<li>处理方式：丢弃有差错帧</li>
-<li>目的：保证上交帧都正确</li>
+<li>常见应用<ul>
+<li>Web</li>
+<li>文件传输协议(FTP)</li>
+<li>远程登录</li>
+<li>电子邮件</li>
 </ul>
 </li>
-<li>重传任务转移<ul>
-<li>由高层协议完成</li>
-<li>例如：传输层TCP协议</li>
+<li>主要特点<ul>
+<li><ol>
+<li>网络中各计算机地位不平等</li>
+</ol>
+<ul>
+<li>服务器可管理客户机<ul>
+<li>通过用户权限限制</li>
+</ul>
+</li>
+<li>网络管理集中方便<ul>
+<li>由少数服务器负责</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ol start="2">
+<li>客户机间不直接通信</li>
+</ol>
+<ul>
+<li>举例<ul>
+<li>Web应用中两个浏览器不直接通信</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ol start="3">
+<li>可扩展性不佳</li>
+</ol>
+<ul>
+<li>限制因素<ul>
+<li>服务器硬件限制</li>
+<li>网络带宽限制</li>
+</ul>
+</li>
+<li>结果<ul>
+<li>服务器支持的客户机数量有限</li>
 </ul>
 </li>
 </ul>
@@ -312,10 +238,217 @@
 </ul>
 </li>
 </ul>
-<h2 id="3-2-组帧"><a href="#3-2-组帧" class="headerlink" title="3.2   组帧"></a>3.2   组帧</h2>
+<h3 id="6-1-2-P2P模型"><a href="#6-1-2-P2P模型" class="headerlink" title="6.1.2    P2P模型"></a>6.1.2    P2P模型</h3><ul>
+<li>基本概念<ul>
+<li>网络中的传输内容不再保存在中心服务器上</li>
+<li>每个节点同时具有下载、上传功能</li>
+<li>权利和义务大体对等</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>无固定客户和服务器划分</li>
+<li>任意对等方(Peer)直接相互通信</li>
+<li>本质仍使用客户&#x2F;服务器模型<ul>
+<li>节点既作为客户访问资源</li>
+<li>又作为服务器提供资源</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>减轻服务器计算压力</li>
+<li>消除对单个服务器的依赖</li>
+<li>任务分配到各个节点</li>
+<li>提高系统效率和资源利用率</li>
+<li>客户机间可直接共享文档</li>
+<li>可扩展性好</li>
+<li>网络健壮性强</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>占用较多内存</li>
+<li>影响整机速度</li>
+<li>对硬盘损伤较大</li>
+<li>占用大量网络流量(50%-90%)</li>
+<li>导致网络拥塞</li>
+<li>ISP通常反对P2P应用</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-2-域名系统-DNS"><a href="#6-2-域名系统-DNS" class="headerlink" title="6.2  域名系统(DNS)"></a>6.2  域名系统(DNS)</h2><h3 id="6-2-1-层次域名空间"><a href="#6-2-1-层次域名空间" class="headerlink" title="6.2.1    层次域名空间"></a>6.2.1    层次域名空间</h3><ul>
+<li><p>层次域名空间</p>
+<ul>
+<li>因特网采用层次树状结构的命名方法</li>
+<li>每个连接设备都有唯一的域名(Domain Name)</li>
+<li>域(Domain)是名字空间中的可管理划分<ul>
+<li>可划分为子域</li>
+<li>形成多级域名结构(顶级域、二级域、三级域等)</li>
+</ul>
+</li>
+<li>域名组成<ul>
+<li>由标号序列组成</li>
+<li>标号之间用点(“.”)分隔</li>
+<li>示例：<a target="_blank" rel="noopener" href="http://www.cskaoyan.com/">www.cskaoyan.com</a><ul>
+<li>com: 顶级域名</li>
+<li>cskaoyan: 二级域名</li>
+<li>www: 三级域名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>标号规则</p>
+<ul>
+<li>英文不区分大小写</li>
+<li>只能使用连字符(-)，不能使用其他标点符号</li>
+<li>单个标号不超过63个字符</li>
+<li>完整域名最长不超过255个字符</li>
+<li>域名书写顺序<ul>
+<li>最低级域名在最左边</li>
+<li>顶级域名在最右边</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>顶级域名分类(TLD)</p>
+<ul>
+<li>国家(地区)顶级域名(nTLD)<ul>
+<li>.cn: 中国</li>
+<li>.us: 美国</li>
+<li>.uk: 英国</li>
+</ul>
+</li>
+<li>通用顶级域名(gTLD)<ul>
+<li>.com: 公司</li>
+<li>.net: 网络服务机构</li>
+<li>.org: 非营利性组织</li>
+<li>.edu: 教育机构</li>
+<li>.gov: 政府部门</li>
+</ul>
+</li>
+<li>基础结构域名<ul>
+<li>arpa: 用于反向域名解析(IP→域名)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>域名空间树状结构</p>
+<ul>
+<li>根<ul>
+<li>顶级域名<ul>
+<li>aero</li>
+<li>com</li>
+<li>net</li>
+<li>org</li>
+<li>edu</li>
+<li>gov</li>
+<li>cn</li>
+<li>uk</li>
+</ul>
+</li>
+<li>二级域名(示例)<ul>
+<li>cskaoyan</li>
+<li>cctv</li>
+<li>google</li>
+<li>bj</li>
+<li>edu</li>
+<li>com</li>
+</ul>
+</li>
+<li>三级域名(示例)<ul>
+<li>mail</li>
+<li>www</li>
+<li>hust</li>
+<li>hit</li>
+</ul>
+</li>
+<li>四级域名(示例)<ul>
+<li>mail</li>
+<li>www</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>域名管理</p>
+<ul>
+<li>顶级域名由ICANN管理</li>
+<li>国家顶级域名下的二级域名由各国自行管理</li>
+<li>子域可委托给其他组织管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-2-2-域名服务器"><a href="#6-2-2-域名服务器" class="headerlink" title="6.2.2   域名服务器"></a>6.2.2   域名服务器</h3><ul>
+<li>定义<ul>
+<li>域名到IP地址的解析由运行在域名服务器上的程序完成</li>
+<li>管辖范围称为区（小于或等于域）</li>
+<li>每个区设置权限域名服务器保存域名到IP地址的映射</li>
+<li>域名服务器功能<ul>
+<li>进行域名到IP地址的解析</li>
+<li>具有连向其他域名服务器的信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DNS服务器层次结构<ul>
+<li>按层次方式组织</li>
+<li>映射分布在所有域名服务器上</li>
+<li>四种类型<ul>
+<li>根域名服务器<ul>
+<li>最高层次</li>
+<li>知道所有顶级域名服务器的域名和IP地址</li>
+<li>13个根域名服务器（实际是冗余服务器集群）</li>
+<li>功能<ul>
+<li>管辖顶级域（如.com）</li>
+<li>通常不直接转换域名，而是指引查询方向</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>顶级域名服务器<ul>
+<li>管理在该顶级域名服务器注册的所有二级域名</li>
+<li>响应DNS查询请求<ul>
+<li>可能给出最终结果</li>
+<li>可能指引下一步查询</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限域名服务器（授权域名服务器）<ul>
+<li>每台主机必须在此登记</li>
+<li>建议至少两台以提高可靠性</li>
+<li>功能<ul>
+<li>总能将其管辖的主机名转换为IP地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本地域名服务器<ul>
+<li>重要性<ul>
+<li>对域名系统非常重要</li>
+</ul>
+</li>
+<li>部署<ul>
+<li>ISP、大学或院系可拥有</li>
+</ul>
+</li>
+<li>功能<ul>
+<li>接收主机的DNS查询请求</li>
+<li>在Windows系统中配置为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 	
 	</div>
-  <a type="button" href="/2025/12/05/数据链路层/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/05/应用层/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -814,45 +947,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
-		
-			<li><a href="/tags/js/">js<span>1</span></a></li>
-		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
-		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
-		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
-		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
-		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
-		
-			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
 			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
+			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+		
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
+		
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+		
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
 			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
 		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
 		
 			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
-		
-			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>60</span></a></li>

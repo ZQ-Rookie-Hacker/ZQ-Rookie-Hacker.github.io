@@ -223,6 +223,14 @@
 <td><code>--format</code></td>
 <td>输出格式（json&#x2F;csv&#x2F;html）</td>
 </tr>
+<tr>
+<td><code>--proxy</code></td>
+<td>代理（<a href="http://ip:port）">http://ip:port）</a></td>
+</tr>
+<tr>
+<td><code>--proxy-file</code></td>
+<td>代理池文件（每行一个代理）</td>
+</tr>
 </tbody></table>
 <h2 id="执行说明"><a href="#执行说明" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">P0 (每次必跑，~8分钟)</span><br><span class="line"> ├── 1. 万能快速扫描</span><br><span class="line"> ├── 2. 敏感文件/备份泄露</span><br><span class="line"> └── 3. Git/SVN 源码泄露</span><br><span class="line"></span><br><span class="line">P1 (重要补充，~15分钟)</span><br><span class="line"> ├── 4. 递归深度扫描</span><br><span class="line"> ├── 5. 带认证扫描</span><br><span class="line"> └── 6. JS/API 端点发现</span><br><span class="line"></span><br><span class="line">P2 (深度挖掘，~30分钟)</span><br><span class="line"> ├── 7. 自定义大字典</span><br><span class="line"> ├── 8. 多方法扫描 PUT/OPTIONS</span><br><span class="line"> └── 9. 状态码精细过滤/403绕过</span><br><span class="line"></span><br><span class="line">P3 (特殊场景，按需)</span><br><span class="line"> ├── 10. WAF/CC绕过</span><br><span class="line"> ├── 11. 批量目标扫描</span><br><span class="line"> └── 12. CMS/框架专项</span><br></pre></td></tr></table></figure>
 

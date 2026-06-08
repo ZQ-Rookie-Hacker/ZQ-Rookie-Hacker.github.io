@@ -132,14 +132,16 @@
   <div class="row">
 	
 	
-		<p>内容来自：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoweigege/p/14954648.html#%E9%A1%B5%E9%9D%A2%E6%9C%80%E6%97%A9%E5%8A%A0%E8%BD%BD%E4%BB%A3%E7%A0%81hook%E6%97%B6%E6%9C%BA">JavaScript常用的Hook脚本</a></p>
-<h2 id="监听-键盘-与-鼠标-事件"><a href="#监听-键盘-与-鼠标-事件" class="headerlink" title="监听 键盘 与 鼠标 事件"></a>监听 键盘 与 鼠标 事件</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 判断是否按下F12  onkeydown事件</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">提示： 与 onkeydown 事件相关联的事件触发次序:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">onkeydown</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">onkeypress</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">onkeyup</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// F12的键码为 123，可以直接全局搜索 keyCode == 123, == 123 ,keyCode</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onkeydown</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">event</span> &amp;&amp; <span class="variable language_">window</span>.<span class="property">event</span>.<span class="property">keyCode</span> == <span class="number">123</span>) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 改变键码</span></span><br><span class="line">        event.<span class="property">keyCode</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        event.<span class="property">returnValue</span> = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 监听到F12被按下直接关闭窗口</span></span><br><span class="line">        <span class="variable language_">window</span>.<span class="title function_">close</span>();</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听鼠标右键是否被按下方法 1， oncontextmenu事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">oncontextmenu</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听鼠标右键是否被按下方法 2，onmousedown事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onmousedown</span> = <span class="keyword">function</span>(<span class="params">evt</span>)&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// button属性是2 就代表是鼠标右键 </span></span><br><span class="line">    <span class="keyword">if</span>(evt.<span class="property">button</span> == <span class="number">2</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&#x27;监听到鼠标右键被按下&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        evt.<span class="title function_">preventDefault</span>() <span class="comment">// 该方法将通知 Web 浏览器不要执行与事件关联的默认动作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听用户工具栏调起开发者工具，判断浏览器的可视高度和宽度是否有改变，有改变则处理，</span></span><br><span class="line"><span class="comment">// 判断是否开了开发者工具不太合理。</span></span><br><span class="line"><span class="keyword">var</span> h = <span class="variable language_">window</span>.<span class="property">innerHeight</span>, w = <span class="variable language_">window</span>.<span class="property">innerWidth</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">onresize</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;改变了窗口高度&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// hook代码</span></span><br><span class="line">(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//严谨模式 检查所有错误</span></span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// hook 鼠标选择</span></span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(<span class="variable language_">document</span>, <span class="string">&#x27;onselectstart&#x27;</span>, &#123;</span><br><span class="line">		<span class="attr">set</span>: <span class="keyword">function</span>(<span class="params">val</span>) &#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Hook捕获到选中设置-&gt;&#x27;</span>, val);</span><br><span class="line">			<span class="keyword">return</span> val;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// hook 鼠标右键</span></span><br><span class="line">	<span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(<span class="variable language_">document</span>,<span class="string">&#x27;oncontextmenu&#x27;</span>,&#123;</span><br><span class="line">		<span class="attr">set</span>:<span class="keyword">function</span>(<span class="params">evt</span>)&#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;检测到右键点击&quot;</span>);</span><br><span class="line">			<span class="keyword">return</span> evt</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+		<h2 id="0x00-为什么可以hook？"><a href="#0x00-为什么可以hook？" class="headerlink" title="0x00:为什么可以hook？"></a>0x00:为什么可以hook？</h2><p>Hook 之所以能生效，是 JavaScript 语言特性与浏览器架构共同决定的。</p>
+<p><strong>浏览器提供了可拦截的 API 层</strong></p>
+<p>浏览器将底层能力（网络请求、DOM 操作、Cookie 读写等）通过 Web API 暴露给 JS。这些 API 在底层由 C++ 实现，但在 JS 层面，它们以对象属性和方法的形式挂在 <code>window</code>、<code>document</code>、<code>XMLHttpRequest.prototype</code> 等全局对象上。关键在于：浏览器没有对这些 JS 层的绑定做只读保护，所以我们可以在 JS 层替换它们。</p>
+<p>同时，浏览器是单线程执行模型，我们的 hook 脚本和目标页面代码运行在同一个 JS 上下文中，共享同一个全局作用域和对象引用。这意味着你修改了 <code>JSON.parse</code>，目标代码调用 <code>JSON.parse</code> 时就会走进你注入的函数。</p>
+<p><strong>在此基础上，JS 的三个语言特性让 hook 变得简单：</strong></p>
+<p><strong>1. 函数是第一类对象（First-class Object）</strong></p>
+<p>在 JS 中，函数和普通对象一样可以被赋值、传递、覆盖。浏览器内置的 API（如 <code>document.cookie</code> 的 setter、<code>XMLHttpRequest.prototype.open</code>）本质上也是挂载在对象上的属性，所以可以直接被替换：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 保存原函数引用</span></span><br><span class="line"><span class="keyword">var</span> original = <span class="title class_">JSON</span>.<span class="property">parse</span>;</span><br><span class="line"><span class="comment">// 用自己的函数覆盖</span></span><br><span class="line"><span class="title class_">JSON</span>.<span class="property">parse</span> = <span class="keyword">function</span>(<span class="params">params</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;拦截到:&quot;</span>, params);</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">original</span>(params); <span class="comment">// 调用原函数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h2 id="webpack-hook-半自动扣"><a href="#webpack-hook-半自动扣" class="headerlink" title="webpack hook 半自动扣"></a>webpack hook 半自动扣</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//在加载器后面下断点  执行下面代码</span></span><br><span class="line"><span class="comment">// 这里的f 替换成需要导出的函数名</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">zhiyuan</span> = f;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">wbpk_</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">isz</span> = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">f = <span class="keyword">function</span>(<span class="params">r</span>)&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="variable language_">window</span>.<span class="property">isz</span>)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">// e[r]里的e 是加载器里的call那里</span></span><br><span class="line">		<span class="variable language_">window</span>.<span class="property">wbpk_</span> = <span class="variable language_">window</span>.<span class="property">wbpk_</span> + r.<span class="title function_">toString</span>()+<span class="string">&quot;:&quot;</span>+(e[r]+<span class="string">&quot;&quot;</span>)+ <span class="string">&quot;,&quot;</span>;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="variable language_">window</span>.<span class="title function_">zhiyuan</span>(r);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在你要的方法加载前下断点 执行 window.isz=true</span></span><br><span class="line"><span class="comment">//在你要的方法运行后代码处下断点  执行 window.wbpk_  拿到所有代码  注意后面有个逗号</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">o</span>(<span class="params">t</span>) &#123;</span><br><span class="line">     <span class="keyword">if</span> (n[t])</span><br><span class="line">        <span class="keyword">return</span> n[t].<span class="property">exports</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> i = n[t] = &#123;</span><br><span class="line">        <span class="attr">i</span>: t,</span><br><span class="line">        <span class="attr">l</span>: !<span class="number">1</span>,</span><br><span class="line">        <span class="attr">exports</span>: &#123;&#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;被调用的 &gt;&gt;&gt; &quot;</span>, e[t].<span class="title function_">toString</span>());</span><br><span class="line">    <span class="comment">//  这里进行拼接，bb变量需要在全局定义一下 </span></span><br><span class="line">    <span class="comment">// t 是模块名， e[t] 是模块对应的函数， 也就是key：value形式</span></span><br><span class="line">    bb += <span class="string">`&quot;<span class="subst">$&#123;t&#125;</span>&quot;:<span class="subst">$&#123;e[t].toString()&#125;</span>,`</span></span><br><span class="line">    <span class="keyword">return</span> e[t].<span class="title function_">call</span>(i.<span class="property">exports</span>, i, i.<span class="property">exports</span>, o),</span><br><span class="line"></span><br><span class="line">    i.<span class="property">l</span> = !<span class="number">0</span>,</span><br><span class="line"></span><br><span class="line">    i.<span class="property">exports</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bz = o;</span><br></pre></td></tr></table></figure>
-<p>如果只是调用模块，不用模块里面的方法, 那么直接获取调用模块的时候所有加载过的模块，进行拼接</p>
-<h2 id="document下的createElement-方法的hook-查看创建了什么元素"><a href="#document下的createElement-方法的hook-查看创建了什么元素" class="headerlink" title="document下的createElement()方法的hook,查看创建了什么元素"></a>document下的createElement()方法的hook,查看创建了什么元素</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span></span><br><span class="line">   <span class="keyword">var</span> _createElement = <span class="variable language_">document</span>.<span class="property">createElement</span>.<span class="title function_">bind</span>(<span class="variable language_">document</span>);</span><br><span class="line"></span><br><span class="line">   <span class="variable language_">document</span>.<span class="property">createElement</span> = <span class="keyword">function</span>(<span class="params">elm</span>)&#123;</span><br><span class="line">   <span class="comment">// 这里做判断 是否创建了script这个元素    </span></span><br><span class="line">   <span class="keyword">if</span>(elm == <span class="string">&#x27;body&#x27;</span>)&#123;</span><br><span class="line">        <span class="keyword">debugger</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">_createElement</span>(elm);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>之前我不知道我用的是 <code>var _createElement = document.createElement</code> 导致一直报错 <code>Uncaught TypeError: Illegal invocation</code><br>原来是需要绑定一下对象 <code>var _createElement = document.createElement.bind(document);</code></p>
-<h2 id="headers-hook-当header中包含Authorization时，则插入断点"><a href="#headers-hook-当header中包含Authorization时，则插入断点" class="headerlink" title="headers hook 当header中包含Authorization时，则插入断点"></a>headers hook 当header中包含Authorization时，则插入断点</h2>
+<p>这就是最基础的 hook —— 保存原引用，替换为新函数，新函数内部再调用原引用。</p>
 	
 	</div>
   <a type="button" href="/2026/06/07/HookScripts/#more" class="btn btn-default more">阅读此文</a>
@@ -282,45 +284,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
 		
-			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
 		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
-		
-			<li><a href="/tags/Git/">Git<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
 			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
 			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
 		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
 		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
 		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
 		
 			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/hook/">hook<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>61</span></a></li>

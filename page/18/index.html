@@ -118,7 +118,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/05/网络层/" >网络层</a>
+			<a href="/2025/12/05/计算机网络体系结构/" >计算机网络体系结构</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -132,282 +132,280 @@
   <div class="row">
 	
 	
-		<h2 id="4-1-网络层的功能"><a href="#4-1-网络层的功能" class="headerlink" title="4.1   网络层的功能"></a>4.1   网络层的功能</h2><h3 id="4-1-1-异构网络互连"><a href="#4-1-1-异构网络互连" class="headerlink" title="4.1.1   异构网络互连"></a>4.1.1   异构网络互连</h3><ul>
+		<h2 id="1-1-计算机网络概述"><a href="#1-1-计算机网络概述" class="headerlink" title="1.1   计算机网络概述"></a>1.1   计算机网络概述</h2><h3 id="1-1-1-计算机网络的概念"><a href="#1-1-1-计算机网络的概念" class="headerlink" title="1.1.1   计算机网络的概念"></a>1.1.1   计算机网络的概念</h3><ul>
+<li>计算机网络的概念<ul>
 <li>定义<ul>
-<li>互联网由全球范围内数以百万计的异构网络互连</li>
-<li>网络层任务之一是实现异构网络互连</li>
-<li>网络互连：将两个以上计算机网络通过中继系统相互连接</li>
+<li>将众多分散的、自治的计算机系统，通过通信设备与线路连接起来</li>
+<li>由功能完善的软件实现资源共享和信息传递的系统</li>
 </ul>
 </li>
-<li>中继系统分类（按层次）<ul>
-<li>物理层中继系统<ul>
-<li>转发器</li>
+<li>组成<ul>
+<li>节点(Node)<ul>
+<li>计算机</li>
 <li>集线器</li>
-</ul>
-</li>
-<li>数据链路层中继系统<ul>
-<li>网桥</li>
 <li>交换机</li>
-</ul>
-</li>
-<li>网络层中继系统<ul>
 <li>路由器</li>
 </ul>
 </li>
-<li>网络层以上中继系统<ul>
-<li>网关</li>
+<li>链路(Link)</li>
 </ul>
 </li>
+<li>互连网(internet)<ul>
+<li>网络之间通过路由器互连</li>
+<li>构成覆盖范围更广的计算机网络</li>
 </ul>
 </li>
-<li>网络互连特点<ul>
-<li>通常指用路由器进行连接和路由选择</li>
-<li>路由器是专用计算机</li>
-<li>历史原因：路由器有时被称为网关</li>
+<li>名词区分<ul>
+<li>internet(互连网)<ul>
+<li>通用名词</li>
+<li>多个计算机网络互连而成</li>
+<li>可使用任意通信协议</li>
 </ul>
 </li>
-<li>TCP&#x2F;IP网络互连方案<ul>
-<li>网络层采用标准化协议</li>
-<li>可连接异构网络</li>
-<li>IP网络概念<ul>
-<li>实际互连网络（通过路由器连接）</li>
-<li>虚拟IP网络（统一网络视图）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>IP网络优势<ul>
-<li>主机通信时如同在单个网络上</li>
-<li>隐藏底层网络异构细节</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-1-2-路由与转发"><a href="#4-1-2-路由与转发" class="headerlink" title="4.1.2   路由与转发"></a>4.1.2   路由与转发</h3><ul>
-<li>路由器主要完成两个功能<ul>
-<li>路由选择(确定哪一条路径)<ul>
-<li>根据路由选择协议构造并维护路由表</li>
-<li>经常或定期与相邻路由器交换信息</li>
-<li>获取网络最新拓扑</li>
-<li>动态更新维护路由表</li>
-<li>决定分组到达目的地节点的最优路径</li>
-</ul>
-</li>
-<li>分组转发(分组到达时所采取的动作)<ul>
-<li>处理通过路由器的数据流</li>
-<li>关键操作<ul>
-<li>转发表查询</li>
-<li>转发</li>
-<li>队列管理</li>
-<li>任务调度</li>
+<li>Internet(互联网&#x2F;因特网)<ul>
+<li>专用名词</li>
+<li>全球最大、开放的特定计算机网络</li>
+<li>采用TCP&#x2F;IP族作为通信规则</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>路由表与转发表的关系<ul>
-<li>路由表根据路由选择算法得出</li>
-<li>转发表从路由表得出</li>
-<li>转发表结构优化查找过程</li>
-<li>路由表优化网络拓扑变化计算</li>
+</ul>
+<h3 id="1-1-2-计算机网络的组成"><a href="#1-1-2-计算机网络的组成" class="headerlink" title="1.1.2   计算机网络的组成"></a>1.1.2   计算机网络的组成</h3><ul>
+<li>从组成部分看<ul>
+<li>硬件<ul>
+<li>主机(端系统)</li>
+<li>通信链路<ul>
+<li>双绞线</li>
+<li>光纤</li>
 </ul>
 </li>
-<li>注意<ul>
-<li>讨论路由选择原理时<ul>
-<li>不区分转发表和路由表</li>
-<li>笼统使用路由表一词</li>
+<li>交换设备<ul>
+<li>路由器</li>
+<li>交换机</li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-<h3 id="4-1-3-网络层提供的两种服务"><a href="#4-1-3-网络层提供的两种服务" class="headerlink" title="4.1.3    网络层提供的两种服务"></a>4.1.3    网络层提供的两种服务</h3><ul>
-<li><p>网络层提供两种通信服务方式</p>
-<ul>
-<li>面向连接的虚电路服务</li>
-<li>无连接的数据报服务</li>
-</ul>
-</li>
-<li><p>①. 虚电路（Virtual Circuit, VC）</p>
-<ul>
-<li>基本概念<ul>
-<li>计算机通信前先建立网络层连接</li>
-<li>连接是一条逻辑上的路径（非物理专用）</li>
-<li>分为三个阶段：建立、传输、释放</li>
-</ul>
-</li>
-<li>虚电路号（VCID）<ul>
-<li>每次建立时分配唯一编号</li>
-<li>区分不同虚电路</li>
-</ul>
-</li>
-<li>数据传输特点<ul>
-<li>首部仅携带VCID，不重复目的地址</li>
-<li>每个节点维护虚电路表<ul>
-<li>包含VCID、入链路、出链路、前后节点等信息</li>
+<li>通信处理机<ul>
+<li>网卡</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>工作流程<ul>
-<li>建立连接：发送“呼叫请求”分组 → 接收方确认“呼叫应答”</li>
-<li>数据传输：通过已建立路径传输数据分组</li>
-<li>释放连接：发送“释放请求”分组 → 逐段拆除连接</li>
-</ul>
-</li>
-<li>特点总结<ul>
-<li>建立&#x2F;拆除需要开销，适合长时间频繁通信</li>
-<li>路由选择在连接建立时确定</li>
-<li>提供可靠传输、有序到达、流量控制</li>
-<li>对网络故障适应性差<ul>
-<li>节点或链路失效 → 所有相关虚电路中断</li>
-</ul>
-</li>
-<li>分组首部开销小（只用VCID）</li>
+<li>软件<ul>
+<li>资源共享软件</li>
+<li>工具软件<ul>
+<li>E-mail程序</li>
+<li>FTP程序</li>
+<li>聊天程序</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>②. 数据报（Datagram）</p>
-<ul>
-<li>基本概念<ul>
-<li>发送前不需要建立连接</li>
-<li>每个分组独立路由转发</li>
-<li>网络层不承诺服务质量</li>
-</ul>
-</li>
-<li>数据传输特点<ul>
-<li>每个分组包含完整源和目的地址</li>
-<li>中间节点缓存并查找转发表进行转发</li>
-<li>不保证顺序、可靠性、流量控制</li>
-</ul>
-</li>
-<li>工作流程<ul>
-<li>主机A将分组发给相邻交换节点A</li>
-<li>节点A查找转发表决定下一跳</li>
-<li>其他节点类似转发，直到到达主机B</li>
-</ul>
-</li>
-<li>特点总结<ul>
-<li>无需连接建立，灵活高效</li>
-<li>尽最大努力交付，可能出错、丢失、乱序</li>
-<li>支持资源复用，利用率高</li>
-<li>对网络故障适应性强<ul>
-<li>可动态更新路由避开故障节点</li>
-</ul>
-</li>
-<li>分组需排队转发，可能造成延迟或丢包</li>
+<li>协议<ul>
+<li>网络传输数据规范</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>③. 数据报服务与虚电路服务比较</p>
-<ul>
-<li>连接的建立<ul>
-<li>数据报服务：不需要</li>
-<li>虚电路服务：必须有</li>
+<li>从工作方式看(Internet)<ul>
+<li>边缘部分<ul>
+<li>用户直接使用的主机</li>
+<li>功能<ul>
+<li>通信<ul>
+<li>数据传输</li>
+<li>音频&#x2F;视频</li>
 </ul>
 </li>
-<li>目的地址<ul>
-<li>数据报服务：每个分组都有完整的目的地址</li>
-<li>虚电路服务：连接阶段</li>
+<li>资源共享</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>核心部分<ul>
+<li>网络和路由器</li>
+<li>功能<ul>
+<li>提供连通性</li>
+<li>交换服务</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="4-1-4-SDN-的基本概念"><a href="#4-1-4-SDN-的基本概念" class="headerlink" title="4.1.4   SDN 的基本概念"></a>4.1.4   SDN 的基本概念</h3><ul>
-<li>网络层抽象划分<ul>
-<li>数据平面（转发层面）<ul>
-<li>功能：转发</li>
+</li>
+<li>从功能组成看<ul>
+<li>通信子网<ul>
+<li>组成<ul>
+<li>传输介质</li>
+<li>通信设备</li>
+<li>网络协议</li>
 </ul>
 </li>
-<li>控制平面<ul>
-<li>功能：路由选择</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>SDN架构特点<ul>
-<li>集中式的控制平面</li>
-<li>分布式的数据平面</li>
-<li>控制平面与数据平面分离</li>
-<li>控制平面通过控制-数据接口集中控制路由器</li>
-</ul>
-</li>
-<li>传统路由器 vs SDN路由器<ul>
-<li>传统路由器<ul>
-<li>包含转发表和路由选择软件</li>
-<li>既有数据平面又有控制平面</li>
-</ul>
-</li>
-<li>SDN路由器<ul>
-<li>简化设计</li>
-<li>无需路由选择软件</li>
-<li>路由器间不交换路由信息</li>
+<li>功能<ul>
+<li>数据传输</li>
+<li>交换</li>
+<li>控制</li>
+<li>存储</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>SDN结构<ul>
-<li>远程控制器<ul>
-<li>逻辑上的控制中心</li>
-<li>掌握网络状态</li>
-<li>计算最佳路由</li>
-<li>通过Openflow协议下发流表</li>
+<li>资源子网<ul>
+<li>组成<ul>
+<li>资源共享设备</li>
+<li>软件</li>
 </ul>
 </li>
-<li>路由器工作流程<ul>
-<li>收到分组</li>
-<li>查找转发表</li>
-<li>转发分组</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>SDN应用场景<ul>
-<li>大型数据中心之间的广域网</li>
-</ul>
-</li>
-<li>SDN接口<ul>
-<li>北向接口<ul>
-<li>面向应用开发者的编程接口</li>
-<li>提供丰富API</li>
-</ul>
-</li>
-<li>南向接口<ul>
-<li>控制器与转发设备间的双向会话接口</li>
-<li>协议示例：Openflow</li>
-</ul>
-</li>
-<li>东西向接口<ul>
-<li>控制器集群内部通信接口</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>SDN优点<ul>
-<li>全局集中式控制和分布式高速转发</li>
-<li>灵活可编程与性能的平衡</li>
-<li>降低成本</li>
-</ul>
-</li>
-<li>SDN问题<ul>
-<li>安全风险<ul>
-<li>集中管理易受攻击</li>
-</ul>
-</li>
-<li>瓶颈问题<ul>
-<li>控制器可能成为性能瓶颈</li>
+<li>功能<ul>
+<li>提供硬件资源共享服务</li>
+<li>提供软件资源共享服务</li>
+<li>提供数据资源共享服务</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="4-1-5-拥塞控制"><a href="#4-1-5-拥塞控制" class="headerlink" title="4.1.5    拥塞控制"></a>4.1.5    拥塞控制</h3>
+</li>
+</ul>
+<h3 id="1-1-3-计算机网络的功能"><a href="#1-1-3-计算机网络的功能" class="headerlink" title="1.1.3    计算机网络的功能"></a>1.1.3    计算机网络的功能</h3><ul>
+<li>数据通信<ul>
+<li>最基本和最重要的功能</li>
+<li>实现联网计算机之间各种信息的传输</li>
+<li>应用示例<ul>
+<li>文件传输</li>
+<li>电子邮件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>资源共享<ul>
+<li>共享类型<ul>
+<li>软件共享</li>
+<li>数据共享</li>
+<li>硬件共享</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>互通有无、分工协作</li>
+<li>提高资源利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分布式处理<ul>
+<li>定义<ul>
+<li>将复杂任务分配给网络中空闲计算机</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>提高系统利用率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提高可靠性<ul>
+<li>定义<ul>
+<li>各台计算机互为替代机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>负载均衡<ul>
+<li>定义<ul>
+<li>均衡分配工作任务给各台计算机</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他功能<ul>
+<li>电子化办公与服务</li>
+<li>远程教育</li>
+<li>娱乐功能</li>
+<li>社会效益<ul>
+<li>满足社会需求</li>
+<li>方便学习、工作和生活</li>
+<li>巨大经济效益</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-4-电路交换、报文交换与分组交换"><a href="#1-1-4-电路交换、报文交换与分组交换" class="headerlink" title="1.1.4    电路交换、报文交换与分组交换"></a>1.1.4    电路交换、报文交换与分组交换</h3><ul>
+<li>电路交换<ul>
+<li>特点<ul>
+<li>建立连接、传输数据、释放连接</li>
+<li>物理通信路径独占</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信时延小</li>
+<li>有序传输</li>
+<li>没有冲突</li>
+<li>实时性强</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建立连接时间长</li>
+<li>线路利用率低</li>
+<li>灵活性差</li>
+<li>难以实现差错控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>报文交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>报文为单位传输</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>无建立连接时延</li>
+<li>灵活分配线路</li>
+<li>线路利用率高</li>
+<li>支持差错控制</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>转发时延高</li>
+<li>缓存开销大</li>
+<li>错误处理低效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分组交换<ul>
+<li>特点<ul>
+<li>存储转发技术</li>
+<li>将报文划分为分组</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>方便存储管理</li>
+<li>传输效率高</li>
+<li>减少出错概率和重传代价</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>存在存储转发时延</li>
+<li>需要传输额外信息量</li>
+<li>可能出现失序、丢失或重复分组</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三种交换方式比较<ul>
+<li>电路交换适合连续大量数据传输</li>
+<li>报文交换和分组交换信道利用率更高</li>
+<li>分组交换更适合突发式数据传送</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-1-5-计算机网络的分类"><a href="#1-1-5-计算机网络的分类" class="headerlink" title="1.1.5    计算机网络的分类"></a>1.1.5    计算机网络的分类</h3>
 	
 	</div>
-  <a type="button" href="/2025/12/05/网络层/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/05/计算机网络体系结构/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -567,45 +565,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
 		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
 		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
 		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
 		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
 		
 			<li><a href="/tags/windows/">windows<span>1</span></a></li>
 		
 			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
 		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
 		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
 		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
 			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
-		
-			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
-		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>61</span></a></li>

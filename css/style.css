@@ -118,6 +118,24 @@ li i {
     line-height: 24px
 }
 
+/* 主页文章标题 */
+.page h3.title,
+.post h3.title {
+    font-size: 1.9em;
+    margin: 1.5em 0 0.4em;
+    font-weight: 700;
+}
+
+/* 主页文章标题链接 */
+.page h3.title a {
+    font-size: 1.1em;
+}
+
+/* 主页文章间距 — 按钮与下篇文章拉开距离 */
+.entry {
+    margin-bottom: 2em;
+}
+
 .meta-widget {
     margin: 10px 0;
     font-size: .9em;
@@ -179,7 +197,7 @@ li i {
 #local-search-input {
     background-color: #000;
     color: #fff;
-    font-family: dos;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
     -webkit-text-fill-color: #bbb;
     border: 2px solid #2bbc8a;
     border-radius: 4px;
@@ -930,8 +948,17 @@ hr {
 
 .post ul li,
 .page ul li {
-    list-style-type: '·  ';
-    padding-left: 0.3em;
+    list-style: none;
+    padding-left: 1.2em;
+    position: relative;
+}
+
+.post ul li::before,
+.page ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #636366;
 }
 
 .post ol li,
@@ -942,8 +969,13 @@ hr {
 /* 列表嵌套 */
 .post ul ul,
 .page ul ul {
-    list-style-type: '–  ';
+    list-style: none;
     margin: 0.2em 0;
+}
+
+.post ul ul li::before,
+.page ul ul li::before {
+    content: '–';
 }
 
 /* 内联代码（非代码块） */
@@ -2018,6 +2050,7 @@ figure.highlight.code-enhanced td {
 
 /* Right-side scroll fade indicator — sticky inside scroll container */
 .code-fade {
+    position: -webkit-sticky;
     position: sticky;
     right: 0;
     display: block;

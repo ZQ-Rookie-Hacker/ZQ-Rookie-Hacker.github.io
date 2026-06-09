@@ -155,7 +155,7 @@
 <p>后面的操作也是类似的，都打上断点，10多个不算多（因为我们不知道sign处理逻辑，没办法）还有就是打了断点程序不一定会执行到这里（分支）</p>
 <p>再次出发翻译，跳过函数执行<br><img src="/images/%E6%9C%89%E9%81%93%E7%BF%BB%E8%AF%91js%E9%80%86%E5%90%91/image_11.png" alt="在这里插入图片描述"></p>
 <p>不断的调试，发现LLM翻译接口的封装请求逻辑<br><img src="/images/%E6%9C%89%E9%81%93%E7%BF%BB%E8%AF%91js%E9%80%86%E5%90%91/image_12.png" alt="在这里插入图片描述"><br>同时在网络面板查看其响应包，返回的不是翻译结果而是：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;translateDirection&quot;</span><span class="punctuation">:</span><span class="string">&quot;zh-CHS2en&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="attr">&quot;code&quot;</span><span class="punctuation">:</span><span class="number">0</span><span class="punctuation">,</span><span class="attr">&quot;msg&quot;</span><span class="punctuation">:</span><span class="string">&quot;OK&quot;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 
 <p>不断调试，又发现了简单的 POST 请求封装，在之前的网络面版中，这请求是将需要翻译的内容发送给后端<br><img src="/images/%E6%9C%89%E9%81%93%E7%BF%BB%E8%AF%91js%E9%80%86%E5%90%91/image_13.png" alt="在这里插入图片描述"></p>

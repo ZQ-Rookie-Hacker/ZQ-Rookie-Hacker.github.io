@@ -118,346 +118,6 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/05/应用层/" >应用层</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-05  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="6-1-网络应用模型"><a href="#6-1-网络应用模型" class="headerlink" title="6.1   网络应用模型"></a>6.1   网络应用模型</h2><h3 id="6-1-1-客户-服务器模型"><a href="#6-1-1-客户-服务器模型" class="headerlink" title="6.1.1    客户&#x2F;服务器模型"></a>6.1.1    客户&#x2F;服务器模型</h3><ul>
-<li>基本概念<ul>
-<li>有一个总是打开的主机称为服务器</li>
-<li>服务于许多来自其他称为客户机的主机请求</li>
-</ul>
-</li>
-<li>工作流程<ul>
-<li><ol>
-<li>服务器处于接收请求的状态</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>客户机发出服务请求，并等待接收结果</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>服务器收到请求后</li>
-</ol>
-<ul>
-<li>分析请求</li>
-<li>进行必要的处理</li>
-<li>得到结果并发送给客户机</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>服务器特点<ul>
-<li>运行专门提供服务的程序</li>
-<li>可以同时处理多个客户请求<ul>
-<li>包括远程或本地客户</li>
-</ul>
-</li>
-<li>不需要知道客户程序地址</li>
-</ul>
-</li>
-<li>客户机特点<ul>
-<li>必须知道服务器程序地址</li>
-</ul>
-</li>
-<li>主要特征<ul>
-<li>客户是服务请求方</li>
-<li>服务器是服务提供方</li>
-<li>举例<ul>
-<li>Web应用程序<ul>
-<li>Web服务器服务于浏览器请求</li>
-<li>处理流程<ul>
-<li>接收客户机请求</li>
-<li>发送所请求对象响应</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>常见应用<ul>
-<li>Web</li>
-<li>文件传输协议(FTP)</li>
-<li>远程登录</li>
-<li>电子邮件</li>
-</ul>
-</li>
-<li>主要特点<ul>
-<li><ol>
-<li>网络中各计算机地位不平等</li>
-</ol>
-<ul>
-<li>服务器可管理客户机<ul>
-<li>通过用户权限限制</li>
-</ul>
-</li>
-<li>网络管理集中方便<ul>
-<li>由少数服务器负责</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ol start="2">
-<li>客户机间不直接通信</li>
-</ol>
-<ul>
-<li>举例<ul>
-<li>Web应用中两个浏览器不直接通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ol start="3">
-<li>可扩展性不佳</li>
-</ol>
-<ul>
-<li>限制因素<ul>
-<li>服务器硬件限制</li>
-<li>网络带宽限制</li>
-</ul>
-</li>
-<li>结果<ul>
-<li>服务器支持的客户机数量有限</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="6-1-2-P2P模型"><a href="#6-1-2-P2P模型" class="headerlink" title="6.1.2    P2P模型"></a>6.1.2    P2P模型</h3><ul>
-<li>基本概念<ul>
-<li>网络中的传输内容不再保存在中心服务器上</li>
-<li>每个节点同时具有下载、上传功能</li>
-<li>权利和义务大体对等</li>
-</ul>
-</li>
-<li>特点<ul>
-<li>无固定客户和服务器划分</li>
-<li>任意对等方(Peer)直接相互通信</li>
-<li>本质仍使用客户&#x2F;服务器模型<ul>
-<li>节点既作为客户访问资源</li>
-<li>又作为服务器提供资源</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>优点<ul>
-<li>减轻服务器计算压力</li>
-<li>消除对单个服务器的依赖</li>
-<li>任务分配到各个节点</li>
-<li>提高系统效率和资源利用率</li>
-<li>客户机间可直接共享文档</li>
-<li>可扩展性好</li>
-<li>网络健壮性强</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>占用较多内存</li>
-<li>影响整机速度</li>
-<li>对硬盘损伤较大</li>
-<li>占用大量网络流量(50%-90%)</li>
-<li>导致网络拥塞</li>
-<li>ISP通常反对P2P应用</li>
-</ul>
-</li>
-</ul>
-<h2 id="6-2-域名系统-DNS"><a href="#6-2-域名系统-DNS" class="headerlink" title="6.2  域名系统(DNS)"></a>6.2  域名系统(DNS)</h2><h3 id="6-2-1-层次域名空间"><a href="#6-2-1-层次域名空间" class="headerlink" title="6.2.1    层次域名空间"></a>6.2.1    层次域名空间</h3><ul>
-<li><p>层次域名空间</p>
-<ul>
-<li>因特网采用层次树状结构的命名方法</li>
-<li>每个连接设备都有唯一的域名(Domain Name)</li>
-<li>域(Domain)是名字空间中的可管理划分<ul>
-<li>可划分为子域</li>
-<li>形成多级域名结构(顶级域、二级域、三级域等)</li>
-</ul>
-</li>
-<li>域名组成<ul>
-<li>由标号序列组成</li>
-<li>标号之间用点(“.”)分隔</li>
-<li>示例：<a target="_blank" rel="noopener" href="http://www.cskaoyan.com/">www.cskaoyan.com</a><ul>
-<li>com: 顶级域名</li>
-<li>cskaoyan: 二级域名</li>
-<li>www: 三级域名</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>标号规则</p>
-<ul>
-<li>英文不区分大小写</li>
-<li>只能使用连字符(-)，不能使用其他标点符号</li>
-<li>单个标号不超过63个字符</li>
-<li>完整域名最长不超过255个字符</li>
-<li>域名书写顺序<ul>
-<li>最低级域名在最左边</li>
-<li>顶级域名在最右边</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>顶级域名分类(TLD)</p>
-<ul>
-<li>国家(地区)顶级域名(nTLD)<ul>
-<li>.cn: 中国</li>
-<li>.us: 美国</li>
-<li>.uk: 英国</li>
-</ul>
-</li>
-<li>通用顶级域名(gTLD)<ul>
-<li>.com: 公司</li>
-<li>.net: 网络服务机构</li>
-<li>.org: 非营利性组织</li>
-<li>.edu: 教育机构</li>
-<li>.gov: 政府部门</li>
-</ul>
-</li>
-<li>基础结构域名<ul>
-<li>arpa: 用于反向域名解析(IP→域名)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>域名空间树状结构</p>
-<ul>
-<li>根<ul>
-<li>顶级域名<ul>
-<li>aero</li>
-<li>com</li>
-<li>net</li>
-<li>org</li>
-<li>edu</li>
-<li>gov</li>
-<li>cn</li>
-<li>uk</li>
-</ul>
-</li>
-<li>二级域名(示例)<ul>
-<li>cskaoyan</li>
-<li>cctv</li>
-<li>google</li>
-<li>bj</li>
-<li>edu</li>
-<li>com</li>
-</ul>
-</li>
-<li>三级域名(示例)<ul>
-<li>mail</li>
-<li>www</li>
-<li>hust</li>
-<li>hit</li>
-</ul>
-</li>
-<li>四级域名(示例)<ul>
-<li>mail</li>
-<li>www</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>域名管理</p>
-<ul>
-<li>顶级域名由ICANN管理</li>
-<li>国家顶级域名下的二级域名由各国自行管理</li>
-<li>子域可委托给其他组织管理</li>
-</ul>
-</li>
-</ul>
-<h3 id="6-2-2-域名服务器"><a href="#6-2-2-域名服务器" class="headerlink" title="6.2.2   域名服务器"></a>6.2.2   域名服务器</h3><ul>
-<li>定义<ul>
-<li>域名到IP地址的解析由运行在域名服务器上的程序完成</li>
-<li>管辖范围称为区（小于或等于域）</li>
-<li>每个区设置权限域名服务器保存域名到IP地址的映射</li>
-<li>域名服务器功能<ul>
-<li>进行域名到IP地址的解析</li>
-<li>具有连向其他域名服务器的信息</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DNS服务器层次结构<ul>
-<li>按层次方式组织</li>
-<li>映射分布在所有域名服务器上</li>
-<li>四种类型<ul>
-<li>根域名服务器<ul>
-<li>最高层次</li>
-<li>知道所有顶级域名服务器的域名和IP地址</li>
-<li>13个根域名服务器（实际是冗余服务器集群）</li>
-<li>功能<ul>
-<li>管辖顶级域（如.com）</li>
-<li>通常不直接转换域名，而是指引查询方向</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>顶级域名服务器<ul>
-<li>管理在该顶级域名服务器注册的所有二级域名</li>
-<li>响应DNS查询请求<ul>
-<li>可能给出最终结果</li>
-<li>可能指引下一步查询</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>权限域名服务器（授权域名服务器）<ul>
-<li>每台主机必须在此登记</li>
-<li>建议至少两台以提高可靠性</li>
-<li>功能<ul>
-<li>总能将其管辖的主机名转换为IP地址</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>本地域名服务器<ul>
-<li>重要性<ul>
-<li>对域名系统非常重要</li>
-</ul>
-</li>
-<li>部署<ul>
-<li>ISP、大学或院系可拥有</li>
-</ul>
-</li>
-<li>功能<ul>
-<li>接收主机的DNS查询请求</li>
-<li>在Windows系统中配置为</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-	
-	</div>
-  <a type="button" href="/2025/12/05/应用层/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2025/12/05/数据链路层/" >数据链路层</a>
 		</h3>
 		</div>
@@ -659,6 +319,403 @@
 </div>
 
 		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/05/物理层/" >物理层</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="2-1-通信基础"><a href="#2-1-通信基础" class="headerlink" title="2.1   通信基础"></a>2.1   通信基础</h2><h3 id="2-1-1-基本概念"><a href="#2-1-1-基本概念" class="headerlink" title="2.1.1   基本概念"></a>2.1.1   基本概念</h3><ul>
+<li>①. 数据、信号与码元<ul>
+<li>通信目的：传输信息（文字、图像、视频等）</li>
+<li>数据：传送信息的实体</li>
+<li>信号：数据的电气或电磁表现</li>
+<li>分类：<ul>
+<li>模拟数据&#x2F;信号：取值连续</li>
+<li>数字数据&#x2F;信号：取值离散</li>
+</ul>
+</li>
+<li>码元：<ul>
+<li>定义：固定时长的信号波形表示k进制数</li>
+<li>码元宽度：信号周期</li>
+<li>信息量：1码元可携带若干比特</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 信源、信道与信宿<ul>
+<li>通信系统模型：<ul>
+<li>信源：产生和发送数据的源头</li>
+<li>信道：信号的传输介质<ul>
+<li>分类：<ul>
+<li>按信号形式：模拟信道、数字信道</li>
+<li>按传输介质：无线信道、有线信道</li>
+</ul>
+</li>
+<li>信号类型：<ul>
+<li>基带信号：未调制的原始电信号</li>
+<li>宽带信号：调制后的频分复用模拟信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信宿：接收数据的终点</li>
+</ul>
+</li>
+<li>数据传输方式：<ul>
+<li>串行传输：逐比特按序传输（长距离）</li>
+<li>并行传输：多比特同时传输（近距离）</li>
+</ul>
+</li>
+<li>通信交互方式：<ul>
+<li>单向通信：单方向（广播）</li>
+<li>半双工通信：双向但不能同时</li>
+<li>全双工通信：双向同时</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 速率、波特与带宽<ul>
+<li>速率：<ul>
+<li>码元传输速率（波特率）：每秒传输码元数（Baud）</li>
+<li>信息传输速率（比特率）：每秒传输比特数（b&#x2F;s）</li>
+<li>关系：比特率 &#x3D; 波特率 × n（n为每码元比特数）</li>
+</ul>
+</li>
+<li>带宽：<ul>
+<li>模拟系统：频率范围（Hz）</li>
+<li>计算机网络：最高数据率（b&#x2F;s）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-2-信道的极限容量"><a href="#2-1-2-信道的极限容量" class="headerlink" title="2.1.2    信道的极限容量"></a>2.1.2    信道的极限容量</h3><ul>
+<li>信道失真影响<ul>
+<li>失真不影响通信质量的条件</li>
+<li>导致严重失真的因素<ul>
+<li>码元传输速率高</li>
+<li>信号传输距离远</li>
+<li>噪声干扰大</li>
+<li>传输介质质量差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>奈奎斯特定理(奈氏准则)<ul>
+<li>适用场景: 理想低通(无噪声、带宽有限)信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;2Wlog₂V (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>V: 码元离散电平数量</li>
+</ul>
+</li>
+<li>重要结论<br>①. 码元传输速率存在上限<br>②. 带宽越大传输能力越强<br>③. 只限制码元速率不限制信息速率</li>
+<li>提高数据速率的方法: 多元制调制</li>
+</ul>
+</li>
+<li>香农定理<ul>
+<li>适用场景: 带宽受限且有高斯噪声的信道</li>
+<li>核心公式: 极限数据传输速率&#x3D;Wlog₂(1+S&#x2F;N) (b&#x2F;s)</li>
+<li>关键参数<ul>
+<li>W: 信道频率带宽(Hz)</li>
+<li>S: 信号平均功率</li>
+<li>N: 高斯噪声功率</li>
+</ul>
+</li>
+<li>信噪比表示方法<ul>
+<li>无单位记法: S&#x2F;N</li>
+<li>分贝记法: 10log₁₀(S&#x2F;N) dB</li>
+</ul>
+</li>
+<li>重要结论<br>①. 带宽&#x2F;信噪比越大速率越高<br>②. 给定条件下速率上限确定<br>③. 低于极限速率可实现无差错传输<br>④. 实际速率远低于理论极限</li>
+</ul>
+</li>
+<li>奈氏准则 vs 香农定理<ul>
+<li>奈氏准则: 仅考虑带宽与码元速率</li>
+<li>香农定理: 同时考虑带宽和信噪比</li>
+<li>共同结论: 单个码元携带比特数有限</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-3-编码与调制"><a href="#2-1-3-编码与调制" class="headerlink" title="2.1.3   编码与调制"></a>2.1.3   编码与调制</h3><ul>
+<li>信号与数据转换<ul>
+<li>编码: 数据→数字信号</li>
+<li>调制: 数据→模拟信号</li>
+</ul>
+</li>
+<li>数字数据转换方式<ul>
+<li>数字发送器→数字信号</li>
+<li>调制器→模拟信号</li>
+</ul>
+</li>
+<li>模拟数据转换方式<ul>
+<li>PCM编码器→数字信号</li>
+<li>放大器调制器→模拟信号</li>
+</ul>
+</li>
+<li>四种编码与调制方式<ul>
+<li>数字数据编码为数字信号<ul>
+<li>常用编码方式<ul>
+<li>归零(RZ)编码<ul>
+<li>特点: 码元中间跳变到零电平</li>
+<li>优点: 提供自同步机制</li>
+<li>缺点: 占用带宽</li>
+</ul>
+</li>
+<li>非归零(NRZ)编码<ul>
+<li>特点: 不归零</li>
+<li>优点: 编码效率最高</li>
+<li>缺点: 需要时钟线同步</li>
+</ul>
+</li>
+<li>反向非归零(NRZI)编码<ul>
+<li>特点: 电平跳变表示0,不变表示1</li>
+<li>应用: USB 2.0</li>
+</ul>
+</li>
+<li>曼彻斯特编码<ul>
+<li>特点: 码元中间电平跳变</li>
+<li>应用: 标准以太网</li>
+</ul>
+</li>
+<li>差分曼彻斯特编码<ul>
+<li>特点: 码元开始处跳变表示0</li>
+<li>优点: 抗干扰能力强</li>
+<li>应用: 宽带高速网</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据编码为数字信号<ul>
+<li>步骤<ul>
+<li>采样<ul>
+<li>奈奎斯特定理: 采样频率≥2倍最大频率</li>
+</ul>
+</li>
+<li>量化<ul>
+<li>电平幅值→离散数字量</li>
+</ul>
+</li>
+<li>编码<ul>
+<li>离散整数→二进制编码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用: PCM编码</li>
+</ul>
+</li>
+<li>数字数据调制为模拟信号<ul>
+<li>调制方式<ul>
+<li>调幅(AM)&#x2F;幅移键控(ASK)<ul>
+<li>特点: 改变振幅表示1和0</li>
+<li>缺点: 抗干扰能力差</li>
+</ul>
+</li>
+<li>调频(FM)&#x2F;频移键控(FSK)<ul>
+<li>特点: 改变频率表示1和0</li>
+<li>优点: 抗干扰能力强</li>
+</ul>
+</li>
+<li>调相(PM)&#x2F;相移键控(PSK)<ul>
+<li>特点: 改变相位表示1和0</li>
+<li>变种: DPSK(差分相移键控)</li>
+</ul>
+</li>
+<li>正交幅度调制(QAM)<ul>
+<li>特点: AM与PM结合</li>
+<li>数据传输速率公式: R&#x3D;Blog₂(mn)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模拟数据调制为模拟信号<ul>
+<li>应用<ul>
+<li>电话机和本地局交换机</li>
+</ul>
+</li>
+<li>技术: 频分复用(FDM)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-传输介质"><a href="#2-2-传输介质" class="headerlink" title="2.2   传输介质"></a>2.2   传输介质</h2><h3 id="2-2-1-双绞线、同轴电缆、光纤与无线传输介质"><a href="#2-2-1-双绞线、同轴电缆、光纤与无线传输介质" class="headerlink" title="2.2.1    双绞线、同轴电缆、光纤与无线传输介质"></a>2.2.1    双绞线、同轴电缆、光纤与无线传输介质</h3><ul>
+<li>传输介质分类<ul>
+<li>导向传输介质<ul>
+<li>铜线或光纤</li>
+<li>电磁波沿固体介质传播</li>
+</ul>
+</li>
+<li>非导向传输介质<ul>
+<li>自由空间（空气、真空或海水）</li>
+<li>无线传输</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>①. 双绞线<ul>
+<li>特点<ul>
+<li>最常用传输介质</li>
+<li>两根绝缘铜导线绞合</li>
+<li>减少电磁干扰</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>屏蔽双绞线(STP)</li>
+<li>非屏蔽双绞线(UTP)</li>
+</ul>
+</li>
+<li>性能<ul>
+<li>价格便宜</li>
+<li>模拟&#x2F;数字传输</li>
+<li>通信距离：几千米到数十千米</li>
+<li>带宽取决于铜线粗细和传输距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>②. 同轴电缆<ul>
+<li>结构<ul>
+<li>内导体</li>
+<li>绝缘层</li>
+<li>外导体屏蔽层</li>
+<li>绝缘保护套层</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>50Ω同轴电缆<ul>
+<li>传送基带数字信号</li>
+<li>早期局域网应用</li>
+</ul>
+</li>
+<li>75Ω同轴电缆<ul>
+<li>传送宽带信号</li>
+<li>有线电视系统应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>良好抗干扰特性</li>
+<li>传输较高速率数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>③. 光纤<ul>
+<li>原理<ul>
+<li>利用光脉冲通信</li>
+<li>1：有光脉冲</li>
+<li>0：无光脉冲</li>
+</ul>
+</li>
+<li>结构<ul>
+<li>纤芯（8-100μm）</li>
+<li>包层（较低折射率）</li>
+</ul>
+</li>
+<li>传输原理<ul>
+<li>全反射现象</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>多模光纤<ul>
+<li>多条光线传输</li>
+<li>适合近距离</li>
+</ul>
+</li>
+<li>单模光纤<ul>
+<li>单波长传输</li>
+<li>适合远距离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>通信容量大</li>
+<li>传输损耗小</li>
+<li>抗干扰性能好</li>
+<li>无串音干扰</li>
+<li>体积小重量轻</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>④. 无线传输介质<ul>
+<li>应用场景<ul>
+<li>蜂窝移动电话</li>
+<li>无线局域网(WLAN)</li>
+<li>特殊场合移动联网</li>
+</ul>
+</li>
+<li>(1) 无线电波<ul>
+<li>特点<ul>
+<li>穿透能力强</li>
+<li>传输距离长</li>
+<li>全向传播</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(2) 微波、红外线和激光<ul>
+<li>共同特点<ul>
+<li>需要视线通路</li>
+<li>指向性强</li>
+</ul>
+</li>
+<li>微波通信<ul>
+<li>频率：2-40GHz</li>
+<li>容量大</li>
+<li>直线传播</li>
+<li>需中继站</li>
+</ul>
+</li>
+<li>卫星通信<ul>
+<li>地球同步卫星中继</li>
+<li>优点<ul>
+<li>容量大</li>
+<li>距离远</li>
+<li>覆盖广</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>保密性差</li>
+<li>传播时延长</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/2025/12/05/物理层/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
 
 		</div>
 
@@ -705,7 +762,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">38</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">37</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">6</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -757,45 +814,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
 		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
-		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
+			<li><a href="/tags/SRC/">SRC<span>1</span></a></li>
 		
 			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
 		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
 		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
 		
-			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
 		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/代理/">代理<span>1</span></a></li>
-		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
-		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
 		
 			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/WEB/">WEB<span>1</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>4</span></a></li>
+		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
+			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>61</span></a></li>

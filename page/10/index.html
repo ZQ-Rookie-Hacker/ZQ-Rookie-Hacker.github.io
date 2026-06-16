@@ -118,153 +118,6 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/30/Java基础/" >Java基础</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-12-30  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="一、Java虚拟机与平台特性"><a href="#一、Java虚拟机与平台特性" class="headerlink" title="一、Java虚拟机与平台特性"></a>一、Java虚拟机与平台特性</h2><h3 id="1-JVM架构详解"><a href="#1-JVM架构详解" class="headerlink" title="1. JVM架构详解"></a>1. JVM架构详解</h3><ul>
-<li><p><strong>类加载器子系统</strong>：</p>
-<ul>
-<li>启动类加载器（Bootstrap）：加载<code>rt.jar</code>等核心库</li>
-<li>扩展类加载器（Extension）：加载<code>jre/lib/ext</code>目录</li>
-<li>应用类加载器（Application）：加载<code>CLASSPATH</code>路径</li>
-<li>自定义类加载器：继承<code>ClassLoader</code>实现热部署</li>
-</ul>
-</li>
-<li><p><strong>运行时数据区</strong>：</p>
-<p><img src="/images/Java%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
-</li>
-<li><p><strong>垃圾回收机制</strong>：</p>
-<ul>
-<li><strong>分代收集</strong>：新生代（Eden+S0+S1）和老年代</li>
-<li><strong>GC算法</strong>：<ul>
-<li>标记-清除：产生内存碎片</li>
-<li>复制算法：适用于新生代（90%对象存活率低）</li>
-<li>标记-整理：适用于老年代</li>
-</ul>
-</li>
-<li><strong>常见GC器</strong>：<ul>
-<li>Serial：单线程，适合客户端应用</li>
-<li>Parallel：多线程吞吐量优先</li>
-<li>CMS：低延迟，但会产生碎片</li>
-<li>G1：分区收集，预测停顿时间</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-跨平台原理"><a href="#2-跨平台原理" class="headerlink" title="2. 跨平台原理"></a>2. 跨平台原理</h3><ul>
-<li><strong>字节码文件</strong>（<code>.class</code>）：<ul>
-<li>由Java编译器生成，与操作系统无关</li>
-<li>包含：常量池、字段表、方法表、属性表</li>
-</ul>
-</li>
-<li><strong>JVM执行过程</strong>：<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>编译后字节码（<code>javap -c Test.class</code>）：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  Code:</span><br><span class="line">     0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     3: ldc           #3  // String Hello</span><br><span class="line">     5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     8: return</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="二、基础语法与数据类型"><a href="#二、基础语法与数据类型" class="headerlink" title="二、基础语法与数据类型"></a>二、基础语法与数据类型</h2><h3 id="1-基本数据类型解析"><a href="#1-基本数据类型解析" class="headerlink" title="1. 基本数据类型解析"></a>1. 基本数据类型解析</h3><table>
-<thead>
-<tr>
-<th>基本类型</th>
-<th>包装类</th>
-<th>大小</th>
-<th>默认值</th>
-<th>取值范围</th>
-<th>特殊说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>byte</code></td>
-<td><code>Byte</code></td>
-<td>1字节</td>
-<td>0</td>
-<td>-128~127</td>
-<td>适合存储小整数</td>
-</tr>
-<tr>
-<td><code>short</code></td>
-<td><code>Short</code></td>
-<td>2字节</td>
-<td>0</td>
-<td>-32768~32767</td>
-<td></td>
-</tr>
-<tr>
-<td><code>int</code></td>
-<td><code>Integer</code></td>
-<td>4字节</td>
-<td>0</td>
-<td>-2^31~2^31-1</td>
-<td>最常用整型</td>
-</tr>
-<tr>
-<td><code>long</code></td>
-<td><code>Long</code></td>
-<td>8字节</td>
-<td>0L</td>
-<td>-2^63~2^63-1</td>
-<td>后缀<code>L</code></td>
-</tr>
-<tr>
-<td><code>float</code></td>
-<td><code>Float</code></td>
-<td>4字节</td>
-<td>0.0f</td>
-<td>±3.40282347E+38F</td>
-<td>后缀<code>f</code></td>
-</tr>
-<tr>
-<td><code>double</code></td>
-<td><code>Double</code></td>
-<td>8字节</td>
-<td>0.0d</td>
-<td>±1.79769313486231570E+308</td>
-<td>默认浮点类型</td>
-</tr>
-<tr>
-<td><code>char</code></td>
-<td><code>Character</code></td>
-<td>2字节</td>
-<td>‘\u0000’</td>
-<td>0~65535</td>
-<td>Unicode字符</td>
-</tr>
-<tr>
-<td><code>boolean</code></td>
-<td><code>Boolean</code></td>
-<td>1位</td>
-<td>false</td>
-<td>true&#x2F;false</td>
-<td>无具体大小</td>
-</tr>
-</tbody></table>
-<p>关键说明</p>
-<ol>
-<li>包装类均为<strong>引用类型</strong>，首字母大写（两个特殊情况：<code>int</code> 对应 <code>Integer</code>、<code>char</code> 对应 <code>Character</code>，其余基本类型直接首字母大写即可）</li>
-<li>包装类主要用于需要使用对象的场景（如集合框架、反射等），可实现基本类型与包装类的自动装箱&#x2F;拆箱</li>
-</ol>
-	
-	</div>
-  <a type="button" href="/2025/12/30/Java基础/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2025/12/28/搜索指令大全/" >搜索指令大全</a>
 		</h3>
 		</div>
@@ -295,6 +148,175 @@
 	
 	</div>
   <a type="button" href="/2025/12/28/搜索指令大全/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2025/12/25/kali右键菜单添加/" >Kali右键菜单添加</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<blockquote>
+<blockquote>
+<hr>
+<h3 id="🔍-核心原理"><a href="#🔍-核心原理" class="headerlink" title="🔍 核心原理"></a>🔍 <strong>核心原理</strong></h3><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>正确做法</th>
+<th>错误做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>安装路径</strong></td>
+<td>通过官方脚本安装到 <code>/usr/bin/</code></td>
+<td>安装到 <code>~/.cargo/bin/</code>（需额外配置 PATH）</td>
+</tr>
+<tr>
+<td><strong>文件位置</strong></td>
+<td>移动到 <code>~/.local/share/applications/</code></td>
+<td>保留在桌面或 <code>/usr/share/</code></td>
+</tr>
+<tr>
+<td><strong>Categories 标签</strong></td>
+<td><code>kali-reconnaissance;kali-network-information;kali-network-service-discovery;</code></td>
+<td><code>Security;</code> 或 <code>kali-network-service-discovery;</code>（缺少 <code>kali-network-information</code>）</td>
+</tr>
+<tr>
+<td><strong>图标</strong></td>
+<td><code>Icon=system-run</code></td>
+<td><code>kali-rustscan</code>（不存在）</td>
+</tr>
+<tr>
+<td><strong>命令格式</strong></td>
+<td><code>Exec=xfce4-terminal -e &quot;bash -c &#39;read -p \&quot;IP: \&quot; ip; rustscan -a $ip -- -sV; read -p \&quot;按 Enter 键退出\&quot;&#39;&quot;</code></td>
+<td><code>rustscan --help</code>（只显示帮助）</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="📌-5-步操作"><a href="#📌-5-步操作" class="headerlink" title="📌 5 步操作"></a>📌 <strong>5 步操作</strong></h3><h4 id="✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）"><a href="#✅-步骤-1：通过-GitHub-安装-rustscan（官方脚本）" class="headerlink" title="✅ 步骤 1：通过 GitHub 安装 rustscan（官方脚本）"></a>✅ <strong>步骤 1：通过 GitHub 安装 rustscan（官方脚本）</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 curl（如果未安装）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install curl -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行官方安装脚本（自动下载到 /usr/bin/）</span></span><br><span class="line">curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅ <strong>验证安装</strong>：</p>
+<pre><code class="language-bash">which rustscan
+# 预期输出：/usr/bin/rustscan
+
+rustscan --version
+# 预期输出：2.1.1（或最新版本）
+</code></pre>
+</blockquote>
+<blockquote>
+<p>💡 <strong>关键原理</strong>：  </p>
+<ul>
+<li>安装脚本会自动将二进制文件放到 <strong><code>/usr/bin/</code></strong>（Linux 标准 PATH 路径）  </li>
+<li><strong>无需手动配置 PATH</strong>，系统自动识别命令</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-2：在桌面创建启动器"><a href="#✅-步骤-2：在桌面创建启动器" class="headerlink" title="✅ 步骤 2：在桌面创建启动器"></a>✅ <strong>步骤 2：在桌面创建启动器</strong></h4><ol>
+<li><strong>右键桌面空白处</strong> → 选择 <strong>“创建启动器(L)…”</strong>  </li>
+<li><strong>填写信息</strong>：一般会自动填充</li>
+</ol>
+<hr>
+<h4 id="✅-步骤-3：移动文件到正确目录"><a href="#✅-步骤-3：移动文件到正确目录" class="headerlink" title="✅ 步骤 3：移动文件到正确目录"></a>✅ <strong>步骤 3：移动文件到正确目录</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 当前用户的共享文件夹下的 applications 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/.local/share/applications （没有则需要创建）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 移动桌面文件到目标目录</span></span><br><span class="line"><span class="built_in">mv</span> ~/Desktop/rustscan.desktop ~/.local/share/applications/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✅ <strong>验证目录</strong>：</p>
+<pre><code class="language-bash">ls -ld ~/.local/share/applications
+# 预期输出：drwxr-xr-x 2 ... /home/rookie-hacker/.local/share/applications
+</code></pre>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-4：修正-Categories-标签"><a href="#✅-步骤-4：修正-Categories-标签" class="headerlink" title="✅ 步骤 4：修正 Categories 标签"></a>✅ <strong>步骤 4：修正 Categories 标签</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 编辑 desktop 文件</span></span><br><span class="line">vim ~/.local/share/applications/rustscan.desktop</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✏️ <strong>修改内容</strong>：</p>
+<pre><code class="language-ini"># 现在查看右键菜单中其他快捷方式的格式
+cat /usr/share/applications/xxx.desktop
+# 找到 Categories 行，替换为精准标签
+Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; 
+</code></pre>
+</blockquote>
+<blockquote>
+<p>✅ <strong>‘完整’配置示例</strong>：</p>
+<pre><code class="language-ini">[Desktop Entry]
+Version=1.0
+Type=Application
+Name=
+Comment=
+Exec=
+Icon=system-run
+Terminal=true
+Type=Application
+Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery; # 主要修改这里，其他在创建启动器的时候会自动填充
+StartupNotify=false
+</code></pre>
+</blockquote>
+<blockquote>
+<p>✏️ <strong>保存并退出</strong>：  </p>
+<ul>
+<li>：wq</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="✅-步骤-5：刷新菜单缓存"><a href="#✅-步骤-5：刷新菜单缓存" class="headerlink" title="✅ 步骤 5：刷新菜单缓存"></a>✅ <strong>步骤 5：刷新菜单缓存</strong></h4>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 删除所有缓存</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/menus ~/.cache/desktop-directories ~/.cache/desktop-files</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 重启面板（强制生效）</span></span><br><span class="line">xfce4-panel --restart</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="⚠️-常见错误解决方案"><a href="#⚠️-常见错误解决方案" class="headerlink" title="⚠️ 常见错误解决方案"></a>⚠️ <strong>常见错误解决方案</strong></h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>which rustscan</code> 无输出</strong></td>
+<td>安装失败</td>
+<td>重新执行安装脚本：<code>curl -s https://raw.githubusercontent.com/RustScan/RustScan/master/script/install.sh | sudo bash</code></td>
+</tr>
+<tr>
+<td><strong>移动时报错 “不是目录”</strong></td>
+<td><code>~/.local/share/applications</code> 是文件</td>
+<td>执行 <code>rm -f ~/.local/share/applications</code> 再重建目录</td>
+</tr>
+<tr>
+<td><strong>菜单只在”网络扫描”显示</strong></td>
+<td>缺少 <code>kali-network-information</code> 标签</td>
+<td>用 <code>sed</code> 修正 Categories 行：<code>sed -i &#39;s/Categories=.*/Categories=kali-reconnaissance;kali-network-information;kali-network-service-discovery;/&#39; ~/.local/share/applications/rustscan.desktop</code></td>
+</tr>
+<tr>
+<td><strong>终端报错 <code>rustscan: command not found</code></strong></td>
+<td>PATH 未包含 <code>/usr/bin/</code></td>
+<td>执行 <code>echo &#39;export PATH=&quot;$PATH:/usr/bin&quot;&#39; &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc</code></td>
+</tr>
+<tr>
+<td><strong>图标不显示</strong></td>
+<td>未使用 <code>system-run</code></td>
+<td>确保 <code>Icon=system-run</code>（不是 <code>kali-rustscan</code>）</td>
+</tr>
+</tbody></table>
+<hr>
+</blockquote>
+</blockquote>
+</blockquote>
+
+	
+	</div>
+  <a type="button" href="/2025/12/25/kali右键菜单添加/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -344,7 +366,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">38</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">37</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">6</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -396,45 +418,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
+			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
 		
 			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
 		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
-		
-			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
-		
-			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
-		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
-		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/js/">js<span>4</span></a></li>
-		
-			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
-		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
 		
 			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
 		
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+		
+			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+		
+			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/SRC/">SRC<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
+		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
 			<li><a href="/tags/python/">python<span>1</span></a></li>
 		
-			<li><a href="/tags/代理/">代理<span>1</span></a></li>
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
+		
+			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>61</span></a></li>

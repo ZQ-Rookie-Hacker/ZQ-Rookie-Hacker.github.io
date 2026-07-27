@@ -42,6 +42,7 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -63,7 +64,26 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -143,10 +163,10 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 <blockquote>
 <p>如果此时就是想访问server 1 可以修改命令为 ssh -L 80:127.0.0.1 用户@server1_ip</p>
 </blockquote>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#ssh反向连接命令格式</span></span><br><span class="line">ssh <span class="literal">-R</span> 远程主机监听端口:本地主机地址:本地服务端口 用户名<span class="selector-tag">@</span>远程服务器地址</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#ssh反向连接命令格式</span></span><br><span class="line">ssh <span class="literal">-R</span> 远程主机监听端口:本地主机地址:本地服务端口 用户名<span class="selector-tag">@</span>远程服务器地址</span><br></pre></td></tr></table></figure>
 
 <h3 id="SSH正向连接（本地端口转发）"><a href="#SSH正向连接（本地端口转发）" class="headerlink" title="SSH正向连接（本地端口转发）"></a><code>SSH正向连接</code>（本地端口转发）</h3><p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_5.png" alt="在这里插入图片描述"><br><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_6.png" alt="在这里插入图片描述"><br><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_7.png" alt="在这里插入图片描述"></p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#指令格式</span></span><br><span class="line">ssh <span class="literal">-L</span> 本地端口:内网目标IP:内网目标端口 SSH服务器用户名@SSH服务器IP</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#指令格式</span></span><br><span class="line">ssh <span class="literal">-L</span> 本地端口:内网目标IP:内网目标端口 SSH服务器用户名@SSH服务器IP</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="ssh动态连接（动态端口转发）"><a href="#ssh动态连接（动态端口转发）" class="headerlink" title="ssh动态连接（动态端口转发）"></a><code>ssh动态连接</code>（动态端口转发）</h3><p><img src="/images/SSH%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/image_8.png" alt="在这里插入图片描述"></p>
@@ -193,10 +213,10 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 </ol>
 <h4 id="2-SSH连接参数调整"><a href="#2-SSH连接参数调整" class="headerlink" title="2.SSH连接参数调整"></a><code>2.SSH连接参数调整</code></h4><ol>
 <li><p><strong>客户端配置（<code>~/.ssh/config</code>）-Linux系统</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Host *</span><br><span class="line">    ServerAliveInterval 30    <span class="comment"># 每30秒发送心跳包</span></span><br><span class="line">    ServerAliveCountMax 10    <span class="comment"># 连续10次无响应才断开</span></span><br><span class="line">    TCPKeepAlive <span class="built_in">yes</span>          <span class="comment"># 启用TCP级心跳</span></span><br><span class="line">    ControlMaster auto        <span class="comment"># 启用连接复用</span></span><br><span class="line">    ControlPath ~/.ssh/socket-%r@%h:%p</span><br><span class="line">    ControlPersist 1h         <span class="comment"># 主连接保持1小时</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Host *</span><br><span class="line">    ServerAliveInterval 30    <span class="comment"># 每30秒发送心跳包</span></span><br><span class="line">    ServerAliveCountMax 10    <span class="comment"># 连续10次无响应才断开</span></span><br><span class="line">    TCPKeepAlive <span class="built_in">yes</span>          <span class="comment"># 启用TCP级心跳</span></span><br><span class="line">    ControlMaster auto        <span class="comment"># 启用连接复用</span></span><br><span class="line">    ControlPath ~/.ssh/socket-%r@%h:%p</span><br><span class="line">    ControlPersist 1h         <span class="comment"># 主连接保持1小时</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>服务器配置（<code>/etc/ssh/sshd_config</code>）-Linux系统</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ClientAliveInterval 60        <span class="comment"># 服务器主动检测客户端的间隔</span></span><br><span class="line">ClientAliveCountMax 3         <span class="comment"># 允许的无响应次数</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ClientAliveInterval 60        <span class="comment"># 服务器主动检测客户端的间隔</span></span><br><span class="line">ClientAliveCountMax 3         <span class="comment"># 允许的无响应次数</span></span><br></pre></td></tr></table></figure>
 <p>配置后重启SSH服务：<code>sudo systemctl restart sshd</code>。</p>
 </li>
 </ol>
@@ -204,7 +224,7 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 <ol>
 <li><p><strong>自动查找机制</strong>：</p>
 <ul>
-<li>每次执行 <code>ssh</code> 命令时，客户端会<strong>按固定顺序</strong>查找配置文件：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.ssh/config → /etc/ssh/ssh_config</span><br></pre></td></tr></table></figure></li>
+<li>每次执行 <code>ssh</code> 命令时，客户端会<strong>按固定顺序</strong>查找配置文件：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">~/.ssh/config → /etc/ssh/ssh_config</span><br></pre></td></tr></table></figure></li>
 <li>Windows 路径：<code>%USERPROFILE%\.ssh\config</code> → <code>C:\ProgramData\ssh\ssh_config</code></li>
 </ul>
 </li>
@@ -215,9 +235,9 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 </ul>
 </li>
 <li><p><strong>加载验证方法</strong>：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加 -v 参数查看加载过程</span></span><br><span class="line">ssh <span class="literal">-v</span> user@server.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加 -v 参数查看加载过程</span></span><br><span class="line">ssh <span class="literal">-v</span> user@server.com</span><br></pre></td></tr></table></figure>
 <p>输出中会显示：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">debug1: Reading configuration data /c/Users/21143/.ssh/config</span><br><span class="line">debug1: Applying options for *</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">debug1: Reading configuration data /c/Users/21143/.ssh/config</span><br><span class="line">debug1: Applying options for *</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h5 id="（1）为什么您需要手动创建文件？"><a href="#（1）为什么您需要手动创建文件？" class="headerlink" title="（1）为什么您需要手动创建文件？"></a>（1）为什么您需要手动创建文件？</h5><ol>
 <li><p><strong>默认文件不存在</strong>：</p>
@@ -227,13 +247,13 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 </ul>
 </li>
 <li><p><strong>目录结构要求</strong>：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 必需的目录结构</span></span><br><span class="line">C:\Users\<span class="number">21143</span>\</span><br><span class="line">  └── .ssh/</span><br><span class="line">      ├── config          <span class="comment"># 配置文件</span></span><br><span class="line">      ├── id_rsa          <span class="comment"># 私钥</span></span><br><span class="line">      └── known_hosts     <span class="comment"># 已知主机记录</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 必需的目录结构</span></span><br><span class="line">C:\Users\<span class="number">21143</span>\</span><br><span class="line">  └── .ssh/</span><br><span class="line">      ├── config          <span class="comment"># 配置文件</span></span><br><span class="line">      ├── id_rsa          <span class="comment"># 私钥</span></span><br><span class="line">      └── known_hosts     <span class="comment"># 已知主机记录</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>权限要求</strong>：</p>
 <ul>
 <li>必须设置严格权限（否则 SSH 会忽略配置）：</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">icacls <span class="variable">$env:USERPROFILE</span>\.ssh /inheritance:<span class="built_in">r</span></span><br><span class="line">icacls <span class="variable">$env:USERPROFILE</span>\.ssh /grant:<span class="built_in">r</span> <span class="string">&quot;<span class="variable">$env:USERNAME:</span>(F)&quot;</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">icacls <span class="variable">$env:USERPROFILE</span>\.ssh /inheritance:<span class="built_in">r</span></span><br><span class="line">icacls <span class="variable">$env:USERPROFILE</span>\.ssh /grant:<span class="built_in">r</span> <span class="string">&quot;<span class="variable">$env:USERNAME:</span>(F)&quot;</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h5 id="（2）配置文件如何影响连接？"><a href="#（2）配置文件如何影响连接？" class="headerlink" title="（2）配置文件如何影响连接？"></a>（2）配置文件如何影响连接？</h5><p>当您执行 <code>ssh user@host</code> 时：</p>
 <ol>
@@ -242,25 +262,25 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 <li>应用配置参数到当前连接</li>
 <li>命令行参数会覆盖配置文件设置</li>
 </ol>
-<h5 id="（3）配置示例解析"><a href="#（3）配置示例解析" class="headerlink" title="（3）配置示例解析"></a>（3）配置示例解析</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Host myserver            <span class="comment"># 定义主机别名</span></span><br><span class="line">  HostName 192.168.1.10  <span class="comment"># 真实IP/域名</span></span><br><span class="line">  User admin             <span class="comment"># 自动使用此用户名</span></span><br><span class="line">  Port 2222              <span class="comment"># 非标准端口</span></span><br><span class="line">  IdentityFile ~/.ssh/id_ecdsa  <span class="comment"># 指定私钥</span></span><br><span class="line"></span><br><span class="line">Host *                   <span class="comment"># 全局默认配置</span></span><br><span class="line">  ServerAliveInterval 30</span><br><span class="line">  TCPKeepAlive <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+<h5 id="（3）配置示例解析"><a href="#（3）配置示例解析" class="headerlink" title="（3）配置示例解析"></a>（3）配置示例解析</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Host myserver            <span class="comment"># 定义主机别名</span></span><br><span class="line">  HostName 192.168.1.10  <span class="comment"># 真实IP/域名</span></span><br><span class="line">  User admin             <span class="comment"># 自动使用此用户名</span></span><br><span class="line">  Port 2222              <span class="comment"># 非标准端口</span></span><br><span class="line">  IdentityFile ~/.ssh/id_ecdsa  <span class="comment"># 指定私钥</span></span><br><span class="line"></span><br><span class="line">Host *                   <span class="comment"># 全局默认配置</span></span><br><span class="line">  ServerAliveInterval 30</span><br><span class="line">  TCPKeepAlive <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
 
 <p>使用时：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 触发 myserver 配置块</span></span><br><span class="line">ssh myserver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 触发全局配置 (*)</span></span><br><span class="line">ssh any<span class="literal">-other-server</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 触发 myserver 配置块</span></span><br><span class="line">ssh myserver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 触发全局配置 (*)</span></span><br><span class="line">ssh any<span class="literal">-other-server</span></span><br></pre></td></tr></table></figure>
 
 <h5 id="（4）关键验证步骤"><a href="#（4）关键验证步骤" class="headerlink" title="（4）关键验证步骤"></a>（4）关键验证步骤</h5><ol>
 <li><p>创建文件后执行：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查配置是否被加载</span></span><br><span class="line">ssh <span class="literal">-G</span> myserver | findstr <span class="string">&quot;ServerAliveInterval&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查配置是否被加载</span></span><br><span class="line">ssh <span class="literal">-G</span> myserver | findstr <span class="string">&quot;ServerAliveInterval&quot;</span></span><br></pre></td></tr></table></figure>
 <p>应输出：<code>serveraliveinterval 30</code></p>
 </li>
 <li><p>测试连接稳定性：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 观察是否还会超时断开</span></span><br><span class="line">ssh <span class="literal">-v</span> myserver</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 观察是否还会超时断开</span></span><br><span class="line">ssh <span class="literal">-v</span> myserver</span><br></pre></td></tr></table></figure></li>
 </ol>
 <blockquote>
 <p>只要文件路径正确、权限合规且语法无误，SSH 客户端 <strong>100% 会自动加载</strong> 此配置文件，无需额外操作。这是 OpenSSH 的标准行为，在 Windows&#x2F;Linux&#x2F;macOS 上完全一致。</p>
 </blockquote>
 <h4 id="3-断线重连工具"><a href="#3-断线重连工具" class="headerlink" title="3.断线重连工具"></a><code>3.断线重连工具</code></h4><ol>
 <li><p><strong>使用<code>autossh</code>自动重连</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">autossh -M 0 -N -D 1080 user@server  <span class="comment"># -M 0禁用端口监控，专注重连</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">autossh -M 0 -N -D 1080 user@server  <span class="comment"># -M 0禁用端口监控，专注重连</span></span><br></pre></td></tr></table></figure>
 <p>安装：  </p>
 <ul>
 <li>Ubuntu&#x2F;Debian：<code>sudo apt install autossh</code>  </li>
@@ -268,33 +288,33 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 </ul>
 </li>
 <li><p><strong>替代方案：<code>mosh</code>（移动SSH）</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 服务器端安装</span></span><br><span class="line"><span class="built_in">sudo</span> apt install mosh  </span><br><span class="line"><span class="comment"># 客户端连接（支持断线自动恢复）</span></span><br><span class="line">mosh user@server</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 服务器端安装</span></span><br><span class="line"><span class="built_in">sudo</span> apt install mosh  </span><br><span class="line"><span class="comment"># 客户端连接（支持断线自动恢复）</span></span><br><span class="line">mosh user@server</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="4-会话持久化工具"><a href="#4-会话持久化工具" class="headerlink" title="4.会话持久化工具"></a><code>4.会话持久化工具</code></h4><ol>
 <li><p><strong>使用<code>screen</code>或<code>tmux</code></strong>  </p>
 <ul>
-<li>在SSH会话中先启动<code>screen</code>或<code>tmux</code>，再执行长时间任务：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">screen -S mysession    <span class="comment"># 创建会话</span></span><br><span class="line"><span class="comment"># 执行任务（如编译、传输大文件）</span></span><br></pre></td></tr></table></figure></li>
-<li>断线后重新连接，恢复会话：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen -r mysession    <span class="comment"># 恢复会话</span></span><br></pre></td></tr></table></figure></li>
+<li>在SSH会话中先启动<code>screen</code>或<code>tmux</code>，再执行长时间任务：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -S mysession    <span class="comment"># 创建会话</span></span><br><span class="line"><span class="comment"># 执行任务（如编译、传输大文件）</span></span><br></pre></td></tr></table></figure></li>
+<li>断线后重新连接，恢复会话：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -r mysession    <span class="comment"># 恢复会话</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p><strong>后台运行命令</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">nohup</span> <span class="built_in">command</span> &amp;         <span class="comment"># 使命令不随SSH断开而终止</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">nohup</span> <span class="built_in">command</span> &amp;         <span class="comment"># 使命令不随SSH断开而终止</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="5-安全策略优化"><a href="#5-安全策略优化" class="headerlink" title="5.安全策略优化"></a><code>5.安全策略优化</code></h4><ol>
 <li><p><strong>密钥认证替代密码</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen              <span class="comment"># 生成密钥对</span></span><br><span class="line">ssh-copy-id user@server <span class="comment"># 上传公钥到服务器</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen              <span class="comment"># 生成密钥对</span></span><br><span class="line">ssh-copy-id user@server <span class="comment"># 上传公钥到服务器</span></span><br></pre></td></tr></table></figure>
 <p>禁用密码认证（<code>/etc/ssh/sshd_config</code>）：  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication no</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">PasswordAuthentication no</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>调整登录限制</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加最大连接尝试次数</span></span><br><span class="line">MaxAuthTries 6</span><br><span class="line"><span class="comment"># 设置登录超时</span></span><br><span class="line">LoginGraceTime 30s</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 增加最大连接尝试次数</span></span><br><span class="line">MaxAuthTries 6</span><br><span class="line"><span class="comment"># 设置登录超时</span></span><br><span class="line">LoginGraceTime 30s</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="6-监控与告警"><a href="#6-监控与告警" class="headerlink" title="6.监控与告警"></a><code>6.监控与告警</code></h4><ol>
 <li><p><strong>实时监控连接状态</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch -n 1 <span class="string">&#x27;ss -tunap | grep ssh&#x27;</span>  <span class="comment"># 实时查看SSH连接</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">watch -n 1 <span class="string">&#x27;ss -tunap | grep ssh&#x27;</span>  <span class="comment"># 实时查看SSH连接</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>日志分析工具</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -u sshd -f  <span class="comment"># 实时查看SSH服务日志</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">journalctl -u sshd -f  <span class="comment"># 实时查看SSH服务日志</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>告警机制</strong>  </p>
 <ul>
@@ -305,18 +325,18 @@ SSH 隧道就像是一条加密的地下通道，让你在不安全的网络上�
 <h4 id="7-特殊场景解决方案"><a href="#7-特殊场景解决方案" class="headerlink" title="7.特殊场景解决方案"></a><code>7.特殊场景解决方案</code></h4><ol>
 <li><p><strong>高延迟网络</strong>  </p>
 <ul>
-<li>降低TCP窗口缩放：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户端临时设置</span></span><br><span class="line"><span class="built_in">sudo</span> sysctl -w net.ipv4.tcp_window_scaling=0</span><br></pre></td></tr></table></figure></li>
+<li>降低TCP窗口缩放：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 客户端临时设置</span></span><br><span class="line"><span class="built_in">sudo</span> sysctl -w net.ipv4.tcp_window_scaling=0</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p><strong>跨时区时钟同步</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install ntp    <span class="comment"># 安装NTP服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart ntp</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install ntp    <span class="comment"># 安装NTP服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart ntp</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="8-测试与验证"><a href="#8-测试与验证" class="headerlink" title="8.测试与验证"></a><code>8.测试与验证</code></h4><ol>
 <li><p><strong>网络连通性测试</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping server             <span class="comment"># 测试网络可达性</span></span><br><span class="line">traceroute server       <span class="comment"># 追踪路由路径</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping server             <span class="comment"># 测试网络可达性</span></span><br><span class="line">traceroute server       <span class="comment"># 追踪路由路径</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>端口可用性测试</strong>  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -zv server 22        <span class="comment"># 测试SSH端口连通性</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nc -zv server 22        <span class="comment"># 测试SSH端口连通性</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 
 		  <div class="article-footer-copyright">
@@ -441,7 +461,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>35</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>17</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/基础知识/">基础知识<span>21</span></a></li> <li><a href="/categories/网络安全/基础知识/通用/">通用<span>8</span></a></li>
   </li>
 
 			</ul>
@@ -465,7 +485,7 @@ window.addEventListener('load', function() {
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -510,6 +530,7 @@ window.addEventListener('load', function() {
   margin-left: 5px;
 }
 </style>
+
 	</div>
 
 	<!-- article TOC placed below the category list; should scroll with page -->
@@ -548,7 +569,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -557,7 +578,14 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -568,16 +596,6 @@ window.addEventListener('load', function() {
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

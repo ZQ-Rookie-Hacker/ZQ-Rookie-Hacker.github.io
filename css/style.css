@@ -44,8 +44,11 @@ body {
 
 .page,
 .post {
-    line-height: 1.5em;
-    font-family: Fira code,SimHei,Monaco, Menlo, Consolas,DOS,  'Courier New', monospace
+    line-height: 1.8;
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', SimHei, sans-serif;
+    color: #d1d1d6;
+    letter-spacing: 0.2px;
 }
 
 .page .more {
@@ -62,16 +65,40 @@ body {
     border-bottom: 1px solid #fff
 }
 
+/* Blog title — Apple + Hacker 混合风格 */
 .navbar-brand {
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
-    -webkit-transition: all .2s linear;
-    -moz-transition: all .2s linear;
-    transition: all .2s linear
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    color: #f5f5f7;
+    text-shadow: 0 0 20px rgba(43, 188, 138, 0.3);
+    transition: all 0.25s ease;
+    padding: 15px;
+    line-height: 20px;
 }
 
 .navbar-brand:hover {
     text-decoration: none;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .4)
+    color: #2bbc8a;
+    text-shadow: 0 0 25px rgba(43, 188, 138, 0.5);
+}
+
+/* 导航项 — 与标题字体统一 */
+.nav-menu .nav > li > a {
+    padding: 15px;
+    line-height: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    color: #a1a1a6;
+    transition: color 0.15s ease;
+}
+
+.nav-menu .nav > li > a:hover {
+    color: #2bbc8a;
+    background: none;
 }
 
 .pagination {
@@ -89,6 +116,24 @@ li i {
 
 .listing-item {
     line-height: 24px
+}
+
+/* 主页文章标题 */
+.page h3.title,
+.post h3.title {
+    font-size: 1.9em;
+    margin: 1.5em 0 0.4em;
+    font-weight: 700;
+}
+
+/* 主页文章标题链接 */
+.page h3.title a {
+    font-size: 1.1em;
+}
+
+/* 主页文章间距 — 按钮与下篇文章拉开距离 */
+.entry {
+    margin-bottom: 2em;
 }
 
 .meta-widget {
@@ -121,7 +166,7 @@ li i {
     padding: 2px 6px;
     margin: 2px;
     background: #e5e5e5;
-    color: #555;
+    color: #000;
     border-radius: 3px;
     text-decoration: none;
     border: 1px dashed #bbb
@@ -152,7 +197,7 @@ li i {
 #local-search-input {
     background-color: #000;
     color: #fff;
-    font-family: dos;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
     -webkit-text-fill-color: #bbb;
     border: 2px solid #2bbc8a;
     border-radius: 4px;
@@ -194,24 +239,73 @@ em.search-keyword {
     width: 100%
 }
 
+/* Apple 风格链接 — 仅文章内容 + TOC */
 a {
-    color: #2bbc8a
+    color: #2bbc8a;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-a:focus {
-    color: #fefe54;
-    background: #a50
+/* 正文链接绿色 — 排除按钮 */
+.post a:not(.btn),
+.page a:not(.btn) {
+    color: #2bbc8a !important;
+    border-bottom: 1px solid rgba(43, 188, 138, 0.3);
+    padding-bottom: 1px;
 }
 
-a:hover {
-    color: #000000;
-    background: rgb(153, 153, 153)
+.post a:not(.btn):hover,
+.page a:not(.btn):hover {
+    color: #2bbc8a !important;
+    border-bottom-color: #2bbc8a;
+    background: none !important;
 }
 
-a:active {
-    color: #fefe54;
-    background: #a50
+.post a:not(.btn):focus,
+.page a:not(.btn):focus {
+    color: #2bbc8a !important;
+    outline: 2px solid rgba(43, 188, 138, 0.5);
+    outline-offset: 2px;
+    border-radius: 2px;
+    background: none !important;
 }
+
+.post a:not(.btn):active,
+.page a:not(.btn):active {
+    color: #2bbc8a !important;
+    background: none !important;
+}
+
+.post a:not(.btn):visited,
+.page a:not(.btn):visited {
+    color: #2bbc8a !important;
+}
+
+/* 标签云覆盖回黑色 */
+.tag_box a,
+.post .tag_box a,
+.page .tag_box a {
+    color: #000 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.tag_box a:hover {
+    color: #fff !important;
+}
+
+/* 按钮内文字黑色 — 所有 btn 变体 */
+.post .btn,
+.page .btn,
+.post .btn a,
+.page .btn a,
+.post a.btn,
+.page a.btn {
+    color: #000 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
 
 a.label-anchor {
     position: relative;
@@ -253,10 +347,24 @@ a.inline-ref:hover {
     border-bottom: solid 1px #000
 }
 
+/* ==============================================
+   Apple macOS 风格 blockquote
+   参考：macOS Notes + Apple Developer Docs
+   ============================================== */
+
+/* > 一级引用 — 绿色主题 */
 blockquote {
-    border-left: 5px solid #ccc;
-    font-size: .9em;
-    background-color: #3a3a3a
+    margin: 1.5em 0;
+    padding: 18px 24px 18px 24px;
+    border: none;
+    border-left: 3.5px solid #2bbc8a;
+    border-radius: 10px;
+    background: #1c1c1e;
+    font-size: 0.95em;
+    color: #d1d1d6;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    line-height: 1.75;
 }
 
 blockquote p,
@@ -264,7 +372,58 @@ blockquote ol,
 blockquote ul,
 blockquote li,
 .slogan {
-    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+blockquote p {
+    margin: 0.4em 0;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* >> 二级嵌套引用 — 蓝灰色主题 */
+blockquote blockquote {
+    border-left-color: #64d2ff;
+    background: #1a1a1c;
+    margin: 1em 0;
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* >>> 三级嵌套引用 — 紫色主题 */
+blockquote blockquote blockquote {
+    border-left-color: #bf5af2;
+    background: #18181a;
+    margin: 0.8em 0;
+    padding: 12px 18px;
+    border-radius: 6px;
+}
+
+/* blockquote 内代码 */
+blockquote code {
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #f0f0f0;
+}
+
+/* blockquote 内 strong / em */
+blockquote strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+blockquote em {
+    color: #a1a1a6;
+    font-style: italic;
 }
 
 img,
@@ -376,6 +535,7 @@ h5 {
     font-size: 1.1em;
     margin-bottom: .6667em
 }
+/* Apple 风格标题 */
 h1,
 h2,
 h3,
@@ -383,16 +543,19 @@ h4,
 h5,
 h6 {
     text-rendering: optimizelegibility;
-    font-weight: bold;
-    line-height: 1.2em;
-    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
-    color: #fff
+    font-weight: 700;
+    line-height: 1.35;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', SimHei, sans-serif;
+    color: #f5f5f7;
+    letter-spacing: -0.2px;
 }
 
 h2 {
-    color: #fff;
+    color: #f5f5f7;
     padding-top: 40px;
-    margin: -25px 0 .83em
+    padding-bottom: 10px;
+    margin: -25px 0 1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .page-header {
@@ -405,8 +568,17 @@ h2 {
     border-radius: 6px 6px 0 0;
     font-size: 1.3em
 }
-em{
-    font-style:oblique;
+/* Apple 风格强调文本 */
+.post em,
+.page em {
+    font-style: italic;
+    color: #a1a1a6;
+}
+
+.post strong,
+.page strong {
+    font-weight: 600;
+    color: #f5f5f7;
 }
 .page .entry {
     padding-top: 10px;
@@ -455,46 +627,53 @@ em{
     opacity: 1
 }
 
+/* TOC — 隔离 Apple 风格，不影响 */
 .toc {
-    font-size: 10pt;
+    font-size: 13px;
     width: auto;
-    padding: 12px;
-    background: #1a1a1a;
-    border-left: 3px solid #2bbc8a;
+    padding: 14px 16px;
+    background: #1c1c1e;
+    border-radius: 10px;
+    border: 1px solid #2c2c2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', SimHei, sans-serif;
 }
 
-/* TOC 标题样式 */
+/* TOC 标题 */
 .toc .toc-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #2bbc8a;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8e8e93;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     display: block;
     margin-bottom: 10px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #2c2c2e;
 }
 
-/* TOC 链接样式 */
+/* TOC 链接基础样式 */
 .toc-article a {
-    color: #ccc;
     text-decoration: none;
-    transition: all 0.2s;
+    border: none;
+    border-bottom: none;
+    border-radius: 4px;
     display: block;
-    padding: 4px 8px;
-    border-radius: 3px;
+    transition: color 0.15s ease, background 0.15s ease;
+    line-height: 1.6;
 }
 
 .toc-article a:hover {
-    color: #2bbc8a;
-    background: rgba(43, 188, 138, 0.1);
-    padding-left: 12px;
+    color: #2bbc8a !important;
+    background: rgba(43, 188, 138, 0.08);
+    border: none;
+    border-bottom: none;
 }
 
-/* 当前激活的TOC项 */
+/* 当前激活项 */
 .toc-article a.toc-active {
-    color: #2bbc8a;
-    font-weight: bold;
-    background: rgba(43, 188, 138, 0.15);
+    color: #2bbc8a !important;
+    font-weight: 600;
+    background: rgba(43, 188, 138, 0.08);
 }
 
 /* make TOC scrollable within the sidebar so active item can move into view */
@@ -504,8 +683,8 @@ em{
 }
 
 .toc-article a.toc-active {
-    color: #fefe54;
-    font-weight: bold;
+    color: #2bbc8a;
+    font-weight: 600;
 }
 
 /* small card at page right-top showing date + categories/tags */
@@ -539,48 +718,184 @@ em{
     font-size: 125%
 }
 
-.toc-article {
-    list-style: circle;
-    line-height: 1em;
-    margin-bottom: 0;
-    padding: 10px 12px
+/* ==============================================
+   TOC — Apple Notes 风格，清晰层次
+   ============================================== */
+
+/* 列表基础 */
+.toc-article,
+.toc-article-child {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0;
 }
 
-.toc-article li {
-    margin-left: 5px !important;
-    padding: 0 !important
+.toc-article-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    list-style-type: none !important;
 }
 
-.toc-article ol {
-    list-style: square;
-    padding: 5px 10px
+/* 嵌套缩进 + 左侧树线 */
+.toc-article-child {
+    padding-left: 16px;
+    margin-left: 4px;
+    border-left: 1px solid #2c2c2e;
 }
 
-.toc-article ol ol {
-    list-style: circle;
-    padding: 5px 10px
+/* 去掉数字 */
+.toc-article-number {
+    display: none !important;
+}
+
+/* 链接基础 */
+.toc-article-link {
+    display: block;
+    text-decoration: none;
+    border: none !important;
+    border-bottom: none !important;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    line-height: 1.5;
+    padding: 5px 10px;
+    margin: 1px 0;
+    color: #a1a1a6;
+    font-size: 13px;
+}
+
+.toc-article-link:hover {
+    color: #f5f5f7 !important;
+    background: rgba(43, 188, 138, 0.1);
+    border: none !important;
+    border-bottom: none !important;
+}
+
+.toc-article-link.toc-active {
+    color: #2bbc8a !important;
+    font-weight: 600;
+    background: rgba(43, 188, 138, 0.12);
+}
+
+/* h1 — 最大最亮 */
+.toc-level-1 > .toc-article-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f5f5f7;
+    padding: 7px 10px;
+}
+
+/* h2 */
+.toc-level-2 > .toc-article-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #c7c7cc;
+}
+
+/* h3 */
+.toc-level-3 > .toc-article-link {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #a1a1a6;
+}
+
+/* h4 */
+.toc-level-4 > .toc-article-link {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8e8e93;
+}
+
+/* h5 */
+.toc-level-5 > .toc-article-link {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #636366;
+}
+
+/* h6 */
+.toc-level-6 > .toc-article-link {
+    font-size: 11px;
+    font-weight: 400;
+    color: #48484a;
 }
 
 .line {
     height: 20px
 }
 
+/* Apple macOS 风格表格 */
 table {
     border-collapse: separate;
     border-spacing: 0;
-    vertical-align: middle
+    vertical-align: middle;
+    width: 100%;
+    margin: 1.2em 0;
+    border-radius: 12px;
+    border: 1px solid #333;
+    overflow: hidden;
+    background: #1a1a1a;
+    font-size: 0.95em;
 }
 
 th {
-    padding: 12px 10px 12px 10px;
-    border-bottom: 1px dashed #4088b8
+    padding: 12px 16px;
+    background: #252525;
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    border-bottom: 1px solid #333;
 }
 
 td {
-    padding: 7px 10px 7px 10px;
+    padding: 10px 16px;
     text-align: left;
     font-weight: normal;
-    vertical-align: middle
+    vertical-align: middle;
+    border-bottom: 1px solid #262626;
+    color: #c8c8c8;
+}
+
+/* 去掉最后一行底部边框 */
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* 斑马纹 */
+tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* 行 hover 效果 */
+tbody tr:hover {
+    background: rgba(43, 188, 138, 0.06);
+    transition: background 0.15s ease;
+}
+
+/* 表格内代码 */
+td code,
+th code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #fefe54;
+}
+
+/* 表格内链接 */
+td a {
+    color: #2bbc8a;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+}
+
+td a:hover {
+    border-bottom-color: #2bbc8a;
 }
 
 .cf:before,
@@ -597,8 +912,230 @@ td {
     *zoom: 1
 }
 
+/* Apple 风格分隔线 */
 hr {
-    border-top: 2px solid #fff
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 2em 0;
+}
+
+/* Apple 风格段落 */
+.post p,
+.page p {
+    margin: 0.8em 0;
+    line-height: 1.8;
+}
+
+.post p:first-child,
+.page p:first-child {
+    margin-top: 0;
+}
+
+/* Apple 风格列表 */
+.post ul,
+.post ol,
+.page ul,
+.page ol {
+    margin: 0.8em 0;
+    padding-left: 1.6em;
+}
+
+.post li,
+.page li {
+    margin: 0.35em 0;
+    line-height: 1.7;
+}
+
+.post ul li,
+.page ul li {
+    list-style: none;
+    padding-left: 1.2em;
+    position: relative;
+}
+
+.post ul li::before,
+.page ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #636366;
+}
+
+.post ol li,
+.page ol li {
+    list-style-type: decimal;
+}
+
+/* 列表嵌套 */
+.post ul ul,
+.page ul ul {
+    list-style: none;
+    margin: 0.2em 0;
+}
+
+.post ul ul li::before,
+.page ul ul li::before {
+    content: '–';
+}
+
+/* 内联代码（非代码块） */
+.post p code,
+.post li code,
+.page p code,
+.page li code {
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #f0f0f0;
+    font-family: 'Fira Code', Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ==============================================
+   Apple 风格：图片、kbd、mark 等 MD 元素
+   ============================================== */
+
+/* 图片 — 圆角 + 微阴影 */
+.post img,
+.page img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    margin: 1.2em auto;
+    display: block;
+}
+
+/* 键盘按键 — Apple 键盘风格 */
+kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 0.82em;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    color: #e0e0e0;
+    background: linear-gradient(180deg, #3a3a3c, #2c2c2e);
+    border: 1px solid #48484a;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 #1c1c1e, inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* 高亮文本 */
+mark {
+    background: rgba(254, 254, 84, 0.2);
+    color: #f5f5f7;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+/* 上标 / 下标 */
+sup, sub {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* 缩写 */
+abbr[title] {
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+    cursor: help;
+}
+
+/* 定义列表 */
+.post dl,
+.page dl {
+    margin: 0.8em 0;
+}
+
+.post dt,
+.page dt {
+    font-weight: 600;
+    color: #f5f5f7;
+    margin-top: 0.6em;
+}
+
+.post dd,
+.page dd {
+    margin-left: 1.5em;
+    margin-top: 0.2em;
+    color: #a1a1a6;
+}
+
+/* 任务列表（- [ ] / - [x]） */
+.post ul.contains-task-list,
+.page ul.contains-task-list {
+    list-style: none;
+    padding-left: 0.5em;
+}
+
+.post .task-list-item,
+.page .task-list-item {
+    position: relative;
+    padding-left: 1.8em;
+    list-style-type: none !important;
+}
+
+.post .task-list-item input[type="checkbox"],
+.page .task-list-item input[type="checkbox"] {
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    width: 16px;
+    height: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1.5px solid #48484a;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.post .task-list-item input[type="checkbox"]:checked,
+.page .task-list-item input[type="checkbox"]:checked {
+    background: #2bbc8a;
+    border-color: #2bbc8a;
+}
+
+.post .task-list-item input[type="checkbox"]:checked::after,
+.page .task-list-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* 脚注 */
+.post sup a,
+.page sup a {
+    color: #2bbc8a;
+    border-bottom: none;
+    font-size: 0.85em;
+}
+
+.post .footnotes,
+.page .footnotes {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9em;
+    color: #a1a1a6;
 }
 
 /* Post sidebar — sticky behavior moved to .sticky-meta class */
@@ -675,15 +1212,32 @@ hr {
     font-size: .8em
 }
 
+/* 主页标题 — Apple + Hacker 风格 */
 .logo {
     background: url("../favicon.png") no-repeat left top;
-    background-size: 5em
+    background-size: 5em;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo>h1 {
     padding-left: 3em;
-    font-size: 1.5em;
-    line-height: 2.0em
+    font-size: 1.8em;
+    line-height: 2.0em;
+    font-family: 'Fira Code', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', SimHei, monospace;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #f5f5f7 0%, #2bbc8a 50%, #fefe54 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+/* 光标颜色改为绿色 */
+.logo .blink-fast {
+    -webkit-text-fill-color: #2bbc8a;
+    text-shadow: 0 0 8px rgba(43, 188, 138, 0.6);
 }
 
 .fa-heart:before {
@@ -944,4 +1498,635 @@ border: 2px solid rgb(255, 255, 255) !important;
 }
 .category-stick.expanded .category-tree {
     display: block;
+}
+
+/* ==============================================
+   Search Trigger Button (Sidebar Widget)
+   ============================================== */
+#site_search {
+    margin: 0;
+}
+
+.search-trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #000;
+    color: #bbb;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    border: 2px solid #2bbc8a;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 8px;
+}
+
+.search-trigger:hover {
+    border-color: #2bbc8a;
+    box-shadow: 0 0 12px rgba(43, 188, 138, 0.4);
+    color: #fff;
+    background-color: #0a0a0a;
+}
+
+.search-trigger:focus {
+    outline: none;
+    box-shadow: 0 0 14px rgba(43, 188, 138, 0.5);
+    border-color: #2bbc8a;
+}
+
+.search-trigger-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.search-trigger-label {
+    flex: 1;
+    text-align: left;
+}
+
+.search-trigger-kbd {
+    font-size: 11px;
+    padding: 2px 6px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    color: #888;
+    background: #111;
+    flex-shrink: 0;
+}
+
+/* ==============================================
+   Search Overlay (Modal)
+   ============================================== */
+#search-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.85);
+    animation: search-fade-in 0.15s ease;
+}
+
+#search-overlay.active {
+    display: flex;
+    justify-content: center;
+    padding-top: 10vh;
+}
+
+@keyframes search-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+#search-overlay-inner {
+    width: 90%;
+    max-width: 680px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+/* ---- Header: search input ---- */
+#search-overlay-header {
+    padding: 16px 16px 0;
+    flex-shrink: 0;
+}
+
+#search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px 4px 12px;
+    background: #000;
+    border: 2px solid #333;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+#search-input-wrap:focus-within {
+    border-color: #2bbc8a;
+    box-shadow: 0 0 10px rgba(43, 188, 138, 0.3);
+}
+
+#search-input-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+#search-overlay-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    font-size: 18px;
+    padding: 8px 0;
+    caret-color: #2bbc8a;
+}
+
+#search-overlay-input::placeholder {
+    color: #555;
+}
+
+#search-hint {
+    font-size: 11px;
+    color: #555;
+    flex-shrink: 0;
+    padding-right: 4px;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ---- Status line ---- */
+#search-status {
+    padding: 8px 20px;
+    font-size: 12px;
+    color: #666;
+    min-height: 20px;
+    flex-shrink: 0;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* ---- Results list ---- */
+#search-overlay-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px;
+    min-height: 100px;
+}
+
+#search-overlay-results::-webkit-scrollbar {
+    width: 5px;
+}
+
+#search-overlay-results::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#search-overlay-results::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+#search-overlay-results::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#search-result-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.search-result-item {
+    position: relative;
+    padding: 12px 16px;
+    margin: 2px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-left: 3px solid transparent;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+    background: #1a1a1a;
+    border-left-color: #2bbc8a;
+}
+
+/* Title row: title + badge aligned */
+.search-result-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-result-item .search-result-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: bold;
+    color: #2bbc8a;
+    text-decoration: none;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-result-item .search-result-title:hover {
+    text-decoration: underline;
+    color: #fefe54;
+}
+
+/* Section count badge — small green circle */
+.search-section-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(43, 188, 138, 0.15);
+    color: #2bbc8a;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* Snippet */
+.search-result-snippet {
+    font-size: 13px;
+    color: #888;
+    margin: 5px 0 0;
+    line-height: 1.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* Keyword highlight */
+em.search-keyword {
+    font-weight: bold;
+    font-style: normal;
+    color: #fefe54;
+    border-bottom: 1px dashed #2bbc8a;
+}
+
+/* ---- Footer shortcuts bar ---- */
+#search-footer {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: #444;
+    border-top: 1px solid #1a1a1a;
+    flex-shrink: 0;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+#search-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ---- No-results fallback ---- */
+#search-overlay-results:empty::after {
+    content: '';
+}
+
+/* ---- Section button ---- */
+button.search-sec-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    border: 1px solid #2bbc8a;
+    border-radius: 4px;
+    background: transparent;
+    color: #2bbc8a;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1;
+}
+
+button.search-sec-btn:hover,
+a.search-sec-btn:hover {
+    background: #2bbc8a;
+    color: #000;
+}
+
+/* Arrow button (no sections — just go to article) */
+a.search-sec-goto {
+    text-decoration: none;
+    border-color: #444;
+    color: #666;
+}
+
+a.search-sec-goto:hover {
+    background: #555;
+    border-color: #666;
+    color: #fff;
+}
+
+/* ---- Context menu (click-triggered popup) ---- */
+.search-ctx-menu {
+    position: fixed;
+    z-index: 10001;
+    min-width: 180px;
+    max-width: 380px;
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 6px;
+    background: #151515;
+    border: 1px solid #2bbc8a;
+    border-radius: 6px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+    font-family: DOS, SimHei, Monaco, Menlo, Consolas, 'Courier New', monospace;
+}
+
+.search-ctx-menu::-webkit-scrollbar {
+    width: 4px;
+}
+.search-ctx-menu::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 2px;
+}
+
+a.search-ctx-link {
+    display: block;
+    padding: 7px 10px;
+    margin: 1px 0;
+    font-size: 13px;
+    color: #aaa;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.1s, color 0.1s;
+    line-height: 1.4em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a.search-ctx-link:hover {
+    background: rgba(43, 188, 138, 0.12);
+    color: #2bbc8a;
+}
+
+a.search-ctx-link em.search-keyword {
+    color: #fefe54;
+    font-style: normal;
+}
+
+.search-ctx-more {
+    display: block;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #555;
+}
+
+/* ---- Keyword highlight on target page ---- */
+mark.search-hl-mark {
+    background: rgba(43, 188, 138, 0.35);
+    color: #fff;
+    padding: 1px 3px;
+    border-radius: 3px;
+    border: 1px solid #2bbc8a;
+    animation: search-hl-pulse 1s ease-in-out 3;
+}
+
+@keyframes search-hl-pulse {
+    0%, 100% { background: rgba(43, 188, 138, 0.35); }
+    50%      { background: rgba(43, 188, 138, 0.65); }
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 767px) {
+    #search-overlay-inner {
+        width: 96%;
+        max-height: 85vh;
+        border-radius: 4px;
+    }
+
+    #search-overlay-input {
+        font-size: 16px;
+    }
+
+    .search-result-item {
+        padding: 10px 12px;
+    }
+
+    button.search-sec-btn {
+        min-width: 28px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    #search-footer {
+        gap: 12px;
+        font-size: 10px;
+    }
+}
+
+/* ==============================================
+   Code Block Enhancement: Header + Scroll
+   ============================================== */
+
+/* Reset figure when enhanced — macOS window style */
+figure.highlight.code-enhanced {
+    position: relative;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px !important;
+    border: none;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+    margin: 1.2em 0;
+}
+
+figure.highlight.code-enhanced .code-header {
+    border-radius: 16px 16px 0 0;
+    padding: 10px 16px;
+    border-bottom: none;
+}
+
+figure.highlight.code-enhanced .code-scroll {
+    border-radius: 0 0 16px 16px;
+    padding: 0 18px;
+}
+
+figure.highlight.code-enhanced pre {
+    border-radius: 0 !important;
+    padding: 8px 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: #252525 !important;
+}
+
+figure.highlight.code-enhanced table {
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+figure.highlight.code-enhanced td {
+    background: transparent !important;
+}
+
+/* Header bar: macOS dots + language label + copy button */
+.code-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    background: #252525 !important;
+    border: none !important;
+    border-bottom: none !important;
+    flex-shrink: 0;
+    min-height: 36px;
+}
+
+/* macOS 红黄绿三圆点 */
+.code-dots {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.code-dots span {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+
+.code-dots span:nth-child(1) {
+    background: #ff5f57;
+}
+
+.code-dots span:nth-child(2) {
+    background: #febc2e;
+}
+
+.code-dots span:nth-child(3) {
+    background: #28c840;
+}
+
+/* Language label */
+.code-lang {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    color: #666;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Scrollable code area */
+.code-scroll {
+    overflow-x: auto;
+    background: #252525 !important;
+    border: none !important;
+}
+
+.code-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.code-scroll::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Right-side scroll fade indicator — sticky inside scroll container */
+.code-fade {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    display: block;
+    width: 40px;
+    min-width: 40px;
+    height: 0;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, #252525 85%);
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* Copy button */
+.code-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: transparent;
+    color: #888;
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.code-copy-btn svg {
+    flex-shrink: 0;
+}
+
+.code-copy-btn:hover {
+    background: rgba(43, 188, 138, 0.15);
+    border-color: #2bbc8a;
+    color: #2bbc8a;
+}
+
+.code-copy-btn.copied {
+    background: rgba(43, 188, 138, 0.2);
+    border-color: #2bbc8a;
+    color: #2bbc8a;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 767px) {
+    .code-header {
+        padding: 6px 10px;
+        min-height: 30px;
+        gap: 8px;
+    }
+
+    .code-dots span {
+        width: 9px;
+        height: 9px;
+    }
+
+    .code-dots {
+        gap: 5px;
+    }
+
+    .code-copy-btn {
+        padding: 2px 8px;
+        font-size: 11px;
+    }
+
+    .code-copy-btn span {
+        display: none;
+    }
+
+    .code-fade {
+        width: 24px;
+        min-width: 24px;
+    }
 }

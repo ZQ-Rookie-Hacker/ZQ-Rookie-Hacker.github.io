@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -52,7 +53,26 @@
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -117,11 +137,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/04/20/邮箱地址解析/" >邮箱地址解析</a>
+			<a href="/2026/07/27/神经网络基础/" >神经网络基础</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-04-20  </div>
+		<div class="date">post @ 2026-07-27  </div>
 		</div>
 	</div>
 	
@@ -131,21 +151,17 @@
   <div class="row">
 	
 	
-		<h2 id="从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路"><a href="#从协议原理到实战攻破GitHub-GitLab——复刻PortSwigger研究思路" class="headerlink" title="从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路"></a>从协议原理到实战攻破GitHub&#x2F;GitLab——复刻PortSwigger研究思路</h2><p>本文完整保留<a target="_blank" rel="noopener" href="https://portswigger.net/research/splitting-the-email-atom">《Splitting the email atom》</a>原文研究逻辑、试错过程、Payload案例，融合邮箱解析库原理、规则差异、漏洞本质等精华内容，以零基础可懂的语言，还原安全研究者从发现异常→挖掘原理→绕过防护→实战攻破大厂的全流程，无核心知识点遗漏。</p>
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>这篇文章是我闲暇之余（实际上是在学习网安的过程中迷茫了）学习神经网络的笔记，跳过了机器学习的完整过程直接学习深度学习，目的是为了学完神经网络之后对AI学习以及网安学习产生一些新的思考</p>
 <hr>
-<h1 id="前言：颠覆对电子邮件地址的认知"><a href="#前言：颠覆对电子邮件地址的认知" class="headerlink" title="前言：颠覆对电子邮件地址的认知"></a>前言：颠覆对电子邮件地址的认知</h1><p>常规认知中，邮箱格式为<strong>本地部分@域名</strong>，系统仅做简单格式校验，但真实情况为：</p>
-<ol>
-<li>邮箱解析无统一标准，完全依赖解析库、邮件服务器的自定义规则；</li>
-<li>解析库为轻量级字符串处理，仅做基础匹配运算，不会消耗大量硬件资源；</li>
-<li>邮箱RFC协议为兼容老旧技术，保留大量冗余、宽松的解析规则；</li>
-<li>解析规则不统一+协议过度宽松+第三方库违规实现，催生了域名验证绕过、内网入侵、企业服务器控制等高危漏洞。</li>
-</ol>
-<p>本文将跟随研究者思考路径，从邮件路由异常切入，逐层揭开邮箱解析漏洞的完整体系。</p>
-<hr>
-<h1 id="第一章-基础铺垫：邮箱解析核心知识"><a href="#第一章-基础铺垫：邮箱解析核心知识" class="headerlink" title="第一章 基础铺垫：邮箱解析核心知识"></a>第一章 基础铺垫：邮箱解析核心知识</h1><h2 id="1-1-理论标准与现实解析差异"><a href="#1-1-理论标准与现实解析差异" class="headerlink" title="1.1 理论标准与现实解析差异"></a>1.1 理论标准与现实解析差异</h2>
+<h2 id="1-神经网络的发展"><a href="#1-神经网络的发展" class="headerlink" title="1.神经网络的发展"></a>1.神经网络的发展</h2><p>神经网络的发展并非一帆风顺的线性进步，而是一部充满高潮、低谷与颠覆性革命的曲折演进史，其思想萌芽可追溯至20世纪40年代，彼时麦克洛克和皮茨基于数理逻辑提出了首个形式化的M-P神经元模型，首次在数学层面模拟了生物神经元的“激活”机制，为整个领域奠定了最初的理论基石；</p>
+<p>然而直到<strong>50年代末</strong>，罗森布拉特提出<code>感知机（Perceptron</code>）并成功将其应用于简单的模式识别，才真正点燃了第一波研究热潮，但这种单层结构的巨大缺陷很快暴露——它连最基本的异或（XOR）逻辑问题都无法解决，这一致命伤被马文·明斯基在1969年的著作中严厉抨击，直接导致神经网络研究在70年代几乎陷入万马齐喑的“第一次寒冬”。</p>
+<p>进入<strong>80年代</strong>，随着反向传播（Backpropagation）算法被鲁梅尔哈特等人重新发现并推广至<code>多层感知机</code>，使得网络中间层（隐藏层）的错误信号能够有效回传并调整权重，这一突破极大地拓展了神经网络的非线性拟合能力，由此掀起了联结主义的第二次复兴，学界欢呼雀跃，认为机器智能的黎明即将到来；但好景不长，由于当时可用的数据规模极其有限，CPU算力捉襟见肘，更棘手的是，研究者发现当网络层数加深时，梯度信号在反向传播过程中会急剧消失或爆炸，导致深层网络几乎无法收敛，加之支持<code>向量机（SVM）</code>等浅层模型凭借精妙的核技巧和凸优化理论在性能上频频胜出，神经网络在90年代末期再次黯然失色，迎来了漫长的“第二次寒冬”。</p>
+<p>真正的转机始于<strong>2006年</strong>，深度学习之父辛顿（Geoffrey Hinton）等人创新性地提出<code>深度信念网络（DBN）</code>，通过无监督的逐层预训练策略有效缓解了梯度消失问题，并正式打出“深度学习”的旗帜，标志着第三次崛起的开端；</p>
+<p>而引爆这场革命的标志性事件则是<strong>2012年</strong>的ImageNet图像识别竞赛，辛顿团队凭借<code>深度卷积神经网络架构AlexNe</code>t，利用GPU并行计算处理海量数据，以碾压性的优势超越所有传统算法夺冠，向全世界证明了“<code>深度+大数据+强算力</code>”这一组合的惊人威力。自此，深度学习进入全面爆发时代，学界和工业界的热情如井喷般释放，研究者们不再畏首畏尾于网络的深度，反而不断堆叠层数，从经典的AlexNet到VGG、ResNet（残差网络）、Inception，网络动辄上百层甚至上千层；与此同时，神经网络的结构也在横向野蛮生长，从擅长处理序列数据的<code>循环神经网络（RNN）</code>及其改进型<code>长短时记忆网络（LSTM）</code>。</p>
+<p>到<strong>2017年</strong>谷歌团队提出颠覆性的<code>Transformer架构</code>，彻底抛弃了传统的递归与卷积，仅依赖自注意力机制捕获全局依赖关系，这一革命性设计不仅将自然语言处理推向前所未有的高度，催生了GPT系列、BERT等千亿级参数量的大语言模型，更凭借其强大的扩展性和迁移能力反哺至计算机视觉、多模态融合乃至科学计算领域。如今，神经网络早已挣脱学术论文的束缚，深度嵌入到人脸识别、自动驾驶、蛋白质结构预测、AIGC（人工智能生成内容）乃至气象精准预报等千行百业，它从最初一个简单的数学模仿，经历两次寒冬的蛰伏与三次爆发的升腾，最终成长为当代人工智能无可争议的核心引擎，并且仍在以月为单位迭代进化，向着具身智能、世界模型等更宏大的未知疆域极速狂飙。</p>
 	
 	</div>
-  <a type="button" href="/2026/04/20/邮箱地址解析/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/07/27/神经网络基础/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -155,11 +171,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/04/15/OAuth_authentication/" >OAuth authentication</a>
+			<a href="/2026/07/16/XXE基础/" >XXE基础</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-04-15  </div>
+		<div class="date">post @ 2026-07-16  </div>
 		</div>
 	</div>
 	
@@ -169,36 +185,26 @@
   <div class="row">
 	
 	
-		<h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h3><h4 id="OAuth诞生前：古老的-密码共享-时代"><a href="#OAuth诞生前：古老的-密码共享-时代" class="headerlink" title="OAuth诞生前：古老的&quot;密码共享&quot;时代"></a><strong><code>OAuth诞生前：古老的&quot;密码共享&quot;时代</code></strong></h4><p>在OAuth诞生之前，互联网上几乎没有标准化的授权方案。当你想让一个第三方应用（比如一款帮你分析好友社交网络的工具）访问你在另一个平台（比如你的社交账号）上的数据时，<code>唯一的办法</code>就是把你的用户名和密码直接告诉它。但是，这样存在巨大的安全风险：用户与密码可能会被保存、滥用，甚至被恶意程序用来做任何事，而你毫无办法</p>
-<p>后来，一些大型科技公司（比如Google、Facebook）意识到了这个巨大的安全风险，开始各自推出私有的授权方案，例如FlickrAuth和GoogleAuthSub。但这些方案彼此不兼容，开发者需要为每个不同的平台单独学习和适配，极其痛苦</p>
-<hr>
-<h4 id="OAuth-1-0：从-共享密码-到-安全授权"><a href="#OAuth-1-0：从-共享密码-到-安全授权" class="headerlink" title="OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;"></a><strong><code>OAuth 1.0：从&quot;共享密码&quot;到&quot;安全授权&quot;</code></strong></h4><p>为了解决这个”授权困境”，OAuth（开放授权）应运而生。它的故事始于2006年，当时Twitter的一位开发者Blaine Cook在为Twitter实现OpenID时，发现没有一个好的方案来安全地授权第三方应用访问Twitter的API。于是，他与Chris Messina等人一起发起讨论，最终催生了OAuth协议。</p>
-<p>OAuth 1.0协议的核心思想是引入一个<code>&quot;令牌&quot;（Token）</code>的概念。它就像一把精心设计的、有时间限制的”临时钥匙”，第三方应用只需用这把<code>&quot;临时钥匙&quot;</code>来访问你的数据，整个过程完全不需要知道你的密码</p>
-<blockquote>
-<p>OAuth授权过程中，有三个关键角色</p>
-<blockquote>
-<ol>
-<li><code>用户</code>：数据的拥有者，比如社交网站的会员</li>
-<li><code>服务提供商</code>：保存数据的地方，比如Google、微信</li>
-<li><code>客户端应用</code>：想要访问用户数据的第三方程序，比如一款分析社交好友的App</li>
-</ol>
-</blockquote>
-<p>OAuth 1.0的安全性<code>高度依赖</code>于其复杂的加密签名。为了确保授权过程中的核心数据（如令牌、参数）在传输中不被篡改，开发者<code>必须</code>在客户端（Consumer）和服务提供方（Service Provider）之间对<code>所有HTTP</code>请求进行签名</p>
-<blockquote>
-<p>1.签名的工作原理,其核心思想是<code>服务提供方</code>能够验证收到的请求，确实是由知道正确客户端密钥（Consumer Secret）的客户端发出的，并且在传输过程中<code>未被修改</code></p>
-<blockquote>
-<ol>
-<li>生成签名基础字符串：客户端将HTTP方法、请求URL以及所有OAuth参数（如<code>oauth_consumer_key</code>, <code>oauth_token</code>, <code>oauth_timestamp</code>, <code>oauth_nonce</code>）按字母顺序排序并拼接成一个长字符串</li>
-<li>计算签名：使用<code>客户端密钥</code>（Consumer Secret）和<code>令牌密钥</code>作为密钥，对上述字符串应用哈希算法（如HMAC-SHA1或RSA-SHA1），生成最终的签名值</li>
-<li>发送并验证：签名被放在<code>请求头</code>中发送。服务提供方收到请求后，用同样的方法和密钥计算出预期签名，与收到的签名进行<code>比对</code>，只有完全一致，请求才被认为是合法的</li>
-</ol>
-</blockquote>
-</blockquote>
-</blockquote>
-<p><code>OAuth 1.0 </code>存在的问题</p>
+		<h2 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h2><p><strong>1. XIMIL是一种标记语言</strong><br>XML指可扩展标记语言(EXtensible Markup Language)把<strong>数据结构化</strong>后<strong>传输</strong>给对方让对方在结构化的数据中进行读取。</p>
+<p>假设你要告诉同事“张三的座机是010-8888，手机是1380000，邮箱是<a href="mailto:&#x7a;&#x68;&#97;&#x6e;&#x67;&#64;&#x78;&#x78;&#46;&#99;&#111;&#x6d;">zhang@xx.com</a>”。</p>
+<ul>
+<li><p><strong>非结构化（纯文本）</strong>：你发微信：“张三电话010-8888，手机1380000，邮箱<a href="mailto:&#122;&#x68;&#97;&#110;&#103;&#64;&#120;&#x78;&#x2e;&#x63;&#111;&#x6d;">zhang@xx.com</a>”。<br>如果同事的电脑要提取“手机号”，得写复杂的模糊匹配（万一张三写了“Tel”或者“Mobile”呢？）。</p>
+</li>
+<li><p><strong>结构化（XML）</strong>：</p>
+  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">员工</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">姓名</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">姓名</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">座机</span>&gt;</span>010-8888<span class="tag">&lt;/<span class="name">座机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">手机</span>&gt;</span>1380000<span class="tag">&lt;/<span class="name">手机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">邮箱</span>&gt;</span>zhang@xx.com<span class="tag">&lt;/<span class="name">邮箱</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">员工</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>2. 标签没有被预定义，需要自行定义</strong></p>
+<p>这是XML与它的“表哥”HTML最本质的区别：</p>
+<ul>
+<li>HTML（预定义标签）：浏览器只认识 [h1]（大标题）、[p]（段落）、[table]（表格）。标签是写死的，你不能自己发明一个 &lt;帅哥&gt; 标签让浏览器渲染，因为它不认识。</li>
+<li>XML（自定义标签）：XML没有任何现成的标签库。它相当于给你一张白纸，完全由你（发送方和接收方）商量着来。比如，你们俩约定好用 &lt;员工工号&gt; 来传工号，用 &lt;紧急联系人&gt; 传亲属电话。只要双方都认这个“自定义名字”，数据就能正确读取。</li>
+</ul>
+<p><strong>3. 没有任何行为的 XML 的漏洞何处来？</strong></p>
+<p>绝大多数（超过95%）的XXE漏洞，核心根源就是利用了<strong>DTD声明</strong>中的“实体（ENTITY）声明”功能。</p>
+<p><strong>DTD声明规定</strong>：这个 XML 文档里可以出现哪些标签、标签之间的层级关系、标签里能填什么类型的数据，以及可以提前定义哪些“快捷方式（实体）</p>
 	
 	</div>
-  <a type="button" href="/2026/04/15/OAuth_authentication/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/07/16/XXE基础/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -234,11 +240,12 @@
 		<div class="col-md-3" id="sidebar">
   
     
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
+  <div id="site_search" class="widget">
+    <button type="button" id="search-trigger-btn" class="search-trigger" title="Search (Ctrl+K)">
+      <span class="search-trigger-icon">🔍</span>
+      <span class="search-trigger-label">Search</span>
+      <span class="search-trigger-kbd">Ctrl+K</span>
+    </button>
   </div>
 
 
@@ -247,7 +254,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -292,54 +299,55 @@
   margin-left: 5px;
 }
 </style>
+
   
     
 	<div class="widget">
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/指令/">指令<span>3</span></a></li>
-		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
-		
-			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
-		
-			<li><a href="/tags/编码技术/">编码技术<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
-		
-			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
-		
-			<li><a href="/tags/包管理工具/">包管理工具<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
-		
 			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
 		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
-		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
 			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
 		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
 			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
 		
-			<li><a href="/tags/域工具/">域工具<span>2</span></a></li>
+			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+		
+			<li><a href="/tags/Java/">Java<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
+		
+			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
+		
+			<li><a href="/tags/神经网络基础/">神经网络基础<span>1</span></a></li>
+		
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
+		
+			<li><a href="/tags/深度学习/">深度学习<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/tor/">tor<span>1</span></a></li>
+		
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
+		
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>60</span></a></li>
+		   <li><a href="/tags">...<span>64</span></a></li>
 		 
 		</ul>
 	</div>
@@ -352,23 +360,23 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/07/27/神经网络基础/" ><i class="fa fa-file-o"></i>神经网络基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/07/16/XXE基础/" ><i class="fa fa-file-o"></i>XXE基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/06/07/HookScripts/" ><i class="fa fa-file-o"></i>HookScripts</a>
+      </li>
+    
+      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
       <li>
         <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>
@@ -408,7 +416,7 @@
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -417,7 +425,14 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -428,16 +443,6 @@
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

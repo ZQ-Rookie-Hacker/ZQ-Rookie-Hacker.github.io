@@ -1,0 +1,1036 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>tools | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x01 dirsearch
+核心优势：Python 目录扫描器，内置字典丰富，支持递归&amp;#x2F;多方法&amp;#x2F;认证扫描
+
+参数速查
+
+
+参数
+作用
+
+
+
+-u
+目标 URL
+
+
+-e
+指定扩展名（php,jsp,bak,env…）
+
+
+-w
+自定义字典路径
+
+
+-t
+线程数（建议 ≤15）
+">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="tools"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> tools</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h1 id="0x01-dirsearch"><a href="#0x01-dirsearch" class="headerlink" title="0x01 dirsearch"></a>0x01 dirsearch</h1><blockquote>
+<p><strong>核心优势</strong>：Python 目录扫描器，内置字典丰富，支持递归&#x2F;多方法&#x2F;认证扫描</p>
+</blockquote>
+<h2 id="参数速查"><a href="#参数速查" class="headerlink" title="参数速查"></a>参数速查</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-u</code></td>
+<td>目标 URL</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>指定扩展名（php,jsp,bak,env…）</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>自定义字典路径</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>线程数（建议 ≤15）</td>
+</tr>
+<tr>
+<td><code>--delay</code></td>
+<td>请求间隔（秒），防 CC</td>
+</tr>
+<tr>
+<td><code>--random-agent</code></td>
+<td>随机 User-Agent</td>
+</tr>
+<tr>
+<td><code>--exclude-status</code></td>
+<td>排除状态码（404,400…）</td>
+</tr>
+<tr>
+<td><code>--include-status</code></td>
+<td>仅显示指定状态码</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>递归扫描</td>
+</tr>
+<tr>
+<td><code>--recursion-depth</code></td>
+<td>递归深度</td>
+</tr>
+<tr>
+<td><code>--cookie</code></td>
+<td>带 Cookie 认证扫描</td>
+</tr>
+<tr>
+<td><code>-H</code></td>
+<td>自定义请求头</td>
+</tr>
+<tr>
+<td><code>--method</code></td>
+<td>HTTP 方法（PUT&#x2F;OPTIONS）</td>
+</tr>
+<tr>
+<td><code>--prefixes</code></td>
+<td>路径前缀（&#x2F;admin,&#x2F;api…）</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>输出文件</td>
+</tr>
+<tr>
+<td><code>--format</code></td>
+<td>输出格式（json&#x2F;csv&#x2F;html）</td>
+</tr>
+<tr>
+<td><code>--proxy</code></td>
+<td>代理（<a href="http://ip:port）">http://ip:port）</a></td>
+</tr>
+<tr>
+<td><code>--proxy-file</code></td>
+<td>代理池文件（每行一个代理）</td>
+</tr>
+</tbody></table>
+<h2 id="执行说明"><a href="#执行说明" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">P0 (每次必跑，~8分钟)</span><br><span class="line"> ├── 1. 万能快速扫描</span><br><span class="line"> ├── 2. 敏感文件/备份泄露</span><br><span class="line"> └── 3. Git/SVN 源码泄露</span><br><span class="line"></span><br><span class="line">P1 (重要补充，~15分钟)</span><br><span class="line"> ├── 4. 递归深度扫描</span><br><span class="line"> ├── 5. 带认证扫描</span><br><span class="line"> └── 6. JS/API 端点发现</span><br><span class="line"></span><br><span class="line">P2 (深度挖掘，~30分钟)</span><br><span class="line"> ├── 7. 自定义大字典</span><br><span class="line"> ├── 8. 多方法扫描 PUT/OPTIONS</span><br><span class="line"> └── 9. 状态码精细过滤/403绕过</span><br><span class="line"></span><br><span class="line">P3 (特殊场景，按需)</span><br><span class="line"> ├── 10. WAF/CC绕过</span><br><span class="line"> ├── 11. 批量目标扫描</span><br><span class="line"> └── 12. CMS/框架专项</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔴-P0-—-每次必跑"><a href="#🔴-P0-—-每次必跑" class="headerlink" title="🔴 P0 — 每次必跑"></a>🔴 P0 — 每次必跑</h2><p><strong>1. 万能快速扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx,jsp,html,js,json,bak,zip,sql,<span class="built_in">env</span>,<span class="built_in">log</span>,conf,txt -t 15 --<span class="built_in">timeout</span> 10 --delay 0.3 --random-agent --exclude-status 404 -o dirsearch_quick.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：第一轮快速过一遍，覆盖常见扩展名和敏感文件<br><strong>注意</strong>：线程控制在 15 以下，加 delay 避免触发 CC 防护</p>
+</blockquote>
+<p><strong>2. 敏感文件&#x2F;备份泄露</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e bak,zip,tar,sql,<span class="built_in">env</span>,<span class="built_in">log</span>,conf,cfg,ini,swp,old,backup,git,svn -t 10 --<span class="built_in">timeout</span> 10 --delay 0.5 --random-agent --exclude-status 404 --plain-text=sensitive.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：专找备份文件、配置泄露、源码泄露，SRC 高危漏洞来源</p>
+</blockquote>
+<p><strong>3. Git&#x2F;SVN 源码泄露</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e git -w /usr/share/seclists/Discovery/Web-Content/common.txt -t 10 --<span class="built_in">timeout</span> 15 --delay 0.3 --random-agent --exclude-status 404</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：<code>.git/HEAD</code>、<code>.svn/entries</code> 直接拿源码，P0 级漏洞</p>
+</blockquote>
+<hr>
+<h2 id="🟡-P1-—-重要补充"><a href="#🟡-P1-—-重要补充" class="headerlink" title="🟡 P1 — 重要补充"></a>🟡 P1 — 重要补充</h2><p><strong>4. 递归深度扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx,jsp,html,js,json -r --recursion-depth 3 -t 10 --<span class="built_in">timeout</span> 10 --delay 0.5 --random-agent --exclude-status 404,403 -o dirsearch_recursive.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现子目录后自动深入扫描，适合大型站点</p>
+</blockquote>
+<p><strong>5. 带认证扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET/admin/ -e php,asp,aspx,jsp --cookie <span class="string">&quot;JSESSIONID=xxx; PHPSESSID=xxx&quot;</span> -t 10 --<span class="built_in">timeout</span> 10 --delay 0.3 --random-agent --exclude-status 404,403,302 -r --recursion-depth 2</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：扫描需要认证才能访问的路径，找未授权访问、越权</p>
+</blockquote>
+<p><strong>6. JS&#x2F;API 端点发现</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e js,map,json,xml,<span class="keyword">do</span>,action -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -t 10 --<span class="built_in">timeout</span> 10 --delay 0.3 --random-agent --exclude-status 404</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：JS 中藏 API key、接口路径；API 端点直接找未授权接口</p>
+</blockquote>
+<hr>
+<h2 id="🟢-P2-—-深度挖掘"><a href="#🟢-P2-—-深度挖掘" class="headerlink" title="🟢 P2 — 深度挖掘"></a>🟢 P2 — 深度挖掘</h2><p><strong>7. 自定义字典爆破</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx,jsp -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -t 10 --<span class="built_in">timeout</span> 15 --delay 0.8 --random-agent --exclude-status 404 -o dirsearch_medium.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：默认字典不够用时，换大字典深度扫<br><strong>注意</strong>：大字典扫描务必控制线程 10 + delay 0.8s</p>
+</blockquote>
+<p><strong>8. 多方法扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx,jsp --method PUT -t 10 --<span class="built_in">timeout</span> 10 --delay 0.5 --random-agent --exclude-status 404,405</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：PUT 上传点、OPTIONS 信息泄露</p>
+</blockquote>
+<p><strong>9. 状态码精细过滤</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx --include-status 403 -t 15 --<span class="built_in">timeout</span> 10 --delay 0.3 --random-agent</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：403 绕过是 SRC 高频漏洞；301&#x2F;302 可能暴露内部路径</p>
+</blockquote>
+<hr>
+<h2 id="🔵-P3-—-特殊场景"><a href="#🔵-P3-—-特殊场景" class="headerlink" title="🔵 P3 — 特殊场景"></a>🔵 P3 — 特殊场景</h2><p><strong>10. WAF&#x2F;CC 绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -u https://TARGET -e php,asp,aspx -t 5 --<span class="built_in">timeout</span> 15 --delay 1.5 --random-agent --exclude-status 404 --proxy http://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>核心策略</strong>：线程 5-10 + delay 0.5-2s + 代理池 + 随机 UA + 伪造 Header</p>
+</blockquote>
+<p><strong>11. 批量目标扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dirsearch -l targets.txt -e php,asp,aspx,jsp,<span class="built_in">env</span>,git,bak,sql -t 10 --<span class="built_in">timeout</span> 10 --delay 0.5 --random-agent --exclude-status 404 -o dirsearch_batch.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：SRC 批量资产扫描，一次性跑完所有子域名</p>
+</blockquote>
+<p><strong>12. CMS&#x2F;框架专项</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Spring Boot Actuator</span></span><br><span class="line">dirsearch -u https://TARGET -e json,xml --prefixes <span class="string">&quot;/actuator,/env,/health,/info,/metrics,/heapdump&quot;</span> -t 10 --<span class="built_in">timeout</span> 10 --delay 0.5 --random-agent --exclude-status 404</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="0x02-ffuf"><a href="#0x02-ffuf" class="headerlink" title="0x02 ffuf"></a>0x02 ffuf</h1><blockquote>
+<p><strong>适用架构</strong>：Vue&#x2F;React + Spring Boot、前后端分离、REST API<br><strong>核心优势</strong>：支持 POST&#x2F;JSON fuzz、HTTP&#x2F;2、灵活过滤器，现代架构首选</p>
+</blockquote>
+<h2 id="参数速查-1"><a href="#参数速查-1" class="headerlink" title="参数速查"></a>参数速查</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-u</code></td>
+<td>目标 URL（FUZZ 为占位符）</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>字典路径</td>
+</tr>
+<tr>
+<td><code>-mc</code></td>
+<td>匹配状态码（200,301,401…）</td>
+</tr>
+<tr>
+<td><code>-fs</code></td>
+<td>按响应大小过滤（0&#x3D;过滤空响应）</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>线程数</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>请求间隔（秒），防 CC</td>
+</tr>
+<tr>
+<td><code>-x</code></td>
+<td>代理地址</td>
+</tr>
+<tr>
+<td><code>-X</code></td>
+<td>HTTP 方法（POST&#x2F;PUT&#x2F;DELETE）</td>
+</tr>
+<tr>
+<td><code>-H</code></td>
+<td>自定义请求头</td>
+</tr>
+<tr>
+<td><code>-d</code></td>
+<td>POST 请求体</td>
+</tr>
+<tr>
+<td><code>-o / -of</code></td>
+<td>输出文件 &#x2F; 输出格式（json）</td>
+</tr>
+</tbody></table>
+<h2 id="执行说明-1"><a href="#执行说明-1" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">P0 (每次必跑，~5分钟)</span><br><span class="line"> ├── 1. Spring Boot Actuator 探测</span><br><span class="line"> ├── 2. Swagger/API 文档探测</span><br><span class="line"> └── 3. 基础 API 端点 fuzz</span><br><span class="line"></span><br><span class="line">P1 (重要补充，~15分钟)</span><br><span class="line"> ├── 4. GET/POST 参数 fuzz</span><br><span class="line"> ├── 5. HTTP 方法测试</span><br><span class="line"> └── 6. 认证绕过测试</span><br><span class="line"></span><br><span class="line">P2 (深度挖掘，~30分钟)</span><br><span class="line"> ├── 7. IDOR/越权测试</span><br><span class="line"> ├── 8. 参数爆破 (字典)</span><br><span class="line"> └── 9. 敏感端点组合 fuzz</span><br><span class="line"></span><br><span class="line">P3 (特殊场景，按需)</span><br><span class="line"> ├── 10. WAF/CC 绕过</span><br><span class="line"> └── 11. 结果聚合分析</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔴-P0-—-每次必跑-1"><a href="#🔴-P0-—-每次必跑-1" class="headerlink" title="🔴 P0 — 每次必跑"></a>🔴 P0 — 每次必跑</h2><p><strong>1. Spring Boot Actuator 探测</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffuf -u https://TARGET/FUZZ -w &lt;(<span class="built_in">echo</span> -e <span class="string">&quot;actuator\nactuator/env\nactuator/health\nactuator/mappings\nactuator/heapdump\nactuator/loggers\nactuator/configprops&quot;</span>) -mc 200,401,403 -fs 0 -t 10 -p 0.3 -o actuator.json -of json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：Actuator 是 Spring Boot 高危漏洞来源，env&#x2F;heapdump&#x2F;mappings 泄露敏感信息<br><strong>注意</strong>：Actuator 端点通常有认证，关注 401&#x2F;403 响应（存在但未授权）</p>
+</blockquote>
+<p><strong>2. Swagger&#x2F;API 文档探测</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffuf -u https://TARGET/FUZZ -w &lt;(<span class="built_in">echo</span> -e <span class="string">&quot;swagger-ui.html\nswagger-ui/index.html\nv2/api-docs\nv3/api-docs\nswagger-resources\napi-docs\ndocs\nredoc\nopenapi.json&quot;</span>) -mc 200,301,302 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：Swagger 泄露全部 API 接口、参数类型、认证方式，SRC 高危漏洞</p>
+</blockquote>
+<p><strong>3. 基础 API 端点 fuzz</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffuf -u https://TARGET/api/FUZZ -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -mc 200,201,204,301,302,401,403,405 -fs 0 -t 10 -p 0.3 -o api_endpoints.json -of json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现未授权 API 端点、信息泄露接口<br><strong>注意</strong>：现代 API 返回 JSON，用 <code>-fs 0</code> 过滤空响应</p>
+</blockquote>
+<hr>
+<h2 id="🟡-P1-—-重要补充-1"><a href="#🟡-P1-—-重要补充-1" class="headerlink" title="🟡 P1 — 重要补充"></a>🟡 P1 — 重要补充</h2><p><strong>4. GET&#x2F;POST 参数 fuzz</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># GET 参数名 fuzz</span></span><br><span class="line">ffuf -u <span class="string">&quot;https://TARGET/api/user?FUZZ=test&quot;</span> -w /usr/share/seclists/Discovery/Web-Content/api/objects.txt -mc 200,201,400,401,403,500 -fs 0 -t 10 -p 0.3</span><br><span class="line"></span><br><span class="line"><span class="comment"># POST JSON body 参数 fuzz</span></span><br><span class="line">ffuf -u https://TARGET/api/login -X POST -H <span class="string">&quot;Content-Type: application/json&quot;</span> -d <span class="string">&#x27;&#123;&quot;FUZZ&quot;:&quot;test&quot;&#125;&#x27;</span> -w /usr/share/seclists/Discovery/Web-Content/api/objects.txt -mc 200,201,400,401,403,500 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现隐藏参数、未授权参数、SQL 注入点</p>
+</blockquote>
+<p><strong>5. HTTP 方法测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 测试 PUT/DELETE/PATCH（越权操作）</span></span><br><span class="line">ffuf -u https://TARGET/api/user/1 -X PUT -H <span class="string">&quot;Content-Type: application/json&quot;</span> -d <span class="string">&#x27;&#123;&quot;id&quot;:1,&quot;role&quot;:&quot;admin&quot;&#125;&#x27;</span> -mc 200,201,204,405 -fs 0 -t 10 -p 0.3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试 OPTIONS（信息泄露）</span></span><br><span class="line">ffuf -u https://TARGET/api/FUZZ -X OPTIONS -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -mc 200,204,405 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：PUT&#x2F;DELETE&#x2F;PATCH 可能暴露越权操作、未授权访问</p>
+</blockquote>
+<p><strong>6. 认证绕过测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除认证 Header 测试未授权访问</span></span><br><span class="line">ffuf -u https://TARGET/api/admin/users -mc 200,201,401,403 -fs 0 -t 10 -p 0.3</span><br><span class="line"></span><br><span class="line"><span class="comment"># JWT None 算法测试</span></span><br><span class="line">ffuf -u https://TARGET/api/admin/users -H <span class="string">&quot;Authorization: Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMDAwMDAwMH0.&quot;</span> -mc 200,201,401,403 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：认证绕过是 SRC 高危漏洞，测试未授权访问、越权</p>
+</blockquote>
+<hr>
+<h2 id="🟢-P2-—-深度挖掘-1"><a href="#🟢-P2-—-深度挖掘-1" class="headerlink" title="🟢 P2 — 深度挖掘"></a>🟢 P2 — 深度挖掘</h2><p><strong>7. IDOR&#x2F;越权测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用户 ID 遍历（用普通用户 Token 测试）</span></span><br><span class="line">ffuf -u https://TARGET/api/user/FUZZ -w &lt;(<span class="built_in">seq</span> 1 10000) -mc 200,201,401,403 -fs 0 -t 10 -p 0.3 -H <span class="string">&quot;Authorization: Bearer NORMAL_USER_TOKEN&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：IDOR 是 SRC 最常见高危漏洞，遍历 ID 测试越权访问</p>
+</blockquote>
+<p><strong>8. 参数爆破</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># GET 参数名爆破</span></span><br><span class="line">ffuf -u <span class="string">&quot;https://TARGET/api/user?FUZZ=1&quot;</span> -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt -mc 200,201,400,401,403,500 -fs 0 -t 10 -p 0.3</span><br><span class="line"></span><br><span class="line"><span class="comment"># JSON 参数名爆破</span></span><br><span class="line">ffuf -u https://TARGET/api/user -X POST -H <span class="string">&quot;Content-Type: application/json&quot;</span> -d <span class="string">&#x27;&#123;&quot;FUZZ&quot;:&quot;test&quot;&#125;&#x27;</span> -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt -mc 200,201,400,401,403,500 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现隐藏参数、未文档化接口</p>
+</blockquote>
+<p><strong>9. 敏感端点组合 fuzz</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffuf -u https://TARGET/FUZZ -w &lt;(<span class="built_in">echo</span> -e <span class="string">&quot;admin\nadmin/api\nadmin/console\nmanagement\nmanage\nconsole\ndashboard\nupload\ndownload\nexport\nimport\nfile\ndebug\ntest\ndev\nstaging\nbackup&quot;</span>) -mc 200,201,401,403 -fs 0 -t 10 -p 0.3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现管理后台、文件操作、调试端点等高危接口</p>
+</blockquote>
+<hr>
+<h2 id="🔵-P3-—-特殊场景-1"><a href="#🔵-P3-—-特殊场景-1" class="headerlink" title="🔵 P3 — 特殊场景"></a>🔵 P3 — 特殊场景</h2><p><strong>10. WAF&#x2F;CC 绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ffuf -u https://TARGET/api/FUZZ -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -mc 200,201,401,403 -fs 0 -t 3 -p 1.5 -x http://127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>核心策略</strong>：线程 3-5 + delay 0.5-1.5s + 代理池 + 随机 UA</p>
+</blockquote>
+<p><strong>11. 结果聚合分析</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 提取有效端点</span></span><br><span class="line"><span class="built_in">cat</span> *.json | jq -r <span class="string">&#x27;.results[] | select(.status == 200 or .status == 201) | .url&#x27;</span> | <span class="built_in">sort</span> -u &gt; valid_endpoints.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取有认证要求的端点（可能绕过）</span></span><br><span class="line"><span class="built_in">cat</span> *.json | jq -r <span class="string">&#x27;.results[] | select(.status == 401 or .status == 403) | .url&#x27;</span> | <span class="built_in">sort</span> -u &gt; auth_required.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：聚合分析扫描结果，识别高价值目标</p>
+</blockquote>
+<hr>
+<h1 id="0x03-feroxbuster"><a href="#0x03-feroxbuster" class="headerlink" title="0x03 feroxbuster"></a>0x03 feroxbuster</h1><blockquote>
+<p><strong>适用架构</strong>：Vue&#x2F;React + Spring Boot、前后端分离、REST API<br><strong>核心优势</strong>：Rust 高性能、自动校准过滤（–auto-tune）、智能递归、TUI 界面</p>
+</blockquote>
+<h2 id="参数速查-2"><a href="#参数速查-2" class="headerlink" title="参数速查"></a>参数速查</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-u</code></td>
+<td>目标 URL</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>字典路径</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>线程数</td>
+</tr>
+<tr>
+<td><code>--delay</code></td>
+<td>请求间隔（300ms&#x2F;500ms）</td>
+</tr>
+<tr>
+<td><code>--random-agent</code></td>
+<td>随机 User-Agent</td>
+</tr>
+<tr>
+<td><code>--auto-tune</code></td>
+<td>自动调整速率避免 WAF（核心参数）</td>
+</tr>
+<tr>
+<td><code>--depth</code></td>
+<td>递归深度（2-5）</td>
+</tr>
+<tr>
+<td><code>--extensions</code></td>
+<td>附加扩展名（js,json,xml…）</td>
+</tr>
+<tr>
+<td><code>--methods</code></td>
+<td>HTTP 方法组合（GET,POST,PUT,DELETE）</td>
+</tr>
+<tr>
+<td><code>--filter-status</code></td>
+<td>过滤状态码（404,400,500…）</td>
+</tr>
+<tr>
+<td><code>--filter-size</code></td>
+<td>按响应大小过滤（0&#x3D;空响应）</td>
+</tr>
+<tr>
+<td><code>--filter-regex</code></td>
+<td>正则过滤（错误页面）</td>
+</tr>
+<tr>
+<td><code>--headers</code></td>
+<td>自定义请求头</td>
+</tr>
+<tr>
+<td><code>--proxy</code></td>
+<td>代理地址</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>JSON 格式输出</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>输出文件</td>
+</tr>
+</tbody></table>
+<h2 id="执行说明-2"><a href="#执行说明-2" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">P0 (每次必跑，~10分钟)</span><br><span class="line"> ├── 1. 基础 API 递归扫描</span><br><span class="line"> ├── 2. 静态资源深度扫描</span><br><span class="line"> └── 3. Spring Boot 端点扫描</span><br><span class="line"></span><br><span class="line">P1 (重要补充，~20分钟)</span><br><span class="line"> ├── 4. 带认证扫描</span><br><span class="line"> ├── 5. 多方法扫描</span><br><span class="line"> └── 6. 扩展名组合扫描</span><br><span class="line"></span><br><span class="line">P2 (深度挖掘，~40分钟)</span><br><span class="line"> ├── 7. 深度递归扫描</span><br><span class="line"> ├── 8. 自定义过滤器</span><br><span class="line"> └── 9. 大字典扫描</span><br><span class="line"></span><br><span class="line">P3 (特殊场景，按需)</span><br><span class="line"> ├── 10. WAF/CC 绕过</span><br><span class="line"> └── 11. 结果分析与去重</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔴-P0-—-每次必跑-2"><a href="#🔴-P0-—-每次必跑-2" class="headerlink" title="🔴 P0 — 每次必跑"></a>🔴 P0 — 每次必跑</h2><p><strong>1. 基础 API 递归扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -t 10 --delay 300ms --random-agent --auto-tune --depth 2 --json -o ferox_api.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：递归发现 API 端点，<code>--auto-tune</code> 自动学习响应模式减少误报</p>
+</blockquote>
+<p><strong>2. 静态资源深度扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt -t 10 --delay 300ms --random-agent --auto-tune --extensions js,css,html,json,map --json -o ferox_static.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：发现 JS 源码、API 路径、敏感文件泄露</p>
+</blockquote>
+<p><strong>3. Spring Boot 端点扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET -w &lt;(<span class="built_in">echo</span> -e <span class="string">&quot;actuator\nactuator/env\nactuator/health\nactuator/mappings\nactuator/heapdump\nswagger-ui.html\nv2/api-docs\nv3/api-docs&quot;</span>) -t 10 --delay 300ms --random-agent --auto-tune --json -o ferox_spring.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：Spring Boot Actuator、Swagger、管理端点是高危漏洞来源</p>
+</blockquote>
+<hr>
+<h2 id="🟡-P1-—-重要补充-2"><a href="#🟡-P1-—-重要补充-2" class="headerlink" title="🟡 P1 — 重要补充"></a>🟡 P1 — 重要补充</h2><p><strong>4. 带认证扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET/api -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -t 10 --delay 300ms --random-agent --auto-tune --headers <span class="string">&quot;Authorization: Bearer eyJhbGciOi...&quot;</span> --json -o ferox_auth.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：扫描需要认证才能访问的 API，找未授权访问、越权</p>
+</blockquote>
+<p><strong>5. 多方法扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET/api -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -t 10 --delay 300ms --random-agent --auto-tune --methods GET,POST,PUT,DELETE,PATCH --json -o ferox_methods.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：PUT&#x2F;DELETE&#x2F;PATCH 可能暴露越权操作、未授权访问</p>
+</blockquote>
+<p><strong>6. 扩展名组合扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Java 特有扩展名（Spring Boot 常见 .do .action 后缀）</span></span><br><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -t 10 --delay 300ms --random-agent --auto-tune --extensions jsp,jspx,<span class="keyword">do</span>,action,class,jar,war --json -o ferox_java.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：扩展名组合扫描发现隐藏接口、配置文件</p>
+</blockquote>
+<hr>
+<h2 id="🟢-P2-—-深度挖掘-2"><a href="#🟢-P2-—-深度挖掘-2" class="headerlink" title="🟢 P2 — 深度挖掘"></a>🟢 P2 — 深度挖掘</h2><p><strong>7. 深度递归扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -t 10 --delay 500ms --random-agent --auto-tune --depth 4 --json -o ferox_deep.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：深度递归发现多层嵌套 API、隐藏目录<br><strong>注意</strong>：深度递归请求量指数增长，delay 500ms + auto-tune</p>
+</blockquote>
+<p><strong>8. 自定义过滤器</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># SPA 站点必须过滤（Vue/React 未匹配路由返回 index.html 200）</span></span><br><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -t 10 --delay 300ms --random-agent --auto-tune --filter-status 404,400,500 --filter-size 0 --filter-regex <span class="string">&quot;^(error|not found)&quot;</span> --json -o ferox_filtered.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：精确过滤减少误报，SPA 站点必须过滤 200 响应</p>
+</blockquote>
+<p><strong>9. 大字典扫描</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -t 10 --delay 500ms --random-agent --auto-tune --json -o ferox_medium.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：默认字典不够用时，换大字典深度扫</p>
+</blockquote>
+<hr>
+<h2 id="🔵-P3-—-特殊场景-2"><a href="#🔵-P3-—-特殊场景-2" class="headerlink" title="🔵 P3 — 特殊场景"></a>🔵 P3 — 特殊场景</h2><p><strong>10. WAF&#x2F;CC 绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feroxbuster -u https://TARGET/api -w /usr/share/seclists/Discovery/Web-Content/api/api-endpoints.txt -t 3 --delay 1500ms --random-agent --auto-tune --proxy http://127.0.0.1:7890 --json -o ferox_slow.json</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>核心策略</strong>：线程 3-5 + delay 500-2000ms + 代理池 + 随机 UA + auto-tune</p>
+</blockquote>
+<p><strong>11. 结果分析与去重</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 提取有效端点</span></span><br><span class="line"><span class="built_in">cat</span> ferox_*.json | jq -r <span class="string">&#x27;.results[] | select(.status == 200 or .status == 201) | .url&#x27;</span> | <span class="built_in">sort</span> -u &gt; ferox_valid.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取有认证要求的端点</span></span><br><span class="line"><span class="built_in">cat</span> ferox_*.json | jq -r <span class="string">&#x27;.results[] | select(.status == 401 or .status == 403) | .url&#x27;</span> | <span class="built_in">sort</span> -u &gt; ferox_auth_required.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：聚合分析扫描结果，识别高价值目标</p>
+</blockquote>
+<hr>
+<h1 id="0x04-httpx"><a href="#0x04-httpx" class="headerlink" title="0x04 httpx"></a>0x04 httpx</h1><blockquote>
+<p><strong>适用场景</strong>：SRC 资产筛选、子域名存活探测、指纹识别、高价值目标排序<br><strong>核心优势</strong>：异步高性能、支持多维度提取（Title&#x2F;CDN&#x2F;Tech&#x2F;Status）、输出灵活可管道串联</p>
+</blockquote>
+<h2 id="参数速查-3"><a href="#参数速查-3" class="headerlink" title="参数速查"></a>参数速查</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-sc</code></td>
+<td>显示状态码</td>
+</tr>
+<tr>
+<td><code>-cl</code></td>
+<td>显示响应长度</td>
+</tr>
+<tr>
+<td><code>-ct</code></td>
+<td>显示 Content-Type</td>
+</tr>
+<tr>
+<td><code>-title</code></td>
+<td>显示页面标题</td>
+</tr>
+<tr>
+<td><code>-server</code></td>
+<td>显示 Web 服务器</td>
+</tr>
+<tr>
+<td><code>-td</code></td>
+<td>显示技术栈（Wappalyzer 指纹）</td>
+</tr>
+<tr>
+<td><code>-tech-detect</code></td>
+<td>技术栈检测（同 -td）</td>
+</tr>
+<tr>
+<td><code>-ip</code></td>
+<td>显示解析 IP</td>
+</tr>
+<tr>
+<td><code>-cname</code></td>
+<td>显示 CNAME 记录</td>
+</tr>
+<tr>
+<td><code>-cdn</code></td>
+<td>显示 CDN 信息</td>
+</tr>
+<tr>
+<td><code>-asn</code></td>
+<td>显示 ASN 信息</td>
+</tr>
+<tr>
+<td><code>-location</code></td>
+<td>显示重定向目标</td>
+</tr>
+<tr>
+<td><code>-follow-redirects</code></td>
+<td>跟随重定向</td>
+</tr>
+<tr>
+<td><code>-threads</code></td>
+<td>并发线程数</td>
+</tr>
+<tr>
+<td><code>-rate-limit</code></td>
+<td>每秒最大请求数</td>
+</tr>
+<tr>
+<td><code>-timeout</code></td>
+<td>超时时间（秒）</td>
+</tr>
+<tr>
+<td><code>-retries</code></td>
+<td>重试次数</td>
+</tr>
+<tr>
+<td><code>-path</code></td>
+<td>探测指定路径（可多次）</td>
+</tr>
+<tr>
+<td><code>-H</code></td>
+<td>自定义请求头</td>
+</tr>
+<tr>
+<td><code>-json</code></td>
+<td>JSON 格式输出（最完整）</td>
+</tr>
+<tr>
+<td><code>-csv</code></td>
+<td>CSV 格式输出</td>
+</tr>
+<tr>
+<td><code>-md</code></td>
+<td>Markdown 格式输出</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>输出文件</td>
+</tr>
+<tr>
+<td><code>-silent</code></td>
+<td>静默模式（仅输出 URL）</td>
+</tr>
+</tbody></table>
+<h2 id="执行说明-3"><a href="#执行说明-3" class="headerlink" title="执行说明"></a>执行说明</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">P0 (每次必跑，~5分钟)</span><br><span class="line"> ├── 1. 存活子域名探测 + 基础信息提取</span><br><span class="line"> ├── 2. CDN/WAF 识别</span><br><span class="line"> └── 3. 技术栈指纹识别</span><br><span class="line"></span><br><span class="line">P1 (重要补充，~10分钟)</span><br><span class="line"> ├── 4. 高价值目标筛选</span><br><span class="line"> ├── 5. 敏感路径/端点探测</span><br><span class="line"> └── 6. 状态码精细分析</span><br><span class="line"></span><br><span class="line">P2 (深度挖掘，~20分钟)</span><br><span class="line"> ├── 7. 响应体内容提取（关键字/正则）</span><br><span class="line"> ├── 8. JSON 输出 + jq 聚合分析</span><br><span class="line"> └── 9. 多源资产批量探测</span><br><span class="line"></span><br><span class="line">P3 (特殊场景，按需)</span><br><span class="line"> ├── 10. WAF/CC 绕过</span><br><span class="line"> └── 11. 链式管道组合（subfinder + httpx + nuclei）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔴-P0-—-每次必跑-3"><a href="#🔴-P0-—-每次必跑-3" class="headerlink" title="🔴 P0 — 每次必跑"></a>🔴 P0 — 每次必跑</h2><p><strong>1. 存活子域名探测 + 基础信息提取</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -cl -ct -title -server -td -ip -cname -cdn -follow-redirects -<span class="built_in">timeout</span> 10 -retries 2 -threads 50 -rate-limit 150 -o httpx_alive.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：从子域名列表中快速筛选存活 HTTP 服务，提取状态码&#x2F;长度&#x2F;标题&#x2F;服务器&#x2F;IP 等基础信息<br><strong>注意</strong>：<code>-threads 50 -rate-limit 150</code> 控制并发和速率，避免触发 CC 防护</p>
+</blockquote>
+<p><strong>2. CDN&#x2F;WAF 识别</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -ip -cname -cdn -asn -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -json | jq -r <span class="string">&#x27;select(.cdn == false or .cdn == &quot;false&quot;) | .url&#x27;</span> &gt; real_ip_targets.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：识别 CDN&#x2F;WAF 保护，筛选直连 IP 目标（SRC 直连 IP 漏洞价值更高）<br><strong>注意</strong>：CDN 目标直接打意义不大，优先找真实 IP</p>
+</blockquote>
+<p><strong>3. 技术栈指纹识别</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -server -td -tech-detect -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -json | jq -r <span class="string">&#x27;select(.tech != null) | .url + &quot; [&quot; + (.tech | join(&quot;, &quot;)) + &quot;]&quot;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：识别 Web 框架&#x2F;中间件版本，快速定位高危技术栈（Spring Boot Actuator、Tomcat Manager、Shiro 等）<br><strong>注意</strong>：<code>-tech-detect</code> 依赖 Wappalyzer 指纹库，部分站点可能识别不出</p>
+</blockquote>
+<hr>
+<h2 id="🟡-P1-—-重要补充-3"><a href="#🟡-P1-—-重要补充-3" class="headerlink" title="🟡 P1 — 重要补充"></a>🟡 P1 — 重要补充</h2><p><strong>4. 高价值目标筛选</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 筛选后台/管理类页面（标题含关键字）</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -cl -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -json | jq -r <span class="string">&#x27;select(.title | test(&quot;admin|管理|后台|console|dashboard|login|登录&quot;; &quot;i&quot;)) | .url + &quot; [&quot; + .title + &quot;]&quot;&#x27;</span> &gt; httpx_admin.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：从海量子域名中快速锁定高价值目标（后台、API 文档、大响应）<br><strong>注意</strong>：SRC 中 API 文档泄露（Swagger&#x2F;OpenAPI）属于高频高危漏洞</p>
+</blockquote>
+<p><strong>5. 敏感路径&#x2F;端点探测</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -cl -title -path /actuator -path /actuator/env -path /actuator/heapdump -path /swagger-ui.html -path /v2/api-docs -path /.env -path /.git/HEAD -path /admin -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -rate-limit 100 -json | jq -r <span class="string">&#x27;select(.status_code == 200) | .url&#x27;</span> &gt; httpx_sensitive.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：批量探测子域名的敏感端点，发现 Actuator 未授权、源码泄露、配置文件泄露<br><strong>注意</strong>：敏感路径探测请求数 &#x3D; 子域名数 × 路径数，控制 <code>-rate-limit</code></p>
+</blockquote>
+<p><strong>6. 状态码精细分析</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 提取 401/403 目标（存在但未授权，可能绕过）</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -cl -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -json | jq -r <span class="string">&#x27;select(.status_code == 401 or .status_code == 403) | .url + &quot; [&quot; + (.status_code | tostring) + &quot;]&quot;&#x27;</span> &gt; httpx_forbidden.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取 301/302 重定向（可能暴露内部路径）</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -cl -location -follow-redirects=<span class="literal">false</span> -<span class="built_in">timeout</span> 10 -threads 50 -json | jq -r <span class="string">&#x27;select(.status_code == 301 or .status_code == 302) | .url + &quot; -&gt; &quot; + (.location // &quot;N/A&quot;)&#x27;</span> &gt; httpx_redirects.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：状态码精细分析，401&#x2F;403 可能存在认证绕过，301&#x2F;302 暴露内部架构</p>
+</blockquote>
+<hr>
+<h2 id="🟢-P2-—-深度挖掘-3"><a href="#🟢-P2-—-深度挖掘-3" class="headerlink" title="🟢 P2 — 深度挖掘"></a>🟢 P2 — 深度挖掘</h2><p><strong>7. 响应体内容提取</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 搜索响应体中的敏感关键字</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -cl -body -match-regex <span class="string">&quot;password|secret|api_key|token|private_key|jdbc|mysql|redis&quot;</span> -<span class="built_in">timeout</span> 10 -threads 30 -json | jq -r <span class="string">&#x27;.url + &quot; -&gt; &quot; + (.matched_lines | join(&quot;, &quot;))&#x27;</span> &gt; httpx_secrets.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 正则提取 API Key / Token</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -extract-regex <span class="string">&quot;[A-Za-z0-9]&#123;32,&#125;&quot;</span> -sc -title -<span class="built_in">timeout</span> 10 -threads 30 -o httpx_tokens.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：从响应体中挖掘邮箱、API Key、敏感路径、数据库连接串等<br><strong>注意</strong>：<code>-body</code> 会下载完整响应体，请求量大时控制线程 30 + 速率</p>
+</blockquote>
+<p><strong>8. JSON 输出 + jq 聚合分析</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># JSON 输出所有信息</span></span><br><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -cl -ct -title -server -td -ip -cname -cdn -tech-detect -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -json -o httpx_all.json</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按技术栈分组统计</span></span><br><span class="line"><span class="built_in">cat</span> httpx_all.json | jq -r <span class="string">&#x27;select(.tech != null) | .tech[]&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn | <span class="built_in">head</span> -30</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取直连 IP（非 CDN，可用于端口扫描）</span></span><br><span class="line"><span class="built_in">cat</span> httpx_all.json | jq -r <span class="string">&#x27;select(.cdn == false or .cdn == &quot;false&quot;) | .host&#x27;</span> | <span class="built_in">sort</span> -u &gt; httpx_real_ips.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：JSON 输出配合 jq 进行多维度聚合分析，发现异常和高价值目标</p>
+</blockquote>
+<p><strong>9. 多源资产批量探测</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 多源子域名合并后探测（含非标准端口）</span></span><br><span class="line"><span class="built_in">cat</span> subfinder.txt amass.txt crtsh.txt | <span class="built_in">sort</span> -u | httpx -sc -cl -ct -title -server -td -ip -cdn -tech-detect -ports 80,443,8080,8443,8888,9090,3000,5000 -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -rate-limit 150 -o httpx_merged.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：多源合并、非标准端口全面覆盖</p>
+</blockquote>
+<hr>
+<h2 id="🔵-P3-—-特殊场景-3"><a href="#🔵-P3-—-特殊场景-3" class="headerlink" title="🔵 P3 — 特殊场景"></a>🔵 P3 — 特殊场景</h2><p><strong>10. WAF&#x2F;CC 绕过</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> subdomains.txt | httpx -sc -title -H <span class="string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> -H <span class="string">&quot;X-Real-IP: 127.0.0.1&quot;</span> -random-agent -follow-redirects -<span class="built_in">timeout</span> 10 -threads 10 -rate-limit 20 -o httpx_stealth.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>核心策略</strong>：线程 10-20 + rate-limit 20-50 + 代理池 + 随机 UA + 伪造 Header</p>
+</blockquote>
+<p><strong>11. 链式管道组合（subfinder + httpx + nuclei）</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 完整自动化流水线：子域名发现 → 存活探测 → 漏洞扫描</span></span><br><span class="line">subfinder -d TARGET -silent | httpx -sc -cl -title -server -td -tech-detect -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -silent | nuclei -t cves/ -t vulnerabilities/ -t misconfigurations/ -severity critical,high,medium -o nuclei_results.txt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Actuator 专项流水线</span></span><br><span class="line">subfinder -d TARGET -silent | httpx -sc -title -path /actuator -path /actuator/env -path /actuator/heapdump -follow-redirects -<span class="built_in">timeout</span> 10 -threads 50 -silent | nuclei -t http/exposures/ -o nuclei_actuator.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>用途</strong>：全自动化流水线，从子域名发现到漏洞扫描一气呵成<br><strong>注意</strong>：流水线请求量大，确保 httpx 层控制好速率</p>
+</blockquote>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="tools">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-06-02
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/信息收集/">信息收集<span>3</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/tools/">tools<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x01-dirsearch"><span class="toc-article-text">0x01 dirsearch</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5"><span class="toc-article-text">参数速查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E"><span class="toc-article-text">执行说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x02-ffuf"><span class="toc-article-text">0x02 ffuf</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5-1"><span class="toc-article-text">参数速查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E-1"><span class="toc-article-text">执行说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91-1"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85-1"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98-1"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF-1"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x03-feroxbuster"><span class="toc-article-text">0x03 feroxbuster</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5-2"><span class="toc-article-text">参数速查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E-2"><span class="toc-article-text">执行说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91-2"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85-2"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98-2"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF-2"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#0x04-httpx"><span class="toc-article-text">0x04 httpx</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5-3"><span class="toc-article-text">参数速查</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%B4%E6%98%8E-3"><span class="toc-article-text">执行说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B4-P0-%E2%80%94-%E6%AF%8F%E6%AC%A1%E5%BF%85%E8%B7%91-3"><span class="toc-article-text">🔴 P0 — 每次必跑</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A1-P1-%E2%80%94-%E9%87%8D%E8%A6%81%E8%A1%A5%E5%85%85-3"><span class="toc-article-text">🟡 P1 — 重要补充</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%9F%A2-P2-%E2%80%94-%E6%B7%B1%E5%BA%A6%E6%8C%96%E6%8E%98-3"><span class="toc-article-text">🟢 P2 — 深度挖掘</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%F0%9F%94%B5-P3-%E2%80%94-%E7%89%B9%E6%AE%8A%E5%9C%BA%E6%99%AF-3"><span class="toc-article-text">🔵 P3 — 特殊场景</span></a></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

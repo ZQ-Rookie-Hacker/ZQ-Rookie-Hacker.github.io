@@ -41,6 +41,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -62,7 +63,26 @@
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -161,7 +181,7 @@
 <ul>
 <li>补充</li>
 </ul>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">如果没有给.com就需要一个一个试</span><br><span class="line"></span><br><span class="line">通用后缀</span><br><span class="line">.com.net.org.cn.com.cn.net.cn.org.cn</span><br><span class="line">企业/办公常用</span><br><span class="line">.cc.co.info.io</span><br><span class="line">政府/教育/机构</span><br><span class="line">.gov.gov.cn.edu.edu.cn</span><br><span class="line">国际邮箱常用</span><br><span class="line">.me.pro.cloud.app</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">如果没有给.com就需要一个一个试</span><br><span class="line"></span><br><span class="line">通用后缀</span><br><span class="line">.com.net.org.cn.com.cn.net.cn.org.cn</span><br><span class="line">企业/办公常用</span><br><span class="line">.cc.co.info.io</span><br><span class="line">政府/教育/机构</span><br><span class="line">.gov.gov.cn.edu.edu.cn</span><br><span class="line">国际邮箱常用</span><br><span class="line">.me.pro.cloud.app</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>再次访问<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_16.png" alt="在这里插入图片描述"></p>
 <hr>
@@ -211,7 +231,7 @@
 <p>只识别到255个字符，那也就是说可以通过控制字符，实现精准截断</p>
 </blockquote>
 <p>payload:</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbattacker@dontwannacry.com.exploit-0aa000dc03c3d6c0805ec51501f6004b.exploit-server.net</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbattacker@dontwannacry.com.exploit-0aa000dc03c3d6c0805ec51501f6004b.exploit-server.net</span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_29.png" alt="在这里插入图片描述"></p>
 <hr>
@@ -393,7 +413,7 @@
 </blockquote>
 <p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_62.png" alt="在这里插入图片描述"></p>
 <p>模拟器加密过程</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">X假设为AES填充的字符</span><br><span class="line">Q是手动填充的字符</span><br><span class="line"></span><br><span class="line">注意：AES填充的字符是不会对加解密产生影响的，这是由其自己的算法决定</span><br><span class="line"></span><br><span class="line">email=administrator:1774939875390</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: administr</span><br><span class="line">	ator:17749398753</span><br><span class="line">	90XXXXXXXXXXXXXx</span><br><span class="line"></span><br><span class="line">要删除 Invalid email address: 利用AES块为16个字符</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line"></span><br><span class="line">则 email=QQQQQQQQQadministrator:1774939875390</span><br><span class="line"></span><br><span class="line">对与这个的密文</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">删除这段密文前32字节后即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">解密时，AES会自动不到64位</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">注意之前提到的AES填充的字符不会影响加解密，所以解密的结果是 administrator:1774939875390</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">X假设为AES填充的字符</span><br><span class="line">Q是手动填充的字符</span><br><span class="line"></span><br><span class="line">注意：AES填充的字符是不会对加解密产生影响的，这是由其自己的算法决定</span><br><span class="line"></span><br><span class="line">email=administrator:1774939875390</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: administr</span><br><span class="line">	ator:17749398753</span><br><span class="line">	90XXXXXXXXXXXXXx</span><br><span class="line"></span><br><span class="line">要删除 Invalid email address: 利用AES块为16个字符</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line"></span><br><span class="line">则 email=QQQQQQQQQadministrator:1774939875390</span><br><span class="line"></span><br><span class="line">对与这个的密文</span><br><span class="line">	Invalid email ad</span><br><span class="line">	dress: QQQQQQQQQ</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">删除这段密文前32字节后即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">解密时，AES会自动不到64位</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">即：</span><br><span class="line">	administrator:17</span><br><span class="line">	74939875390XXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">	XXXXXXXXXXXXXXXX</span><br><span class="line">注意之前提到的AES填充的字符不会影响加解密，所以解密的结果是 administrator:1774939875390</span><br></pre></td></tr></table></figure>
 
 
 <p>发送payload<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_63.png" alt="在这里插入图片描述"></p>
@@ -423,11 +443,11 @@
 <p>补充：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Hanford/article/details/53364021">utf-7</a> 是一个很古老的编码，基本只应用在邮箱中。其中一些字符经普通的utf-7编码后会在首尾分别加<code>+</code>  <code>-</code> ，如：<code>+xxxx-</code>。而<code>+</code>在邮箱解析有其他特殊意义,所以专门给邮箱 &#x2F; IMAP 协议用的 <code>Modified UTF-7</code>（修改版 UTF-7），它为了避开 + 在邮件里的冲突，把起始符号从 <code>+ </code>改成了<code> &amp;</code> ,即 <code>&amp;xxxx-</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_72.png" alt="在这里插入图片描述"></p>
 <p>很显然所需注册账号的邮箱后缀应为 <code>@ginandjuice.shop</code><br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_73.png" alt="在这里插入图片描述"></p>
 <p>构造payload</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">经过尝试，邮箱地址不可以有多个@，且只有utf-7可以</span><br><span class="line">=?utf-7?q?attacker@exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">@ 的utf-7编码：&amp;AEA-</span><br><span class="line"></span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">发现还是错误</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">经过尝试，邮箱地址不可以有多个@，且只有utf-7可以</span><br><span class="line">=?utf-7?q?attacker@exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">@ 的utf-7编码：&amp;AEA-</span><br><span class="line"></span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net?=@ginandjuice.shop</span><br><span class="line"></span><br><span class="line">发现还是错误</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_74.png" alt="在这里插入图片描述"><br>&#x3D;00 即 \x00 即 null，作者在尾部放置了一个空字符，其原理是： 空字符截断 + 邮箱解析缺陷，导致后续内容被完全忽略</p>
 <p>新paylaod</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">空格的utf-7编码：&amp;ACA-</span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net&amp;ACA-?=@ginandjuice.shop</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">空格的utf-7编码：&amp;ACA-</span><br><span class="line">=?utf-7?q?attacker&amp;AEA-exploit-0a3e005b03724f5c8427b23901c1005a.exploit-server.net&amp;ACA-?=@ginandjuice.shop</span><br></pre></td></tr></table></figure>
 
 <p>邮箱成功获取邮件<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_75.png" alt="在这里插入图片描述"></p>
 <p>登录验证<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_76.png" alt="在这里插入图片描述"></p>
@@ -606,7 +626,7 @@ window.addEventListener('load', function() {
 			<ul id="categorys" class="tag_box list-unstyled collapse in">
 				  
   <li>
-    <li><a href="/categories/网络安全/">网络安全<span>35</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>11</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>7</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>7</span></a></li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>12</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>8</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>8</span></a></li>
   </li>
 
 			</ul>
@@ -630,7 +650,7 @@ window.addEventListener('load', function() {
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -675,6 +695,7 @@ window.addEventListener('load', function() {
   margin-left: 5px;
 }
 </style>
+
 	</div>
 
 	<!-- article TOC placed below the category list; should scroll with page -->
@@ -713,7 +734,7 @@ window.addEventListener('load', function() {
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -722,7 +743,14 @@ window.addEventListener('load', function() {
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -733,16 +761,6 @@ window.addEventListener('load', function() {
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

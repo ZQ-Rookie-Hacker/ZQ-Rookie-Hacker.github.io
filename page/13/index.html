@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -52,7 +53,26 @@
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -117,11 +137,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/08/任务导向计网学习/" >任务导向计网学习</a>
+			<a href="/2025/12/14/编码技术/" >编码技术</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-08  </div>
+		<div class="date">post @ 2025-12-14  </div>
 		</div>
 	</div>
 	
@@ -131,23 +151,28 @@
   <div class="row">
 	
 	
-		<h2 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h2><ol>
-<li><p>资源下载</p>
-<blockquote>
-<p>eve-ng 懒人版镜像文件在eve-ng懒人社区下载，记住要下载其客户端窗口<br>vm或其他虚拟机软件部署</p>
-</blockquote>
-</li>
-<li><p>网络配置<br><img src="/images/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_1.png" alt="在这里插入图片描述"></p>
-</li>
-</ol>
-<hr>
-<h2 id="二、网络设备以及配置知识"><a href="#二、网络设备以及配置知识" class="headerlink" title="二、网络设备以及配置知识"></a>二、网络设备以及配置知识</h2><h3 id="网络设备知识"><a href="#网络设备知识" class="headerlink" title="网络设备知识"></a>网络设备知识</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">华为：</span><br><span class="line">	1.路由器：AR系列（save）</span><br><span class="line">	2.交换机：CE系列（commit）</span><br><span class="line">	3.防火墙： </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="基础实验一"><a href="#基础实验一" class="headerlink" title="基础实验一"></a>基础实验一</h3><h4 id="0-任务导向"><a href="#0-任务导向" class="headerlink" title="0. 任务导向"></a>0. 任务导向</h4><p><img src="/images/%E4%BB%BB%E5%8A%A1%E5%AF%BC%E5%90%91%E8%AE%A1%E7%BD%91%E5%AD%A6%E4%B9%A0/image_2.png" alt="在这里插入图片描述"></p>
-<p>知识要点：</p>
+		<h2 id="一、编码基础概述"><a href="#一、编码基础概述" class="headerlink" title="一、编码基础概述"></a>一、编码基础概述</h2><h3 id="1-1-为什么需要编码"><a href="#1-1-为什么需要编码" class="headerlink" title="1.1 为什么需要编码"></a>1.1 为什么需要编码</h3><p>在计算机系统中，不同系统、协议和应用程序对数据的表示和处理方式存在差异。编码技术解决了以下问题：</p>
+<ul>
+<li><strong>字符表示</strong>：将人类可读的字符转换为计算机可处理的二进制数据</li>
+<li><strong>数据传输</strong>：确保特殊字符在传输过程中不被误解或破坏</li>
+<li><strong>安全过滤</strong>：绕过基于特定字符集的过滤机制</li>
+<li><strong>数据压缩</strong>：在某些情况下提高传输效率</li>
+</ul>
+<h3 id="1-2-编码与加密的区别"><a href="#1-2-编码与加密的区别" class="headerlink" title="1.2 编码与加密的区别"></a>1.2 编码与加密的区别</h3><ul>
+<li><strong>编码</strong>：数据格式的转换，是可逆的、公开的转换过程，不提供保密性</li>
+<li><strong>加密</strong>：通过密钥将数据转换为密文，提供保密性和完整性保护</li>
+</ul>
+<h3 id="1-3-编码在网络安全中的重要性"><a href="#1-3-编码在网络安全中的重要性" class="headerlink" title="1.3 编码在网络安全中的重要性"></a>1.3 编码在网络安全中的重要性</h3><p>渗透测试中，攻击者常利用编码技术：</p>
+<ul>
+<li>绕过WAF（Web应用防火墙）和输入过滤</li>
+<li>隐藏恶意负载</li>
+<li>规避安全检测机制</li>
+<li>利用解析差异实施攻击</li>
+</ul>
+<h2 id="二、基础字符编码"><a href="#二、基础字符编码" class="headerlink" title="二、基础字符编码"></a>二、基础字符编码</h2>
 	
 	</div>
-  <a type="button" href="/2025/12/08/任务导向计网学习/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/14/编码技术/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -157,11 +182,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2025/12/06/PHP基础详解/" >PHP基础详解</a>
+			<a href="/2025/12/13/kali的常用命令/" >Kali常用命令</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2025-12-06  </div>
+		<div class="date">post @ 2025-12-13  </div>
 		</div>
 	</div>
 	
@@ -171,31 +196,39 @@
   <div class="row">
 	
 	
-		<h2 id="1-PHP简述"><a href="#1-PHP简述" class="headerlink" title="1. PHP简述"></a>1. PHP简述</h2><h3 id="详细解释"><a href="#详细解释" class="headerlink" title="详细解释"></a>详细解释</h3><p>PHP（Hypertext Preprocessor，超文本预处理器）是一种通用开源脚本语言，主要用于Web开发。它最初被设计为服务器端脚本语言，现在已发展成为一种通用编程语言。</p>
-<h3 id="核心特点："><a href="#核心特点：" class="headerlink" title="核心特点："></a>核心特点：</h3><ul>
-<li><strong>开源免费</strong>：PHP是完全开源的，可以自由使用和修改</li>
-<li><strong>跨平台</strong>：可以在Windows、Linux、macOS等操作系统上运行</li>
-<li><strong>嵌入HTML</strong>：PHP代码可以嵌入到HTML中，便于Web开发</li>
-<li><strong>服务器端执行</strong>：PHP代码在服务器上执行，结果以纯HTML形式返回给浏览器</li>
-<li><strong>丰富的库</strong>：PHP拥有超过1000个内置函数，支持各种功能</li>
+		<h2 id="1-系统基本操作"><a href="#1-系统基本操作" class="headerlink" title="1. 系统基本操作"></a>1. 系统基本操作</h2><h3 id="系统控制"><a href="#系统控制" class="headerlink" title="系统控制"></a>系统控制</h3><ul>
+<li><code>reboot</code> - 重启系统</li>
+<li><code>shutdown -h now</code> - 立即关闭系统</li>
+<li><code>shutdown -h hours:minutes &amp;</code> - 按预定时间关闭系统</li>
+<li><code>shutdown -c</code> - 取消预定的关机操作</li>
+<li><code>shutdown -r now</code> - 立即重启系统</li>
+<li><code>init 0</code> - 关闭系统</li>
+<li><code>telinit 0</code> - 关闭系统</li>
+<li><code>clear</code> - 清屏</li>
 </ul>
-<h3 id="PHP在Web开发中的角色："><a href="#PHP在Web开发中的角色：" class="headerlink" title="PHP在Web开发中的角色："></a>PHP在Web开发中的角色：</h3><ul>
-<li>生成动态网页内容</li>
-<li>处理表单数据</li>
-<li>与数据库交互</li>
-<li>创建会话和Cookie</li>
-<li>生成图像和PDF</li>
-<li>与其他系统通信</li>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><ul>
+<li><code>env</code> - 显示当前所有环境变量</li>
+<li><code>echo $PATH</code> - 查看PATH环境变量</li>
+<li><code>echo $JAVA_HOME</code> - 查看JAVA_HOME环境变量</li>
+<li><code>echo $PATH | grep jdk</code> - 检查PATH中是否包含JDK路径</li>
 </ul>
-<h3 id="PHP与Java-JavaScript的区别："><a href="#PHP与Java-JavaScript的区别：" class="headerlink" title="PHP与Java&#x2F;JavaScript的区别："></a>PHP与Java&#x2F;JavaScript的区别：</h3><ul>
-<li>PHP是服务器端语言，Java可以是客户端也可以是服务器端</li>
-<li>Java与JavaScript没有关系，只是名字相似</li>
-<li>PHP执行在服务器上，JavaScript执行在客户端</li>
+<h3 id="用户切换与管理"><a href="#用户切换与管理" class="headerlink" title="用户切换与管理"></a>用户切换与管理</h3><ul>
+<li><code>su -l</code> - 切换登录用户</li>
+<li><code>su - root</code> - 切换到root用户</li>
+<li><code>su 用户名</code> - 切换到普通用户</li>
+<li><code>logout</code> - 注销当前用户</li>
+<li><code>passwd</code> - 修改当前用户密码</li>
+<li><code>passwd root</code> - 修改root用户密码</li>
 </ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3>
+<h3 id="历史命令"><a href="#历史命令" class="headerlink" title="历史命令"></a>历史命令</h3><ul>
+<li><code>history</code> - 查看历史命令</li>
+<li><code>!!</code> - 重复上一条命令</li>
+<li><code>!n</code> - 重复第n条命令</li>
+</ul>
+<h2 id="2-文件和目录操作"><a href="#2-文件和目录操作" class="headerlink" title="2. 文件和目录操作"></a>2. 文件和目录操作</h2>
 	
 	</div>
-  <a type="button" href="/2025/12/06/PHP基础详解/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2025/12/13/kali的常用命令/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -231,11 +264,12 @@
 		<div class="col-md-3" id="sidebar">
   
     
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
+  <div id="site_search" class="widget">
+    <button type="button" id="search-trigger-btn" class="search-trigger" title="Search (Ctrl+K)">
+      <span class="search-trigger-icon">🔍</span>
+      <span class="search-trigger-label">Search</span>
+      <span class="search-trigger-kbd">Ctrl+K</span>
+    </button>
   </div>
 
 
@@ -244,7 +278,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -289,54 +323,55 @@
   margin-left: 5px;
 }
 </style>
+
   
     
 	<div class="widget">
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
 		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
 		
-			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+			<li><a href="/tags/js/">js<span>4</span></a></li>
 		
-			<li><a href="/tags/域渗透/">域渗透<span>2</span></a></li>
-		
-			<li><a href="/tags/Jenkins/">Jenkins<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/认证/">认证<span>2</span></a></li>
-		
-			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
 			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
 		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
+			<li><a href="/tags/解压/">解压<span>1</span></a></li>
 		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
+			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
 		
 			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
 		
-			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
 		
-			<li><a href="/tags/解压/">解压<span>1</span></a></li>
+			<li><a href="/tags/Google-Hacking/">Google Hacking<span>1</span></a></li>
 		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
+			<li><a href="/tags/FOFA/">FOFA<span>1</span></a></li>
+		
+			<li><a href="/tags/深度学习/">深度学习<span>1</span></a></li>
 		
 			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
 		
-			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
 		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			<li><a href="/tags/Kali/">Kali<span>1</span></a></li>
+		
+			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
+		
+			<li><a href="/tags/应用层/">应用层<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>60</span></a></li>
+		   <li><a href="/tags">...<span>64</span></a></li>
 		 
 		</ul>
 	</div>
@@ -349,23 +384,23 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/07/27/神经网络基础/" ><i class="fa fa-file-o"></i>神经网络基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/07/16/XXE基础/" ><i class="fa fa-file-o"></i>XXE基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/06/07/HookScripts/" ><i class="fa fa-file-o"></i>HookScripts</a>
+      </li>
+    
+      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
       <li>
         <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>
@@ -405,7 +440,7 @@
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -414,7 +449,14 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -425,16 +467,6 @@
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

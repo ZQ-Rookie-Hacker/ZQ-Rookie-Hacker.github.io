@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
   <script src="/js/jquery-2.0.3.min.js"></script>
@@ -52,7 +53,26 @@
 
 
 
-<meta name="generator" content="Hexo 8.1.1"></head>
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
 
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -117,11 +137,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/04/01/业务逻辑漏洞/" >业务逻辑漏洞</a>
+			<a href="/2026/04/12/浏览器同源策略与CORS解析/" >浏览器同源策略与CORS解析</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-04-01  </div>
+		<div class="date">post @ 2026-04-12  </div>
 		</div>
 	</div>
 	
@@ -131,20 +151,16 @@
   <div class="row">
 	
 	
-		<h2 id="业务逻辑漏洞"><a href="#业务逻辑漏洞" class="headerlink" title="业务逻辑漏洞"></a>业务逻辑漏洞</h2><h3 id="0x01-对客户端控制的过度信任"><a href="#0x01-对客户端控制的过度信任" class="headerlink" title="0x01.对客户端控制的过度信任"></a>0x01.对客户端控制的过度信任</h3><ul>
-<li>任务：买夹克衫</li>
-</ul>
-<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_1.png" alt="在这里插入图片描述"></p>
-<p>抓取添加物品的数据包<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_2.png" alt="在这里插入图片描述"></p>
-<p>结果<br><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_3.png" alt="在这里插入图片描述"></p>
+		<h2 id="前言：为什么需要同源策略？"><a href="#前言：为什么需要同源策略？" class="headerlink" title="前言：为什么需要同源策略？"></a>前言：为什么需要同源策略？</h2><p>互联网诞生之初，浏览器允许任意网页随意访问其他网站的数据。这带来了巨大的安全隐患：恶意网站可以悄悄读取你在银行网站上的个人信息，甚至冒充你进行操作。为了解决这个问题，浏览器引入了 <strong>同源策略</strong>，作为一道基本的安全防线。</p>
+<p>但同源策略过于严格，现代 Web 应用又需要合法的跨域通信（比如前端调用不同域名的 API）。于是，W3C 制定了 <strong>CORS</strong>，在保证安全的前提下，为跨域访问打开一扇可控的门。</p>
+<p>本笔记将按照 <strong>“问题 → 解决方案 → 细节机制 → 安全风险”</strong> 的逻辑，解释同源策略与 CORS。</p>
 <hr>
-<h3 id="0x02-高级逻辑漏洞"><a href="#0x02-高级逻辑漏洞" class="headerlink" title="0x02.高级逻辑漏洞"></a>0x02.高级逻辑漏洞</h3><ul>
-<li>任务：买夹克衫</li>
-</ul>
-<p><img src="/images/%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/image_4.png" alt="在这里插入图片描述"></p>
+<h2 id="1-同源策略：浏览器安全的基石"><a href="#1-同源策略：浏览器安全的基石" class="headerlink" title="1. 同源策略：浏览器安全的基石"></a>1. 同源策略：浏览器安全的基石</h2><h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>如果没有同源策略，当你登录银行网站 <code>https://bank.com</code> 后，再打开一个恶意网站 <code>https://evil.com</code>，恶意网站可以这样攻击：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 恶意网站中的脚本</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://bank.com/api/account&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="title function_">sendToAttacker</span>(data));</span><br></pre></td></tr></table></figure>
+<p>由于浏览器会携带银行网站的 Cookie，请求会成功返回你的账户数据，然后被恶意网站窃取。</p>
 	
 	</div>
-  <a type="button" href="/2026/04/01/业务逻辑漏洞/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/04/12/浏览器同源策略与CORS解析/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -154,11 +170,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2026/03/23/BloodHound/" >BloodHound食用</a>
+			<a href="/2026/04/10/JWT/" >JWT</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2026-03-23  </div>
+		<div class="date">post @ 2026-04-10  </div>
 		</div>
 	</div>
 	
@@ -168,143 +184,120 @@
   <div class="row">
 	
 	
-		<h2 id="1-手册概述"><a href="#1-手册概述" class="headerlink" title="1. 手册概述"></a>1. 手册概述</h2><p>BloodHound 是域渗透测试中核心的可视化分析工具，其预构建分析查询可精准定位域内高价值目标、攻击路径、高危权限配置与协议漏洞。本手册系统拆解所有预构建查询的核心用途、实战价值，并给出分阶段使用策略，帮助渗透测试人员高效利用查询结果规划攻击链路。</p>
-<h2 id="2-预构建查询分类详解"><a href="#2-预构建查询分类详解" class="headerlink" title="2. 预构建查询分类详解"></a>2. 预构建查询分类详解</h2><h3 id="2-1-域基础信息类（Domain-Information）"><a href="#2-1-域基础信息类（Domain-Information）" class="headerlink" title="2.1 域基础信息类（Domain Information）"></a>2.1 域基础信息类（Domain Information）</h3><table>
+		<h3 id="0x-00-JWT基础知识"><a href="#0x-00-JWT基础知识" class="headerlink" title="0x.00.JWT基础知识"></a>0x.00.JWT基础知识</h3><ol>
+<li><code>🧩 JWT 的核心结构</code></li>
+</ol>
+<p>一个 JWT 由三部分组成，用 <code>.</code> 分隔：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+
+<table>
 <thead>
 <tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
+<th>部分</th>
+<th>名称</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Find all Domain Admins</td>
-<td>列出<code>Domain Admins</code>组的所有成员</td>
-<td>明确域内最高权限账号，锁定渗透最终目标</td>
-<td>所有后续查询的核心参照目标</td>
+<td>第一段</td>
+<td><strong>Header（头部）</strong></td>
+<td>包含令牌类型（<code>typ: &quot;JWT&quot;</code>）和签名算法（如 <code>HS256</code>、<code>RS256</code>）。Base64Url 编码。</td>
 </tr>
 <tr>
-<td>Map Domain Trusts</td>
-<td>可视化域信任关系（父子域&#x2F;外部域&#x2F;林信任）</td>
-<td>规划跨域渗透路径，找到从子域突破到父域的链路</td>
-<td>需结合域控拓扑分析信任方向</td>
+<td>第二段</td>
+<td><strong>Payload（载荷）</strong></td>
+<td>包含声明（claims），如主题声明（<code>sub</code>）、过期时间（<code>exp</code>）、签发时间（<code>iat</code>）等。Base64Url 编码。</td>
 </tr>
 <tr>
-<td>Find Computers with Unsupported Operating Systems</td>
-<td>查找运行已停止支持系统（Win7&#x2F;2008&#x2F;XP等）的主机</td>
-<td>定位最易突破的初始攻击入口（漏洞多、补丁少）</td>
-<td>优先作为初始打点的目标清单</td>
+<td>第三段</td>
+<td><strong>Signature（签名）</strong></td>
+<td>对前两部分进行签名，防止篡改。</td>
 </tr>
 </tbody></table>
-<h3 id="2-2-危险权限类（Dangerous-Privileges）"><a href="#2-2-危险权限类（Dangerous-Privileges）" class="headerlink" title="2.2 危险权限类（Dangerous Privileges）"></a>2.2 危险权限类（Dangerous Privileges）</h3><table>
+<ol start="2">
+<li><p><code>注册声明</code></p>
+<ul>
+<li>官方声明<ul>
+<li>iss (issuer)：签发方</li>
+<li>iat (issued at)：签发时间</li>
+<li>sub (subject)：主题（一般放用户唯一标识）</li>
+<li>aud (audience)：受众</li>
+<li>exp (expiration time)：过期时间</li>
+<li>nbf (not before)：在此时间之前不可用</li>
+<li>jti (JWT ID)：唯一编号，防重放</li>
+</ul>
+</li>
+<li>公共声明（<code>Public Claims</code>）:由 IANA 统一登记维护，行业通用、无冲突风险，不属于官方注册声明但广泛使用<ul>
+<li>auth_time：用户实际完成身份认证的时间</li>
+<li>nonce：随机值，多用于 OIDC 场景，防止重放攻击</li>
+<li>azp：授权参与方，通常存储客户端 ID</li>
+<li>scope：权限范围字段，定义令牌可访问的资源范围</li>
+<li>client_id：调用接口的客户端唯一标识</li>
+<li>sid：会话 ID，关联用户当前登录会话</li>
+<li>at_hash：访问令牌哈希值，OIDC 中用于校验令牌一致性</li>
+</ul>
+</li>
+<li>私有声明（<code>Private Claims</code>）:业务方自定义字段，无统一标准，JWT 渗透测试中最核心的篡改目标<ul>
+<li>role&#x2F;roles：用户角色，常见值 user&#x2F;admin&#x2F;root</li>
+<li>username：登录用户名</li>
+<li>userId&#x2F;uid&#x2F;id：用户唯一标识 ID</li>
+<li>admin：布尔型标识，true 代表管理员权限</li>
+<li>permissions：权限数组，存储具体操作权限</li>
+<li>email：用户邮箱</li>
+<li>group：用户所属分组</li>
+<li>is_admin：管理员权限标识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>✅ JWT 的典型使用流程</code></p>
+<ul>
+<li><strong>登录</strong>：客户端发送用户名&#x2F;密码 → 服务器验证成功 → 生成 JWT 并返回。</li>
+<li><strong>存储</strong>：客户端通常将 JWT 保存在 <code>localStorage</code>、<code>sessionStorage</code> 或 <code>HttpOnly Cookie</code> 中。</li>
+<li><strong>请求</strong>：客户端在后续请求的 <code>Authorization</code> 头或是<code>Cookie</code>中携带 JWT</li>
+<li><strong>验证</strong>：服务器收到 JWT 后，验证签名、有效期、issuer 等，从载荷中提取用户身份。</li>
+</ul>
+</li>
+<li><p><code>📦 JWT vs Session（传统会话）</code></p>
+</li>
+</ol>
+<table>
 <thead>
 <tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
+<th>特性</th>
+<th>JWT</th>
+<th>Session</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Find Principals with DCSync Rights</td>
-<td>查找拥有<code>DCSync</code>权限的主体（用户&#x2F;组&#x2F;计算机）</td>
-<td>拿到该权限可直接同步所有域账号哈希，控制整个域</td>
-<td>域内最高危权限，优先级最高的攻击目标</td>
+<td>服务端存储</td>
+<td>无状态（不存储）</td>
+<td>有状态（存储会话数据）</td>
 </tr>
 <tr>
-<td>Users with Foreign Domain Group Membership</td>
-<td>查找属于外部域组的用户</td>
-<td>作为跨域攻击入口，利用用户在其他域的权限突破边界</td>
-<td>需结合域信任关系分析权限传递</td>
+<td>扩展性</td>
+<td>易于水平扩展</td>
+<td>需要共享存储（如 Redis）</td>
 </tr>
 <tr>
-<td>Groups with Foreign Domain Group Membership</td>
-<td>查找包含外部域成员的组</td>
-<td>利用组权限传递特性，实现跨域横向渗透</td>
-<td>重点关注高权限组（如管理员组）的外部成员</td>
+<td>吊销能力</td>
+<td>困难（需黑名单）</td>
+<td>简单（删除会话记录）</td>
 </tr>
 <tr>
-<td>Find Computers where Domain Users are Local Admin</td>
-<td>查找普通域用户为本地管理员的主机</td>
-<td>横向移动核心入口，拿到主机权限后窃取高权限凭证</td>
-<td>优先对这类主机进行横向打点</td>
-</tr>
-<tr>
-<td>Find Computers where Domain Users can read LAPS passwords</td>
-<td>查找可读取LAPS密码的主机</td>
-<td>直接获取主机本地管理员权限，无需破解</td>
-<td>LAPS为本地管理员密码管理工具，是高价值目标</td>
-</tr>
-<tr>
-<td>Find All Paths from Domain Users to High Value Targets</td>
-<td>生成从普通域用户到高价值目标的完整攻击路径</td>
-<td>渗透核心导航，明确“从哪台机、用哪个账号”提权</td>
-<td>初始渗透阶段首选查询</td>
-</tr>
-<tr>
-<td>Find Workstations where Domain Users can RDP</td>
-<td>查找普通用户可RDP的工作站</td>
-<td>直接登录后提权、窃取凭证</td>
-<td>优先选择核心业务人员的工作站</td>
-</tr>
-<tr>
-<td>Find Servers where Domain Users can RDP</td>
-<td>查找普通用户可RDP的服务器</td>
-<td>服务器承载关键服务，易接触高权限账号</td>
-<td>重点关注数据库、应用服务器</td>
-</tr>
-<tr>
-<td>Find Dangerous Privileges for Domain Users Groups</td>
-<td>查找域用户组的危险特权（如<code>SeImpersonatePrivilege</code>）</td>
-<td>利用特权实现本地提权，获取系统权限</td>
-<td>结合提权工具（如JuicyPotato）使用</td>
-</tr>
-<tr>
-<td>Find Domain Admin Logons to non-Domain Controllers</td>
-<td>查找域管理员登录过的非域控主机</td>
-<td>窃取这些主机的凭证可直接拿到域管权限</td>
-<td>最稳定的提权方式之一，优先分析</td>
+<td>载荷大小</td>
+<td>较大（包含用户信息）</td>
+<td>很小（仅 session ID）</td>
 </tr>
 </tbody></table>
-<h3 id="2-3-Kerberos-协议类（Kerberos-Interaction）"><a href="#2-3-Kerberos-协议类（Kerberos-Interaction）" class="headerlink" title="2.3 Kerberos 协议类（Kerberos Interaction）"></a>2.3 Kerberos 协议类（Kerberos Interaction）</h3><table>
-<thead>
-<tr>
-<th>查询名称</th>
-<th>核心作用</th>
-<th>实战价值</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Find Kerberoastable Members of High Value Groups</td>
-<td>查找高价值组中可被Kerberoasting攻击的成员</td>
-<td>优先攻击高权限服务账号，提升提权效率</td>
-<td>高价值组包括域管组、企业管理员组等</td>
-</tr>
-<tr>
-<td>List all Kerberoastable Accounts</td>
-<td>列出所有带SPN的用户&#x2F;服务账号</td>
-<td>发起Kerberoasting攻击，离线破解NTLM哈希</td>
-<td>需结合Impacket等工具请求服务票据</td>
-</tr>
-<tr>
-<td>Find Kerberoastable Users with most privileges</td>
-<td>查找权限最高的可Kerberoasting用户</td>
-<td>精准定位高价值攻击目标，减少无效破解</td>
-<td>结合权限图谱分析用户所属组</td>
-</tr>
-<tr>
-<td>Find AS-REP Roastable Users (DontReqPreAuth)</td>
-<td>查找无需Kerberos预认证的用户</td>
-<td>发起AS-REP Roasting攻击，直接获取NT哈希</td>
-<td>攻击门槛极低，无前置权限也可执行</td>
-</tr>
-</tbody></table>
-<h3 id="2-4-最短路径类（Shortest-Paths）"><a href="#2-4-最短路径类（Shortest-Paths）" class="headerlink" title="2.4 最短路径类（Shortest Paths）"></a>2.4 最短路径类（Shortest Paths）</h3>
+<ol start="5">
+<li><code>流程图</code></li>
+</ol>
+<p><img src="/images/JWT/image_1.png" alt="在这里插入图片描述"><br>实现身份认证依靠的是检查 令牌的<code>完整性</code>（未被篡改）和<code>真实性</code>（由服务器签发），就会设置JWT的比对机制</p>
+<p><strong><code>对称签名算法</code></strong>(HS256，即 HMAC+SHA256)：同一个密钥既用于生成签名，也用于验证签名。这个密钥必须绝对保密，不能让<code>客户端</code>或<code>任何第三方</code>知道。若服务器可以使用所存处的密钥成功对应客户端发来的jwt进行解密，则通过认证。</p>
 	
 	</div>
-  <a type="button" href="/2026/03/23/BloodHound/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2026/04/10/JWT/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -340,11 +333,12 @@
 		<div class="col-md-3" id="sidebar">
   
     
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
+  <div id="site_search" class="widget">
+    <button type="button" id="search-trigger-btn" class="search-trigger" title="Search (Ctrl+K)">
+      <span class="search-trigger-icon">🔍</span>
+      <span class="search-trigger-label">Search</span>
+      <span class="search-trigger-kbd">Ctrl+K</span>
+    </button>
   </div>
 
 
@@ -353,7 +347,7 @@
 <div class="widget-wrap">
   <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
   <div class="widget category-tree">
-    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">35</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/">我的SRC</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%80%9D%E8%B7%AF/">思路</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E6%88%91%E7%9A%84SRC/%E6%8A%A5%E5%91%8A/">报告</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">17</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">11</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
   </div>
 </div>
 
@@ -398,54 +392,55 @@
   margin-left: 5px;
 }
 </style>
+
   
     
 	<div class="widget">
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/SSH/">SSH<span>1</span></a></li>
+		
 			<li><a href="/tags/虚拟机网络/">虚拟机网络<span>1</span></a></li>
 		
-			<li><a href="/tags/Java/">Java<span>1</span></a></li>
-		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
-		
-			<li><a href="/tags/网络层/">网络层<span>1</span></a></li>
-		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
-		
-			<li><a href="/tags/计算机体系架构/">计算机体系架构<span>1</span></a></li>
+			<li><a href="/tags/Git/">Git<span>1</span></a></li>
 		
 			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
-		
-			<li><a href="/tags/软考/">软考<span>1</span></a></li>
-		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
 		
 			<li><a href="/tags/信息安全工程师/">信息安全工程师<span>1</span></a></li>
 		
-			<li><a href="/tags/JWT/">JWT<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
-		
-			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
-		
-			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
 		
 			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
 		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
+			<li><a href="/tags/Hexo/">Hexo<span>1</span></a></li>
 		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
+			<li><a href="/tags/Blog/">Blog<span>1</span></a></li>
+		
+			<li><a href="/tags/指令/">指令<span>3</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>4</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/python/">python<span>1</span></a></li>
+		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
+			<li><a href="/tags/PHP/">PHP<span>1</span></a></li>
+		
+			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
+		
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
+		
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
+		
+			<li><a href="/tags/ARL/">ARL<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>60</span></a></li>
+		   <li><a href="/tags">...<span>64</span></a></li>
 		 
 		</ul>
 	</div>
@@ -458,23 +453,23 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/07/27/神经网络基础/" ><i class="fa fa-file-o"></i>神经网络基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/07/16/XXE基础/" ><i class="fa fa-file-o"></i>XXE基础</a>
+      </li>
+    
+      <li>
+        <a href="/2026/06/07/HookScripts/" ><i class="fa fa-file-o"></i>HookScripts</a>
+      </li>
+    
+      <li>
         <a href="/2026/04/20/邮箱地址解析/" ><i class="fa fa-file-o"></i>邮箱地址解析</a>
       </li>
     
       <li>
         <a href="/2026/04/15/OAuth_authentication/" ><i class="fa fa-file-o"></i>OAuth authentication</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/13/CORS/" ><i class="fa fa-file-o"></i>CORS</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/12/浏览器同源策略与CORS解析/" ><i class="fa fa-file-o"></i>浏览器同源策略与CORS解析</a>
-      </li>
-    
-      <li>
-        <a href="/2026/04/10/JWT/" ><i class="fa fa-file-o"></i>JWT</a>
       </li>
     
   </ul>
@@ -514,7 +509,7 @@
 
 
   
-<a id="gotop" href="#">   
+<a id="gotop" href="#">
   <span>⬆︎TOP</span>
 </a>
 
@@ -523,7 +518,14 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/toc.js"></script>
-<script src="/js/search.js"></script> 
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -534,16 +536,6 @@
 })(jQuery);
 </script>
 
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
 
 </body>
    </html>

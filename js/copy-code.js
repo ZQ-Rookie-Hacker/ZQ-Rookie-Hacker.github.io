@@ -62,14 +62,22 @@
   }
 
   function getCodeText(figure) {
-    // 有 table 的结构（旧版带行号）
+    // 优先按 <span class="line"> 逐行提取（保证换行正确）
+    var lines = figure.querySelectorAll('span.line');
+    if (lines.length > 0) {
+      var text = '';
+      for (var i = 0; i < lines.length; i++) {
+        text += lines[i].textContent + '\n';
+      }
+      return text;
+    }
+    // 无 span.line 时的降级方案：使用 innerText（可保留 <br> 换行）
     var codeCol = figure.querySelector('td.code');
-    if (codeCol) return codeCol.textContent;
-    // 无行号结构：直接取 pre 或 code
+    if (codeCol) return codeCol.innerText;
     var code = figure.querySelector('code');
-    if (code) return code.textContent;
+    if (code) return code.innerText;
     var pre = figure.querySelector('pre');
-    return pre ? pre.textContent : '';
+    return pre ? pre.innerText : '';
   }
 
   function copyCode(btn, figure) {

@@ -1,0 +1,1105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>CNN与RNN基础 | ZQ-Rookie-Hacker&#39;s Blog</title>
+  <meta name="author" content="ZQ-Rookie-Hacker">
+  
+  <meta name="description" content="引言本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在笔记的基础上添加了一些个人的理解和总结。
+
+卷积神经网络CNN图像基础知识图像基本概念图像是人类视觉的基础，是自然景物的客观反映，是人类认识世界和人类本身的重要源泉。“图”是物体反射或透射光的分布，“像“是人的视觉系统所接受的图在人脑中所形成的印象或认识，照片、绘画、剪贴画、地图、书法作品、手写汉字、传真、卫星云图、影视画面、X光片、脑电图、心电图等都是图像。
+在计算机中，按照颜色和灰度的多少可以将图像分为四种基本类型。
+
+二值图像
+一幅二值图像的二维矩阵仅由0、1两个值构成，“0”代表黑色，“1”代白色。由于每一像素（矩阵中每一元素）取值仅有0、1两种可能，所以计算机中二值图像的数据类型通常为1个二进制位。二值图像通常用于文字、线条图的扫描识别（OCR）和掩膜图像的存储。
+
+
+灰度图像
+灰度图像矩阵元素的取值范围通常为[0，255]。因此其数据类型一般为8位无符号整数的（int8），这就是人们经常提到的256灰度图像。**“0”表示纯黑色，“255”表示纯白色，中间的数字从小到大表示由黑到白的过渡色。**二值图像可以看成是灰度图像的一个特例。
+
+索引图像
+索引图像的文件结构比较复杂，除了存放图像的二维矩阵外，还包括一个称之为颜色索引矩阵MAP的二维数组。MAP的大小由存放图像的矩阵元素值域决定，如矩阵元素值域为[0，255]，则MAP矩阵的大小为256Ⅹ3，用MAP&amp;#x3D;[RGB]表示。MAP中每一行的三个元素分别指定该行对应颜色的红、绿、蓝单色值，MAP中每一行对应图像矩阵像素的一个灰度值，如某一像素的灰度值为64，则该像素就与MAP中的第64行建立了映射关系，该像素在屏幕上的实际颜色由第64行的[RGB]组合决定。也就是说，图像在屏幕上显示时，每一像素的颜色由存放在矩阵中该像素的灰度值作为索引通过检索颜色索引矩阵MAP得到。
+
+
+真彩色RGB图像
+RGB图像与索引图像一样都可以用来表示彩色图像。与索引图像一样，它分别用红（R）、绿（G）、蓝（B）三原色的组合来表示每个像素的颜色。但与索引图像不同的是，RGB图像每一个像素的颜色值（由RGB三原色表示）直接存放在图像矩阵中，由于每一像素的颜色需由R、G、B三个分量来表示，**M、N分别表示图像的行列数，三个M x N的二维矩阵分别表示各个像素的R、G、B三个颜色分量。**RGB图像的数据类型一般为8位无符号整形。注意：通道的顺序是 BGR 而不是 RGB。
+
+
+
+
+
+图像类型
+通道数
+像素值范围
+主要特点
+常见用途
+
+
+
+二值图像
+1通道
+0 或 1
+每个像素只有黑与白两种值
+形态学操作、二值化、轮廓检测
+
+
+灰度图像
+1通道
+0 到 255
+每个像素表示灰度（亮度）
+图像预处理、物体检测、人脸识别
+
+
+索引图像
+1通道
+0 到 255（索引）
+像素值为颜色表的索引，颜色表决定实际颜色
+存储压缩、较少颜色的图像表示
+
+
+RGB图像
+3通道（R、G、B）
+0 到 255
+每个像素由红、绿、蓝三个通道组成
+普通彩色图像显示、图像处理与分析
+
+
+简单的讲：图像是由像素点组成的，每个像素点的取值范围为: [0, 255] 。像素值越接近于0，颜色越暗，接近于黑色；像素值越接近于255，颜色越亮，接近于白色。
+在深度学习中，我们使用的图像大多是彩色图，彩色图由RGB3个通道组成，如下图所示：
+
+
+图像加载"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="CNN与RNN基础"/>
+  <meta property="og:site_name" content="ZQ-Rookie-Hacker&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/zhuzhuxia.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/mobile-optimized.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.1.1"><script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: {
+    pageReady: () => {
+      return MathJax.startup.defaultPageReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ZQ-Rookie-Hacker&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> CNN与RNN基础</h1>
+		</div>
+	
+
+
+
+
+<!-- Reading progress bar -->
+<div class="reading-progress-bar" id="reading-progress-bar"></div>
+
+
+<div class="row post">
+		<!-- cols -->
+		
+		<div id="top_meta"></div>
+		<div class="col-md-9">
+		
+
+		<!-- content -->
+		<div class="mypage">
+		  
+		  <!-- 文章统计 -->
+		  <div class="article-stats">
+		    <i class="fa fa-file-text"></i> 字数: <span id="word-count">计算中...</span>
+		    <span style="margin-left: 12px;"><i class="fa fa-clock-o"></i> 阅读时长: <span id="reading-time">计算中...</span></span>
+		  </div>
+		  
+		  
+
+		  <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在笔记的基础上添加了一些个人的理解和总结。</p>
+<hr>
+<h2 id="卷积神经网络CNN"><a href="#卷积神经网络CNN" class="headerlink" title="卷积神经网络CNN"></a>卷积神经网络CNN</h2><h3 id="图像基础知识"><a href="#图像基础知识" class="headerlink" title="图像基础知识"></a>图像基础知识</h3><h4 id="图像基本概念"><a href="#图像基本概念" class="headerlink" title="图像基本概念"></a>图像基本概念</h4><p>图像是人类视觉的基础，是自然景物的客观反映，是人类<strong>认识世界和人类本身</strong>的重要源泉。<strong>“图”是物体反射或透射光的分布，“像“是人的视觉系统所接受的图在人脑中所形成的印象或认识</strong>，<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%85%A7%E7%89%87/1465692?fromModule=lemma_inlink">照片</a>、绘画、剪贴画、地图、书法作品、手写汉字、传真、卫星云图、影视画面、X光片、脑电图、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BF%83%E7%94%B5%E5%9B%BE/399200?fromModule=lemma_inlink">心电图</a>等都是图像。</p>
+<p>在计算机中，按照颜色和灰度的多少可以将图像分为四种基本类型。</p>
+<ul>
+<li><p><strong>二值图像</strong></p>
+<p>一幅二值图像的二维<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E7%9F%A9%E9%98%B5&spm=1001.2101.3001.7020">矩阵</a>仅由0、1两个值构成，<strong>“0”代表黑色，“1”代白色</strong>。由于每一像素（矩阵中每一元素）取值仅有0、1两种可能，所以计算机中二值图像的数据类型通常为1个二进制位。二值图像通常用于文字、线条图的扫描识别（OCR）和掩膜图像的存储。</p>
+<img src="/images/CNN与RNN基础/image_1.png"  style="zoom:50%;" />
+</li>
+<li><p><strong>灰度图像</strong></p>
+<p><strong>灰度图像矩阵元素的取值范围通常为[0，255]</strong>。因此其数据类型一般为<strong>8位无符号整数的（int8）</strong>，这就是人们经常提到的256灰度图像。**“0”表示纯黑色，“255”表示纯白色，中间的数字从小到大表示由黑到白的过渡色。**二值图像可以看成是灰度图像的一个特例。</p>
+</li>
+<li><p><strong>索引图像</strong></p>
+<p>索引图像的文件结构比较复杂，除了<strong>存放图像的二维矩阵</strong>外，还包括一个称之为<strong>颜色索引矩阵MAP的二维数组</strong>。MAP的大小由存放图像的矩阵元素值域决定，如矩阵元素值域为[0，255]，则MAP矩阵的大小为256Ⅹ3，<strong>用MAP&#x3D;[RGB]表示</strong>。<strong>MAP中每一行的三个元素分别指定该行对应颜色的红、绿、蓝单色值，MAP中每一行对应图像矩阵像素的一个灰度值</strong>，如某一像素的灰度值为64，则该像素就与MAP中的第64行建立了映射关系，该像素在屏幕上的实际颜色由第64行的[RGB]组合决定。也就是说，图像在屏幕上显示时，每一像素的颜色由存放在矩阵中该像素的灰度值作为索引通过检索颜色索引矩阵MAP得到。</p>
+<img src="/images/CNN与RNN基础/image_2.png"  style="zoom:50%;" />
+</li>
+<li><p><strong>真彩色RGB图像</strong></p>
+<p>RGB图像与索引图像一样都可以用来表示彩色图像。与索引图像一样，它分别用红（R）、绿（G）、蓝（B）三原色的组合来表示每个像素的颜色。但与索引图像不同的是，<strong>RGB图像每一个像素的颜色值（由RGB三原色表示）直接存放在图像矩阵中</strong>，由于每一像素的颜色需由R、G、B三个分量来表示，**M、N分别表示图像的行列数，三个M x N的二维矩阵分别表示各个像素的R、G、B三个颜色分量。**RGB图像的数据类型一般为8位无符号整形。<strong>注意：通道的顺序是 BGR 而不是 RGB。</strong></p>
+<img src="/images/CNN与RNN基础/image_3.png"  style="zoom:75%;" />
+
+<table>
+<thead>
+<tr>
+<th>图像类型</th>
+<th>通道数</th>
+<th>像素值范围</th>
+<th>主要特点</th>
+<th>常见用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>二值图像</strong></td>
+<td>1通道</td>
+<td>0 或 1</td>
+<td>每个像素只有黑与白两种值</td>
+<td>形态学操作、二值化、轮廓检测</td>
+</tr>
+<tr>
+<td><strong>灰度图像</strong></td>
+<td>1通道</td>
+<td>0 到 255</td>
+<td>每个像素表示灰度（亮度）</td>
+<td>图像预处理、物体检测、人脸识别</td>
+</tr>
+<tr>
+<td><strong>索引图像</strong></td>
+<td>1通道</td>
+<td>0 到 255（索引）</td>
+<td>像素值为颜色表的索引，颜色表决定实际颜色</td>
+<td>存储压缩、较少颜色的图像表示</td>
+</tr>
+<tr>
+<td><strong>RGB图像</strong></td>
+<td>3通道（R、G、B）</td>
+<td>0 到 255</td>
+<td>每个像素由红、绿、蓝三个通道组成</td>
+<td>普通彩色图像显示、图像处理与分析</td>
+</tr>
+</tbody></table>
+<p>简单的讲：<strong>图像是由像素点组成的，每个像素点的取值范围为: [0, 255] 。像素值越接近于0，颜色越暗，接近于黑色；像素值越接近于255，颜色越亮，接近于白色。</strong></p>
+<p>在深度学习中，我们使用的图像大多是彩色图，彩色图由RGB3个通道组成，如下图所示：</p>
+<img src="/images/CNN与RNN基础/image_4.png"  style="zoom:50%;" /></li>
+</ul>
+<h4 id="图像加载"><a href="#图像加载" class="headerlink" title="图像加载"></a>图像加载</h4><p>使用 matplotlib 库来实际理解下上面讲解的图像知识。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 像素值的理解</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line">    <span class="comment"># 全0数组是黑色的图像</span></span><br><span class="line">    <span class="comment"># H, W, C -&gt; 高, 宽, 通道</span></span><br><span class="line">    img = np.zeros(shape=[<span class="number">200</span>, <span class="number">200</span>, <span class="number">3</span>])</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    <span class="comment"># 对坐标轴进行设置</span></span><br><span class="line">    <span class="comment"># off:关闭坐标轴</span></span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 全255数组是白色的图像</span></span><br><span class="line">    img = np.full(shape=[<span class="number">200</span>, <span class="number">200</span>, <span class="number">3</span>], fill_value=<span class="number">255</span>)</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 图像的加载</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test02</span>():</span><br><span class="line">    <span class="comment"># 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&quot;data/img.jpg&quot;</span>)</span><br><span class="line">    <span class="comment"># 保存图像</span></span><br><span class="line">    plt.imsave(<span class="string">&quot;data/img1.jpg&quot;</span>, img)</span><br><span class="line">    <span class="comment"># 打印图像形状 高,宽,通道</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;图像的形状(H, W, C):\n&quot;</span>, img.shape)</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test01()</span><br><span class="line">    test02()</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果:</strong></p>
+<p>全黑和全白图像：</p>
+<img src="/images/CNN与RNN基础/image_5.png"  style="zoom:50%;" />
+
+<p>图像的形状为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">图像的形状（H，W，C）:</span><br><span class="line"> (<span class="number">640</span>, <span class="number">640</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<img src="/images/CNN与RNN基础/image_6.png"  style="zoom:50%;" />
+
+<h3 id="卷积神经网络（CNN）概述"><a href="#卷积神经网络（CNN）概述" class="headerlink" title="卷积神经网络（CNN）概述"></a>卷积神经网络（CNN）概述</h3><h4 id="什么是卷积神经网络"><a href="#什么是卷积神经网络" class="headerlink" title="什么是卷积神经网络"></a>什么是卷积神经网络</h4><p><strong>卷积神经网络是深度学习在计算机视觉领域的突破性成果，专门用于处理图像、视频、语音等数据的神经网络</strong> </p>
+<p>在计算机视觉领域, 往往我们输入的图像都很大，使用全连接网络的话，计算的代价较高。另外图像也很难保留原有的特征，导致图像处理的准确率不高。</p>
+<p>卷积神经网络（Convolutional Neural Network）是<strong>含有卷积层的神经网络</strong>。卷积层的<strong>作用就是用来自动学习、提取图像的特征</strong>。</p>
+<p>CNN网络主要由三部分构成：<strong>卷积层、池化层和全连接层</strong>构成：</p>
+<p>（1）卷积层负责提取图像中的局部特征</p>
+<p>（2）池化层用来大幅降低参数量级(降维)</p>
+<p>（3）全连接层类似人工神经网络的部分，用来输出想要的结果</p>
+<img src="/images/CNN与RNN基础/image_7.png"  style="zoom:50%;" />
+
+<p>上图中CNN要做的事情是：给定一张图片，是车还是马未知，是什么车也未知，现在需要模型判断这张图片里具体是一个什么东西，总之输出一个结果：如果是车，那是什么车</p>
+<ul>
+<li>最左边是<ul>
+<li>数据输入层：对数据做一些处理，比如去均值（各维度都减对应维度的均值，使得输入数据各个维度都中心化为0，避免数据过多偏差，影响训练效果）、归一化（把所有的数据都归一到同样的范围）、PCA等等。CNN只对训练集做“去均值”这一步。</li>
+</ul>
+</li>
+<li>中间是<ul>
+<li>卷积层(CONV)：线性乘积求和，提取图像中的局部特征</li>
+<li>激励层(RELU)：ReLU激活函数,输入数据转换成输出数据</li>
+<li>池化层(POOL)：取区域平均值或最大值，大幅降低参数量级(降维)</li>
+</ul>
+</li>
+<li>最右边是<ul>
+<li>全连接层(FC)：接收二维数据集，输出CNN模型预测结果</li>
+</ul>
+</li>
+</ul>
+<h4 id="卷积神经网络应用"><a href="#卷积神经网络应用" class="headerlink" title="卷积神经网络应用"></a>卷积神经网络应用</h4><p><strong>图像分类</strong>：最常见的应用，例如识别图片中的物体类别</p>
+<p><strong>目标检测</strong>：检测图像中物体的位置和类别</p>
+<p><strong>图像分割</strong>：将图像分成多个区域，用于语义分割</p>
+<p><strong>人脸识别</strong>：识别图像中的人脸</p>
+<p><strong>医学图像分析</strong>：用于检测医学图像中的异常（如癌症检测、骨折检测等）</p>
+<p><strong>自动驾驶</strong>：用于识别交通标志、车辆、行人</p>
+<h4 id="CNN中的经典算法-网络架构"><a href="#CNN中的经典算法-网络架构" class="headerlink" title="CNN中的经典算法&#x2F;网络架构"></a><strong>CNN中的经典算法&#x2F;网络架构</strong></h4><p>**LeNet-5:**作为最早的CNN架构之一，证明了CNN在图像识别任务上的有效性，为后续的CNN发展奠定了基础</p>
+<ul>
+<li><strong>卷积层:</strong> 提取图像的边缘、角点等基本特征</li>
+<li><strong>池化层 (子采样层):</strong> 降低特征图的维度，减少计算量，并提高模型对输入图像微小变化的鲁棒性</li>
+<li><strong>全连接层:</strong> 将卷积层和池化层提取的特征进行组合，用于最终的分类</li>
+</ul>
+<p>**AlexNet:**显著提升了ImageNet图像分类的准确率，证明了深度学习在计算机视觉领域的潜力，并推动了深度学习的快速发展</p>
+<ul>
+<li><strong>卷积层:</strong> 使用更大的卷积核和更多的卷积核，提取更丰富的图像特征</li>
+<li><strong>ReLU激活函数:</strong> 加速训练过程，并提高模型的性能</li>
+<li><strong>最大池化层:</strong> 降低特征图的维度</li>
+<li><strong>Dropout层:</strong> 防止过拟合</li>
+<li><strong>全连接层:</strong> 用于最终的分类</li>
+</ul>
+<p>**VGGNet:**探索了网络深度对性能的影响，证明了更深的网络可以提取更抽象和更具表达力的特征</p>
+<ul>
+<li><strong>卷积层:</strong> 使用更小的卷积核 (3x3)，并堆叠多个卷积层，增加了网络的深度，提取更复杂的特征</li>
+<li><strong>最大池化层:</strong> 降低特征图的维度</li>
+<li><strong>全连接层:</strong> 用于最终的分类</li>
+</ul>
+<p>**GoogLeNet (Inception):**提出了 Inception 模块，在提高性能的同时减少了计算量，为后续的网络架构设计提供了新的思路</p>
+<ul>
+<li><strong>Inception 模块:</strong> 并行使用不同大小的卷积核和池化操作，然后将它们的输出连接起来，增加了网络的宽度，提高了网络的效率</li>
+</ul>
+<p>**ResNet:**解决了深度网络训练困难的问题，使得可以训练更深的网络，从而显著提高了模型的性能</p>
+<ul>
+<li><strong>残差块 (Residual Block):</strong> 引入跳跃连接 (Shortcut Connection)，允许梯度直接反向传播到浅层，解决了深度网络的梯度消失问题，使得训练非常深的网络成为可能</li>
+</ul>
+<p><strong>DenseNet:</strong></p>
+<ul>
+<li><strong>密集块 (Dense Block):</strong> 将每一层都与之前的所有层连接，特征重用更加充分，进一步提高了网络的性能和参数效率</li>
+<li>DenseNet通过密集连接（Dense Connectivity）在网络中各层之间建立了直接的连接，即每一层都接收前面所有层的输出作为输入。这种设计增强了特征传递和梯度流动，避免了梯度消失问题，并提高了信息的利用率</li>
+</ul>
+<h3 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h3><blockquote>
+<p>卷积层（Convolutional Layer）通过卷积操作提取输入数据中的特征（例如图像中的边缘、纹理、形状等）。</p>
+<p>卷积层利用卷积核（滤波器）对输入进行处理，从而生成特征图（feature map），并且每个卷积层能够提取不同层次的特征，从低级特征（如边缘）到高级特征（如物体的形状）。</p>
+<p><strong>卷积层的主要作用如下：</strong></p>
+<ul>
+<li><p><strong>特征提取</strong>：卷积层的主要作用是从输入图像中提取低级特征（如边缘、角点、纹理等）。通过多个卷积层的堆叠，网络能够逐渐从低级特征到高级特征（如物体的形状、区域等）进行学习。</p>
+</li>
+<li><p><strong>权重共享</strong>：在卷积层中，同一个卷积核在整个输入图像上共享权重，这使得卷积层的参数数量大大减少，减少了计算量并提高了训练效率。</p>
+</li>
+<li><p><strong>局部连接</strong>：卷积层中的每个神经元仅与输入图像的一个小局部区域相连，这称为<strong>局部感受野</strong>，这种局部连接方式更符合图像的空间结构，有助于捕捉图像中的局部特征。</p>
+</li>
+<li><p><strong>空间不变性</strong>：由于卷积操作是局部的并且采用权重共享，卷积层在处理图像时具有<strong>平移不变性</strong>。也就是说，不论物体出现在图像的哪个位置，卷积层都能有效地检测到这些物体的特征。</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h4><img src='/images/CNN与RNN基础/image_8.png' style="zoom:50%;" />
+
+<ol>
+<li><p>input 表示输入的图像</p>
+</li>
+<li><p>filter 表示卷积核, 也叫做滤波器(滤波矩阵)</p>
+<ul>
+<li>一组固定的权重，因为每个神经元的多个权重固定，所以又可以看做一个恒定的滤波器filter</li>
+<li>非严格意义上来讲，下图中红框框起来的部分便可以理解为一个滤波器，即带着<strong>一组固定权重的神经元</strong>。多个滤波器叠加便成了卷积层</li>
+<li>一个卷积核就是一个神经元</li>
+</ul>
+<p><img src="/images/CNN%E4%B8%8ERNN%E5%9F%BA%E7%A1%80/image_9.png" alt="img"></p>
+</li>
+<li><p>input 经过 filter 得到输出为最右侧的图像，该图叫做特征图</p>
+</li>
+</ol>
+<p>那么, 它是如何进行计算的呢？<strong>卷积运算本质上就是在滤波器和输入数据的局部区域间做点积。</strong></p>
+<img src='/images/CNN与RNN基础/image_10.png' style="zoom:50%;" />
+
+<p>左上角的点计算方法：</p>
+<img src='/images/CNN与RNN基础/image_11.png' style="zoom:50%;" />
+
+<p>按照上面的计算方法可以得到最终的特征图为:</p>
+<img src='/images/CNN与RNN基础/image_12.png' style="zoom:50%;" />
+
+<p>图像上的卷积:</p>
+<p>在下图对应的计算过程中，输入是一定区域大小(width*height)的数据，和滤波器filter（带着一组固定权重的神经元）做内积后得到新的二维数据。</p>
+<img src='/images/CNN与RNN基础/image_13.png' style="zoom:50%;" />
+
+<p>具体来说，左边是图像输入，中间部分就是滤波器filter（带着一组固定权重的神经元），不同的滤波器filter会得到不同的输出数据，比如颜色深浅、轮廓。相当于如果想提取图像的不同特征，则用不同的滤波器filter，提取想要的关于图像的特定信息：颜色深浅或轮廓。</p>
+<h4 id="Padding（填充）"><a href="#Padding（填充）" class="headerlink" title="Padding（填充）"></a>Padding（填充）</h4><p>通过上面的卷积计算过程，最终的特征图比原始图像小很多，如果想要保持经过卷积后的图像大小不变, 可以在<strong>原图周围</strong>添加 Padding 来实现。</p>
+<p>Padding（填充）操作是一种用于&#x3D;&#x3D;在输入特征图的边界周围添加额外像素（通常是零）&#x3D;&#x3D;。</p>
+<p><strong>Padding的主要作用：</strong></p>
+<ul>
+<li>**保持空间维度：**如果不使用 padding，每次卷积操作后，特征图的尺寸都会缩小。多次卷积后，特征图会变得非常小，可能会丢失重要的边缘信息。Padding可以帮助维持输出特征图的尺寸与输入相同或接近相同。</li>
+<li>**保留边缘信息：**图像边缘的像素在卷积过程中参与的计算次数较少，这意味着边缘信息在特征提取过程中容易丢失。Padding通过在边缘添加额外的像素，增加了边缘像素的参与度，从而更好地保留了边缘信息。</li>
+<li>**提高性能：**Padding有助于避免由于特征图尺寸快速缩小而导致的信息丢失，从而提高模型的性能，尤其是在处理较小的图像或需要进行多层卷积时。</li>
+</ul>
+<p><strong>Padding的类型：</strong></p>
+<ul>
+<li><strong>Valid Padding (No Padding):</strong> 不进行任何填充。卷积核只在输入图像的有效区域内滑动。输出尺寸会缩小。 </li>
+<li><strong>Same Padding:</strong> 添加足够的填充，使得输出特征图的尺寸与输入相同。 </li>
+<li><strong>Full Padding:</strong> 尽可能多地添加填充，使得卷积核的每个元素都至少在输入图像上滑动一次。输出尺寸会增大。</li>
+</ul>
+<p>**Padding的选择：**取决于具体的应用场景和网络架构</p>
+<ul>
+<li><strong>Valid Padding:</strong> 适用于不需要保持输出尺寸的场景，或者输入图像足够大，边缘信息丢失不重要的情况。</li>
+<li><strong>Same Padding:</strong> 广泛应用于各种CNN架构中，因为它可以保持特征图的尺寸，方便网络设计和计算。</li>
+<li><strong>Full Padding:</strong> 较少使用，因为它会增加计算量，并且可能会在边缘引入一些伪影。</li>
+</ul>
+<img src='/images/CNN与RNN基础/image_14.png' style="zoom:50%;" />
+
+<img src='/images/CNN与RNN基础/image_15.png' style="zoom:50%;" />
+
+<h4 id="Stride（步长）"><a href="#Stride（步长）" class="headerlink" title="Stride（步长）"></a>Stride（步长）</h4><p>Stride（步长）指的是<strong>卷积核在图像上滑动时的步伐大小</strong>，即每次卷积时卷积核在图像中向右（或向下）移动的像素数。步长直接影响卷积操作后输出特征图的尺寸，以及计算量和模型的特征提取能力。</p>
+<p><strong>Stride的作用:</strong></p>
+<ul>
+<li>**降低计算复杂度：**更大的步长意味着卷积核移动的次数更少，从而减少了计算量，并加快了训练和推理速度。</li>
+<li>**减1长越大，生成的特征图尺寸越小。这类似于池化的降维效果。</li>
+<li>**增大感受野：**虽然更大的步长会减小特征图的尺寸，但它同时也会增大每个神经元在输入数据上的感受野。这意味着每个神经元能够捕捉到更大范围的输入信息。</li>
+</ul>
+<p>**Stride的选择：**取决于具体的应用场景和网络架构</p>
+<ul>
+<li><strong>Stride &#x3D; 1:</strong> 这是最常见的设置，尤其是在网络的早期层。它允许保留更多的空间细节。</li>
+<li><strong>Stride &gt; 1:</strong> 通常用于减小特征图的尺寸和增大感受野，例如在网络的后期层或需要进行快速降维时。 常见的设置包括 stride&#x3D;2 或 stride&#x3D;4。</li>
+</ul>
+<p>按照步长为1来移动卷积核，计算特征图如下所示：</p>
+<img src='/images/CNN与RNN基础/image_16.png' style="zoom:50%;" />
+
+<p>如果把Stride增大为2，也是可以提取特征图的，如下图所示：</p>
+<img src='/images/CNN与RNN基础/image_17.png' style="zoom:50%;" />
+
+<h4 id="多通道卷积计算"><a href="#多通道卷积计算" class="headerlink" title="多通道卷积计算"></a>多通道卷积计算</h4><p>实际中的图像都是多个通道组成的，我们怎么计算卷积呢？</p>
+<img src='/images/CNN与RNN基础/image_18.png' style="zoom:50%;" />
+
+<p>计算方法如下：</p>
+<ol>
+<li>当输入有多个通道(Channel), 例如 RGB 三个通道, 此时要求卷积核需要拥有相同的通道数（图像有多少通道，每个卷积核就有多少通道）.</li>
+<li>每个卷积核通道与对应的输入图像的各个通道进行卷积.</li>
+<li>将每个通道的卷积结果按位相加得到最终的特征图.</li>
+</ol>
+<p>如下图所示:</p>
+<img src='/images/CNN与RNN基础/image_19.png' style="zoom:50%;" />
+
+<h4 id="多卷积核卷积计算"><a href="#多卷积核卷积计算" class="headerlink" title="多卷积核卷积计算"></a>多卷积核卷积计算</h4><p>上面的例子里我们只使用一个卷积核进行特征提取, 实际对图像进行特征提取时, 我们需要使用多个卷积核进行特征提取. 这个多个卷积核可以理解为从不同到的视角、不同的角度对图像特征进行提取.</p>
+<p>那么, 当使用多个卷积核时, 应该怎么进行特征提取呢?</p>
+<img src='/images/CNN与RNN基础/image_20.png' style="zoom:50%;" />
+
+<p>通过以下例子查看多卷积核卷积计算流程:</p>
+<img src='/images/CNN与RNN基础/image_21.png' style="zoom:75%;" />
+
+<p>可以看到：</p>
+<ul>
+<li>两个神经元，意味着有两个滤波器</li>
+<li>数据窗口每次移动两个步长取3*3的局部数据，即stride&#x3D;2</li>
+<li>zero-padding&#x3D;1。输入数据由<code>5*5*3</code>变为<code>7*7*3</code></li>
+<li>左边是输入（<strong>7*7*3</strong>中，7*7代表图像的像素&#x2F;长宽，3代表R、G、B 三个颜色通道）</li>
+<li>中间部分是两个不同的滤波器Filter w0、Filter w1</li>
+<li>最右边则是两个不同的输出</li>
+</ul>
+<h4 id="特征图大小"><a href="#特征图大小" class="headerlink" title="特征图大小"></a>特征图大小</h4><p>输出特征图的大小与以下参数息息相关:</p>
+<ol>
+<li>size: 卷积核&#x2F;过滤器大小，一般会选择为奇数，比如有 <code>1*1</code>, <code>3*3</code>， <code>5*5</code></li>
+<li>Padding: 零填充的方式 </li>
+<li>Stride: 步长</li>
+</ol>
+<p>那计算方法如下图所示:</p>
+<ol>
+<li>输入图像大小: W x W</li>
+<li>卷积核大小: F x F</li>
+<li>Stride: S</li>
+<li>Padding: P</li>
+<li>输出图像大小: N x N</li>
+</ol>
+<img src='/images/CNN与RNN基础/image_22.png' />
+
+<p>以下图为例:</p>
+<ol>
+<li>图像大小: 5 x 5</li>
+<li>卷积核大小: 3 x 3</li>
+<li>Stride: 1</li>
+<li>Padding: 1</li>
+<li>(5 - 3 + 2) &#x2F; 1 + 1 &#x3D; 5（如果除不尽向下取整）, 即得到的特征图大小为: 5 x 5</li>
+</ol>
+<img src='/images/CNN与RNN基础/image_14.png' style="zoom:75%;" />
+
+<h4 id="PyTorch卷积层API"><a href="#PyTorch卷积层API" class="headerlink" title="PyTorch卷积层API"></a>PyTorch卷积层API</h4><p>在PyTorch中进行卷积的API是：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conv = nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">参数说明：</span></span><br><span class="line"><span class="string">in_channels: 输入通道数，RGB图片一般是3</span></span><br><span class="line"><span class="string">out_channels: 输出通道，也可以理解为卷积核kernel的数量</span></span><br><span class="line"><span class="string">kernel_size：卷积核的高和宽设置，一般为3,5,7...</span></span><br><span class="line"><span class="string">stride：卷积核移动的步长</span></span><br><span class="line"><span class="string">	整数stride：表示在所有维度上使用相同的步长 stride=2 表示在水平和垂直方向上每次移动2个像素</span></span><br><span class="line"><span class="string">	元组stride: 允许在不同维度上设置不同的步长 stride=(2, 1) 表示在水平方向上步长为2，在垂直方向上步长为1</span></span><br><span class="line"><span class="string">padding：在四周加入padding的数量，默认补0</span></span><br><span class="line"><span class="string">	padding=0：不进行填充。</span></span><br><span class="line"><span class="string">	padding=1：在每个维度上填充 1 个像素（常用于保持输出尺寸与输入相同 padding=输入形状大小-输出形状大小）。</span></span><br><span class="line"><span class="string">	padding=&#x27;same&#x27;（从 PyTorch 1.9+ 开始支持）：让输出特征图的尺寸与输入保持一致。PyTorch会自动计算需要的填充量。stride必须等于1，不支持跨行，因为计算padding时可能出现小数</span></span><br><span class="line"><span class="string">	padding=kernel_size-1：Full Padding 完全填充</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们接下来对下面的图片进行特征提取:</p>
+<img src='/images/CNN与RNN基础/image_23.png' style="zoom:50%;" />
+
+<p>下面演示多通道多卷积核卷积:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对图像进行卷积</span></span><br><span class="line"><span class="comment">## 1 读取图像 显示图像</span></span><br><span class="line"><span class="comment">## 2 定义卷积层</span></span><br><span class="line"><span class="comment">## 3 变换数据形状 1-转成tensor 2-通道要求[C H W] 3-批次数要求 [batch, C, H, W]</span></span><br><span class="line"><span class="comment">## 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line"><span class="comment">## (H-F+2p)/s +1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&#x27;./data/img.jpg&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img.shape&#x27;</span>, img.shape)</span><br><span class="line"></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 定义卷积层</span></span><br><span class="line">    myconv2d = nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">4</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;myconv2d---&gt;&#x27;</span>, myconv2d)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 变换数据形状 </span></span><br><span class="line">	<span class="comment"># ①转换成tensor</span></span><br><span class="line">    <span class="comment"># ②通道要求[C, H, W], 默认[H, W, C]</span></span><br><span class="line">    <span class="comment"># ③批次数要求[batch, C, H, W],多少个图像(一个图像是三维数组,四维有多少个三维就是多少个图像)</span></span><br><span class="line">    <span class="comment"># [0, 1, 2] --&gt; [2, 0, 1]</span></span><br><span class="line">    img2 = torch.tensor(img).permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img2.shape---&gt;&#x27;</span>, img2.shape)</span><br><span class="line">	<span class="comment"># 图像数为1,变为4维张量</span></span><br><span class="line">    img3 = img2.unsqueeze(<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img3.shape---&gt;&#x27;</span>, img3.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line">    <span class="comment"># (H-F+2p)/s + 1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line">    img4 = myconv2d(img3.<span class="built_in">type</span>(torch.float32))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img4--&gt;&#x27;</span>, img4.shape)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test01()</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果:</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">img.shape---&gt; (<span class="number">640</span>, <span class="number">640</span>, <span class="number">3</span>)</span><br><span class="line">myconv2d---&gt; Conv2d(<span class="number">3</span>, <span class="number">4</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">img2.shape---&gt; torch.Size([<span class="number">3</span>, <span class="number">640</span>, <span class="number">640</span>])</span><br><span class="line">img3.shape---&gt; torch.Size([<span class="number">1</span>, <span class="number">3</span>, <span class="number">640</span>, <span class="number">640</span>])</span><br><span class="line">img4--&gt; torch.Size([<span class="number">1</span>, <span class="number">4</span>, <span class="number">319</span>, <span class="number">319</span>])</span><br></pre></td></tr></table></figure>
+
+<p>对生成的特征图进行显示:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 对图像卷积 并显示卷积以后的特征图</span></span><br><span class="line"><span class="comment">## 思路：去掉批次数 -&gt; 转成[HWC] --&gt;按照通道拿数据[:,:,0123]</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test02</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&#x27;./data/img.jpg&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img.shape&#x27;</span>, img.shape)</span><br><span class="line"></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 定义卷积层</span></span><br><span class="line">    myconv2d = nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">4</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;myconv2d---&gt;&#x27;</span>, myconv2d)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 变换数据形状 1-转成tensor 2-通道要求[C H W] 3-批次数要求 [batch, C, H, W]</span></span><br><span class="line">    <span class="comment"># [0, 1, 2] --&gt; [2, 0, 1]</span></span><br><span class="line">    img2 = torch.tensor(img).permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img2.shape---&gt;&#x27;</span>, img2.shape)</span><br><span class="line"></span><br><span class="line">    img3 = img2.unsqueeze(<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img3.shape---&gt;&#x27;</span>, img3.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line">    <span class="comment"># (H-F+2p)/s +1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line">    img4 = myconv2d(img3.<span class="built_in">type</span>(torch.float32))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img4--&gt;&#x27;</span>, img4.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5 查看特征图思路：去掉批次数 -&gt; 转成[HWC] --&gt;按照通道拿数据[:,:,0123]</span></span><br><span class="line">    img5 = img4[<span class="number">0</span>] <span class="comment"># 去掉批次数</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;去掉批次数img5.shape--&gt;&#x27;</span>, img5.shape)</span><br><span class="line">    img6 = img5.permute(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;去掉批次数以后，再进行HWC img6.shape--&gt;&#x27;</span>, img6.shape)</span><br><span class="line"></span><br><span class="line">    feature1 = img6[:, :, <span class="number">0</span>].detach().numpy()</span><br><span class="line">    feature2 = img6[:, :, <span class="number">1</span>].detach().numpy()</span><br><span class="line">    feature3 = img6[:, :, <span class="number">2</span>].detach().numpy()</span><br><span class="line">    feature4 = img6[:, :, <span class="number">3</span>].detach().numpy()</span><br><span class="line"></span><br><span class="line">    plt.imshow(feature1)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    plt.imshow(feature2)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    plt.imshow(feature3)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    plt.imshow(feature4)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test02()</span><br></pre></td></tr></table></figure>
+
+<p><strong>生成特征图显示:</strong></p>
+<p><img src="/images/CNN%E4%B8%8ERNN%E5%9F%BA%E7%A1%80/image_24.png" alt="image-20220706160149097"></p>
+<h3 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h3><blockquote>
+<p>池化层（Pooling Layer）是用于降低输入数据的空间维度（例如图像的高度和宽度），从而减少计算量、减少内存消耗，并提高模型的鲁棒性。</p>
+<p>池化层通常位于卷积层之后，它通过对卷积层输出的特征图进行下采样，保留最重要的特征信息，同时丢弃一些不重要的细节。</p>
+<p><strong>池化层的主要作用如下:</strong></p>
+<ul>
+<li><p><strong>降维和计算量减少</strong>：池化层通过减少特征图的尺寸，从而降低了计算量，特别是在多层网络中，随着层数的增加，池化能够显著减少计算资源的消耗。</p>
+</li>
+<li><p><strong>提高鲁棒性</strong>：池化操作可以使得特征对小的变换、平移和旋转变得更加不敏感。这样，模型在面对噪声或图像的轻微变化时，依然能够稳定工作。</p>
+</li>
+<li><p><strong>防止过拟合</strong>：通过池化减少了特征图的大小，减少了模型的复杂度，从而有助于防止过拟合，尤其是在较小的数据集上。</p>
+</li>
+<li><p><strong>抽象特征</strong>：通过池化层的操作，可以提取更为抽象和高层次的特征，使得网络能够学习到更具泛化能力的表示。</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="池化层计算"><a href="#池化层计算" class="headerlink" title="池化层计算"></a>池化层计算</h4><ul>
+<li><p>最大池化(Max Pooling) ：通过池化窗口进行最大池化，<strong>取窗口中的最大值作为输出</strong></p>
+<img src='/images/CNN与RNN基础/image_25.png' style="zoom:50%;" />
+</li>
+<li><p>平均池化(Avg Pooling) ：<strong>取窗口内的所有值的均值作为输出</strong></p>
+<img src='/images/CNN与RNN基础/image_26.png' style="zoom:50%;" /></li>
+</ul>
+<h4 id="Padding（填充）-1"><a href="#Padding（填充）-1" class="headerlink" title="Padding（填充）"></a>Padding（填充）</h4><img src='/images/CNN与RNN基础/image_27.png' style="zoom:75%;" />
+
+<h4 id="Stride（步长）-1"><a href="#Stride（步长）-1" class="headerlink" title="Stride（步长）"></a>Stride（步长）</h4><img src='/images/CNN与RNN基础/image_28.png' style="zoom:75%;" />
+
+
+
+<h4 id="多通道池化计算"><a href="#多通道池化计算" class="headerlink" title="多通道池化计算"></a>多通道池化计算</h4><p>在处理多通道输入数据时，池化层对每个输入通道分别池化，而不是像卷积层那样将各个通道的输入相加。这意味着<mark>池化层的输出和输入的通道数是相等。</mark></p>
+<p><strong>池化只在宽高维度上池化</strong>，<strong>在通道上是不发生池化</strong>（池化前后，多少个通道还是多少个通道）</p>
+<img src='/images/CNN与RNN基础/image_29.png' style="zoom:75%;" />
+
+<h4 id="PyTorch池化层API"><a href="#PyTorch池化层API" class="headerlink" title="PyTorch池化层API"></a>PyTorch池化层API</h4><p>在PyTorch中进行池化的API是：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 最大池化</span></span><br><span class="line">nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>)</span><br><span class="line"><span class="comment">## 平均池化</span></span><br><span class="line">nn.AvgPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">参数说明：</span></span><br><span class="line"><span class="string">kernel_size：核的高和宽设置，一般为3,5,7...</span></span><br><span class="line"><span class="string">stride：核移动的步长</span></span><br><span class="line"><span class="string">padding：在四周加入padding的数量，默认补0</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>单通道池化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 单通道池化</span></span><br><span class="line"><span class="comment"># 定义输入数据 [1,3,3]</span></span><br><span class="line">inputs = torch.tensor([[[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]]], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"><span class="comment"># 修改stride，padding观察效果</span></span><br><span class="line"><span class="comment"># 1. 最大池化</span></span><br><span class="line">pooling = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line">output = pooling(inputs)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;最大池化：\n&quot;</span>, output)</span><br><span class="line"><span class="comment"># 2. 平均池化</span></span><br><span class="line">pooling = nn.AvgPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line">output = pooling(inputs)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;平均池化：\n&quot;</span>, output)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果:</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">最大池化：</span><br><span class="line"> tensor([[[<span class="number">4.</span>, <span class="number">5.</span>],</span><br><span class="line">         [<span class="number">7.</span>, <span class="number">8.</span>]]])</span><br><span class="line">平均池化：</span><br><span class="line"> tensor([[[<span class="number">2.</span>, <span class="number">3.</span>],</span><br><span class="line">         [<span class="number">5.</span>, <span class="number">6.</span>]]])</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多通道池化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 2. 多通道池化</span></span><br><span class="line"><span class="comment"># 定义输入数据 [3,3,3]</span></span><br><span class="line">inputs = torch.tensor([[[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]],</span><br><span class="line">                       [[<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>], [<span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>], [<span class="number">70</span>, <span class="number">80</span>, <span class="number">90</span>]],</span><br><span class="line">                       [[<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>], [<span class="number">44</span>, <span class="number">55</span>, <span class="number">66</span>], [<span class="number">77</span>, <span class="number">88</span>, <span class="number">99</span>]]], dtype=torch.<span class="built_in">float</span>)</span><br><span class="line"><span class="comment"># 最大池化</span></span><br><span class="line">pooling = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line">output = pooling(inputs)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;多通道池化：\n&quot;</span>, output)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果:</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">多通道池化：</span><br><span class="line"> tensor([[[ <span class="number">4.</span>,  <span class="number">5.</span>],</span><br><span class="line">         [ <span class="number">7.</span>,  <span class="number">8.</span>]],</span><br><span class="line"></span><br><span class="line">        [[<span class="number">50.</span>, <span class="number">60.</span>],</span><br><span class="line">         [<span class="number">80.</span>, <span class="number">90.</span>]],</span><br><span class="line"></span><br><span class="line">        [[<span class="number">55.</span>, <span class="number">66.</span>],</span><br><span class="line">         [<span class="number">88.</span>, <span class="number">99.</span>]]])</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="图像分类案例"><a href="#图像分类案例" class="headerlink" title="图像分类案例"></a>图像分类案例</h3><blockquote>
+<p>咱们使用前面学习到的知识来构建一个卷积神经网络, 并训练该网络实现图像分类。要完成这个案例，咱们需要学习的内容如下:<br>了解 CIFAR10 数据集<br>搭建卷积神经网络<br>编写训练函数<br>编写预测函数</p>
+</blockquote>
+<p>导入工具包</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">from</span> torchvision.datasets <span class="keyword">import</span> CIFAR10</span><br><span class="line"><span class="keyword">from</span> torchvision.transforms <span class="keyword">import</span> ToTensor  <span class="comment"># pip install torchvision -i https://mirrors.aliyun.com/pypi/simple/</span></span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> torchsummary <span class="keyword">import</span> summary</span><br><span class="line"></span><br><span class="line"><span class="comment">## 每批次样本数</span></span><br><span class="line">BATCH_SIZE = <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="CIFAR10-数据集"><a href="#CIFAR10-数据集" class="headerlink" title="CIFAR10 数据集"></a>CIFAR10 数据集</h4><p>CIFAR-10数据集5万张训练图像、1万张测试图像、10个类别、每个类别有6k个图像，图像大小32×32×3。下图列举了10个类，每一类随机展示了10张图片：</p>
+<img src='/images/CNN与RNN基础/image_30.png' style="zoom:50%;" />
+
+<p>PyTorch 中的 torchvision.datasets 计算机视觉模块封装了 CIFAR10 数据集, 使用方法如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 1. 数据集基本信息</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_dataset</span>():</span><br><span class="line">    <span class="comment"># 加载数据集:训练集数据和测试数据</span></span><br><span class="line">    <span class="comment"># ToTensor: 将image（一个PIL.Image对象）转换为一个Tensor</span></span><br><span class="line">    train = CIFAR10(root=<span class="string">&#x27;data&#x27;</span>, train=<span class="literal">True</span>, transform=ToTensor())</span><br><span class="line">    valid = CIFAR10(root=<span class="string">&#x27;data&#x27;</span>, train=<span class="literal">False</span>, transform=ToTensor())</span><br><span class="line">    <span class="comment"># 返回数据集结果</span></span><br><span class="line">    <span class="keyword">return</span> train, valid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 数据集加载</span></span><br><span class="line">    train_dataset, valid_dataset = create_dataset()</span><br><span class="line">    <span class="comment"># 数据集类别</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;数据集类别:&quot;</span>, train_dataset.class_to_idx)</span><br><span class="line">    <span class="comment"># 数据集中的图像数据</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;训练集数据集:&quot;</span>, train_dataset.data.shape)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;测试集数据集:&quot;</span>, valid_dataset.data.shape)</span><br><span class="line">    <span class="comment"># 图像展示</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">    plt.imshow(train_dataset.data[<span class="number">1</span>])</span><br><span class="line">    plt.title(train_dataset.targets[<span class="number">1</span>])</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">数据集类别: &#123;<span class="string">&#x27;airplane&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;automobile&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;bird&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;cat&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;deer&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;dog&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;frog&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;horse&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;ship&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;truck&#x27;</span>: <span class="number">9</span>&#125; </span><br><span class="line">训练集数据集: (<span class="number">50000</span>, <span class="number">32</span>, <span class="number">32</span>, <span class="number">3</span>) </span><br><span class="line">测试集数据集: (<span class="number">10000</span>, <span class="number">32</span>, <span class="number">32</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<img src='/images/CNN与RNN基础/image_31.png' style="zoom:50%;" />
+
+<h4 id="搭建图像分类网络"><a href="#搭建图像分类网络" class="headerlink" title="搭建图像分类网络"></a>搭建图像分类网络</h4><p>搭建的CNN网络结构如下:</p>
+<img src='/images/CNN与RNN基础/image_32.png' style="zoom:75%;" />
+
+<p>我们要搭建的网络结构如下:</p>
+<ol>
+<li>输入形状: 32x32</li>
+<li>第一个卷积层输入 3 个 Channel, 输出 6 个 Channel, Kernel Size 为: 3x3</li>
+<li>第一个池化层输入 30x30, 输出 15x15, Kernel Size 为: 2x2, Stride 为: 2</li>
+<li>第二个卷积层输入 6 个 Channel, 输出 16 个 Channel, Kernel Size 为 3x3</li>
+<li>第二个池化层输入 13x13, 输出 6x6, Kernel Size 为: 2x2, Stride 为: 2</li>
+<li>第一个全连接层输入 576 维, 输出 120 维</li>
+<li>第二个全连接层输入 120 维, 输出 84 维</li>
+<li>最后的输出层输入 84 维, 输出 10 维</li>
+</ol>
+<p>我们在每个卷积计算之后应用 relu 激活函数来给网络增加非线性因素。</p>
+<p><strong>构建网络代码实现如下:</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 模型构建</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ImageClassification</span>(nn.Module):</span><br><span class="line">    <span class="comment"># 定义网络结构</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(ImageClassification, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="comment"># 定义网络层：卷积层+池化层</span></span><br><span class="line">        <span class="comment"># 第一个卷积层, 输入图像为3通道,输出特征图为6通道,卷积核3*3</span></span><br><span class="line">        <span class="variable language_">self</span>.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, stride=<span class="number">1</span>, kernel_size=<span class="number">3</span>)</span><br><span class="line">        <span class="comment"># 第一个池化层, 核宽高2*2</span></span><br><span class="line">        <span class="variable language_">self</span>.pool1 = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 第二个卷积层, 输入图像为6通道,输出特征图为16通道,卷积核3*3</span></span><br><span class="line">        <span class="variable language_">self</span>.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, stride=<span class="number">1</span>, kernel_size=<span class="number">3</span>)</span><br><span class="line">        <span class="comment"># 第二个池化层, 核宽高2*2</span></span><br><span class="line">        <span class="variable language_">self</span>.pool2 = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 全连接层</span></span><br><span class="line">        <span class="comment"># 第一个隐藏层 输入特征576个(一张图像为16*6*6), 输出特征120个</span></span><br><span class="line">        <span class="variable language_">self</span>.linear1 = nn.Linear(<span class="number">576</span>, <span class="number">120</span>)</span><br><span class="line">        <span class="comment"># 第二个隐藏层</span></span><br><span class="line">        <span class="variable language_">self</span>.linear2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        <span class="comment"># 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line">        </span><br><span class="line">	<span class="comment"># 定义前向传播</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 卷积+relu+池化</span></span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.conv1(x))</span><br><span class="line">        x = <span class="variable language_">self</span>.pool1(x)</span><br><span class="line">        <span class="comment"># 卷积+relu+池化</span></span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.conv2(x))</span><br><span class="line">        x = <span class="variable language_">self</span>.pool2(x)</span><br><span class="line">        <span class="comment"># 将特征图做成以为向量的形式：相当于特征向量 全连接层只能接收二维数据集</span></span><br><span class="line">        <span class="comment"># 由于最后一个批次可能不够8，所以需要根据批次数量来改变形状</span></span><br><span class="line">        <span class="comment"># x[8, 16, 6, 6] --&gt; [8, 576] --&gt;8个样本,576个特征</span></span><br><span class="line">        <span class="comment"># x.size(0): 第1个值是样本数 行数</span></span><br><span class="line">        <span class="comment"># -1：第2个值由原始x剩余3个维度值相乘计算得到 列数(特征个数)</span></span><br><span class="line">        x = x.reshape(x.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 全连接层</span></span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.linear1(x))</span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.linear2(x))</span><br><span class="line">        <span class="comment"># 返回输出结果</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.out(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 模型实例化</span></span><br><span class="line">    model = ImageClassification()</span><br><span class="line">    summary(model, input_size=(<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>), batch_size=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<img src='/images/CNN与RNN基础/image_33.png' style="zoom:75%;" />
+
+<h4 id="编写训练函数"><a href="#编写训练函数" class="headerlink" title="编写训练函数"></a>编写训练函数</h4><p>在训练时，使用多分类交叉熵损失函数，Adam 优化器。具体实现代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">model, train_dataset</span>):</span><br><span class="line">    <span class="comment"># 构建数据加载器</span></span><br><span class="line">    dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=<span class="literal">True</span>)</span><br><span class="line">    criterion = nn.CrossEntropyLoss() <span class="comment"># 构建损失函数</span></span><br><span class="line">    optimizer = optim.Adam(model.parameters(), lr=<span class="number">1e-3</span>) <span class="comment"># 构建优化方法</span></span><br><span class="line">    epoch = <span class="number">100</span>  <span class="comment"># 训练轮数</span></span><br><span class="line">    <span class="keyword">for</span> epoch_idx <span class="keyword">in</span> <span class="built_in">range</span>(epoch):</span><br><span class="line">        sum_num = <span class="number">0</span>   <span class="comment"># 样本数量</span></span><br><span class="line">        total_loss = <span class="number">0.0</span>  <span class="comment"># 损失总和</span></span><br><span class="line">        correct = <span class="number">0</span>  <span class="comment"># 预测正确样本数</span></span><br><span class="line">        start = time.time()  <span class="comment"># 开始时间</span></span><br><span class="line">        <span class="comment"># 遍历数据进行网络训练</span></span><br><span class="line">        <span class="keyword">for</span> x, y <span class="keyword">in</span> dataloader:</span><br><span class="line">            model.train()</span><br><span class="line">            output = model(x)</span><br><span class="line">            loss = criterion(output, y)  <span class="comment"># 计算损失</span></span><br><span class="line">            optimizer.zero_grad()  <span class="comment"># 梯度清零</span></span><br><span class="line">            loss.backward()  <span class="comment"># 反向传播</span></span><br><span class="line">            optimizer.step()  <span class="comment"># 参数更新</span></span><br><span class="line">            correct += (torch.argmax(output, dim=-<span class="number">1</span>) == y).<span class="built_in">sum</span>()  <span class="comment"># 计算预测正确样本数</span></span><br><span class="line">            <span class="comment"># 计算每次训练模型的总损失值 loss是每批样本平均损失值</span></span><br><span class="line">            total_loss += loss.item()*<span class="built_in">len</span>(y)  <span class="comment"># 统计损失和</span></span><br><span class="line">            sum_num += <span class="built_in">len</span>(y)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;epoch:%2s loss:%.5f acc:%.2f time:%.2fs&#x27;</span> %(epoch_idx + <span class="number">1</span>,total_loss / sum_num,correct / sum_num,time.time() - start))</span><br><span class="line">    <span class="comment"># 模型保存</span></span><br><span class="line">    torch.save(model.state_dict(), <span class="string">&#x27;model/image_classification.pth&#x27;</span>)</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 数据集加载</span></span><br><span class="line">    train_dataset, valid_dataset = create_dataset()</span><br><span class="line">    <span class="comment"># 模型实例化</span></span><br><span class="line">    model = ImageClassification()</span><br><span class="line">    <span class="comment"># 模型训练</span></span><br><span class="line">    train(model,train_dataset)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">epoch: <span class="number">1</span> loss:<span class="number">1.59926</span> acc:<span class="number">0.41</span> time:<span class="number">28.97</span>s</span><br><span class="line">epoch: <span class="number">2</span> loss:<span class="number">1.32861</span> acc:<span class="number">0.52</span> time:<span class="number">29.98</span>s</span><br><span class="line">epoch: <span class="number">3</span> loss:<span class="number">1.22957</span> acc:<span class="number">0.56</span> time:<span class="number">29.44</span>s</span><br><span class="line">epoch: <span class="number">4</span> loss:<span class="number">1.15541</span> acc:<span class="number">0.59</span> time:<span class="number">30.45</span>s</span><br><span class="line">epoch: <span class="number">5</span> loss:<span class="number">1.09832</span> acc:<span class="number">0.61</span> time:<span class="number">29.69</span>s</span><br><span class="line">...</span><br><span class="line">epoch:<span class="number">96</span> loss:<span class="number">0.30592</span> acc:<span class="number">0.89</span> time:<span class="number">37.28</span>s</span><br><span class="line">epoch:<span class="number">97</span> loss:<span class="number">0.29255</span> acc:<span class="number">0.90</span> time:<span class="number">37.11</span>s</span><br><span class="line">epoch:<span class="number">98</span> loss:<span class="number">0.29470</span> acc:<span class="number">0.90</span> time:<span class="number">36.98</span>s</span><br><span class="line">epoch:<span class="number">99</span> loss:<span class="number">0.29472</span> acc:<span class="number">0.90</span> time:<span class="number">36.79</span>s</span><br><span class="line">epoch:<span class="number">100</span> loss:<span class="number">0.29903</span> acc:<span class="number">0.90</span> time:<span class="number">37.66</span>s</span><br></pre></td></tr></table></figure>
+
+<h4 id="编写预测函数"><a href="#编写预测函数" class="headerlink" title="编写预测函数"></a>编写预测函数</h4><p>加载训练好的模型，对测试集中的1万条样本进行预测，查看模型在测试集上的准确率。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">valid_dataset</span>):</span><br><span class="line">    <span class="comment"># 构建数据加载器</span></span><br><span class="line">    dataloader = DataLoader(valid_dataset, batch_size=BATCH_SIZE, shuffle=<span class="literal">False</span>)</span><br><span class="line">    <span class="comment"># 加载模型并加载训练好的权重</span></span><br><span class="line">    model = ImageClassification()</span><br><span class="line">    model.load_state_dict(torch.load(<span class="string">&#x27;model/image_classification.pth&#x27;</span>))</span><br><span class="line">    <span class="comment"># 模型切换评估模式, 如果网络模型中有dropout/BN等层, 评估阶段不进行相应操作</span></span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    <span class="comment"># 计算精度</span></span><br><span class="line">    total_correct = <span class="number">0</span></span><br><span class="line">    total_samples = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 遍历每个batch的数据，获取预测结果，计算精度</span></span><br><span class="line">    <span class="keyword">for</span> x, y <span class="keyword">in</span> dataloader:</span><br><span class="line">        output = model(x)</span><br><span class="line">        total_correct += (torch.argmax(output, dim=-<span class="number">1</span>) == y).<span class="built_in">sum</span>()</span><br><span class="line">        total_samples += <span class="built_in">len</span>(y)</span><br><span class="line">    <span class="comment"># 打印精度</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Acc: %.2f&#x27;</span> % (total_correct / total_samples))</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test(valid_dataset)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Acc: <span class="number">0.57</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="模型优化"><a href="#模型优化" class="headerlink" title="模型优化"></a>模型优化</h4><p>CNN网络模型在训练集样本上的准确率远远高于测试集,说明模型产生了过拟合问题,我们把学习率由1e-3修改为1e-4、增加网络参数量和增加dropout正则化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ImageClassification</span>(nn.Module):</span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">		<span class="built_in">super</span>(ImageClassification, <span class="variable language_">self</span>).__init__()</span><br><span class="line">		<span class="variable language_">self</span>.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">32</span>, stride=<span class="number">1</span>, kernel_size=<span class="number">3</span>)</span><br><span class="line">		<span class="variable language_">self</span>.pool1 = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line">		<span class="variable language_">self</span>.conv2 = nn.Conv2d(<span class="number">32</span>, <span class="number">128</span>, stride=<span class="number">1</span>, kernel_size=<span class="number">3</span>)</span><br><span class="line">		<span class="variable language_">self</span>.pool2 = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="variable language_">self</span>.linear1 = nn.Linear(<span class="number">128</span> * <span class="number">6</span> * <span class="number">6</span>, <span class="number">2048</span>)</span><br><span class="line">		<span class="variable language_">self</span>.linear2 = nn.Linear(<span class="number">2048</span>, <span class="number">2048</span>)</span><br><span class="line">		<span class="variable language_">self</span>.out = nn.Linear(<span class="number">2048</span>, <span class="number">10</span>)</span><br><span class="line">		<span class="comment"># Dropout层，p表示神经元被丢弃的概率</span></span><br><span class="line">		<span class="variable language_">self</span>.dropout = nn.Dropout(p=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">		x = torch.relu(<span class="variable language_">self</span>.conv1(x))</span><br><span class="line">		x = <span class="variable language_">self</span>.pool1(x)</span><br><span class="line">		x = torch.relu(<span class="variable language_">self</span>.conv2(x))</span><br><span class="line">		x = <span class="variable language_">self</span>.pool2(x)</span><br><span class="line">		<span class="comment"># 由于最后一个批次可能不够 32，所以需要根据批次数量来 flatten</span></span><br><span class="line">		x = x.reshape(x.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">		x = torch.relu(<span class="variable language_">self</span>.linear1(x))</span><br><span class="line">		<span class="comment"># dropout正则化</span></span><br><span class="line">		<span class="comment"># 训练集准确率远远高于测试准确率,模型产生了过拟合</span></span><br><span class="line">		x = <span class="variable language_">self</span>.dropout(x)</span><br><span class="line">		x = torch.relu(<span class="variable language_">self</span>.linear2(x))</span><br><span class="line">		x = <span class="variable language_">self</span>.dropout(x)</span><br><span class="line">		<span class="keyword">return</span> <span class="variable language_">self</span>.out(x)</span><br></pre></td></tr></table></figure>
+
+<p>经过训练，模型在测试集的准确率由 0.57，提升到了 0.93，同学们也可以自己修改相应的网络结构、训练参数等来提升模型的性能。</p>
+<hr>
+<h2 id="循环神经网络RNN"><a href="#循环神经网络RNN" class="headerlink" title="循环神经网络RNN"></a>循环神经网络RNN</h2><h3 id="RNN介绍"><a href="#RNN介绍" class="headerlink" title="RNN介绍"></a>RNN介绍</h3><h4 id="RNN概念"><a href="#RNN概念" class="headerlink" title="RNN概念"></a>RNN概念</h4><p>循环神经网络（Recurrent Neural Network, RNN）是一种&#x3D;&#x3D;专门处理序列数据的神经网络&#x3D;&#x3D;。与传统的前馈神经网络不同，RNN具有“<strong>循环</strong>”结构，能够处理和记住前面时间步的信息，使其特别适用于时间序列数据或有时序依赖的任务。</p>
+<p>我们要明确什么是序列数据，时间序列数据是指在不同时间点上收集到的数据，这类数据反映了某一事物、现象等随时间的变化状态或程度。这是时间序列数据的定义，当然这里也可以不是时间，比如文字序列，但总归序列数据有一个特点——<strong>后面的数据跟前面的数据有关系</strong>。</p>
+<img src='/images/CNN与RNN基础/image_34.png'  style="zoom:50%;" />
+
+<h4 id="RNN应用场景"><a href="#RNN应用场景" class="headerlink" title="RNN应用场景"></a>RNN应用场景</h4><ul>
+<li><strong>自然语言处理（NLP）</strong>：文本生成、语言建模、机器翻译、情感分析等。</li>
+<li><strong>时间序列预测</strong>：股市预测、气象预测、传感器数据分析等。</li>
+<li><strong>语音识别</strong>：将语音信号转换为文字。</li>
+<li><strong>音乐生成</strong>：通过学习音乐的时序模式来生成新乐曲。</li>
+</ul>
+<h4 id="自然语言处理概述"><a href="#自然语言处理概述" class="headerlink" title="自然语言处理概述"></a>自然语言处理概述</h4><p>自然语言处理（Nature language Processing, NLP）研究的主要是<mark>通过计算机算法来理解自然语言。</mark></p>
+<p>对于自然语言来说，处理的数据主要就是<strong>人类的语言</strong>，例如：汉语、英语、法语等，该类型的数据不像我们前面接触过的结构化数据、或者图像数据可以很方便的进行数值化。</p>
+<p>NLP的目标是让机器能够“听懂”和“读懂”自然语言，并进行有效的交流和分析。</p>
+<p>NLP涵盖了从文本到语音、从语音到文本的各个方面，它涉及多种技术，包括语法分析、语义理解、情感分析、机器翻译等。</p>
+<img src='/images/CNN与RNN基础/image_35.png'  style="zoom:50%;" />
+
+<h3 id="词嵌入层"><a href="#词嵌入层" class="headerlink" title="词嵌入层"></a>词嵌入层</h3><blockquote>
+<p>在 <strong>RNN（Recurrent Neural Network）</strong> 中，<strong>词嵌入层（Word Embedding Layer）</strong> 是处理自然语言数据的关键组成部分。它将输入的离散单词（通常是词汇表中的索引）转换为连续的、低维的向量表示，从而使得神经网络能够理解和处理这些词汇的语义信息。</p>
+</blockquote>
+<h4 id="词嵌入层作用"><a href="#词嵌入层作用" class="headerlink" title="词嵌入层作用"></a>词嵌入层作用</h4><p>词嵌入层的主要目的是<strong>将每个词映射为一个固定长度的向量（将文本转换为向量）</strong>，这些向量能够捕捉词与词之间的语义关系。</p>
+<p>传统的文本表示方法（如one-hot编码）无法反映单词之间的相似性，因为在one-hot编码中，每个单词都被表示为一个<strong>高维稀疏向量</strong>，而词嵌入通过<strong>低维稠密向量</strong>表示单词，能够更好地捕捉词汇之间的语义相似性。</p>
+<p>词嵌入层首先会根据输入的词的数量构建一个<strong>词向量矩阵</strong>，例如: 我们有 100 个词，每个词希望转换成 128 维度的向量，那么构建的矩阵形状即为: 100*128，输入的每个词都对应了一个该矩阵中的一个向量。</p>
+<img src='/images/CNN与RNN基础/image_36.png'  style="zoom:50%;" />
+
+<p><strong>词嵌入层在RNN中的作用</strong>：</p>
+<ul>
+<li><strong>输入表示</strong>：RNN通常用于处理序列数据。在处理文本时，RNN的输入是由单词构成的序列。由于神经网络不能直接处理离散的单词标识符（如整数索引或字符），因此需要通过词嵌入层将每个单词转换为一个固定长度的稠密向量。这些向量作为RNN的输入，帮助RNN理解词语的语义。</li>
+<li><strong>降低维度</strong>：词嵌入层将原本高维的稀疏表示（如one-hot编码）转化为低维的稠密向量，减少了计算量，同时保持了词汇之间的语义关系。</li>
+<li><strong>捕捉语义相似性</strong>：通过训练，词嵌入能够学习到词语之间的关系。例如，语义相似的词（如“猫”和“狗”）在向量空间中会比较接近，而语义不相关的词（如“猫”和“汽车”）则会较为遥远。</li>
+</ul>
+<h4 id="词嵌入层工作流程"><a href="#词嵌入层工作流程" class="headerlink" title="词嵌入层工作流程"></a>词嵌入层工作流程</h4><ul>
+<li><p><strong>初始化词向量</strong>：词嵌入层的初始词向量通常会使用随机初始化或者通过加载预训练的词向量（如Word2Vec或GloVe）进行初始化。</p>
+</li>
+<li><p><strong>输入索引</strong>：每个单词在词汇表中都有一个唯一的索引。输入文本（例如一个句子）会先被分词，然后每个单词会被转换为相应的索引。</p>
+</li>
+<li><p><strong>查找词向量</strong>：词嵌入层将这些单词索引映射为对应的词向量。这些词向量是一个低维稠密向量，表示该词的语义。</p>
+</li>
+<li><p><strong>输入到RNN</strong>：这些词向量作为RNN的输入，RNN处理它们并根据上下文生成一个序列的输出。</p>
+</li>
+</ul>
+<h4 id="词嵌入层使用"><a href="#词嵌入层使用" class="headerlink" title="词嵌入层使用"></a>词嵌入层使用</h4><p>在PyTorch中，我们可以<strong>使用 nn.Embedding 词嵌入层来实现输入词的向量化</strong>。</p>
+<p>nn.Embedding 对象构建时，最主要有两个参数:</p>
+<ul>
+<li><p>num_embeddings：表示<strong>词的数量</strong></p>
+</li>
+<li><p>embedding_dim：表示<strong>用多少维的向量来表示每个词</strong></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nn.Embedding(num_embeddings=<span class="number">10</span>, embedding_dim=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们将会学习如何将词转换为词向量，其步骤如下:</p>
+<ol>
+<li>先将语料进行分词，构建词与索引的映射，我们可以把这个映射叫做词表，词表中每个词都对应了一个唯一的索引；</li>
+<li>然后使用 nn.Embedding 构建词嵌入矩阵，词索引对应的向量即为该词对应的数值化后的向量表示。</li>
+</ol>
+<p>例如，我们的文本数据为: “北京冬奥的进度条已经过半，不少外国运动员在完成自己的比赛后踏上归途。”，接下来，我们看下如何使用词嵌入层将其进行转换为向量表示，步骤如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> jieba <span class="comment"># pip install jieba -i https://pypi.mirrors.ustc.edu.cn/simple/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 0.文本数据</span></span><br><span class="line">    text = <span class="string">&#x27;北京冬奥的进度条已经过半，不少外国运动员在完成自己的比赛后踏上归途。&#x27;</span></span><br><span class="line">    <span class="comment"># 1. 文本分词</span></span><br><span class="line">    words = jieba.lcut(text)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;文本分词:&#x27;</span>, words)</span><br><span class="line">    <span class="comment"># 2.分词去重并保留原来的顺序获取所有的词语</span></span><br><span class="line">    unique_words = <span class="built_in">list</span>(<span class="built_in">set</span>(words))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;去重后词的个数:\n&quot;</span>,<span class="built_in">len</span>(unique_words))</span><br><span class="line">    <span class="comment"># 3. 构建词嵌入层</span></span><br><span class="line">    <span class="comment"># num_embeddings: 表示词的总数量</span></span><br><span class="line">    <span class="comment"># embedding_dim: 表示词嵌入的维度</span></span><br><span class="line">    embed = nn.Embedding(num_embeddings=<span class="built_in">len</span>(unique_words), embedding_dim=<span class="number">4</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;词嵌入的结果：\n&quot;</span>,embed)</span><br><span class="line">    <span class="comment"># 4. 词语的词向量表示</span></span><br><span class="line">    <span class="keyword">for</span> i, word <span class="keyword">in</span> <span class="built_in">enumerate</span>(unique_words):</span><br><span class="line">        <span class="comment"># 获得词嵌入向量</span></span><br><span class="line">        word_vec = embed(torch.tensor(i))</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;%s\t&#x27;</span> % word, word_vec)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">文本分词: [<span class="string">&#x27;北京&#x27;</span>, <span class="string">&#x27;冬奥&#x27;</span>, <span class="string">&#x27;的&#x27;</span>, <span class="string">&#x27;进度条&#x27;</span>, <span class="string">&#x27;已经&#x27;</span>, <span class="string">&#x27;过半&#x27;</span>, <span class="string">&#x27;，&#x27;</span>, <span class="string">&#x27;不少&#x27;</span>, <span class="string">&#x27;外国&#x27;</span>, <span class="string">&#x27;运动员&#x27;</span>, <span class="string">&#x27;在&#x27;</span>, <span class="string">&#x27;完成&#x27;</span>, <span class="string">&#x27;自己&#x27;</span>, <span class="string">&#x27;的&#x27;</span>, <span class="string">&#x27;比赛&#x27;</span>, <span class="string">&#x27;后&#x27;</span>, <span class="string">&#x27;踏上&#x27;</span>, <span class="string">&#x27;归途&#x27;</span>, <span class="string">&#x27;。&#x27;</span>]</span><br><span class="line">去重后词的个数:</span><br><span class="line"> <span class="number">18</span></span><br><span class="line">词嵌入的结果：</span><br><span class="line"> Embedding(<span class="number">18</span>, <span class="number">4</span>)</span><br><span class="line"> 北京	 tensor([-<span class="number">1.8043</span>,  <span class="number">1.7860</span>, -<span class="number">0.7821</span>, -<span class="number">0.3167</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">  的	 tensor([-<span class="number">1.4856</span>, -<span class="number">0.5639</span>,  <span class="number">0.2745</span>,  <span class="number">0.1087</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 冬奥	 tensor([ <span class="number">0.6969</span>, -<span class="number">0.5615</span>,  <span class="number">1.6524</span>, -<span class="number">0.2651</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 自己	 tensor([<span class="number">1.7163</span>, <span class="number">0.9710</span>, <span class="number">0.0193</span>, <span class="number">1.4562</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 不少	 tensor([ <span class="number">0.8770</span>, -<span class="number">1.0347</span>,  <span class="number">0.4939</span>,  <span class="number">1.6718</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 归途	 tensor([ <span class="number">0.0619</span>,  <span class="number">0.0355</span>, -<span class="number">1.6510</span>,  <span class="number">0.8121</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 比赛	 tensor([-<span class="number">1.7128</span>,  <span class="number">0.0681</span>,  <span class="number">2.4199</span>,  <span class="number">0.2714</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">进度条	 tensor([-<span class="number">0.6706</span>,  <span class="number">0.4089</span>, -<span class="number">0.5371</span>,  <span class="number">0.1093</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 外国	 tensor([ <span class="number">0.5665</span>, -<span class="number">0.3168</span>, -<span class="number">0.2065</span>,  <span class="number">0.7682</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 完成	 tensor([ <span class="number">1.4640</span>, -<span class="number">0.2800</span>, -<span class="number">0.2242</span>, -<span class="number">0.3790</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 过半	 tensor([ <span class="number">1.8026</span>,  <span class="number">0.9831</span>, -<span class="number">0.7177</span>,  <span class="number">0.6779</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 踏上	 tensor([-<span class="number">1.0745</span>, -<span class="number">0.2610</span>, -<span class="number">1.5350</span>, -<span class="number">0.1767</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">运动员	 tensor([<span class="number">1.8748</span>, <span class="number">0.2093</span>, <span class="number">1.9471</span>, <span class="number">0.3893</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">  ，	 tensor([-<span class="number">1.2841</span>, -<span class="number">0.0675</span>, -<span class="number">0.1263</span>, -<span class="number">0.6892</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">  在	 tensor([ <span class="number">0.6202</span>, -<span class="number">0.0106</span>,  <span class="number">1.0504</span>,  <span class="number">0.0299</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line"> 已经	 tensor([<span class="number">2.4461</span>, <span class="number">0.2113</span>, <span class="number">0.9387</span>, <span class="number">0.1680</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">  后	 tensor([-<span class="number">1.1989</span>,  <span class="number">0.8727</span>, -<span class="number">0.9484</span>,  <span class="number">0.0578</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br><span class="line">  。	 tensor([<span class="number">0.4020</span>, <span class="number">0.7357</span>, <span class="number">0.3571</span>, <span class="number">1.2355</span>], grad_fn=&lt;EmbeddingBackward0&gt;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="循环网络层"><a href="#循环网络层" class="headerlink" title="循环网络层"></a>循环网络层</h3><p>文本数据是具有序列特性的，例如: “我爱你”, 这串文本就是具有序列关系的，”爱” 需要在 “我” 之后，”你” 需要在 “爱” 之后, 如果颠倒了顺序，那么可能就会表达不同的意思。</p>
+<p>为了表示出数据的序列关系，我们需要使用循环神经网络(Recurrent Nearal Networks, RNN) 来对数据进行建模，RNN 是一个具有记忆功能的网络，它作用于处理带有序列特点的样本数据。</p>
+<h4 id="RNN网络层原理"><a href="#RNN网络层原理" class="headerlink" title="RNN网络层原理"></a>RNN网络层原理</h4><p>当我们希望使用循环网络来对 “我爱你” 进行语义提取时，RNN计算过程是什么样的呢？</p>
+<img src='/images/CNN与RNN基础/image_37.png' style="zoom:50%;" />
+
+<p>上图中h表示&#x3D;&#x3D;隐藏状态&#x3D;&#x3D;，隐藏状态保存了<strong>序列数据中的历史信息</strong>，并将这些信息传递给下一个时间步，从而允许RNN处理和预测序列数据中的元素。</p>
+<p>每一次的输入都会包含两个值：<strong>上一个时间步的隐藏状态、当前状态的输入值x</strong></p>
+<p>每一次的输出都会包含两个值：<strong>输出当前时间步的隐藏状态、当前时间步的预测结果y</strong></p>
+<p><strong>隐藏状态作用：</strong></p>
+<ul>
+<li><p><strong>记忆功能</strong>：隐藏状态就像RNN的记忆，它能够在不同的时间步之间传递信息。当一个新的输入进入网络时，当前的隐藏状态会结合这个新输入来生成新的隐藏状态。</p>
+</li>
+<li><p><strong>上下文理解</strong>：由于隐藏状态携带了过去的信息，它可以用于理解和生成与上下文相关的输出。这对于语言模型、机器翻译等任务尤其重要。</p>
+</li>
+<li><p><strong>连接不同时间步</strong>：隐藏状态通过网络内部的循环连接将各个时间步连接起来，使得网络可以处理变长的序列数据。</p>
+</li>
+</ul>
+<p>上图中，为了更加容易理解，虽然画了 3 个神经元, 但是实际上只有一个神经元，”我爱你” 三个字是重复输入到同一个神经元中。</p>
+<p><img src="/images/CNN%E4%B8%8ERNN%E5%9F%BA%E7%A1%80/image_38.png" alt="RNN2"></p>
+<p>我们举个例子来理解上图的工作过程，假设我们要实现文本生成，也就是输入 “我爱” 这两个字，来预测出 “你”，其如下图所示:</p>
+<img src='/images/CNN与RNN基础/image_39.png' style="zoom:50%;" />
+
+<p>将上图展开成不同时间步的形式，如下图所示:</p>
+<img src='/images/CNN与RNN基础/image_40.png' style="zoom:50%;" />
+
+<p>首先初始化出第一个隐藏状态，一般都是全0的一个向量，然后将 “我” 进行词嵌入，转换为向量的表示形式，送入到第一个时间步，然后输出隐藏状态 h1，然后将 h1 和 “爱” 输入到第二个时间步，得到隐藏状态 h2, 将 h2 送入到全连接网络，得到 “你” 的预测概率。</p>
+<p><strong>RNN神经元内部是如何计算的呢？</strong></p>
+<p>**1. 计算隐藏状态：**每个时间步的隐藏状态$$h_t$$是根据当前输入$$x_t$$和前一时刻的隐藏状态$$h_{t-1}$$计算的。</p>
+<img src='/images/CNN与RNN基础/image_41.png' style="zoom:50%;"/>
+
+<img src='/images/CNN与RNN基础/image_42.png' style="zoom:75%;"/>
+
+<p>上述公式中:</p>
+<ul>
+<li>$$W_{ih}$$ 表示输入数据的权重</li>
+<li>$$b_{ih}​$$ 表示输入数据的偏置</li>
+<li>$$W_{hh}​$$ 表示输入隐藏状态的权重</li>
+<li>$$b_{hh}$$ 表示输入隐藏状态的偏置</li>
+<li>$$h_{t-1}$$ 表示输入隐藏状态</li>
+<li>$$h_t​$$ 表示输出隐藏状态</li>
+</ul>
+<p>最后对输出的结果使用tanh激活函数进行计算，得到该神经元你的输出隐藏状态。</p>
+<p>**2. 计算当前时刻的输出：**网络的输出$$y_t$$是当前时刻的隐藏状态经过一个线性变换得到的。</p>
+<p>​			$$y_t&#x3D;W_{hy}h_t+b_y​$$</p>
+<ul>
+<li>$$y_t​$$ 是当前时刻的输出（通常是一个向量，表示当前时刻的预测值，RNN层的预测值）</li>
+<li>$$h_t​$$ 是当前时刻的隐藏状态</li>
+<li>$$W_{hy}$$ 是从隐藏状态到输出的权重矩阵</li>
+<li>$$b_y$$ 是输出层的偏置项</li>
+</ul>
+<p><strong>3. 词汇表映射</strong>：输出$$y_t$$是一个<strong>向量</strong>，该向量经过<strong>全连接层</strong>后输出得到最终预测结果$$y_{pred}$$，$$y_{pred}$$中每个元素代表当前时刻生成词汇表中某个词的得分（或概率，通过激活函数：如<strong>softmax</strong>）。<mark>词汇表有多少个词，$$y_{pred}$$就有多少个元素值，最大元素值对应的词就是当前时刻预测生成的词。</mark></p>
+<p><strong>神经元工作机制总结：</strong></p>
+<ul>
+<li><p><strong>接收输入</strong>：每个RNN神经元接收来自输入数据$$x_t$$和前一时刻的隐藏状态$$h_{t-1}$$。</p>
+</li>
+<li><p><strong>更新隐藏状态</strong>：神经元通过一个加权和（由权重矩阵和偏置项组成）更新当前时刻的隐藏状态$$h_t​$$，该隐藏状态包含了来自过去的记忆以及当前输入的信息。</p>
+</li>
+<li><p><strong>输出计算</strong>：基于当前隐藏状态$$h_t​$$，神经元生成当前时刻的输出$$y_t​$$，该输出可以用于任务的最终预测。</p>
+<img src='/images/CNN与RNN基础/image_43.png' style="zoom:75%;"/></li>
+</ul>
+<p><strong>文本生成示例：</strong></p>
+<p>假设我们使用RNN进行<strong>文本生成</strong>，输入是一个初始词语或一段上下文（例如，“m”）。RNN会通过隐藏状态逐步生成下一个词的概率分布，然后根据概率选择最可能的下一个词。</p>
+<p><img src="/images/CNN%E4%B8%8ERNN%E5%9F%BA%E7%A1%80/image_44.png" alt="1735443424646"></p>
+<ol>
+<li><p>输入：“m” → 词向量输入$$x_1$$（对应“m”）</p>
+</li>
+<li><p>初始化隐藏状态$$h_0​$$，一般初始值为0</p>
+</li>
+<li><p>隐藏状态更新$$h_1​$$，并计算输出$$y_1​$$</p>
+</li>
+<li><p>经过全连接层输出层计算输出$$y_{pred}​$$，使用softmax函数将$$y_{pred}​$$转换为概率分布</p>
+</li>
+<li><p>选择概率最高的词作为输出词（例如“a”）</p>
+</li>
+<li><p>输入新的词“a”，继续处理下一个时间步，直到生成完整的词或句子</p>
+</li>
+</ol>
+<p>**小结：**在循环神经网络中，<strong>词与输出的对应关系</strong>通常通过以下几个步骤建立</p>
+<ol>
+<li><strong>词嵌入</strong>：将词转化为向量表示（词向量）。</li>
+<li><strong>RNN处理</strong>：通过RNN层逐步处理词向量，生成每个时间步的隐藏状态。</li>
+<li><strong>输出映射</strong>：通过线性变换将隐藏状态映射到输出，通常是一个词汇表中的词的概率分布。</li>
+</ol>
+<h4 id="PyTorch-RNN层的使用"><a href="#PyTorch-RNN层的使用" class="headerlink" title="PyTorch RNN层的使用"></a>PyTorch RNN层的使用</h4><ul>
+<li><p>API介绍</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">RNN = nn.RNN(input_size, hidden_size，num_layers)</span><br></pre></td></tr></table></figure>
+
+<p>参数意义是：</p>
+<ul>
+<li>input_size：输入数据的维度，一般设为词向量的维度</li>
+<li>hidden_size：隐藏层h的维度，也是当前层神经元的输出维度</li>
+<li>num_layers: 隐藏层h的层数，默认为1</li>
+</ul>
+</li>
+<li><p>输入数据和输出结果</p>
+<p>将RNN实例化就可以将数据送入其中进行处理，处理的方式如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">output, hn = RNN(x, h0)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>输入数据：主要包括词嵌入的x 、初始的隐藏层h0</strong><ul>
+<li>x的表示形式为[seq_len, batch, input_size]，即[句子的长度，batch的大小，词向量的维度]</li>
+<li>h0的表示形式为[num_layers, batch, hidden_size]，即[隐藏层的层数，batch的大小，隐藏层h的维度]</li>
+</ul>
+</li>
+<li><strong>输出结果：主要包括输出结果output,最后一层的hn</strong><ul>
+<li>output的表示形式与输入x类似，为[seq_len, batch, input_size]，即[句子的长度，batch的大小，输出向量的维度]</li>
+<li>hn的表示形式与输入h0一样，为[num_layers, batch, hidden_size]，即[隐藏层的层数，batch的大，隐藏层h的维度]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>API使用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#  RNN层送入批量数据</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="comment"># 词向量维度 128, 隐藏向量维度 256</span></span><br><span class="line">    rnn = nn.RNN(input_size=<span class="number">128</span>, hidden_size=<span class="number">256</span>)</span><br><span class="line">    <span class="comment"># 第一个数字: 表示句子长度,也就是词语个数</span></span><br><span class="line">    <span class="comment"># 第二个数字: 批量个数，也就是句子的个数</span></span><br><span class="line">    <span class="comment"># 第三个数字: 词向量维度</span></span><br><span class="line">    inputs = torch.randn(<span class="number">5</span>, <span class="number">32</span>, <span class="number">128</span>)</span><br><span class="line">    hn = torch.zeros(<span class="number">1</span>, <span class="number">32</span>, <span class="number">256</span>)</span><br><span class="line">    <span class="comment"># 获取输出结果</span></span><br><span class="line">    output, hn = rnn(inputs, hn)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;输出向量的维度：\n&quot;</span>,output.shape)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;隐藏层输出的维度：\n&quot;</span>,hn.shape)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test()</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">输出向量的维度：</span><br><span class="line"> torch.Size([<span class="number">5</span>, <span class="number">32</span>, <span class="number">256</span>])</span><br><span class="line">隐藏层输出的维度：</span><br><span class="line"> torch.Size([<span class="number">1</span>, <span class="number">32</span>, <span class="number">256</span>])</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="文本生成案例"><a href="#文本生成案例" class="headerlink" title="文本生成案例"></a>文本生成案例</h3><p>文本生成任务是一种常见的自然语言处理任务，输入一个开始词能够预测出后面的词序列。本案例将会使用循环神经网络来实现周杰伦歌词生成任务。</p>
+<img src='/images/CNN与RNN基础/image_45.png' style="zoom:75%;"/>
+
+<h4 id="导入工具包"><a href="#导入工具包" class="headerlink" title="导入工具包"></a>导入工具包</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> time</span><br></pre></td></tr></table></figure>
+
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>我们收集了周杰伦从第一张专辑《Jay》到第十张专辑《跨时代》中的歌词，来训练神经网络模型，当模型训练好后，我们就可以用这个模型来创作歌词。数据集如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">想要有直升机</span><br><span class="line">想要和你飞到宇宙去</span><br><span class="line">想要和你融化在一起</span><br><span class="line">融化在宇宙里</span><br><span class="line">我每天每天每天在想想想想著你</span><br><span class="line">这样的甜蜜</span><br><span class="line">让我开始相信命运</span><br><span class="line">感谢地心引力</span><br><span class="line">让我碰到你</span><br><span class="line">漂亮的让我面红的可爱女人</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>该数据集共有 5819 行文本。</p>
+<h4 id="构建词表"><a href="#构建词表" class="headerlink" title="构建词表"></a>构建词表</h4><p>在进行自然语言处理任务之前，首要做的就是构建词表。</p>
+<p>所谓的词表就是将语料进行分词，然后给每一个词分配一个唯一的编号，便于我们送入词嵌入层。</p>
+<img src='/images/CNN与RNN基础/image_46.png' style="zoom:75%;"/>
+
+<p>接下来, 我们对周杰伦歌词的数据进行处理构建词表，具体流程如下：</p>
+<ul>
+<li>获取文本数据</li>
+<li>分词，并进行去重</li>
+<li>构建词表</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 获取数据，并进行分词，构建词表</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">build_vocab</span>():</span><br><span class="line">    <span class="comment"># 数据集位置</span></span><br><span class="line">    file_name = <span class="string">&#x27;data/jaychou_lyrics.txt&#x27;</span></span><br><span class="line">    <span class="comment"># 分词结果存储位置</span></span><br><span class="line">    <span class="comment"># 唯一词列表</span></span><br><span class="line">    unique_words = []</span><br><span class="line">    <span class="comment"># 每行文本分词列表</span></span><br><span class="line">    all_words = []</span><br><span class="line">    <span class="comment"># 遍历数据集中的每一行文本</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(file_name, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>):</span><br><span class="line">        <span class="comment"># 使用jieba分词,分割结果是一个列表</span></span><br><span class="line">        words = jieba.lcut(line)</span><br><span class="line">        <span class="comment"># print(words)</span></span><br><span class="line">        <span class="comment"># 所有的分词结果存储到all_words，其中包含重复的词组</span></span><br><span class="line">        all_words.append(words)</span><br><span class="line">        <span class="comment"># 遍历分词结果，去重后存储到unique_words</span></span><br><span class="line">        <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">            <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> unique_words:</span><br><span class="line">                unique_words.append(word)</span><br><span class="line">    <span class="comment"># 语料中词的数量</span></span><br><span class="line">    word_count = <span class="built_in">len</span>(unique_words)</span><br><span class="line">    <span class="comment"># 词到索引映射</span></span><br><span class="line">    word_to_index = &#123;word: idx <span class="keyword">for</span> idx, word <span class="keyword">in</span> <span class="built_in">enumerate</span>(unique_words)&#125;</span><br><span class="line">    <span class="comment"># 歌词文本用词表索引表示</span></span><br><span class="line">    corpus_idx = []</span><br><span class="line">    <span class="comment"># 遍历每一行的分词结果</span></span><br><span class="line">    <span class="keyword">for</span> words <span class="keyword">in</span> all_words:</span><br><span class="line">        temp = []</span><br><span class="line">        <span class="comment"># 获取每一行的词，并获取相应的索引</span></span><br><span class="line">        <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">            temp.append(word_to_index[word])</span><br><span class="line">        <span class="comment"># 在每行词之间添加空格隔开</span></span><br><span class="line">        temp.append(word_to_index[<span class="string">&#x27; &#x27;</span>])</span><br><span class="line">        <span class="comment"># 获取当前文档中每个词对应的索引</span></span><br><span class="line">        corpus_idx.extend(temp)</span><br><span class="line">    <span class="keyword">return</span> unique_words, word_to_index, word_count, corpus_idx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 获取数据</span></span><br><span class="line">    unique_words, word_to_index, unique_word_count, corpus_idx = build_vocab()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;词的数量：\n&quot;</span>,unique_word_count)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;去重后的词:\n&quot;</span>,unique_words)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;每个词的索引：\n&quot;</span>,word_to_index)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;当前文档中每个词对应的索引：\n&quot;</span>,corpus_idx)</span><br></pre></td></tr></table></figure>
+
+<p>我们的词典主要包含了:</p>
+<ul>
+<li><p>unique_words: 存储了每个词</p>
+</li>
+<li><p>word_to_index: 存储了词到编号的映射</p>
+<img src='/images/CNN与RNN基础/image_47.png' style="zoom:75%;"/></li>
+</ul>
+<h4 id="构建数据集对象"><a href="#构建数据集对象" class="headerlink" title="构建数据集对象"></a>构建数据集对象</h4><p>我们在训练的时候，为了便于读取语料，并送入网络，所以我们会构建一个Dataset对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LyricsDataset</span>(torch.utils.data.Dataset):</span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, corpus_idx, num_chars</span>):</span><br><span class="line">		<span class="comment"># 文档数据中词的索引</span></span><br><span class="line">		<span class="variable language_">self</span>.corpus_idx = corpus_idx</span><br><span class="line">		<span class="comment"># 每个句子中词的个数</span></span><br><span class="line">		<span class="variable language_">self</span>.num_chars = num_chars</span><br><span class="line">		<span class="comment"># 文档数据中词的数量，不去重</span></span><br><span class="line">		<span class="variable language_">self</span>.word_count = <span class="built_in">len</span>(<span class="variable language_">self</span>.corpus_idx)</span><br><span class="line">		<span class="comment"># 句子数量</span></span><br><span class="line">		<span class="variable language_">self</span>.number = <span class="variable language_">self</span>.word_count // <span class="variable language_">self</span>.num_chars</span><br><span class="line"></span><br><span class="line">	<span class="comment"># len(obj)时自动调用此方法</span></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">		<span class="comment"># 返回句子数量</span></span><br><span class="line">		<span class="keyword">return</span> <span class="variable language_">self</span>.number</span><br><span class="line"></span><br><span class="line">	<span class="comment"># obj[idx]时自动调用此方法</span></span><br><span class="line">	<span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, idx</span>):</span><br><span class="line">		<span class="comment"># idx指词的索引，并将其修正索引值到文档的范围里面</span></span><br><span class="line">		<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">		我 爱你 中国 , 亲爱 的 母亲</span></span><br><span class="line"><span class="string">		word_count: 7</span></span><br><span class="line"><span class="string">		num_chars: 2 一个句子由num_chars个词组成</span></span><br><span class="line"><span class="string">		word_count-num_chars-2: 7-2-1=4  -1:网络预测结果y在x上后移一个词取值-1</span></span><br><span class="line"><span class="string">		idx=5-&gt;start=4</span></span><br><span class="line"><span class="string">		&quot;&quot;&quot;</span></span><br><span class="line">		start = <span class="built_in">min</span>(<span class="built_in">max</span>(idx, <span class="number">0</span>), <span class="variable language_">self</span>.word_count - <span class="variable language_">self</span>.num_chars - <span class="number">1</span>)</span><br><span class="line">		end = start + <span class="variable language_">self</span>.num_chars</span><br><span class="line">		<span class="comment"># 输入值</span></span><br><span class="line">		x = <span class="variable language_">self</span>.corpus_idx[start: end]</span><br><span class="line">		<span class="comment"># 网络预测结果（目标值）</span></span><br><span class="line">		y = <span class="variable language_">self</span>.corpus_idx[start + <span class="number">1</span>: end + <span class="number">1</span>]</span><br><span class="line">		<span class="comment"># 返回结果</span></span><br><span class="line">		<span class="keyword">return</span> torch.tensor(x), torch.tensor(y)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	<span class="comment"># 获取数据</span></span><br><span class="line">	unique_words, word_to_index, unique_word_count, corpus_idx = build_vocab()</span><br><span class="line">	<span class="comment"># 数据获取实例化</span></span><br><span class="line">	dataset = LyricsDataset(corpus_idx, <span class="number">5</span>)</span><br><span class="line">	<span class="comment"># 查看句子数量</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;句子数量：&#x27;</span>, <span class="built_in">len</span>(dataset))</span><br><span class="line">	<span class="comment"># x, y = dataset.__getitem__(0)</span></span><br><span class="line">	x, y = dataset[<span class="number">0</span>]</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&quot;网络输入值：&quot;</span>, x)</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&quot;目标值：&quot;</span>, y)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">句子数量： <span class="number">9827</span></span><br><span class="line">网络输入值： tensor([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>, <span class="number">40</span>])</span><br><span class="line">目标值： tensor([ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>, <span class="number">40</span>,  <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="构建网络模型"><a href="#构建网络模型" class="headerlink" title="构建网络模型"></a>构建网络模型</h4><p>我们用于实现《歌词生成》的网络模型，主要包含了三个层:</p>
+<ul>
+<li><p>词嵌入层: 用于将语料转换为词向量</p>
+</li>
+<li><p>循环网络层: 提取句子语义</p>
+</li>
+<li><p>全连接层: 输出对词典中每个词的预测概率</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 模型构建</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TextGenerator</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, unique_word_count</span>):</span><br><span class="line">        <span class="built_in">super</span>(TextGenerator, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="comment"># 初始化词嵌入层: 语料中词的数量, 词向量的维度为128</span></span><br><span class="line">        <span class="variable language_">self</span>.ebd = nn.Embedding(unique_word_count, <span class="number">128</span>)</span><br><span class="line">        <span class="comment"># 循环网络层: 词向量维度128, 隐藏向量维度256, 网络层数1</span></span><br><span class="line">        <span class="variable language_">self</span>.rnn = nn.RNN(<span class="number">128</span>, <span class="number">256</span>, <span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 输出层: 特征向量维度256与隐藏向量维度相同, 词表中词的个数</span></span><br><span class="line">        <span class="variable language_">self</span>.out = nn.Linear(<span class="number">256</span>, unique_word_count)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, inputs, hidden</span>):</span><br><span class="line">        <span class="comment"># 输出维度: (batch, seq_len, 词向量维度128)</span></span><br><span class="line">        <span class="comment"># batch：句子数量</span></span><br><span class="line">        <span class="comment"># seq_len： 句子长度， 每个句子由多少个词 词数量</span></span><br><span class="line">        embed = <span class="variable language_">self</span>.ebd(inputs)</span><br><span class="line">        <span class="comment"># rnn层x的表示形式为(seq_len, batch, 词向量维度128)</span></span><br><span class="line">        <span class="comment"># output的表示形式与输入x类似，为(seq_len, batch, 词向量维度256)</span></span><br><span class="line">        <span class="comment"># 前后的hidden形状要一样, 所以DataLoader加载器的batch数要能被整数</span></span><br><span class="line">        output, hidden = <span class="variable language_">self</span>.rnn(embed.transpose(<span class="number">0</span>, <span class="number">1</span>), hidden)</span><br><span class="line">        <span class="comment"># 全连接层输入二维数据， 词数量*词维度</span></span><br><span class="line">        <span class="comment"># 输入维度: (seq_len*batch, 词向量维度256) </span></span><br><span class="line">        <span class="comment"># 输出维度: (seq_len*batch, 语料中词的数量)</span></span><br><span class="line">        <span class="comment"># output: 每个词的分值分布，后续结合softmax输出概率分布</span></span><br><span class="line">        output = <span class="variable language_">self</span>.out(output.reshape(shape=(-<span class="number">1</span>, output.shape[-<span class="number">1</span>])))</span><br><span class="line">        <span class="comment"># 网络输出结果</span></span><br><span class="line">        <span class="keyword">return</span> output, hidden</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_hidden</span>(<span class="params">self, bs</span>):</span><br><span class="line">        <span class="comment"># 隐藏层的初始化:[网络层数, batch, 隐藏层向量维度]</span></span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, bs, <span class="number">256</span>)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	<span class="comment"># 获取数据</span></span><br><span class="line">	unique_words, word_to_index, unique_word_count, corpus_idx = build_vocab()</span><br><span class="line">	model = TextGenerator(unique_word_count)</span><br><span class="line">	<span class="keyword">for</span> named, parameter <span class="keyword">in</span> model.named_parameters():</span><br><span class="line">		<span class="built_in">print</span>(named)</span><br><span class="line">		<span class="built_in">print</span>(parameter)</span><br></pre></td></tr></table></figure>
+
+<h4 id="构建训练函数"><a href="#构建训练函数" class="headerlink" title="构建训练函数"></a>构建训练函数</h4><p>前面的准备工作完成之后, 我们就可以编写训练函数。训练函数主要负责编写数据迭代、送入网络、计算损失、反向传播、更新参数，其流程基本较为固定。</p>
+<p>由于我们要实现文本生成，文本生成本质上，输入一串文本，预测下一个文本，也属于分类问题，所以，我们使用多分类交叉熵损失函数。优化方法我们学习过 SGB、AdaGrad、Adam 等，在这里我们选择学习率、梯度自适应的 Adam 算法作为我们的优化方法。</p>
+<p>训练完成之后，我们使用 torch.save 方法将模型持久化存储。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">	<span class="comment"># 构建词典</span></span><br><span class="line">	unique_words, word_to_index, unique_word_count, corpus_idx = build_vocab()</span><br><span class="line">	<span class="comment"># 数据集 LyricsDataset对象，并实现了 __getitem__ 方法</span></span><br><span class="line">	lyrics = LyricsDataset(corpus_idx=corpus_idx, num_chars=<span class="number">32</span>)</span><br><span class="line">	<span class="comment"># 查看句子数量</span></span><br><span class="line">	<span class="comment"># print(lyrics.number)</span></span><br><span class="line">	<span class="comment"># 初始化模型</span></span><br><span class="line">	model = TextGenerator(unique_word_count)</span><br><span class="line">	<span class="comment"># 数据加载器 DataLoader对象，并将lyrics dataset对象传递给它</span></span><br><span class="line">	lyrics_dataloader = DataLoader(lyrics, shuffle=<span class="literal">True</span>, batch_size=<span class="number">5</span>)</span><br><span class="line">	<span class="comment"># 损失函数</span></span><br><span class="line">	criterion = nn.CrossEntropyLoss()</span><br><span class="line">	<span class="comment"># 优化方法</span></span><br><span class="line">	optimizer = optim.Adam(model.parameters(), lr=<span class="number">1e-3</span>)</span><br><span class="line">	<span class="comment"># 训练轮数</span></span><br><span class="line">	epoch = <span class="number">10</span></span><br><span class="line">	<span class="keyword">for</span> epoch_idx <span class="keyword">in</span> <span class="built_in">range</span>(epoch):</span><br><span class="line">		<span class="comment"># 训练时间</span></span><br><span class="line">		start = time.time()</span><br><span class="line">		iter_num = <span class="number">0</span>  <span class="comment"># 迭代次数</span></span><br><span class="line">		<span class="comment"># 训练损失</span></span><br><span class="line">		total_loss = <span class="number">0.0</span></span><br><span class="line">		<span class="comment"># 遍历数据集 DataLoader 会在后台调用 dataset.__getitem__(index) 来获取每个样本的数据和标签，并将它们组合成一个 batch</span></span><br><span class="line">		<span class="keyword">for</span> x, y <span class="keyword">in</span> lyrics_dataloader:</span><br><span class="line">			<span class="comment"># 隐藏状态的初始化</span></span><br><span class="line">			hidden = model.init_hidden(bs=<span class="number">5</span>)</span><br><span class="line">			<span class="comment"># 模型计算</span></span><br><span class="line">			output, hidden = model(x, hidden)</span><br><span class="line">			<span class="comment"># 计算损失</span></span><br><span class="line">			<span class="comment"># y形状为(batch, seq_len), 需要转换成一维向量-&gt;160个词的下标索引</span></span><br><span class="line">            <span class="comment"># output形状为(seq_len, batch, 词向量维度)</span></span><br><span class="line">            <span class="comment"># 需要先将y进行维度交换(和output保持一致)再改变形状</span></span><br><span class="line">            y = torch.transpose(y, <span class="number">0</span>, <span class="number">1</span>).reshape(shape=(-<span class="number">1</span>,))</span><br><span class="line">			loss = criterion(output, y)</span><br><span class="line">			optimizer.zero_grad()</span><br><span class="line">			loss.backward()</span><br><span class="line">			optimizer.step()</span><br><span class="line">			iter_num += <span class="number">1</span>  <span class="comment"># 迭代次数加1</span></span><br><span class="line">			total_loss += loss.item()</span><br><span class="line">		<span class="comment"># 打印训练信息</span></span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&#x27;epoch %3s loss: %.5f time %.2f&#x27;</span> % (epoch_idx + <span class="number">1</span>, total_loss / iter_num, time.time() - start))</span><br><span class="line">	<span class="comment"># 模型存储</span></span><br><span class="line">	torch.save(model.state_dict(), <span class="string">&#x27;model/lyrics_model_%d.pth&#x27;</span> % epoch)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	train()</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">epoch   <span class="number">1</span> loss: <span class="number">1.84424</span> time <span class="number">5.75</span></span><br><span class="line">epoch   <span class="number">2</span> loss: <span class="number">0.21154</span> time <span class="number">5.91</span></span><br><span class="line">epoch   <span class="number">3</span> loss: <span class="number">0.12014</span> time <span class="number">5.85</span></span><br><span class="line">epoch   <span class="number">4</span> loss: <span class="number">0.10625</span> time <span class="number">5.73</span></span><br><span class="line">epoch   <span class="number">5</span> loss: <span class="number">0.10226</span> time <span class="number">5.58</span></span><br><span class="line">epoch   <span class="number">6</span> loss: <span class="number">0.10009</span> time <span class="number">5.65</span></span><br><span class="line">epoch   <span class="number">7</span> loss: <span class="number">0.09942</span> time <span class="number">5.66</span></span><br><span class="line">epoch   <span class="number">8</span> loss: <span class="number">0.09783</span> time <span class="number">5.66</span></span><br><span class="line">epoch   <span class="number">9</span> loss: <span class="number">0.09663</span> time <span class="number">5.75</span></span><br><span class="line">epoch  <span class="number">10</span> loss: <span class="number">0.09568</span> time <span class="number">5.77</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="构建预测函数"><a href="#构建预测函数" class="headerlink" title="构建预测函数"></a>构建预测函数</h4><p>从磁盘加载训练好的模型，进行预测。预测函数，输入第一个指定的词，我们将该词输入网路，预测出下一个词，再将预测的出的词再次送入网络，预测出下一个词，以此类推，知道预测出我们指定长度的内容。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">start_word, sentence_length</span>):</span><br><span class="line">    <span class="comment"># 构建词典</span></span><br><span class="line">    unique_words, word_to_index, unique_word_count, _ = build_vocab()</span><br><span class="line">    <span class="comment"># 构建模型</span></span><br><span class="line">    model = TextGenerator(unique_word_count)</span><br><span class="line">    <span class="comment"># 加载参数</span></span><br><span class="line">    model.load_state_dict(torch.load(<span class="string">&#x27;model/lyrics_model_10.pth&#x27;</span>))</span><br><span class="line">    <span class="comment"># 隐藏状态</span></span><br><span class="line">    hidden = model.init_hidden(bs=<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 将起始词转换为索引</span></span><br><span class="line">    word_idx = word_to_index[start_word]</span><br><span class="line">    <span class="comment"># 产生的词的索引存放位置</span></span><br><span class="line">    generate_sentence = [word_idx]</span><br><span class="line">    <span class="comment"># 遍历到句子长度，获取每一个词</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(sentence_length):</span><br><span class="line">        <span class="comment"># 模型预测</span></span><br><span class="line">        output, hidden = model(torch.tensor([[word_idx]]), hidden)</span><br><span class="line">        <span class="comment"># 获取预测结果</span></span><br><span class="line">        word_idx = torch.argmax(output)</span><br><span class="line">        generate_sentence.append(word_idx)</span><br><span class="line">        <span class="comment"># 根据产生的索引获取对应的词，并进行打印</span></span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> generate_sentence:</span><br><span class="line">        <span class="built_in">print</span>(unique_words[idx], end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 调用预测函数</span></span><br><span class="line">    predict(<span class="string">&#x27;分手&#x27;</span>, <span class="number">50</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">分手的话像语言暴力</span><br><span class="line"> 我已无能为力再提起 决定中断熟悉</span><br><span class="line"> 周杰伦 周杰伦</span><br><span class="line"> 一步两步三步四步望著天 看星星</span><br><span class="line"> 一颗两颗三颗四颗 连成线背著背默默许下心愿</span><br><span class="line"> 看远方的星</span><br></pre></td></tr></table></figure>
+
+
+		  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+
+		  <script>
+		    // 计算字数与阅读时长，同时更新阅读进度条
+		    (function() {
+		      var content = document.querySelector('.mypage');
+		      if (content) {
+		        var text = content.innerText || content.textContent;
+		        // 中文字符（含 CJK 扩展区 + 标点），按字符计数
+		        var chineseChars = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length;
+		        // 英文/数字按字符计（非词），与 CSDN 统计方式一致
+		        var latinChars = (text.match(/[a-zA-Z0-9]/g) || []).length;
+		        var wordCount = chineseChars + latinChars;
+		        // 阅读时长：中文约 300 字/分钟，英文约 200 词/分钟
+		        var englishWords = (text.match(/[a-zA-Z0-9]+/g) || []).length;
+		        var readingTime = Math.max(1, Math.ceil(chineseChars / 300 + englishWords / 200));
+		        var wcEl = document.getElementById('word-count');
+		        var rtEl = document.getElementById('reading-time');
+		        if (wcEl) wcEl.textContent = '~' + wordCount + ' 字';
+		        if (rtEl) rtEl.textContent = '约 ' + readingTime + ' 分钟';
+		      }
+		      // 阅读进度条
+		      var bar = document.getElementById('reading-progress-bar');
+		      if (bar) {
+		        window.addEventListener('scroll', function() {
+		          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		          var progress = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+		          bar.style.width = progress + '%';
+		        });
+		      }
+		    })();
+		  </script>
+		</div>
+
+		
+		<span id="" class="leancloud-visitors view" data-flag-title="CNN与RNN基础">
+			<em class="post-meta-item-text"> Page View </em> <i class="leancloud-visitors-count"></i>
+		</span>
+		
+		
+		<div>
+	  	<center>
+
+		<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/07/27/神经网络基础/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+	    </center>
+		</div>
+
+		<!-- comment -->
+		
+			<section id="comments" class="comments">
+				<style>
+				.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+				@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+				</style>
+				<div id="vcomment" class="comment"></div>
+<script>
+// 延迟加载评论系统
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/valine@1.5.1/dist/Valine.min.js';
+    script.onload = function() {
+      var valineConfig = {"enable":true,"appId":"22F2XnoONZRtEbXvXO1SDcjS-gzGzoHsz","appKey":"bIFSRG6LeUO90VdfRBHUXNQs","placeholder":"说点什么吧~","visitor":true,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":true}
+      valineConfig.el = '#vcomment';
+      valineConfig.recordIP = true;
+      valineConfig.serverURLs = 'https://22f2xnoo.api.lncldglobal.com';
+      new Valine(valineConfig);
+    };
+    document.head.appendChild(script);
+  }, 1000); // 延迟1秒加载
+});
+</script>
+			</section>
+		
+		
+		
+		</div> <!-- col-md-9/col-md-12 -->
+
+
+		
+		<div id="side_meta">
+			<div class="col-md-3 sticky-meta" id="post_meta"> 
+
+	<!-- small fixed card (date + brief meta) -->
+	<div class="top-card">
+		<!-- date -->
+		
+		<div class="meta-widget">
+		<i class="fa fa-clock-o"></i>
+		2026-07-28
+		</div>
+		
+
+		<!-- brief categories/tags inside fixed card -->
+		
+		<div class="meta-widget small-cats">
+			<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>
+			<ul id="categorys" class="tag_box list-unstyled collapse in">
+				  
+  <li>
+    <li><a href="/categories/AI/">AI<span>4</span></a></li> <li><a href="/categories/AI/深度学习/">深度学习<span>2</span></a></li>
+  </li>
+
+			</ul>
+		</div>
+		
+
+		
+		<div class="meta-widget small-tags">
+			<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>
+			<ul id="tags" class="tag_box list-unstyled collapse in">
+				  
+  <li><a href="/tags/CNN与RNN基础/">CNN与RNN基础<span>1</span></a></li> <li><a href="/tags/深度学习/">深度学习<span>2</span></a></li>
+			</ul>
+		</div>
+		
+	</div>
+
+	<!-- All Categories: sticky within sidebar area -->
+	<div class="category-stick" id="category-stick">
+		
+<div class="widget-wrap">
+  <h3 class="widget-title" style="font-family: monospace; font-size: 1.3em; font-weight: bold; color: #fff;">Categories</h3>
+  <div class="widget category-tree">
+    <ul class="hacker-category-list"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/">408</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><span class="hacker-category-list-count">7</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/">AI</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/AI/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="hacker-category-list-count">2</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/">CTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/">BUUCTF</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/PWN/">PWN</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/CTF/BUUCTF/WEB/">WEB</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%9F%A5%E8%AF%86%E6%9D%82%E7%A2%8E/">知识杂碎</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><span class="hacker-category-list-count">2</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/python/">python</a><span class="hacker-category-list-count">1</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a><span class="hacker-category-list-count">39</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/">SRC&渗透</a><span class="hacker-category-list-count">7</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/SRC/">SRC</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a><span class="hacker-category-list-count">2</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/SRC-%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91/">内网</a><span class="hacker-category-list-count">3</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a><span class="hacker-category-list-count">20</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/Linux/">Linux</a><span class="hacker-category-list-count">4</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/windows/">windows</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%89%8D%E7%AB%AF/">前端</a><span class="hacker-category-list-count">6</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%90%8E%E7%AB%AF/">后端</a><span class="hacker-category-list-count">1</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E7%94%A8/">通用</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="hacker-category-list-count">12</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/PWN/">PWN</a><span class="hacker-category-list-count">3</span></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/">WEB安全</a><span class="hacker-category-list-count">8</span><ul class="hacker-category-list-child"><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/WEB%E5%AE%89%E5%85%A8/Top10/">Top10</a><span class="hacker-category-list-count">8</span></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E6%BC%8F%E6%B4%9E/%E5%A4%8D%E7%8E%B0/">复现</a><span class="hacker-category-list-count">1</span></li></ul></li></ul></li><li class="hacker-category-list-item"><a class="hacker-category-list-link" href="../../../../categories/%E8%AF%81%E4%B9%A6/">证书</a><span class="hacker-category-list-count">1</span></li></ul>
+  </div>
+</div>
+
+
+<style>
+/* Hacker / Terminal Style Category Tree */
+.category-tree .hacker-category-list {
+  padding-left: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #fff;
+  list-style-type: circle; /* 'o' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list {
+  list-style-type: square; /* '■' bullet */
+}
+
+.category-tree .hacker-category-list .hacker-category-list .hacker-category-list {
+  list-style-type: square;
+}
+
+.category-tree .hacker-category-list-item {
+  margin: 6px 0;
+}
+
+.category-tree .hacker-category-list-link {
+  background-color: rgba(43, 188, 138, 0.1);
+  color: #2bbc8a;
+  text-decoration: none;
+  padding: 1px 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.category-tree .hacker-category-list-link:hover {
+  background-color: rgba(43, 188, 138, 0.2);
+  text-decoration: none;
+}
+
+.category-tree .hacker-category-list-count {
+  color: #2bbc8a;
+  margin-left: 5px;
+}
+</style>
+
+	</div>
+
+	<!-- article TOC placed below the category list; should scroll with page -->
+	<div class="toc-wrapper">
+		<div class="toc-widget">
+		
+			 <div class="toc">
+				 <span class="toc-title"><i class="fa fa-list"></i> Contents</span>
+				<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-article-text">引言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCNN"><span class="toc-article-text">卷积神经网络CNN</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%BE%E5%83%8F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-article-text">图像基础知识</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%9B%BE%E5%83%8F%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-article-text">图像基本概念</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%9B%BE%E5%83%8F%E5%8A%A0%E8%BD%BD"><span class="toc-article-text">图像加载</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E6%A6%82%E8%BF%B0"><span class="toc-article-text">卷积神经网络（CNN）概述</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-article-text">什么是卷积神经网络</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8"><span class="toc-article-text">卷积神经网络应用</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#CNN%E4%B8%AD%E7%9A%84%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="toc-article-text">CNN中的经典算法&#x2F;网络架构</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="toc-article-text">卷积层</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97"><span class="toc-article-text">卷积计算</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Padding%EF%BC%88%E5%A1%AB%E5%85%85%EF%BC%89"><span class="toc-article-text">Padding（填充）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Stride%EF%BC%88%E6%AD%A5%E9%95%BF%EF%BC%89"><span class="toc-article-text">Stride（步长）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%A4%9A%E9%80%9A%E9%81%93%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97"><span class="toc-article-text">多通道卷积计算</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%A4%9A%E5%8D%B7%E7%A7%AF%E6%A0%B8%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97"><span class="toc-article-text">多卷积核卷积计算</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%89%B9%E5%BE%81%E5%9B%BE%E5%A4%A7%E5%B0%8F"><span class="toc-article-text">特征图大小</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#PyTorch%E5%8D%B7%E7%A7%AF%E5%B1%82API"><span class="toc-article-text">PyTorch卷积层API</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82"><span class="toc-article-text">池化层</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82%E8%AE%A1%E7%AE%97"><span class="toc-article-text">池化层计算</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Padding%EF%BC%88%E5%A1%AB%E5%85%85%EF%BC%89-1"><span class="toc-article-text">Padding（填充）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Stride%EF%BC%88%E6%AD%A5%E9%95%BF%EF%BC%89-1"><span class="toc-article-text">Stride（步长）</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%A4%9A%E9%80%9A%E9%81%93%E6%B1%A0%E5%8C%96%E8%AE%A1%E7%AE%97"><span class="toc-article-text">多通道池化计算</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#PyTorch%E6%B1%A0%E5%8C%96%E5%B1%82API"><span class="toc-article-text">PyTorch池化层API</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E6%A1%88%E4%BE%8B"><span class="toc-article-text">图像分类案例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#CIFAR10-%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-article-text">CIFAR10 数据集</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%90%AD%E5%BB%BA%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C"><span class="toc-article-text">搭建图像分类网络</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0"><span class="toc-article-text">编写训练函数</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E9%A2%84%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="toc-article-text">编写预测函数</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96"><span class="toc-article-text">模型优化</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN"><span class="toc-article-text">循环神经网络RNN</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#RNN%E4%BB%8B%E7%BB%8D"><span class="toc-article-text">RNN介绍</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#RNN%E6%A6%82%E5%BF%B5"><span class="toc-article-text">RNN概念</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#RNN%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-article-text">RNN应用场景</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E6%A6%82%E8%BF%B0"><span class="toc-article-text">自然语言处理概述</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5%E5%B1%82"><span class="toc-article-text">词嵌入层</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5%E5%B1%82%E4%BD%9C%E7%94%A8"><span class="toc-article-text">词嵌入层作用</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5%E5%B1%82%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-article-text">词嵌入层工作流程</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5%E5%B1%82%E4%BD%BF%E7%94%A8"><span class="toc-article-text">词嵌入层使用</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BE%AA%E7%8E%AF%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-article-text">循环网络层</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#RNN%E7%BD%91%E7%BB%9C%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-article-text">RNN网络层原理</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#PyTorch-RNN%E5%B1%82%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-article-text">PyTorch RNN层的使用</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E6%A1%88%E4%BE%8B"><span class="toc-article-text">文本生成案例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%AF%BC%E5%85%A5%E5%B7%A5%E5%85%B7%E5%8C%85"><span class="toc-article-text">导入工具包</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-article-text">数据集</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E8%AF%8D%E8%A1%A8"><span class="toc-article-text">构建词表</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%AF%B9%E8%B1%A1"><span class="toc-article-text">构建数据集对象</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-article-text">构建网络模型</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0"><span class="toc-article-text">构建训练函数</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%9E%84%E5%BB%BA%E9%A2%84%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="toc-article-text">构建预测函数</span></a></li></ol></li></ol></li></ol>
+			</div>
+		
+		</div>
+	</div>
+
+</div><!-- col-md-3 -->
+
+
+		</div>
+
+		
+
+	</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2026 ZQ-Rookie-Hacker's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/toc.js"></script>
+<script src="/js/copy-code.js"></script>
+
+   <script type="text/javascript">
+     var searchPath = "/search.xml";
+   </script>
+
+
+<script src="/js/search.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

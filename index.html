@@ -151,7 +151,7 @@ MathJax = {
   <div class="row">
 	
 	
-		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在笔记的基础上添加了一些个人的理解和总结。</p>
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在其笔记的基础上添加了一些额外的知识以及个人的理解总结。</p>
 <hr>
 <h2 id="卷积神经网络CNN"><a href="#卷积神经网络CNN" class="headerlink" title="卷积神经网络CNN"></a>卷积神经网络CNN</h2><h3 id="图像基础知识"><a href="#图像基础知识" class="headerlink" title="图像基础知识"></a>图像基础知识</h3><h4 id="图像基本概念"><a href="#图像基本概念" class="headerlink" title="图像基本概念"></a>图像基本概念</h4><p>图像是人类视觉的基础，是自然景物的客观反映，是人类<strong>认识世界和人类本身</strong>的重要源泉。<strong>“图”是物体反射或透射光的分布，“像“是人的视觉系统所接受的图在人脑中所形成的印象或认识</strong>，<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%85%A7%E7%89%87/1465692?fromModule=lemma_inlink">照片</a>、绘画、剪贴画、地图、书法作品、手写汉字、传真、卫星云图、影视画面、X光片、脑电图、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BF%83%E7%94%B5%E5%9B%BE/399200?fromModule=lemma_inlink">心电图</a>等都是图像。</p>
 <p>在计算机中，按照颜色和灰度的多少可以将图像分为四种基本类型。</p>
@@ -212,9 +212,33 @@ MathJax = {
 </tbody></table>
 <p>简单的讲：<strong>图像是由像素点组成的，每个像素点的取值范围为: [0, 255] 。像素值越接近于0，颜色越暗，接近于黑色；像素值越接近于255，颜色越亮，接近于白色。</strong></p>
 <p>在深度学习中，我们使用的图像大多是彩色图，彩色图由RGB3个通道组成，如下图所示：</p>
-<img src="/images/CNN与RNN基础/image_4.png" style="zoom:50%;"></li>
+<img src="/images/CNN与RNN基础/image_4.png" style="zoom:50%;">
+
+</li>
+<li><p><strong>重要概念HWC</strong></p>
+<p>  HWC 是图像的形状，分别表示图像的高、宽、通道数。<br>  HW可以认为决定了一个通道的“面积”（像素点的数量）大小，比如 H&#x3D;200, W&#x3D;200 表示图像的高为200，宽为200，每个通道的像素点数量为40000。<br>  C表示图像的通道数，其数量决定你是那种类型的图片（参考上面的表格），比如 C&#x3D;3 表示是RGB图像。</p>
+</li>
+<li><p><strong>重要概念分辨率与刷新率</strong></p>
+<p>  分辨率是图像的宽和高（W x H），刷新率是屏幕每秒更新画面的次数（Hz）。</p>
+<p>  <strong>分辨率</strong>决定了图像的”清晰度”或”总像素数”。常见命名有两种方式：</p>
+<ul>
+<li><strong>带”p”的命名</strong>：数字表示垂直像素数，如 <strong>1080p</strong> &#x3D; 1920 × 1080（约207万像素），<strong>720p</strong> &#x3D; 1280 × 720（约92万像素）</li>
+<li><strong>带”K”的命名</strong>：数字表示水平像素约几千，如 <strong>2K</strong> ≈ 2560 × 1440，<strong>4K</strong> ≈ 3840 × 2160（约829万像素，是1080p的4倍）</li>
 </ul>
-<h4 id="图像加载"><a href="#图像加载" class="headerlink" title="图像加载"></a>图像加载</h4>
+<p>  <strong>刷新率</strong>决定了画面显示的”流畅度”。比如 60Hz 表示屏幕每秒刷新60次图像，120Hz 则表示每秒刷新120次。刷新率越高，动态画面越流畅，拖影越少。</p>
+<p>  <strong>两者的关系</strong>：分辨率和刷新率通过”带宽”相互制约。显卡传输图像数据到显示器的带宽计算公式为：</p>
+<p>  <strong>带宽 &#x3D; 水平像素 × 垂直像素 × 刷新率 × 色深</strong></p>
+<p>  比如 1920×1080 @ 60Hz（8bit色深）需要的带宽约为：1920 × 1080 × 60 × 8 ≈ <strong>1.0 Gbps</strong>；而 4K @ 120Hz 需要的带宽约为：3840 × 2160 × 120 × 8 ≈ <strong>8.0 Gbps</strong>，是前者的8倍。如果接口带宽不足，就必须在分辨率和刷新率之间做取舍。</p>
+<p>  <strong>常见应用场景</strong>：</p>
+<ul>
+<li>电竞游戏：优先高刷新率（144Hz+），分辨率可选1080p或2K</li>
+<li>3A大作&#x2F;影音：平衡配置（2K@60-144Hz 或 4K@60Hz）</li>
+<li>办公设计：优先高分辨率（4K@60Hz），刷新率要求不高</li>
+</ul>
+<p>  简单的讲：<strong>分辨率（W x H）决定画面有多清晰，刷新率（Hz）决定画面有多顺滑，两者通过带宽公式相互制约，需要根据接口能力和使用场景权衡选择。</strong></p>
+</li>
+</ul>
+<p>还有就对于一个RGB图片，其一个像素点的大小就是3byte（一个通道就1byte）</p>
 	
 	</div>
   <a type="button" href="/2026/07/28/CNN与RNN基础/#more" class="btn btn-default more">阅读此文</a>
@@ -353,45 +377,45 @@ MathJax = {
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
 		
-			<li><a href="/tags/CORS/">CORS<span>2</span></a></li>
-		
-			<li><a href="/tags/crawlers/">crawlers<span>1</span></a></li>
-		
-			<li><a href="/tags/python/">python<span>1</span></a></li>
-		
-			<li><a href="/tags/隧道技术/">隧道技术<span>1</span></a></li>
-		
-			<li><a href="/tags/SRC/">SRC<span>2</span></a></li>
-		
-			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
-		
-			<li><a href="/tags/Next/">Next<span>1</span></a></li>
-		
-			<li><a href="/tags/物理层/">物理层<span>1</span></a></li>
-		
-			<li><a href="/tags/堆/">堆<span>1</span></a></li>
+			<li><a href="/tags/认证/">认证<span>2</span></a></li>
 		
 			<li><a href="/tags/软考/">软考<span>1</span></a></li>
 		
+			<li><a href="/tags/服务器/">服务器<span>1</span></a></li>
+		
+			<li><a href="/tags/CSS/">CSS<span>1</span></a></li>
+		
+			<li><a href="/tags/栈/">栈<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/js/">js<span>4</span></a></li>
+		
+			<li><a href="/tags/windows/">windows<span>1</span></a></li>
+		
+			<li><a href="/tags/CNN与RNN基础/">CNN与RNN基础<span>1</span></a></li>
+		
+			<li><a href="/tags/同源策略/">同源策略<span>1</span></a></li>
+		
+			<li><a href="/tags/VPN/">VPN<span>1</span></a></li>
+		
+			<li><a href="/tags/网络传输工具/">网络传输工具<span>1</span></a></li>
+		
+			<li><a href="/tags/SQL注入/">SQL注入<span>1</span></a></li>
+		
 			<li><a href="/tags/计算机网络/">计算机网络<span>7</span></a></li>
 		
-			<li><a href="/tags/业务逻辑漏洞/">业务逻辑漏洞<span>1</span></a></li>
+			<li><a href="/tags/代理/">代理<span>1</span></a></li>
 		
-			<li><a href="/tags/传输层/">传输层<span>1</span></a></li>
+			<li><a href="/tags/数据链路层/">数据链路层<span>1</span></a></li>
 		
-			<li><a href="/tags/HTML/">HTML<span>1</span></a></li>
+			<li><a href="/tags/Pwn/">Pwn<span>3</span></a></li>
 		
-			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+			<li><a href="/tags/Mysql/">Mysql<span>1</span></a></li>
 		
-			<li><a href="/tags/GitHub-Dork/">GitHub Dork<span>1</span></a></li>
-		
-			<li><a href="/tags/端口协议/">端口协议<span>1</span></a></li>
-		
-			<li><a href="/tags/资产收集/">资产收集<span>1</span></a></li>
-		
-			<li><a href="/tags/DIV/">DIV<span>1</span></a></li>
+			<li><a href="/tags/邮箱解析/">邮箱解析<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>65</span></a></li>

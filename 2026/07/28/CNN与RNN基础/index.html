@@ -9,7 +9,7 @@
   <title>CNN与RNN基础 | ZQ-Rookie-Hacker&#39;s Blog</title>
   <meta name="author" content="ZQ-Rookie-Hacker">
   
-  <meta name="description" content="引言本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在笔记的基础上添加了一些个人的理解和总结。
+  <meta name="description" content="引言本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在其笔记的基础上添加了一些额外的知识以及个人的理解总结。
 
 卷积神经网络CNN图像基础知识图像基本概念图像是人类视觉的基础，是自然景物的客观反映，是人类认识世界和人类本身的重要源泉。“图”是物体反射或透射光的分布，“像“是人的视觉系统所接受的图在人脑中所形成的印象或认识，照片、绘画、剪贴画、地图、书法作品、手写汉字、传真、卫星云图、影视画面、X光片、脑电图、心电图等都是图像。
 在计算机中，按照颜色和灰度的多少可以将图像分为四种基本类型。
@@ -72,7 +72,31 @@ RGB图像
 在深度学习中，我们使用的图像大多是彩色图，彩色图由RGB3个通道组成，如下图所示：
 
 
-图像加载"> 
+
+重要概念HWC
+  HWC 是图像的形状，分别表示图像的高、宽、通道数。  HW可以认为决定了一个通道的“面积”（像素点的数量）大小，比如 H&amp;#x3D;200, W&amp;#x3D;200 表示图像的高为200，宽为200，每个通道的像素点数量为40000。  C表示图像的通道数，其数量决定你是那种类型的图片（参考上面的表格），比如 C&amp;#x3D;3 表示是RGB图像。
+
+重要概念分辨率与刷新率
+  分辨率是图像的宽和高（W x H），刷新率是屏幕每秒更新画面的次数（Hz）。
+  分辨率决定了图像的”清晰度”或”总像素数”。常见命名有两种方式：
+
+带”p”的命名：数字表示垂直像素数，如 1080p &amp;#x3D; 1920 × 1080（约207万像素），720p &amp;#x3D; 1280 × 720（约92万像素）
+带”K”的命名：数字表示水平像素约几千，如 2K ≈ 2560 × 1440，4K ≈ 3840 × 2160（约829万像素，是1080p的4倍）
+
+  刷新率决定了画面显示的”流畅度”。比如 60Hz 表示屏幕每秒刷新60次图像，120Hz 则表示每秒刷新120次。刷新率越高，动态画面越流畅，拖影越少。
+  两者的关系：分辨率和刷新率通过”带宽”相互制约。显卡传输图像数据到显示器的带宽计算公式为：
+  带宽 &amp;#x3D; 水平像素 × 垂直像素 × 刷新率 × 色深
+  比如 1920×1080 @ 60Hz（8bit色深）需要的带宽约为：1920 × 1080 × 60 × 8 ≈ 1.0 Gbps；而 4K @ 120Hz 需要的带宽约为：3840 × 2160 × 120 × 8 ≈ 8.0 Gbps，是前者的8倍。如果接口带宽不足，就必须在分辨率和刷新率之间做取舍。
+  常见应用场景：
+
+电竞游戏：优先高刷新率（144Hz+），分辨率可选1080p或2K
+3A大作&amp;#x2F;影音：平衡配置（2K@60-144Hz 或 4K@60Hz）
+办公设计：优先高分辨率（4K@60Hz），刷新率要求不高
+
+  简单的讲：分辨率（W x H）决定画面有多清晰，刷新率（Hz）决定画面有多顺滑，两者通过带宽公式相互制约，需要根据接口能力和使用场景权衡选择。
+
+
+还有就对于一个RGB图片，其一个像素点的大小就是3byte（一个通道就1byte）"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -206,7 +230,7 @@ MathJax = {
 		  
 		  
 
-		  <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在笔记的基础上添加了一些个人的理解和总结。</p>
+		  <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文绝大部分是使用了黑马的CNN与RNN的笔记，只是在其笔记的基础上添加了一些额外的知识以及个人的理解总结。</p>
 <hr>
 <h2 id="卷积神经网络CNN"><a href="#卷积神经网络CNN" class="headerlink" title="卷积神经网络CNN"></a>卷积神经网络CNN</h2><h3 id="图像基础知识"><a href="#图像基础知识" class="headerlink" title="图像基础知识"></a>图像基础知识</h3><h4 id="图像基本概念"><a href="#图像基本概念" class="headerlink" title="图像基本概念"></a>图像基本概念</h4><p>图像是人类视觉的基础，是自然景物的客观反映，是人类<strong>认识世界和人类本身</strong>的重要源泉。<strong>“图”是物体反射或透射光的分布，“像“是人的视觉系统所接受的图在人脑中所形成的印象或认识</strong>，<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%85%A7%E7%89%87/1465692?fromModule=lemma_inlink">照片</a>、绘画、剪贴画、地图、书法作品、手写汉字、传真、卫星云图、影视画面、X光片、脑电图、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BF%83%E7%94%B5%E5%9B%BE/399200?fromModule=lemma_inlink">心电图</a>等都是图像。</p>
 <p>在计算机中，按照颜色和灰度的多少可以将图像分为四种基本类型。</p>
@@ -267,8 +291,33 @@ MathJax = {
 </tbody></table>
 <p>简单的讲：<strong>图像是由像素点组成的，每个像素点的取值范围为: [0, 255] 。像素值越接近于0，颜色越暗，接近于黑色；像素值越接近于255，颜色越亮，接近于白色。</strong></p>
 <p>在深度学习中，我们使用的图像大多是彩色图，彩色图由RGB3个通道组成，如下图所示：</p>
-<img src="/images/CNN与RNN基础/image_4.png"  style="zoom:50%;" /></li>
+<img src="/images/CNN与RNN基础/image_4.png"  style="zoom:50%;" />
+
+</li>
+<li><p><strong>重要概念HWC</strong></p>
+<p>  HWC 是图像的形状，分别表示图像的高、宽、通道数。<br>  HW可以认为决定了一个通道的“面积”（像素点的数量）大小，比如 H&#x3D;200, W&#x3D;200 表示图像的高为200，宽为200，每个通道的像素点数量为40000。<br>  C表示图像的通道数，其数量决定你是那种类型的图片（参考上面的表格），比如 C&#x3D;3 表示是RGB图像。</p>
+</li>
+<li><p><strong>重要概念分辨率与刷新率</strong></p>
+<p>  分辨率是图像的宽和高（W x H），刷新率是屏幕每秒更新画面的次数（Hz）。</p>
+<p>  <strong>分辨率</strong>决定了图像的”清晰度”或”总像素数”。常见命名有两种方式：</p>
+<ul>
+<li><strong>带”p”的命名</strong>：数字表示垂直像素数，如 <strong>1080p</strong> &#x3D; 1920 × 1080（约207万像素），<strong>720p</strong> &#x3D; 1280 × 720（约92万像素）</li>
+<li><strong>带”K”的命名</strong>：数字表示水平像素约几千，如 <strong>2K</strong> ≈ 2560 × 1440，<strong>4K</strong> ≈ 3840 × 2160（约829万像素，是1080p的4倍）</li>
 </ul>
+<p>  <strong>刷新率</strong>决定了画面显示的”流畅度”。比如 60Hz 表示屏幕每秒刷新60次图像，120Hz 则表示每秒刷新120次。刷新率越高，动态画面越流畅，拖影越少。</p>
+<p>  <strong>两者的关系</strong>：分辨率和刷新率通过”带宽”相互制约。显卡传输图像数据到显示器的带宽计算公式为：</p>
+<p>  <strong>带宽 &#x3D; 水平像素 × 垂直像素 × 刷新率 × 色深</strong></p>
+<p>  比如 1920×1080 @ 60Hz（8bit色深）需要的带宽约为：1920 × 1080 × 60 × 8 ≈ <strong>1.0 Gbps</strong>；而 4K @ 120Hz 需要的带宽约为：3840 × 2160 × 120 × 8 ≈ <strong>8.0 Gbps</strong>，是前者的8倍。如果接口带宽不足，就必须在分辨率和刷新率之间做取舍。</p>
+<p>  <strong>常见应用场景</strong>：</p>
+<ul>
+<li>电竞游戏：优先高刷新率（144Hz+），分辨率可选1080p或2K</li>
+<li>3A大作&#x2F;影音：平衡配置（2K@60-144Hz 或 4K@60Hz）</li>
+<li>办公设计：优先高分辨率（4K@60Hz），刷新率要求不高</li>
+</ul>
+<p>  简单的讲：<strong>分辨率（W x H）决定画面有多清晰，刷新率（Hz）决定画面有多顺滑，两者通过带宽公式相互制约，需要根据接口能力和使用场景权衡选择。</strong></p>
+</li>
+</ul>
+<p>还有就对于一个RGB图片，其一个像素点的大小就是3byte（一个通道就1byte）</p>
 <h4 id="图像加载"><a href="#图像加载" class="headerlink" title="图像加载"></a>图像加载</h4><p>使用 matplotlib 库来实际理解下上面讲解的图像知识。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 像素值的理解</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line">    <span class="comment"># 全0数组是黑色的图像</span></span><br><span class="line">    <span class="comment"># H, W, C -&gt; 高, 宽, 通道</span></span><br><span class="line">    img = np.zeros(shape=[<span class="number">200</span>, <span class="number">200</span>, <span class="number">3</span>])</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    <span class="comment"># 对坐标轴进行设置</span></span><br><span class="line">    <span class="comment"># off:关闭坐标轴</span></span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 全255数组是白色的图像</span></span><br><span class="line">    img = np.full(shape=[<span class="number">200</span>, <span class="number">200</span>, <span class="number">3</span>], fill_value=<span class="number">255</span>)</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 图像的加载</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test02</span>():</span><br><span class="line">    <span class="comment"># 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&quot;data/img.jpg&quot;</span>)</span><br><span class="line">    <span class="comment"># 保存图像</span></span><br><span class="line">    plt.imsave(<span class="string">&quot;data/img1.jpg&quot;</span>, img)</span><br><span class="line">    <span class="comment"># 打印图像形状 高,宽,通道</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;图像的形状(H, W, C):\n&quot;</span>, img.shape)</span><br><span class="line">    <span class="comment"># 展示图像</span></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test01()</span><br><span class="line">    test02()</span><br></pre></td></tr></table></figure>
 
@@ -293,17 +342,17 @@ MathJax = {
 <p>上图中CNN要做的事情是：给定一张图片，是车还是马未知，是什么车也未知，现在需要模型判断这张图片里具体是一个什么东西，总之输出一个结果：如果是车，那是什么车</p>
 <ul>
 <li>最左边是<ul>
-<li>数据输入层：对数据做一些处理，比如去均值（各维度都减对应维度的均值，使得输入数据各个维度都中心化为0，避免数据过多偏差，影响训练效果）、归一化（把所有的数据都归一到同样的范围）、PCA等等。CNN只对训练集做“去均值”这一步。</li>
+<li><strong>数据输入层：</strong> 对数据做一些处理，比如去均值（各维度都减对应维度的均值，使得输入数据各个维度都中心化为0，避免数据过多偏差，影响训练效果）、归一化（把所有的数据都归一到同样的范围）、PCA等等。CNN只对训练集做“去均值”这一步。</li>
 </ul>
 </li>
 <li>中间是<ul>
-<li>卷积层(CONV)：线性乘积求和，提取图像中的局部特征</li>
-<li>激励层(RELU)：ReLU激活函数,输入数据转换成输出数据</li>
-<li>池化层(POOL)：取区域平均值或最大值，大幅降低参数量级(降维)</li>
+<li><strong>卷积层(CONV)：</strong> 线性乘积求和，提取图像中的局部特征</li>
+<li><strong>激励层(RELU)：</strong> ReLU激活函数,输入数据转换成输出数据</li>
+<li><strong>池化层(POOL)：</strong> 取区域平均值或最大值，大幅降低参数量级(降维)</li>
 </ul>
 </li>
 <li>最右边是<ul>
-<li>全连接层(FC)：接收二维数据集，输出CNN模型预测结果</li>
+<li><strong>全连接层(FC)：</strong> 接收二维数据集，输出CNN模型预测结果</li>
 </ul>
 </li>
 </ul>
@@ -313,13 +362,13 @@ MathJax = {
 <p><strong>人脸识别</strong>：识别图像中的人脸</p>
 <p><strong>医学图像分析</strong>：用于检测医学图像中的异常（如癌症检测、骨折检测等）</p>
 <p><strong>自动驾驶</strong>：用于识别交通标志、车辆、行人</p>
-<h4 id="CNN中的经典算法-网络架构"><a href="#CNN中的经典算法-网络架构" class="headerlink" title="CNN中的经典算法&#x2F;网络架构"></a><strong>CNN中的经典算法&#x2F;网络架构</strong></h4><p>**LeNet-5:**作为最早的CNN架构之一，证明了CNN在图像识别任务上的有效性，为后续的CNN发展奠定了基础</p>
+<h4 id="CNN中的经典算法-网络架构"><a href="#CNN中的经典算法-网络架构" class="headerlink" title="CNN中的经典算法&#x2F;网络架构"></a><strong>CNN中的经典算法&#x2F;网络架构</strong></h4><p><strong>LeNet-5:</strong> 作为最早的CNN架构之一，证明了CNN在图像识别任务上的有效性，为后续的CNN发展奠定了基础</p>
 <ul>
 <li><strong>卷积层:</strong> 提取图像的边缘、角点等基本特征</li>
 <li><strong>池化层 (子采样层):</strong> 降低特征图的维度，减少计算量，并提高模型对输入图像微小变化的鲁棒性</li>
 <li><strong>全连接层:</strong> 将卷积层和池化层提取的特征进行组合，用于最终的分类</li>
 </ul>
-<p>**AlexNet:**显著提升了ImageNet图像分类的准确率，证明了深度学习在计算机视觉领域的潜力，并推动了深度学习的快速发展</p>
+<p><strong>AlexNet:</strong> 显著提升了ImageNet图像分类的准确率，证明了深度学习在计算机视觉领域的潜力，并推动了深度学习的快速发展</p>
 <ul>
 <li><strong>卷积层:</strong> 使用更大的卷积核和更多的卷积核，提取更丰富的图像特征</li>
 <li><strong>ReLU激活函数:</strong> 加速训练过程，并提高模型的性能</li>
@@ -327,17 +376,17 @@ MathJax = {
 <li><strong>Dropout层:</strong> 防止过拟合</li>
 <li><strong>全连接层:</strong> 用于最终的分类</li>
 </ul>
-<p>**VGGNet:**探索了网络深度对性能的影响，证明了更深的网络可以提取更抽象和更具表达力的特征</p>
+<p><strong>VGGNet:</strong> 探索了网络深度对性能的影响，证明了更深的网络可以提取更抽象和更具表达力的特征</p>
 <ul>
 <li><strong>卷积层:</strong> 使用更小的卷积核 (3x3)，并堆叠多个卷积层，增加了网络的深度，提取更复杂的特征</li>
 <li><strong>最大池化层:</strong> 降低特征图的维度</li>
 <li><strong>全连接层:</strong> 用于最终的分类</li>
 </ul>
-<p>**GoogLeNet (Inception):**提出了 Inception 模块，在提高性能的同时减少了计算量，为后续的网络架构设计提供了新的思路</p>
+<p><strong>GoogLeNet (Inception):</strong> 提出了 Inception 模块，在提高性能的同时减少了计算量，为后续的网络架构设计提供了新的思路</p>
 <ul>
 <li><strong>Inception 模块:</strong> 并行使用不同大小的卷积核和池化操作，然后将它们的输出连接起来，增加了网络的宽度，提高了网络的效率</li>
 </ul>
-<p>**ResNet:**解决了深度网络训练困难的问题，使得可以训练更深的网络，从而显著提高了模型的性能</p>
+<p><strong>ResNet:</strong> 解决了深度网络训练困难的问题，使得可以训练更深的网络，从而显著提高了模型的性能</p>
 <ul>
 <li><strong>残差块 (Residual Block):</strong> 引入跳跃连接 (Shortcut Connection)，允许梯度直接反向传播到浅层，解决了深度网络的梯度消失问题，使得训练非常深的网络成为可能</li>
 </ul>
@@ -364,20 +413,20 @@ MathJax = {
 <h4 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h4><img src='/images/CNN与RNN基础/image_8.png' style="zoom:50%;" />
 
 <ol>
-<li><p>input 表示输入的图像</p>
+<li><p><strong>input</strong> 表示输入的图像</p>
 </li>
-<li><p>filter 表示卷积核, 也叫做滤波器(滤波矩阵)</p>
+<li><p><strong>filter</strong> 表示卷积核, 也叫做滤波器(滤波矩阵)</p>
 <ul>
 <li>一组固定的权重，因为每个神经元的多个权重固定，所以又可以看做一个恒定的滤波器filter</li>
-<li>非严格意义上来讲，下图中红框框起来的部分便可以理解为一个滤波器，即带着<strong>一组固定权重的神经元</strong>。多个滤波器叠加便成了卷积层</li>
-<li>一个卷积核就是一个神经元</li>
+<li>非严格意义上来讲，下图中红框框起来的部分便可以理解为一个滤波器，即带着<code>一组固定权重的神经元</code>。多个滤波器叠加便成了卷积层</li>
+<li><code>一个卷积核就是一个神经元</code></li>
 </ul>
 <p><img src="/images/CNN%E4%B8%8ERNN%E5%9F%BA%E7%A1%80/image_9.png" alt="img"></p>
 </li>
 <li><p>input 经过 filter 得到输出为最右侧的图像，该图叫做特征图</p>
 </li>
 </ol>
-<p>那么, 它是如何进行计算的呢？<strong>卷积运算本质上就是在滤波器和输入数据的局部区域间做点积。</strong></p>
+<p>那么, 它是如何进行计算的呢？<strong>卷积运算本质上就是在滤波器和输入数据的局部区域间做<code>点积</code></strong></p>
 <img src='/images/CNN与RNN基础/image_10.png' style="zoom:50%;" />
 
 <p>左上角的点计算方法：</p>
@@ -392,10 +441,15 @@ MathJax = {
 
 <p>具体来说，左边是图像输入，中间部分就是滤波器filter（带着一组固定权重的神经元），不同的滤波器filter会得到不同的输出数据，比如颜色深浅、轮廓。相当于如果想提取图像的不同特征，则用不同的滤波器filter，提取想要的关于图像的特定信息：颜色深浅或轮廓。</p>
 <h4 id="Padding（填充）"><a href="#Padding（填充）" class="headerlink" title="Padding（填充）"></a>Padding（填充）</h4><p>通过上面的卷积计算过程，最终的特征图比原始图像小很多，如果想要保持经过卷积后的图像大小不变, 可以在<strong>原图周围</strong>添加 Padding 来实现。</p>
+<p>前置认知 </p>
+<ul>
+<li>如果原图不填充的化，经过与卷积核的内积计算之后，其输出结果的尺寸会变小</li>
+<li>在上述的计算过程中，边缘的像素点参与和卷积核的内积次数少（特别的类似[0][0]这个像素点就只会计算一次），这就会导致边缘信息丢失。</li>
+</ul>
 <p>Padding（填充）操作是一种用于&#x3D;&#x3D;在输入特征图的边界周围添加额外像素（通常是零）&#x3D;&#x3D;。</p>
 <p><strong>Padding的主要作用：</strong></p>
 <ul>
-<li>**保持空间维度：**如果不使用 padding，每次卷积操作后，特征图的尺寸都会缩小。多次卷积后，特征图会变得非常小，可能会丢失重要的边缘信息。Padding可以帮助维持输出特征图的尺寸与输入相同或接近相同。</li>
+<li>**保持空间维度：**如果不使用 padding，每次卷积操作后，特征图的尺寸都会缩小。多次卷积后，特征图会变得非常小，可能会丢失重要的<code>边缘信息</code>。Padding可以帮助维持输出特征图的尺寸与输入相同或接近相同。</li>
 <li>**保留边缘信息：**图像边缘的像素在卷积过程中参与的计算次数较少，这意味着边缘信息在特征提取过程中容易丢失。Padding通过在边缘添加额外的像素，增加了边缘像素的参与度，从而更好地保留了边缘信息。</li>
 <li>**提高性能：**Padding有助于避免由于特征图尺寸快速缩小而导致的信息丢失，从而提高模型的性能，尤其是在处理较小的图像或需要进行多层卷积时。</li>
 </ul>
@@ -487,6 +541,62 @@ MathJax = {
 </ol>
 <img src='/images/CNN与RNN基础/image_14.png' style="zoom:75%;" />
 
+
+<p>📐 <strong>通用计算公式</strong></p>
+<p>$$H_{out} &#x3D; \lfloor \frac{H_{in} + 2 \times P - K_h}{S} \rfloor + 1$$</p>
+<p>$$W_{out} &#x3D; \lfloor \frac{W_{in} + 2 \times P - K_w}{S} \rfloor + 1$$</p>
+<table>
+<thead>
+<tr>
+<th align="left">符号</th>
+<th align="left">含义</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>$H_{in}$ &#x2F; $W_{in}$</strong></td>
+<td align="left">输入图像的高 &#x2F; 宽</td>
+<td align="left">比如 32 × 64</td>
+</tr>
+<tr>
+<td align="left"><strong>$K_h$ &#x2F; $K_w$</strong></td>
+<td align="left">卷积核（滤波器）的高 &#x2F; 宽</td>
+<td align="left">比如 3 × 3，或者 5 × 7</td>
+</tr>
+<tr>
+<td align="left"><strong>$P$</strong></td>
+<td align="left">填充 (Padding)</td>
+<td align="left">在图像四周补 0 的圈数。上下各补 P，左右各补 P，所以公式里是 <strong>$2 \times P$</strong>。</td>
+</tr>
+<tr>
+<td align="left"><strong>$S$</strong></td>
+<td align="left">步长 (Stride)</td>
+<td align="left">卷积核每次滑动的像素数。</td>
+</tr>
+<tr>
+<td align="left"><strong>$\lfloor \dots \rfloor$</strong></td>
+<td align="left">向下取整 (Floor)</td>
+<td align="left">如果除不尽，直接舍弃小数部分（这是大多数深度学习框架的默认行为）。</td>
+</tr>
+</tbody></table>
+<p>假设我们有一张 <strong>32 × 64</strong> 的图像（高32，宽64），使用一个 <strong>3 × 5</strong> 的卷积核（高3，宽5），<strong>步长 S&#x3D;2</strong>，<strong>填充 P&#x3D;1</strong>。</p>
+<p><strong>1. 计算输出的高 ($H_{out}$)</strong>：</p>
+<ul>
+<li>$H_{in} &#x3D; 32$</li>
+<li>$K_h &#x3D; 3$</li>
+<li>$P &#x3D; 1$</li>
+<li>$S &#x3D; 2$</li>
+<li>$H_{out} &#x3D; \lfloor \frac{32 + 2 \times 1 - 3}{2} \rfloor + 1 &#x3D; \lfloor \frac{31}{2} \rfloor + 1 &#x3D; 15 + 1 &#x3D; \mathbf{16}$</li>
+</ul>
+<p><strong>2. 计算输出的宽 ($W_{out}$)</strong>：</p>
+<ul>
+<li>$W_{in} &#x3D; 64$</li>
+<li>$K_w &#x3D; 5$</li>
+<li>$P &#x3D; 1$</li>
+<li>$S &#x3D; 2$</li>
+<li>$W_{out} &#x3D; \lfloor \frac{64 + 2 \times 1 - 5}{2} \rfloor + 1 &#x3D; \lfloor \frac{61}{2} \rfloor + 1 &#x3D; 30 + 1 &#x3D; \mathbf{31}$</li>
+</ul>
+<p><strong>最终输出结果</strong>：特征图的形状为 <strong>16 × 31</strong>。</p>
 <h4 id="PyTorch卷积层API"><a href="#PyTorch卷积层API" class="headerlink" title="PyTorch卷积层API"></a>PyTorch卷积层API</h4><p>在PyTorch中进行卷积的API是：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conv = nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">参数说明：</span></span><br><span class="line"><span class="string">in_channels: 输入通道数，RGB图片一般是3</span></span><br><span class="line"><span class="string">out_channels: 输出通道，也可以理解为卷积核kernel的数量</span></span><br><span class="line"><span class="string">kernel_size：卷积核的高和宽设置，一般为3,5,7...</span></span><br><span class="line"><span class="string">stride：卷积核移动的步长</span></span><br><span class="line"><span class="string">	整数stride：表示在所有维度上使用相同的步长 stride=2 表示在水平和垂直方向上每次移动2个像素</span></span><br><span class="line"><span class="string">	元组stride: 允许在不同维度上设置不同的步长 stride=(2, 1) 表示在水平方向上步长为2，在垂直方向上步长为1</span></span><br><span class="line"><span class="string">padding：在四周加入padding的数量，默认补0</span></span><br><span class="line"><span class="string">	padding=0：不进行填充。</span></span><br><span class="line"><span class="string">	padding=1：在每个维度上填充 1 个像素（常用于保持输出尺寸与输入相同 padding=输入形状大小-输出形状大小）。</span></span><br><span class="line"><span class="string">	padding=&#x27;same&#x27;（从 PyTorch 1.9+ 开始支持）：让输出特征图的尺寸与输入保持一致。PyTorch会自动计算需要的填充量。stride必须等于1，不支持跨行，因为计算padding时可能出现小数</span></span><br><span class="line"><span class="string">	padding=kernel_size-1：Full Padding 完全填充</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -494,7 +604,7 @@ MathJax = {
 <img src='/images/CNN与RNN基础/image_23.png' style="zoom:50%;" />
 
 <p>下面演示多通道多卷积核卷积:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对图像进行卷积</span></span><br><span class="line"><span class="comment">## 1 读取图像 显示图像</span></span><br><span class="line"><span class="comment">## 2 定义卷积层</span></span><br><span class="line"><span class="comment">## 3 变换数据形状 1-转成tensor 2-通道要求[C H W] 3-批次数要求 [batch, C, H, W]</span></span><br><span class="line"><span class="comment">## 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line"><span class="comment">## (H-F+2p)/s +1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&#x27;./data/img.jpg&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img.shape&#x27;</span>, img.shape)</span><br><span class="line"></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 定义卷积层</span></span><br><span class="line">    myconv2d = nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">4</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;myconv2d---&gt;&#x27;</span>, myconv2d)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 变换数据形状 </span></span><br><span class="line">	<span class="comment"># ①转换成tensor</span></span><br><span class="line">    <span class="comment"># ②通道要求[C, H, W], 默认[H, W, C]</span></span><br><span class="line">    <span class="comment"># ③批次数要求[batch, C, H, W],多少个图像(一个图像是三维数组,四维有多少个三维就是多少个图像)</span></span><br><span class="line">    <span class="comment"># [0, 1, 2] --&gt; [2, 0, 1]</span></span><br><span class="line">    img2 = torch.tensor(img).permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img2.shape---&gt;&#x27;</span>, img2.shape)</span><br><span class="line">	<span class="comment"># 图像数为1,变为4维张量</span></span><br><span class="line">    img3 = img2.unsqueeze(<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img3.shape---&gt;&#x27;</span>, img3.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line">    <span class="comment"># (H-F+2p)/s + 1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line">    img4 = myconv2d(img3.<span class="built_in">type</span>(torch.float32))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img4--&gt;&#x27;</span>, img4.shape)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test01()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 对图像进行卷积</span></span><br><span class="line"><span class="comment">## 1 读取图像 显示图像</span></span><br><span class="line"><span class="comment">## 2 定义卷积层</span></span><br><span class="line"><span class="comment">## 3 变换数据形状 1-转成tensor 2-通道要求[C H W] 3-批次数要求 [batch, C, H, W]</span></span><br><span class="line"><span class="comment">## 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line"><span class="comment">## (H-F+2p)/s +1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test01</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1 读取图像</span></span><br><span class="line">    img = plt.imread(<span class="string">&#x27;./img.jpg&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img.shape&#x27;</span>, img.shape)</span><br><span class="line"></span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 定义卷积层</span></span><br><span class="line">    myconv2d = nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">4</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;myconv2d---&gt;&#x27;</span>, myconv2d)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 变换数据形状 </span></span><br><span class="line">	<span class="comment"># ①转换成tensor</span></span><br><span class="line">    <span class="comment"># ②通道要求[C, H, W], 默认[H, W, C]</span></span><br><span class="line">    <span class="comment"># ③批次数要求[batch, C, H, W],多少个图像(一个图像是三维数组,四维有多少个三维就是多少个图像)</span></span><br><span class="line">    <span class="comment"># [0, 1, 2] --&gt; [2, 0, 1]</span></span><br><span class="line">    img2 = torch.tensor(img).permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img2.shape---&gt;&#x27;</span>, img2.shape)</span><br><span class="line">	<span class="comment"># 图像数为1,变为4维张量</span></span><br><span class="line">    img3 = img2.unsqueeze(<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img3.shape---&gt;&#x27;</span>, img3.shape)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 给卷积层喂数据 [1, 3, 640, 640] ---&gt; [1, 4, 319, 319])</span></span><br><span class="line">    <span class="comment"># (H-F+2p)/s + 1 = (640-3+0)/2 + 1 = 319.5向下取整319</span></span><br><span class="line">    img4 = myconv2d(img3.<span class="built_in">type</span>(torch.float32))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;img4--&gt;&#x27;</span>, img4.shape)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test01()</span><br></pre></td></tr></table></figure>
 
 <p><strong>输出结果:</strong></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">img.shape---&gt; (<span class="number">640</span>, <span class="number">640</span>, <span class="number">3</span>)</span><br><span class="line">myconv2d---&gt; Conv2d(<span class="number">3</span>, <span class="number">4</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">img2.shape---&gt; torch.Size([<span class="number">3</span>, <span class="number">640</span>, <span class="number">640</span>])</span><br><span class="line">img3.shape---&gt; torch.Size([<span class="number">1</span>, <span class="number">3</span>, <span class="number">640</span>, <span class="number">640</span>])</span><br><span class="line">img4--&gt; torch.Size([<span class="number">1</span>, <span class="number">4</span>, <span class="number">319</span>, <span class="number">319</span>])</span><br></pre></td></tr></table></figure>
